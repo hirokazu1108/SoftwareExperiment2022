@@ -35,7 +35,6 @@ float turn = 0;
 char left  = 0;
 char right = 0;
 char buf[256];
-
 int kasoku;
 float BoxRotate = 10.0;
 int flag        = 106;
@@ -53,10 +52,11 @@ int af;
 joyconlib_t jc;
 
 /* 関数のプロトタイプ宣言 */
+
 void display(void);
-void resize(int w, int h);
 void timer(int timerID);
 void keyboard(unsigned char key, int x, int y);
+void resize(int w, int h);
 void myInit(char *windowTitle);
 void drawString3D(const char *str, float charSize, float lineWidth);
 void init(void);
@@ -75,11 +75,13 @@ static GLubyte image[TEX_HEIGHT][TEX_WIDTH][4];
 int main(int argc, char **argv)
 {
     /* 初期化 */
+
     glutInit(&argc, argv); /* OpenGL の初期化 */
     myInit(argv[0]);       /* ウインドウ表示と描画設定の初期化 */
     
     glutMainLoop();
 
+    // glutReshapeFunc(reshape);
     /* イベント処理ループ */
 
     /* プログラム終了 */
@@ -97,6 +99,7 @@ void display(void)
 {
     int i;
 
+   
     /* 初期化 */
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); /* 画面を消去 */
     glMatrixMode(GL_MODELVIEW);                         /* 幾何（描画位置など設定する）モード */
@@ -273,6 +276,18 @@ void display(void)
     glutSwapBuffers();
 }
 
+/*void reshape(int w, int h)
+{
+    printf("%d %d\n",w,h);
+  glViewport(0, 0, (GLsizei) w, (GLsizei) h);
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glFrustum(-5.0, 5.0,-5.0, 5.0, 5.0, 500.0);
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+}
+*/
+
 void resize(int w, int h)
 {
     /* ウインドウの縦横の比を計算 */
@@ -289,7 +304,6 @@ void resize(int w, int h)
     glMatrixMode(GL_MODELVIEW);
 }
 
-
 void drawString3D(const char *str, float charSize, float lineWidth)
 {
     glPushMatrix();
@@ -303,7 +317,6 @@ void drawString3D(const char *str, float charSize, float lineWidth)
     glPopAttrib();
     glPopMatrix();
 }
-
 /*
 |  説明：タイマー（設定時間経過）イベント処理
 |  引数：int timerID    イベントが発生したタイマーの識別ID
@@ -327,6 +340,7 @@ void timer(int timerID)
 
     /* 描画要求（直後に display() 関数が呼ばれる） */
     glutPostRedisplay();
+    // SDL_Delay(10);
 }
 
 /***********************************************************
@@ -350,27 +364,50 @@ void keyboard(unsigned char key, int x, int y)
         exit(0); /* プログラム終了 */
         break;
     case 'b':
+        
         //BoxX[0]=BoxX[0]-1;
+        //if(turn>=0){
          BoxX[0] = BoxX[0]-sin(turn*0.1f);
-         BoxZ[0] =BoxZ[0]-cos(turn*0.1f);//BoxZ[0] * /*cos(turn/180)*/sin(turn/180);
+         BoxZ[0] =BoxZ[0]-cos(turn*0.1f);
+       // }
+       /* else{
+         BoxX[0] = BoxX[0]-cos(turn*0.1f);
+         BoxZ[0] =BoxZ[0]-sin(turn*0.1f);
+        }*/
+         //BoxZ[0] * /*cos(turn/180)*/sin(turn/180);
         printf("%f\n",BoxX[0]);
          //BoxY[0]= BoxY[0]+0.01*cos(turn/180.0);
       // BoxX[0] -= 1;
         break;
     case 'd':
-        BoxX[0]=BoxX[0]+1;
+        //BoxX[0]=BoxX[0]+1;
         // BoxY[0]= BoxY[0]-0.01*cos(turn/180.0*3.141592);
         break;
     case 's':
-        turn = turn + 1;
+        
+        if(turn>0){
+            double a;
+            a = -64 + turn;
+            turn = a;
+        }
+        turn = turn - 1;
         printf("zahyouhane~%lf\n",turn);
-        if(turn == 64){
+        if(turn == -64){
             turn = 0;
         }
         
         break;
     case 'a':
-        turn =0;
+        if(turn<0){
+            double a;
+            a = 64 + turn;
+            turn = a;
+        }
+        turn = turn + 1;
+        printf("zahyouhane~%lf\n",turn);
+        if(turn == 64){
+            turn = 0;
+        }
         break;
     case 'n':
         flag -= 1;
@@ -439,26 +476,27 @@ void keyboard(unsigned char key, int x, int y)
 ***********************************************************/
 void myInit(char *windowTitle)
 {
-
     /* ウインドウのサイズ */
     int winWidth  = WINDOW_WIDTH;
     int winHeight = WINDOW_HEIGHT;
     /* ウインドウの縦横の比を計算 */
     float aspect = (float)winWidth / (float)winHeight;
+    // window = SDL_CreateWindow(windowTitle, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, 0);
 
     /*以下がｇｌｓ０３のmain*/
 
     /* OpenGLウインドウ作成までの初期化 */
-    glutInitWindowPosition(WINDOW_PosX, WINDOW_PosY);            /* ウインドウ表示位置 */
+    glutInitWindowPosition(0, 0);            /* ウインドウ表示位置 */
     glutInitWindowSize(winWidth, winHeight); /* ウインドウサイズ */
     // glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);   /* 描画モード */
+
     glutCreateWindow(windowTitle);                      /* ウインドウの表示 */
     glClearColor(0.0, 0.0, 0.0, 1.0);                   /* 画面消去色の設定 */
     
 
     /* イベント発生時に呼び出す関数の登録 */
-    glutReshapeFunc(resize);
     glutKeyboardFunc(keyboard);  /* キーボードを押した時 */
+    glutReshapeFunc(resize);
     glutDisplayFunc(display);    /* 画面表示 */
     glutTimerFunc(15, timer, 0); /* タイマーを15ミリ秒後に設定 */
 
