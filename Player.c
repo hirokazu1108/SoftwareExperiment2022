@@ -371,8 +371,8 @@ void keyboard(unsigned char key, int x, int y)
         break;
     case 'b':
         //BoxX[0]=BoxX[0]-1;
-         BoxX[0] = BoxX[0]-1;
-         BoxZ[0] =BoxZ[0]- 1;//BoxZ[0] * /*cos(turn/180)*/sin(turn/180);
+         BoxX[0] = BoxX[0]-sin(turn*0.1f);
+         BoxZ[0] =BoxZ[0]-cos(turn*0.1f);//BoxZ[0] * /*cos(turn/180)*/sin(turn/180);
         printf("%f\n",BoxX[0]);
          //BoxY[0]= BoxY[0]+0.01*cos(turn/180.0);
       // BoxX[0] -= 1;
@@ -382,7 +382,7 @@ void keyboard(unsigned char key, int x, int y)
         // BoxY[0]= BoxY[0]-0.01*cos(turn/180.0*3.141592);
         break;
     case 's':
-        turn = turn +1.0;
+        turn = turn + 1;
         printf("zahyouhane~%lf\n",turn);
         if(turn == 64){
             turn = 0;
