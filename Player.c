@@ -4,7 +4,7 @@
  * 2個の立方体を別々に動かす
  * -------------------------------------------------------------------- */
 
-/* ヘッダファイル desu*/
+/* ヘッダファイル */
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
@@ -371,9 +371,9 @@ void keyboard(unsigned char key, int x, int y)
         break;
     case 'b':
         //BoxX[0]=BoxX[0]-1;
-         BoxX[0] = BoxX[0] - /*sin(turn/180)*/cos(turn/180);
-         BoxZ[0] = BoxZ[0] - /*cos(turn/180)*/sin(turn/180);
-
+         BoxX[0] = BoxX[0]-1;
+         BoxZ[0] =BoxZ[0]- 1;//BoxZ[0] * /*cos(turn/180)*/sin(turn/180);
+        printf("%f\n",BoxX[0]);
          //BoxY[0]= BoxY[0]+0.01*cos(turn/180.0);
       // BoxX[0] -= 1;
         break;
