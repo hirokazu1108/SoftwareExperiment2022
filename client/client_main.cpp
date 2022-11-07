@@ -4,7 +4,6 @@
  * -------------------------------------------------------------------- */
 
 /* ヘッダファイル */
-#include "./constants.h"
 #include "client.h"
 
 #define RAD (M_PI / 180.0)
@@ -36,8 +35,7 @@ float turn = 0;
 char left  = 0;
 char right = 0;
 char buf[256];
-SDL_Renderer *renderer; //レンダラーの作成
-SDL_Window *window;     // ウィンドウのデータを格納する構造体
+
 int kasoku;
 float BoxRotate = 10.0;
 int flag        = 106;
@@ -46,7 +44,7 @@ int f           = 0; //３のはやさ
 int ps          = 0;
 double junp;
 int junpf = 0;
-int bool  = 1;
+
 int bf;
 int jnk; //ジョイコンの入力コマンド
 int r=0;
@@ -454,8 +452,6 @@ void myInit(char *windowTitle)
     glutInitWindowPosition(WINDOW_PosX, WINDOW_PosY);            /* ウインドウ表示位置 */
     glutInitWindowSize(winWidth, winHeight); /* ウインドウサイズ */
     // glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);   /* 描画モード */
-    // renderer = SDL_CreateRenderer(window, -1, 0); // 生成したウィンドウに対してレンダリングコンテキスト（RC）を生成
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0); // 生成したRCに描画色として白を設定
     glutCreateWindow(windowTitle);                      /* ウインドウの表示 */
     glClearColor(0.0, 0.0, 0.0, 1.0);                   /* 画面消去色の設定 */
     

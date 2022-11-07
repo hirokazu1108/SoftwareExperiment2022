@@ -8,10 +8,10 @@ TEX = platex
 CFLAGS = -Wall $(COPTIONS)
 LDFLAGS = 
 LOADLIBES = 
-LDLIBS = -lm -lSDL2 -lSDL2_image -lSDL2_ttf -lglut -lGLU -lGL -ljoyconlib -lhidapi-hidraw -lSDL2_gfx
+LDLIBS = -lm -lSDL2 -lSDL2_image -lSDL2_ttf -lglut -lGLU -lGL -ljoyconlib -lhidapi-hidraw -lSDL2_gfx -ljoyconlib -lhidapi-hidraw
 
 TARGET = SpaceBattle
-OBJS = client_main.o client_command.o client_net.o client_win.o 
+SRCS = client_main.cpp client_command.cpp client_net.cpp client_win.cpp 
 HEADS = client.h
 
 # 課題に取り組むにはこのターゲットで
@@ -38,8 +38,8 @@ release: $(TARGET)
 # オブジェクトから実行ファイル
 #   $(CC) $(LDFLAGS) n.o $(LOADLIBES) $(LDLIBS) -o n
 #
-$(TARGET): $(OBJS)
-$(OBJS): $(HEADS)
+$(TARGET): $(SRCS)
+	$(CC) $(SRCS) $(LDFLAGS) $(LOADLIBES) $(LDLIBS) -o $(TARGET)
 
 # レポート作成用ターゲット
 # 例えば repo.tex があるとき，
