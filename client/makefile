@@ -10,7 +10,7 @@ LDFLAGS =
 LOADLIBES = 
 LDLIBS = -lm -lSDL2 -lSDL2_image -lSDL2_ttf -lglut -lGLU -lGL -ljoyconlib -lhidapi-hidraw -lSDL2_gfx -ljoyconlib -lhidapi-hidraw
 
-TARGET = SpaceBattle
+TARGET = SB_client
 SRCS = client_main.cpp client_command.cpp client_net.cpp client_win.cpp 
 HEADS = client.h
 

@@ -10,8 +10,8 @@ LDFLAGS =
 LOADLIBES = 
 LDLIBS = -lm -lSDL2 -lSDL2_image -lSDL2_ttf -lglut -lGLU -lGL -ljoyconlib -lhidapi-hidraw -lSDL2_gfx
 
-TARGET = SpaceBattle
-OBJS = server_main.o server_command.o server_net.o
+TARGET = SB_server
+SRCS = server_main.cpp server_command.cpp server_net.cpp 
 HEADS = server.h 
 
 # 課題に取り組むにはこのターゲットで
@@ -38,8 +38,8 @@ release: $(TARGET)
 # オブジェクトから実行ファイル
 #   $(CC) $(LDFLAGS) n.o $(LOADLIBES) $(LDLIBS) -o n
 #
-$(TARGET): $(OBJS)
-$(OBJS): $(HEADS)
+$(TARGET): $(SRCS)
+	$(CC) $(SRCS) $(LDFLAGS) $(LOADLIBES) $(LDLIBS) -o $(TARGET)
 
 # レポート作成用ターゲット
 # 例えば repo.tex があるとき，
