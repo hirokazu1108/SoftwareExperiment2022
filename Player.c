@@ -370,27 +370,50 @@ void keyboard(unsigned char key, int x, int y)
         exit(0); /* プログラム終了 */
         break;
     case 'b':
+        
         //BoxX[0]=BoxX[0]-1;
+        //if(turn>=0){
          BoxX[0] = BoxX[0]-sin(turn*0.1f);
-         BoxZ[0] =BoxZ[0]-cos(turn*0.1f);//BoxZ[0] * /*cos(turn/180)*/sin(turn/180);
+         BoxZ[0] =BoxZ[0]-cos(turn*0.1f);
+       // }
+       /* else{
+         BoxX[0] = BoxX[0]-cos(turn*0.1f);
+         BoxZ[0] =BoxZ[0]-sin(turn*0.1f);
+        }*/
+         //BoxZ[0] * /*cos(turn/180)*/sin(turn/180);
         printf("%f\n",BoxX[0]);
          //BoxY[0]= BoxY[0]+0.01*cos(turn/180.0);
       // BoxX[0] -= 1;
         break;
     case 'd':
-        BoxX[0]=BoxX[0]+1;
+        //BoxX[0]=BoxX[0]+1;
         // BoxY[0]= BoxY[0]-0.01*cos(turn/180.0*3.141592);
         break;
     case 's':
-        turn = turn + 1;
+        
+        if(turn>0){
+            double a;
+            a = -64 + turn;
+            turn = a;
+        }
+        turn = turn - 1;
         printf("zahyouhane~%lf\n",turn);
-        if(turn == 64){
+        if(turn == -64){
             turn = 0;
         }
         
         break;
     case 'a':
-        turn =0;
+        if(turn<0){
+            double a;
+            a = 64 + turn;
+            turn = a;
+        }
+        turn = turn + 1;
+        printf("zahyouhane~%lf\n",turn);
+        if(turn == 64){
+            turn = 0;
+        }
         break;
     case 'n':
         flag -= 1;
