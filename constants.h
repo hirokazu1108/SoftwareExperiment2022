@@ -13,7 +13,7 @@
 #include<unistd.h>
 #include<sys/types.h>
 #include<assert.h>
-
+#include<glm/glm.hpp>
 
 #define PORT			(u_short)8888	/* �ݡ����ֹ� */
 
