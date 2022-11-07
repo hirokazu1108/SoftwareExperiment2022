@@ -74,8 +74,32 @@ static GLubyte image[TEX_HEIGHT][TEX_WIDTH][4];
 ***********************************************************/
 int main(int argc, char **argv)
 {
-    /* 初期化 */
+    char	name[MAX_CLIENTS][MAX_NAME_SIZE];
+    int		endFlag=1;
+    char	localHostName[]="localhost";
+    char	*serverName;
+    int		gClientNum;
+    int		clientID;
 
+    /* 引き数チェック */
+    if(argc == 1){
+    	serverName = localHostName;
+    }
+    else if(argc == 2){
+    	serverName = argv[1];
+    }
+    else{
+		fprintf(stderr, "Usage: %s, Cannot find a Server Name.\n", argv[0]);
+		return -1;
+    }
+
+    /* サーバーとの接続 */
+    if(SetUpClient(serverName,&clientID,&gClientNum,name)==-1){
+		fprintf(stderr,"setup failed : SetUpClient\n");
+		return -1;
+	}
+
+    /* 初期化 */
     glutInit(&argc, argv); /* OpenGL の初期化 */
     myInit(argv[0]);       /* ウインドウ表示と描画設定の初期化 */
     
