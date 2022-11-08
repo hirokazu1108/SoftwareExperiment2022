@@ -4,7 +4,6 @@
 ファイル名	: client_command.c
 機能		: クライアントのコマンド処理
 *****************************************************************/
-
 static void SetIntData2DataBlock(void *data,int intData,int *dataSize);
 static void SetCharData2DataBlock(void *data,char charData,int *dataSize);
 
