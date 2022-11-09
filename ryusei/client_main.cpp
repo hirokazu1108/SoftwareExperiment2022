@@ -38,7 +38,7 @@ char right = 0;
 char buf[256];
 int kasoku;
 float BoxRotate = 10.0;
-int flag        = 106;
+int flag        = 0;
 int flag2 = 1;
 int j           = 0; // 2�ΤϤ䤵
 int f           = 0; //���ΤϤ䤵
@@ -101,22 +101,27 @@ void display(void)
 {
     int i;
 
-        if(flag == 2){
-        CameraX = CameraX/*+cos(turn2*0.1f)*5*/;
-        CameraY = CameraY/*+sin(turn2*0.1f)*5*/;
-        CameraZ = CameraZ;
-        CameraX = BoxX[0] +cos(turn*0.1f)*5;
-        CameraY = BoxY[0]+sin(turn*0.1f)*5;
-        CameraZ = BoxZ[0];
-        }
-        else{
+        if(flag ==0){
         CameraX = CameraX/*+sin(turn*0.1f)*5*/;
         CameraY = CameraY;
         CameraZ = CameraZ/*+cos(turn*0.1f)*5*/;
-        CameraX = BoxX[0] +sin(turn*0.1f)*5;
-        CameraY = BoxY[0];
+        CameraX = BoxX[0] +sin(turn*0.1f)*5 /*+cos(turn2*0.1f)*5*/;
+        CameraY = BoxY[0] + sin(turn2*0.1f)*5;
         CameraZ = BoxZ[0]+cos(turn*0.1f)*5;
+        }
+        else{
+        CameraX = BoxX[0] +sin(turn*0.1f)*5 /*+cos(turn2*0.1f)*5*/;
+        CameraY = BoxY[0] + sin(turn2*0.1f)*5;
+        CameraZ = BoxZ[0]+cos(turn*0.1f)*5;
+        CameraX = BoxX[0] +cos(turn2*0.1f)*5 /*+cos(turn2*0.1f)*5*/;
+        CameraY = BoxY[0] + sin(turn2*0.1f)*5;
+        CameraZ = BoxZ[0]+sin(turn2*0.1f)*5;
         
+       /*
+        CameraX = BoxX[0] +cos(turn*0.1f)*5 ;
+        CameraY = BoxY[0] + sin(turn2*0.1f)*5;
+        CameraZ = BoxZ[0]+cos(turn2*0.1f)*5;
+        */
         }
     /* ����� */
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); /* ���̤�õ� */
@@ -131,7 +136,7 @@ void display(void)
 
    
         gluLookAt(CameraX, CameraY, CameraZ, /* �����ΰ��� */
-        BoxX[0]/*+turn*0.1*/, 0 /*+turn*0.01*/,BoxZ[0]/*+turn*0.01f*//*+sin(turn/180)*/,                         /* �������ΰ��� */
+        BoxX[0]/*+turn*0.1*/, BoxY[0] /*+turn*0.01*/,BoxZ[0]/*+turn*0.01f*//*+sin(turn/180)*/,                         /* �������ΰ��� */
         0, 0.5/*+turn*0.5*/, 0.0);
    
     /* Ω���Τ����� */
@@ -398,6 +403,7 @@ void keyboard(unsigned char key, int x, int y)
         //if(turn>=0){
          BoxX[0] = BoxX[0]-sin(turn*0.1f);
          BoxZ[0] =BoxZ[0]-cos(turn*0.1f);
+         BoxY[0] = BoxY[0] - sin(turn2*0.1f);
        // }
        /* else{
          BoxX[0] = BoxX[0]-cos(turn*0.1f);
@@ -447,11 +453,30 @@ void keyboard(unsigned char key, int x, int y)
         break;
     case 'w':
         flag = 2;
-        turn = turn-1;
+        //turn2 = turn2-1;
+        if(turn2>0){
+            double a;
+            a = -64 + turn2;
+            turn2 = a;
+        }
+        turn2 = turn2 - 1;
 
+        printf("zahyouhane~%lf\n",turn2);
+        if(turn2 == -64){
+            turn2= 0;
+        }
         break;
     case 'j':
-        junpf++;
+        if(turn<0){
+            double a;
+            a = 64 + turn2;
+            turn2 = a;
+        }
+        turn2 = turn2 + 1;
+        printf("zahyouhane~%lf\n",turn2);
+        if(turn2 == 64){
+            turn2 = 0;
+        }
         break;
     default:
         junp  = 0;
