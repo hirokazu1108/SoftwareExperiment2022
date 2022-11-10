@@ -3,6 +3,7 @@
 static void SetIntData2DataBlock(void *data,int intData,int *dataSize);
 static void SetCharData2DataBlock(void *data,char charData,int *dataSize);
 
+int readNum = 0; //読み込んだ戦闘機
 /*****************************************************************
 ????	: ExecuteCommand
 ???	: ??????????????????????????????
@@ -21,6 +22,26 @@ int ExecuteCommand(char command,int pos)
 
 
     switch(command){
+
+        case PLAYERDATA_COMMAND:{
+            dataSize = 0;
+            Player *p = (Player*)malloc(sizeof(Player));
+            RecvData(pos, p, sizeof(Player)); //Playerの情報を受け取る
+            player[pos] = *p; //Playerの情報を格納
+            free(p);
+        }
+            
+            readNum |= (1 << pos); //集まったクライアント番号の判定 1101でclient[2]以外集まっている
+            if(readNum == (15>>(4-gClientNum))){
+			    SetCharData2DataBlock(data2,command,&dataSize);
+			    SendData(ALL_CLIENTS,data2,dataSize);
+
+                SendData(ALL_CLIENTS,player,sizeof(Player)*gClientNum); //Player情報を全員に送る
+
+                readNum = 0;
+            }
+            
+            break;
 	    case END_COMMAND:
 			dataSize = 0;
 			/* ??????????????? */
@@ -84,3 +105,4 @@ static void SetCharData2DataBlock(void *data,char charData,int *dataSize)
     /* ????????????????? */
     (*dataSize) += sizeof(char);
 }
+

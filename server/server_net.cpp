@@ -11,7 +11,6 @@ typedef struct{
 }CLIENT;
 
 static CLIENT	gClients[MAX_CLIENTS];	/* クライアント */
-int	gClientNum;					/* クライアント数 */
 
 static fd_set	gMask;					/* select()用のマスク */
 static int	gWidth;						/* gMask中のチェックすべきビット数 */
@@ -20,7 +19,7 @@ static int MultiAccept(int request_soc,int num);
 static void Enter(int pos, int fd);
 static void SetMask(int maxfd);
 static void SendAllName(void);
-static int RecvData(int pos,void *data,int dataSize);
+
 
 /*****************************************************************
 関数名	: SetUpServer
@@ -39,7 +38,6 @@ int SetUpServer(int num)
     /* 引き数チェック */
     assert(0<num && num<=MAX_CLIENTS);
 
-    gClientNum = num;
     bzero((char*)&server,sizeof(server));
     server.sin_family = AF_INET;
     server.sin_port = htons(PORT);
@@ -102,14 +100,14 @@ int SendRecvManager(void)
         /* エラーが起こった */
         return endFlag;
     }
-
     for(i=0;i<gClientNum;i++){
 		if(FD_ISSET(gClients[i].fd,&readOK)){
 	    	/* クライアントからデータが届いていた */
 	    	/* コマンドを読み込む */
 			RecvData(i,&command,sizeof(char));
-      printf("command:%d\n",command);
+      //printf("command:%c\n",command);
 	    	/* コマンドに対する処理を行う */
+
 	    	endFlag = ExecuteCommand(command,i);
 	    	if(endFlag == 0)break;
 		}
@@ -166,6 +164,29 @@ void SendData(int pos,void *data,int dataSize)
 		write(gClients[pos].fd,data,dataSize);
     }
 }
+
+/*****************************************************************
+関数名	: RecvData
+機能	: クライアントからデータを受け取る
+引数	: int		pos	        : クライアント番号
+		  void		*data		: 受信したデータ
+		  int		dataSize	: 受信するデータのサイズ
+出力	: 受け取ったバイト数
+*****************************************************************/
+int RecvData(int pos,void *data,int dataSize)
+{
+    int n;
+    
+    /* 引き数チェック */
+    assert(0<=pos && pos<gClientNum);
+    assert(data!=NULL);
+    assert(0<dataSize);
+
+    n = read(gClients[pos].fd,data,dataSize);
+    
+    return n;
+}
+
 
 /*****************************************************************
 関数名	: Ending
@@ -261,24 +282,3 @@ static void SendAllName(void)
 	}
 }
 
-/*****************************************************************
-関数名	: RecvData
-機能	: クライアントからデータを受け取る
-引数	: int		pos	        : クライアント番号
-		  void		*data		: 受信したデータ
-		  int		dataSize	: 受信するデータのサイズ
-出力	: 受け取ったバイト数
-*****************************************************************/
-static int RecvData(int pos,void *data,int dataSize)
-{
-    int n;
-    
-    /* 引き数チェック */
-    assert(0<=pos && pos<gClientNum);
-    assert(data!=NULL);
-    assert(0<dataSize);
-
-    n = read(gClients[pos].fd,data,dataSize);
-    
-    return n;
-}

@@ -7,11 +7,10 @@
 static int	gSocket;	/* ソケット */
 static fd_set	gMask;	/* select()用のマスク */
 static int	gWidth;		/* gMask中ののチェックすべきビット数 */
-int	gClientNum;					/* クライアント数 */
 
 static void GetAllName(int *clientID,int *num,char clientNames[][MAX_NAME_SIZE]);
 static void SetMask(void);
-int RecvData(void *data,int dataSize);
+
 
 /*****************************************************************
 関数名	: SetUpClient
@@ -103,7 +102,6 @@ int SendRecvManager(void)
     	/* コマンドに対する処理を行う */
 		endFlag = ExecuteCommand(command);
     }
-    printf("ppo\n");
     return endFlag;
 }
 

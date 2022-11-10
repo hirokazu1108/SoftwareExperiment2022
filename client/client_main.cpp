@@ -5,6 +5,10 @@
 
 /* ヘッダファイル */
 #include "client.h"
+int		gClientNum;
+int		clientID;
+Player *player;
+int sendDataFlag = 0;
 
 #define RAD (M_PI / 180.0)
 typedef struct {
@@ -78,8 +82,6 @@ int main(int argc, char **argv)
     int		endFlag=1;
     char	localHostName[]="localhost";
     char	*serverName;
-    int		gClientNum;
-    int		clientID;
 
     /* 引き数チェック */
     if(argc == 1){
@@ -99,6 +101,27 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
+	player = (Player*)malloc(sizeof(Player)*gClientNum);
+    for(int i = 0; i< gClientNum;i++)
+    {
+        player[i].spead = 0.0;
+        player[i].dir.x = 0;
+        player[i].dir.y = 0;
+        player[i].dir.z = 0;
+        player[i].pos.x = 0;
+        player[i].pos.y = 0;
+        player[i].pos.z = 0;
+        player[i].upVec.x = 0;
+        player[i].upVec.y = 0;
+        player[i].upVec.z = 0;
+        player[i].type = 0;
+        player[i].mp = 0;
+        player[i].hp = 0;
+        player[i].reloadTime= 0;
+    }
+    
+
+    
     /* 初期化 */
     glutInit(&argc, argv); /* OpenGL の初期化 */
     myInit(argv[0]);       /* ウインドウ表示と描画設定の初期化 */
@@ -123,7 +146,6 @@ void display(void)
 {
     int i;
 
-   
     /* 初期化 */
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); /* 画面を消去 */
     glMatrixMode(GL_MODELVIEW);                         /* 幾何（描画位置など設定する）モード */
@@ -132,21 +154,22 @@ void display(void)
     /* 視点の設定 */
     // glMatrixMode(GL_PROJECTION);
     
-    gluLookAt(BoxX[0] +sin(turn*0.1f)*5, BoxY[0], BoxZ[0]+cos(turn*0.1f)*5, /* カメラの位置 */
-        BoxX[0]/*+turn*0.1*/, 0 /*+turn*0.01*/,BoxZ[0]/*+turn*0.01f*//*+sin(turn/180)*/,                         /* 注視点の位置 */
+    gluLookAt(player[clientID].pos.x +sin(turn*0.1f)*5, player[clientID].pos.y, player[clientID].pos.z+cos(turn*0.1f)*5, /* カメラの位置 */
+        player[clientID].pos.x/*+turn*0.1*/, 0 /*+turn*0.01*/,player[clientID].pos.z/*+turn*0.01f*//*+sin(turn/180)*/,                         /* 注視点の位置 */
         0, 0.5/*+turn*0.5*/, 0.0);                              /* カメラ上方向のベクトル */
     /* 立方体の描画 */
     for (i = 0; i < 100; i++) {
         glPushMatrix();           /* 描画位置を保存 */
         glColor3f(1.0, 1.0, 1.0); /* 描画色を白にする */
         glScalef(1.0, 1.0, 1.0);
-        if (i < 2) {
+        if (i < 3) {
             /* 描画位置を(BoxX, i, 0)に移動 */
             // glutWireCube (0.5);
-            if (i == 0) {
-                glTranslatef(BoxX[0], BoxY[0], BoxZ[0]);
+            if (i == 0 || i == 1) {
+                glTranslatef(player[i].pos.x, player[i].pos.y, player[i].pos.z);
                 glRotatef(turn*5.75, 0, 1, 0);
-            } else {
+            }
+             else {
                 glTranslatef(BoxX[1], 0, 2);
                 glRotatef(j, 0, 0, 1.0);
             }
@@ -185,7 +208,7 @@ void display(void)
     glPopMatrix();
 
     //敵１床
-        glColor3f(1.0, 1.0, 1.0); /* 描画色を白にする */
+    glColor3f(1.0, 1.0, 1.0); /* 描画色を白にする */
     glPushMatrix();
     glColor3f(0.0, 1.0, 0.0);
     glTranslatef(0.0, -0.8, 1.5);
@@ -273,15 +296,16 @@ void display(void)
         glPopMatrix();
     }
 
-    printf("%d   %f %f %f\n", jnk, BoxX[0], BoxX[1], BoxX[2]);
+    //printf("%d   %f %f %f\n", jnk, player[clientID].pos.x, BoxX[1], BoxX[2]);
     if (flag < 100) {
       //  Goal();
     }
 
+
     glPushMatrix();                    /* 視点位置を保存 */
     glColor3f(1.0, 1.0, 0);            /* 描画色を白(1.0,1.0,1.0)にする */
     glRotatef(90, 0, 1.0, 0);          /* Y軸中心にBoxRotate(度)回転 */
-    glTranslatef(-0.18, 0.5, BoxX[0]); /* 文字表示座標 */
+    glTranslatef(-0.18, 0.5, player[clientID].pos.x); /* 文字表示座標 */
 
    
 
@@ -293,11 +317,16 @@ void display(void)
     }
     glPopMatrix();
     glFlush();
-    glutSwapBuffers();
+   
 
-    glFlush();
     /* 上記で描画されたCGをモニターに出力 */
-    glutSwapBuffers();
+     glutSwapBuffers();
+
+    
+
+    /* ネットワークの処理 */
+    SendRecvManager();
+    SendPlayerDataCommand(); //PlayerDataの送信
 }
 
 /*void reshape(int w, int h)
@@ -359,12 +388,14 @@ void timer(int timerID)
         /* 箱が端に到達したら移動方向を反転 */
         // if( BoxX[i] > 22.0 || BoxX[i] < -22.0) BoxVx[i] = -BoxVx[i];
     }
-    printf("  %lf  ", BoxVx[0]);
+    //printf("  %lf  ", BoxVx[0]);
    
+
 
     /* 描画要求（直後に display() 関数が呼ばれる） */
     glutPostRedisplay();
     // SDL_Delay(10);
+    
 }
 
 /***********************************************************
@@ -389,23 +420,23 @@ void keyboard(unsigned char key, int x, int y)
         break;
     case 'b':
         
-        //BoxX[0]=BoxX[0]-1;
+        //player[clientID].pos.x=player[clientID].pos.x-1;
         //if(turn>=0){
-         BoxX[0] = BoxX[0]-sin(turn*0.1f);
-         BoxZ[0] =BoxZ[0]-cos(turn*0.1f);
+         player[clientID].pos.x = player[clientID].pos.x-sin(turn*0.1f);
+         player[clientID].pos.z =player[clientID].pos.z-cos(turn*0.1f);
        // }
        /* else{
-         BoxX[0] = BoxX[0]-cos(turn*0.1f);
-         BoxZ[0] =BoxZ[0]-sin(turn*0.1f);
+         player[clientID].pos.x = player[clientID].pos.x-cos(turn*0.1f);
+         player[clientID].pos.z =player[clientID].pos.z-sin(turn*0.1f);
         }*/
-         //BoxZ[0] * /*cos(turn/180)*/sin(turn/180);
-        printf("%f\n",BoxX[0]);
-         //BoxY[0]= BoxY[0]+0.01*cos(turn/180.0);
-      // BoxX[0] -= 1;
+         //player[clientID].pos.z * /*cos(turn/180)*/sin(turn/180);
+        //printf("%f:%f\n",player[0].pos.x,player[1].pos.x);
+         //player[clientID].pos.y= player[clientID].pos.y+0.01*cos(turn/180.0);
+      // player[clientID].pos.x -= 1;
         break;
     case 'd':
-        //BoxX[0]=BoxX[0]+1;
-        // BoxY[0]= BoxY[0]-0.01*cos(turn/180.0*3.141592);
+        //player[clientID].pos.x=player[clientID].pos.x+1;
+        // player[clientID].pos.y= player[clientID].pos.y-0.01*cos(turn/180.0*3.141592);
         break;
     case 's':
         
@@ -415,7 +446,7 @@ void keyboard(unsigned char key, int x, int y)
             turn = a;
         }
         turn = turn - 1;
-        printf("zahyouhane~%lf\n",turn);
+        //printf("zahyouhane~%lf\n",turn);
         if(turn == -64){
             turn = 0;
         }
@@ -428,7 +459,7 @@ void keyboard(unsigned char key, int x, int y)
             turn = a;
         }
         turn = turn + 1;
-        printf("zahyouhane~%lf\n",turn);
+        //printf("zahyouhane~%lf\n",turn);
         if(turn == 64){
             turn = 0;
         }
@@ -447,6 +478,11 @@ void keyboard(unsigned char key, int x, int y)
         break;
     }
     
+    /*回転　ベクトル(hirokazu)
+    printf("turn:%lf\n",turn);
+    player[clientID].SetDir(turn);
+    printf("dir(%f,%f,%f)\n",player[clientID].dir.x,player[clientID].dir.y,player[clientID].dir.z);
+    */
 
     // jyoikonnの処理
     //カメラの処理
@@ -545,4 +581,17 @@ void myInit(char *windowTitle)
     /* 箱の座標と速度の初期値設定 */
 
     
+}
+
+void Player::SetDir(float turn_xz){
+    float rad = turn_xz*0.1f; //rad = turn *0.1f ラジアンに直す 64*0.1 == 2PI
+    
+    glm::vec3 d;
+    d.x = -cos(rad);
+    d.y = 0.0f;
+    d.z = sin(rad);
+
+    dir.x = d.x;
+    dir.y = d.y;
+    dir.z = d.z;
 }
