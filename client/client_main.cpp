@@ -162,10 +162,10 @@ void display(void)
         glPushMatrix();           /* 描画位置を保存 */
         glColor3f(1.0, 1.0, 1.0); /* 描画色を白にする */
         glScalef(1.0, 1.0, 1.0);
-        if (i < 3) {
+        if (i < gClientNum+1) {
             /* 描画位置を(BoxX, i, 0)に移動 */
             // glutWireCube (0.5);
-            if (i == 0 || i == 1) {
+            if (i >=0 && i <= gClientNum) {
                 glTranslatef(player[i].pos.x, player[i].pos.y, player[i].pos.z);
                 glRotatef(turn*5.75, 0, 1, 0);
             }
