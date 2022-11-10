@@ -26,6 +26,9 @@ extern void WindowEvent(int num);
 /* client_command.cpp */
 extern int ExecuteCommand(char command);
 extern void SendEndCommand(void);
+extern void SendPlayerDataCommand(void);
 
-
+extern int		gClientNum;
+extern int		clientID;
+extern Player *player;
 #endif

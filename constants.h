@@ -1,7 +1,7 @@
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
-/* ¥Ø¥Ã¥À¥Õ¥¡¥¤¥ë */
+/* \©¬\ªª\ª¢\ªØ\¢Â\¢ð\«³ */
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
@@ -13,15 +13,16 @@
 #include<unistd.h>
 #include<sys/types.h>
 #include<assert.h>
-#include<glm/glm.hpp>
+#include "glm/glm.hpp"
 
-#define PORT			(u_short)8888	/* ï¿½Ý¡ï¿½ï¿½ï¿½ï¿½Ö¹ï¿½ */
-#define MAX_CLIENTS		4				/* ï¿½ï¿½ï¿½é¥¤ï¿½ï¿½ï¿½ï¿½È¿ï¿½ï¿½Îºï¿½ï¿½ï¿½ï¿½ï¿? */
-#define MAX_NAME_SIZE	10 				/* ï¿½æ¡¼ï¿½ï¿½ï¿½ï¿½Ì¾ï¿½Îºï¿½ï¿½ï¿½ï¿½ï¿½*/
+#define PORT			(u_short)8988	/* «Á¢Ä?ªò¢Â«Á¢Ä?«Á¢Ä?«Á¢Ä?«Á¢Ä?ªÓ?«Á¢Ä? */
+#define MAX_CLIENTS		4				/* «Á¢Ä?«Á¢Ä?«Á¢Ä?«±\¢ð«Á¢Ä?«Á¢Ä?«Á¢Ä?«Á¢Ä?ª²¢Ä«Á¢Ä?«Á¢Ä?ªÂ¢ë«Á¢Ä?«Á¢Ä?«Á¢Ä?«Á¢Ä?«Á¢Ä? */
+#define MAX_NAME_SIZE	10 				/* «Á¢Ä?©Á¢Â?«Á¢Ä?«Á¢Ä?«Á¢Ä?«Á¢Ä?ªÀ?«Á¢Ä?ªÂ¢ë«Á¢Ä?«Á¢Ä?«Á¢Ä?«Á¢Ä?«Á¢Ä?*/
 
-#define MAX_DATA		200				/* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¡ï¿½ï¿½ï¿½ï¿½Îºï¿½ï¿½ï¿½ï¿½ï¿? */
+#define MAX_DATA		200				/* «Á¢Ä?«Á¢Ä?«Á¢Ä?«Á¢Ä?«Á¢Ä?«Á¢Ä?«Á¢Ä?«Á¢Ä?«Á¢Ä?«Á¢Ä?ª®¢Â«Á¢Ä?«Á¢Ä?«Á¢Ä?«Á¢Ä?ªÂ¢ë«Á¢Ä?«Á¢Ä?«Á¢Ä?«Á¢Ä?«Á¢Ä? */
 
-#define END_COMMAND		'E'		  		/* ï¿½×¥ï¿½ï¿½ï¿½ï¿½ï¿½à½?Î»ï¿½ï¿½ï¿½Þ¥ï¿½ï¿? */
+#define PLAYERDATA_COMMAND 's'
+#define END_COMMAND 'e'
 
 
 class Player{
@@ -34,6 +35,7 @@ public:
     int mp;
     int hp;
     int reloadTime;
+    void SetDir(float turn_xz);
 };
 
 class Bullet{
@@ -43,5 +45,6 @@ public:
     glm::vec3 pos;
     glm::vec3 dir;
 };
+
 
 #endif 

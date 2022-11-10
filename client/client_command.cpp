@@ -18,12 +18,20 @@ static void SetCharData2DataBlock(void *data,char charData,int *dataSize);
 int ExecuteCommand(char command)
 {
     int	endFlag = 1;
-#ifndef NDEBUG
-    printf("#####\n");
-    printf("ExecuteCommand()\n");
-    printf("command = %c\n",command);
-#endif
+
     switch(command){
+        case PLAYERDATA_COMMAND:{
+            Player *p = (Player*)malloc(sizeof(Player)*gClientNum);
+            RecvData(p,sizeof(Player)*gClientNum);
+            //格納する処理
+            for(int i = 0; i <gClientNum;i++)
+            {
+                if(i != clientID)
+                    player[i] = p[i];
+            }
+            free(p);
+        }
+            break;
 		case END_COMMAND:
 			endFlag = 0;
 			break;
@@ -46,16 +54,29 @@ void SendEndCommand(void)
     unsigned char	data[MAX_DATA];
     int			dataSize;
 
-#ifndef NDEBUG
-    printf("#####\n");
-    printf("SendEndCommand()\n");
-#endif
     dataSize = 0;
     /* コマンドのセット */
     SetCharData2DataBlock(data,END_COMMAND,&dataSize);
 
     /* データの送信 */
     SendData(data,dataSize);
+}
+
+void SendPlayerDataCommand(void){
+
+    unsigned char	data[MAX_DATA];
+    int			dataSize;
+
+    dataSize = 0;
+    /* コマンドのセット */
+    SetCharData2DataBlock(data,PLAYERDATA_COMMAND,&dataSize);
+    /* データの送信 */
+    SendData(data,dataSize);
+
+    //playerDataの送信
+
+    SendData(&(player[clientID]),sizeof(Player));
+
 }
 
 /*****
@@ -104,3 +125,4 @@ static void SetCharData2DataBlock(void *data,char charData,int *dataSize)
     /* データサイズを増やす */
     (*dataSize) += sizeof(char);
 }
+
