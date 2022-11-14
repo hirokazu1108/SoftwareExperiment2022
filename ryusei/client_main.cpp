@@ -102,26 +102,28 @@ void display(void)
     int i;
 
         if(flag ==0){
-        CameraX = CameraX/*+sin(turn*0.1f)*5*/;
+        CameraX = CameraX;
         CameraY = CameraY;
-        CameraZ = CameraZ/*+cos(turn*0.1f)*5*/;
-        CameraX = BoxX[0] +sin(turn*0.1f)*5 /*+cos(turn2*0.1f)*5*/;
-        CameraY = BoxY[0] + sin(turn2*0.1f)*5;
-        CameraZ = BoxZ[0]+cos(turn*0.1f)*5;
+        CameraZ = CameraZ;
+       //CameraX = BoxX[0] +sin(turn*0.1f)*5 ;
+        //CameraY = BoxY[0] + sin(turn2*0.1f)*5;
+        //CameraZ = BoxZ[0]+cos(turn*0.1f)*5;
+        CameraX = BoxX[0] +sin(turn*0.1f)*5  ;
+        //CameraY = BoxY[0] + sin(turn2*0.1f)*5;
+        CameraZ = BoxZ[0] +cos(turn*0.1f)*5 ;
+        
+        
         }
         else{
-        CameraX = BoxX[0]  /*+cos(turn2*0.1f)*5*/;
-        CameraY = BoxY[0] ;
-        CameraZ = BoxZ[0];
-        CameraX = BoxX[0] +cos(turn2*0.1f)*5 /*+cos(turn2*0.1f)*5*/;
-        CameraY = BoxY[0] + sin(turn2*0.1f)*5;
-        CameraZ = BoxZ[0]+sin(turn2*0.1f)*5;
+        CameraX = CameraX;
+        CameraY = CameraY;
+        CameraZ = CameraZ;
+
         
-       /*
-        CameraX = BoxX[0] +cos(turn*0.1f)*5 ;
+        //CameraX = BoxX[0] +sin(turn*0.1f)*5 ;
         CameraY = BoxY[0] + sin(turn2*0.1f)*5;
-        CameraZ = BoxZ[0]+cos(turn2*0.1f)*5;
-        */
+        //CameraZ = BoxZ[0] +cos(turn*0.1f)*5 ;
+        
         }
     /* ����� */
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); /* ���̤�õ� */
@@ -150,7 +152,7 @@ void display(void)
             if (i == 0) {
                 glTranslatef(BoxX[0], BoxY[0], BoxZ[0]);
                 if(flag == 2){
-                    glRotatef(turn*5.75, 0, 0, 1);
+                   // glRotatef(turn*5.75, 0, 0, 1);
                     //flag = 0;
                 }
                 else{
@@ -454,16 +456,20 @@ void keyboard(unsigned char key, int x, int y)
     case 'w':
         flag = 2;
         //turn2 = turn2-1;
+        
         if(turn2>0){
             double a;
             a = -64 + turn2;
             turn2 = a;
         }
         turn2 = turn2 - 1;
-
+        //turn = turn -1;
         printf("zahyouhane~%lf\n",turn2);
         if(turn2 == -64){
             turn2= 0;
+        }
+        if(turn == -64){
+            turn= 0;
         }
         break;
     case 'j':
