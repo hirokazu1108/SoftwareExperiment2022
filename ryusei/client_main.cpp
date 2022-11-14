@@ -110,9 +110,9 @@ void display(void)
         CameraZ = BoxZ[0]+cos(turn*0.1f)*5;
         }
         else{
-        CameraX = BoxX[0] +sin(turn*0.1f)*5 /*+cos(turn2*0.1f)*5*/;
-        CameraY = BoxY[0] + sin(turn2*0.1f)*5;
-        CameraZ = BoxZ[0]+cos(turn*0.1f)*5;
+        CameraX = BoxX[0]  /*+cos(turn2*0.1f)*5*/;
+        CameraY = BoxY[0] ;
+        CameraZ = BoxZ[0];
         CameraX = BoxX[0] +cos(turn2*0.1f)*5 /*+cos(turn2*0.1f)*5*/;
         CameraY = BoxY[0] + sin(turn2*0.1f)*5;
         CameraZ = BoxZ[0]+sin(turn2*0.1f)*5;
