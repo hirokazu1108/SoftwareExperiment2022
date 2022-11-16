@@ -145,7 +145,7 @@ void display(void)
    
         gluLookAt(CameraX, CameraY, CameraZ, /* �����ΰ��� */
         BoxX[0], BoxY[0],BoxZ[0],                         /* �������ΰ��� */
-        0, 0.5, 0.0);
+        0, 0.5*cos(turn2), 0.0);
    
     /* Ω���Τ����� */
     for (i = 0; i < 100; i++) {
