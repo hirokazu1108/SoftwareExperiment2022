@@ -7,19 +7,33 @@ int main(int argc,char *argv[])
 {
 
 	int	endFlag = 1;
+  	u_short port = PORT;
 
 	/* 引き数チェック */
-	if(argc != 2){
-		fprintf(stderr,"Usage: number of clients\n");
-		exit(-1);
-	}
-	if((gClientNum = atoi(argv[1])) < 0 ||  gClientNum > MAX_CLIENTS){
+  switch (argc) {
+  case 1:
+	fprintf(stderr,"Usage: number of clients\n");
+	return 1;
+    break;
+  case 2:
+    if((gClientNum = atoi(argv[1])) < 0 ||  gClientNum > MAX_CLIENTS){
 		fprintf(stderr,"clients limit = %d \n",MAX_CLIENTS);
 		exit(-1);
 	}
-	
+	break;
+  case 3:
+    if((gClientNum = atoi(argv[1])) < 0 ||  gClientNum > MAX_CLIENTS){
+		fprintf(stderr,"clients limit = %d \n",MAX_CLIENTS);
+		exit(-1);
+	}
+    port = atoi(argv[2]);
+    break;
+  default:
+    fprintf(stderr, "Usage: %s [number of clients] [port number]\n", argv[0]);
+    return 1;
+  }
 	/* クライアントとの接続 */
-	if(SetUpServer(gClientNum) == -1){
+	if(SetUpServer(gClientNum,port) == -1){
 		fprintf(stderr,"Cannot setup server\n");
 		exit(-1);
 	}

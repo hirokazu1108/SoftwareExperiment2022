@@ -6,7 +6,7 @@
 #define ALL_CLIENTS	-1   /* ??????????????????????????????? */
 
 /* server_net.c */
-extern int SetUpServer(int num);
+extern int SetUpServer(int num, u_short port);
 extern void Ending(void);
 extern int RecvIntData(int pos,int *intData);
 extern void SendData(int pos,void *data,int dataSize);
