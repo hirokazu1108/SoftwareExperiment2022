@@ -28,7 +28,7 @@ static void SendAllName(void);
 引数	: int		num		  : クライアント数
 出力	: コネクションに失敗した時-1,成功した時0
 *****************************************************************/
-int SetUpServer(int num)
+int SetUpServer(int num, u_short port)
 {
     struct sockaddr_in	server;
     int			request_soc;
@@ -40,7 +40,7 @@ int SetUpServer(int num)
 
     bzero((char*)&server,sizeof(server));
     server.sin_family = AF_INET;
-    server.sin_port = htons(PORT);
+    server.sin_port = htons(port);
     server.sin_addr.s_addr = htonl(INADDR_ANY);
 
     /* ソケットを作成する */
