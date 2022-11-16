@@ -35,7 +35,6 @@ float BoxX[3];                /* 箱のX座標 */
 float BoxVx[3];               /* 箱のX方向移動速度 */
 float BoxY[3];
 float BoxZ[3];
-float turn = 0;
 char left  = 0;
 char right = 0;
 char buf[256];
@@ -88,8 +87,6 @@ int main(int argc, char **argv)
     /* 引き数チェック */
   switch (argc) {
   case 1:
-    fprintf(stderr, "Usage: %s, Cannot find a Server Name.\n", argv[0]);
-	return -1;
     break;
   case 2:
     sprintf(serverName, "%s", argv[1]);
@@ -122,6 +119,9 @@ int main(int argc, char **argv)
         player[i].upVec.x = 0;
         player[i].upVec.y = 0;
         player[i].upVec.z = 0;
+        player[i].turn1 = 0;
+        player[i].turn2 = 0;
+        player[i].turn3 = 0;
         player[i].type = 0;
         player[i].mp = 0;
         player[i].hp = 0;
@@ -154,6 +154,32 @@ void display(void)
 {
     int i;
 
+    if(flag ==0){
+        CameraX = CameraX;
+        CameraY = CameraY;
+        CameraZ = CameraZ;
+       //CameraX = player[clientID].pos.x +sin(player[clientID].turn1*0.1f)*5 ;
+        //CameraY = player[clientID].pos.y + sin(player[clientID].turn2*0.1f)*5;
+        //CameraZ = player[clientID].pos.z+cos(player[clientID].turn1*0.1f)*5;
+        CameraX = player[clientID].pos.x /*+sin(player[clientID].turn1*0.1f)*5*/  +sin(player[clientID].turn1)*5 *cos(player[clientID].turn3);
+        CameraY = player[clientID].pos.y + sin(player[clientID].turn2)*5;
+        CameraZ = player[clientID].pos.z /*+cos(player[clientID].turn1*0.1f)*5*/ +cos(player[clientID].turn1)*5 *cos(player[clientID].turn3);
+        
+        
+        }
+        else{
+        CameraX = CameraX;
+        CameraY = CameraY;
+        CameraZ = CameraZ;
+
+        CameraX = player[clientID].pos.x /*+sin(player[clientID].turn1*0.1f)*5 */ + sin(player[clientID].turn1)*5 *cos(player[clientID].turn3);
+        CameraY = player[clientID].pos.y + sin(player[clientID].turn2)*5;
+        CameraZ = player[clientID].pos.z /*+cos(player[clientID].turn1*0.1f)*5 */+cos(player[clientID].turn1)*5 *cos(player[clientID].turn3);
+        /*CameraX = player[clientID].pos.x +sin(player[clientID].turn1*0.1f)*5 *cos(player[clientID].turn3*0.1f);
+        CameraY = player[clientID].pos.y + sin(player[clientID].turn2*0.1f)*5;
+        CameraZ = player[clientID].pos.z +cos(player[clientID].turn1*0.1f)*5 *sin(player[clientID].turn3*0.1f);*/
+    }
+    
     /* 初期化 */
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); /* 画面を消去 */
     glMatrixMode(GL_MODELVIEW);                         /* 幾何（描画位置など設定する）モード */
@@ -162,9 +188,10 @@ void display(void)
     /* 視点の設定 */
     // glMatrixMode(GL_PROJECTION);
     
-    gluLookAt(player[clientID].pos.x +sin(turn*0.1f)*5, player[clientID].pos.y, player[clientID].pos.z+cos(turn*0.1f)*5, /* カメラの位置 */
-        player[clientID].pos.x/*+turn*0.1*/, 0 /*+turn*0.01*/,player[clientID].pos.z/*+turn*0.01f*//*+sin(turn/180)*/,                         /* 注視点の位置 */
-        0, 0.5/*+turn*0.5*/, 0.0);                              /* カメラ上方向のベクトル */
+    gluLookAt(CameraX, CameraY, CameraZ, /* カメラの位置 */
+        player[clientID].pos.x, player[clientID].pos.y,player[clientID].pos.z,        /* 注視点の位置 */
+        0, 0.5*cos(player[clientID].turn2), 0.0);         /* カメラ上方向のベクトル */
+
     /* 立方体の描画 */
     for (i = 0; i < 100; i++) {
         glPushMatrix();           /* 描画位置を保存 */
@@ -175,7 +202,7 @@ void display(void)
             // glutWireCube (0.5);
             if (i >=0 && i <= gClientNum) {
                 glTranslatef(player[i].pos.x, player[i].pos.y, player[i].pos.z);
-                glRotatef(turn*5.75, 0, 1, 0);
+                glRotatef(player[clientID].turn1, 0, 1, 0);
             }
              else {
                 glTranslatef(BoxX[1], 0, 2);
@@ -427,68 +454,100 @@ void keyboard(unsigned char key, int x, int y)
         exit(0); /* プログラム終了 */
         break;
     case 'b':
-        
-        //player[clientID].pos.x=player[clientID].pos.x-1;
-        //if(turn>=0){
-         player[clientID].pos.x = player[clientID].pos.x-sin(turn*0.1f);
-         player[clientID].pos.z =player[clientID].pos.z-cos(turn*0.1f);
+       //player[clientID].pos.x=player[clientID].pos.x-1;
+        //if(player[clientID].turn1>=0){
+         player[clientID].pos.x = player[clientID].pos.x-sin(player[clientID].turn1);
+         player[clientID].pos.z =player[clientID].pos.z-cos(player[clientID].turn1);
+         player[clientID].pos.y = player[clientID].pos.y - sin(player[clientID].turn2);
        // }
        /* else{
-         player[clientID].pos.x = player[clientID].pos.x-cos(turn*0.1f);
-         player[clientID].pos.z =player[clientID].pos.z-sin(turn*0.1f);
+         player[clientID].pos.x = player[clientID].pos.x-cos(player[clientID].turn1*0.1f);
+         player[clientID].pos.z =player[clientID].pos.z-sin(player[clientID].turn1*0.1f);
         }*/
-         //player[clientID].pos.z * /*cos(turn/180)*/sin(turn/180);
-        //printf("%f:%f\n",player[0].pos.x,player[1].pos.x);
-         //player[clientID].pos.y= player[clientID].pos.y+0.01*cos(turn/180.0);
+         //player[clientID].pos.z * /*cos(player[clientID].turn1/180)*/sin(player[clientID].turn1/180);
+        printf("%f\n",player[clientID].pos.x);
+         //player[clientID].pos.y= player[clientID].pos.y+0.01*cos(player[clientID].turn1/180.0);
       // player[clientID].pos.x -= 1;
         break;
     case 'd':
         //player[clientID].pos.x=player[clientID].pos.x+1;
-        // player[clientID].pos.y= player[clientID].pos.y-0.01*cos(turn/180.0*3.141592);
+        // player[clientID].pos.y= player[clientID].pos.y-0.01*cos(player[clientID].turn1/180.0*3.141592);
         break;
     case 's':
-        
-        if(turn>0){
+        flag = 0;
+        if(player[clientID].turn1>0){
             double a;
-            a = -64 + turn;
-            turn = a;
+            a = -2 * M_PI + player[clientID].turn1;
+            player[clientID].turn1 = a;
         }
-        turn = turn - 1;
-        //printf("zahyouhane~%lf\n",turn);
-        if(turn == -64){
-            turn = 0;
+        player[clientID].turn1 = player[clientID].turn1 - (M_PI / 180);
+
+        printf("zahyouhane~%lf\n",player[clientID].turn1);
+        if(player[clientID].turn1 == -2 * M_PI){
+            player[clientID].turn1 = 0;
         }
-        
+        /*CameraX = player[clientID].pos.x +sin(player[clientID].turn1*0.1f)*5;
+        CameraY = player[clientID].pos.y;
+        CameraZ = player[clientID].pos.z+cos(player[clientID].turn1*0.1f)*5;*/
         break;
     case 'a':
-        if(turn<0){
+        flag = 0;
+        if(player[clientID].turn1<0){
             double a;
-            a = 64 + turn;
-            turn = a;
+            a = 2 * M_PI + player[clientID].turn1;
+            player[clientID].turn1 = a;
         }
-        turn = turn + 1;
-        //printf("zahyouhane~%lf\n",turn);
-        if(turn == 64){
-            turn = 0;
+        player[clientID].turn1 = player[clientID].turn1 + (M_PI / 180);
+        printf("zahyouhane~%lf\n",player[clientID].turn1);
+        if(player[clientID].turn1 == 2 * M_PI){
+            player[clientID].turn1 = 0;
         }
+       /* CameraX = player[clientID].pos.x +sin(player[clientID].turn1*0.1f)*5;
+        CameraY = player[clientID].pos.y;
+        CameraZ = player[clientID].pos.z+cos(player[clientID].turn1*0.1f)*5;*/
         break;
-    case 'n':
-        flag -= 1;
-
+    case 'w':
+        flag = 2;
+        //player[clientID].turn2 = player[clientID].turn2-1;
+        
+        if(player[clientID].turn2>0){
+            double a;
+            a = -2 * M_PI + player[clientID].turn2;
+            player[clientID].turn2 = a;
+        }
+        player[clientID].turn2 = player[clientID].turn2 - (M_PI / 180);
+        //player[clientID].turn1 = player[clientID].turn1 -1;
+        printf("zahyouhane~%lf\n",player[clientID].turn2);
+        if(player[clientID].turn2 == -2 * M_PI){
+            player[clientID].turn2= 0;
+        }
+          player[clientID].turn3 = player[clientID].turn3 + (M_PI / 180);
+        if(player[clientID].turn3 == 2 * M_PI){
+            player[clientID].turn3= 0;
+        }
         break;
     case 'j':
-        junpf++;
+        if(player[clientID].turn1<0){
+            double a;
+            a = 2 * M_PI + player[clientID].turn2;
+            player[clientID].turn2 = a;
+        }
+        player[clientID].turn2 = player[clientID].turn2 + (M_PI / 180);
+        printf("zahyouhane~%lf\n",player[clientID].turn2);
+        if(player[clientID].turn2 == 2 * M_PI){
+            player[clientID].turn2 = 0;
+        }
         break;
     default:
         junp  = 0;
         junpf = 0;
-        //turn = 0;
+        //player[clientID].turn1 = 0;
         break;
     }
     
     /*回転　ベクトル(hirokazu)
-    printf("turn:%lf\n",turn);
-    player[clientID].SetDir(turn);
+    printf("player[clientID].turn1:%lf\n",player[clientID].turn1);
+    player[clientID].SetDir(player[clientID].turn1);
     printf("dir(%f,%f,%f)\n",player[clientID].dir.x,player[clientID].dir.y,player[clientID].dir.z);
     */
 

@@ -51,6 +51,9 @@ int main(int argc,char *argv[])
         player[i].upVec.x = 0;
         player[i].upVec.y = 0;
         player[i].upVec.z = 0;
+        player[i].turn1 = 0;
+        player[i].turn2 = 0;
+        player[i].turn3 = 0;
         player[i].type = 0;
         player[i].mp = 0;
         player[i].hp = 0;
