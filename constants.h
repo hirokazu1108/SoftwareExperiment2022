@@ -34,6 +34,9 @@ public:
     glm::vec3 pos;
     glm::vec3 dir;
     glm::vec3 upVec;
+    float turn1;
+    float turn2;
+    float turn3;
     int mp;
     int hp;
     int reloadTime;
