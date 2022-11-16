@@ -10,7 +10,7 @@
 #define WINDOW_HEIGHT 2000
 
 /* client_net.cpp */
-extern int SetUpClient(char* hostName,int *clientID,int *num,char clientName[][MAX_NAME_SIZE]);
+extern int SetUpClient(char *hostName,u_short port,int *clientID,int *num,char clientNames[][MAX_NAME_SIZE]);
 extern void CloseSoc(void);
 extern int RecvIntData(int *intData);
 extern void SendData(void *data,int dataSize);

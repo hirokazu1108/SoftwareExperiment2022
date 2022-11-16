@@ -17,11 +17,12 @@ static void SetMask(void);
 機能	: サーバーとのコネクションを設立し，
 		  ユーザーの名前の送受信を行う
 引数	: char	*hostName		: ホスト
+      u_short :ポート番号
 		  int	*num			: 全クライアント数
 		  char	clientNames[][]		: 全クライアントのユーザー名
 出力	: コネクションに失敗した時-1,成功した時0
 *****************************************************************/
-int SetUpClient(char *hostName,int *clientID,int *num,char clientNames[][MAX_NAME_SIZE])
+int SetUpClient(char *hostName,u_short port,int *clientID,int *num,char clientNames[][MAX_NAME_SIZE])
 {
     struct hostent	*servHost;
     struct sockaddr_in	server;
@@ -31,12 +32,12 @@ int SetUpClient(char *hostName,int *clientID,int *num,char clientNames[][MAX_NAM
     /* ホスト名からホスト情報を得る */
     if((servHost = gethostbyname(hostName))==NULL){
 		fprintf(stderr,"Unknown host\n");
-		return -1;
+		return -1;int SetUpServer(int num);int SetUpServer(int num);
     }
 
     bzero((char*)&server,sizeof(server));
     server.sin_family = AF_INET;
-    server.sin_port = htons(PORT);
+    server.sin_port = htons(port);
     bcopy(servHost->h_addr,(char*)&server.sin_addr,servHost->h_length);
 
     /* ソケットを作成する */

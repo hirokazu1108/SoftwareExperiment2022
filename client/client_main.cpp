@@ -78,25 +78,33 @@ static GLubyte image[TEX_HEIGHT][TEX_WIDTH][4];
 ***********************************************************/
 int main(int argc, char **argv)
 {
+    u_short port = PORT;
     char	name[MAX_CLIENTS][MAX_NAME_SIZE];
     int		endFlag=1;
-    char	localHostName[]="localhost";
-    char	*serverName;
+    char	serverName[MAX_NAME_SIZE];
+    
+    sprintf(serverName, "localhost");
 
     /* 引き数チェック */
-    if(argc == 1){
-    	serverName = localHostName;
-    }
-    else if(argc == 2){
-    	serverName = argv[1];
-    }
-    else{
-		fprintf(stderr, "Usage: %s, Cannot find a Server Name.\n", argv[0]);
-		return -1;
-    }
+  switch (argc) {
+  case 1:
+    fprintf(stderr, "Usage: %s, Cannot find a Server Name.\n", argv[0]);
+	return -1;
+    break;
+  case 2:
+    sprintf(serverName, "%s", argv[1]);
+    break;
+  case 3:
+    sprintf(serverName, "%s", argv[1]);
+    port = (u_short)atoi(argv[2]);
+    break;
+  default:
+    fprintf(stderr, "Usage: %s [server name] [port number]\n", argv[0]);
+    return 1;
+  }
 
     /* サーバーとの接続 */
-    if(SetUpClient(serverName,&clientID,&gClientNum,name)==-1){
+    if(SetUpClient(serverName,port,&clientID,&gClientNum,name)==-1){
 		fprintf(stderr,"setup failed : SetUpClient\n");
 		return -1;
 	}
