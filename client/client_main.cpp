@@ -351,7 +351,7 @@ void display(void)
         glColor3f(1.0, 1.0, 1.0);
     }
     glPopMatrix();
-    glFlush();
+
    
 
     /* 上記で描画されたCGをモニターに出力 */
