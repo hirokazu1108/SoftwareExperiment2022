@@ -33,6 +33,8 @@ float BoxY[3];
 float BoxZ[3];
 float turn = 0;
 float turn2 = 0;
+float turn3 = 0;
+float turn4 = 0;
 char left  = 0;
 char right = 0;
 char buf[256];
@@ -45,6 +47,8 @@ int f           = 0; //���ΤϤ䤵
 int ps          = 0;
 double junp;
 int junpf = 0;
+
+
 
 int bf;
 int jnk; //���祤��������ϥ��ޥ��
@@ -108,9 +112,9 @@ void display(void)
        //CameraX = BoxX[0] +sin(turn*0.1f)*5 ;
         //CameraY = BoxY[0] + sin(turn2*0.1f)*5;
         //CameraZ = BoxZ[0]+cos(turn*0.1f)*5;
-        CameraX = BoxX[0] +sin(turn*0.1f)*5  ;
-        //CameraY = BoxY[0] + sin(turn2*0.1f)*5;
-        CameraZ = BoxZ[0] +cos(turn*0.1f)*5 ;
+        CameraX = BoxX[0] /*+sin(turn*0.1f)*5*/  +sin(turn*0.1f)*5 *cos(turn3*0.1f);
+        CameraY = BoxY[0] + sin(turn2*0.1f)*5;
+        CameraZ = BoxZ[0] /*+cos(turn*0.1f)*5*/ +cos(turn*0.1f)*5 *cos(turn3*0.1f);
         
         
         }
@@ -119,10 +123,12 @@ void display(void)
         CameraY = CameraY;
         CameraZ = CameraZ;
 
-        
-        //CameraX = BoxX[0] +sin(turn*0.1f)*5 ;
+        CameraX = BoxX[0] /*+sin(turn*0.1f)*5 */ + sin(turn*0.1f)*5 *cos(turn3*0.1f);
         CameraY = BoxY[0] + sin(turn2*0.1f)*5;
-        //CameraZ = BoxZ[0] +cos(turn*0.1f)*5 ;
+        CameraZ = BoxZ[0] /*+cos(turn*0.1f)*5 */+cos(turn*0.1f)*5 *cos(turn3*0.1f);
+        /*CameraX = BoxX[0] +sin(turn*0.1f)*5 *cos(turn3*0.1f);
+        CameraY = BoxY[0] + sin(turn2*0.1f)*5;
+        CameraZ = BoxZ[0] +cos(turn*0.1f)*5 *sin(turn3*0.1f);*/
         
         }
     /* ����� */
@@ -138,8 +144,8 @@ void display(void)
 
    
         gluLookAt(CameraX, CameraY, CameraZ, /* �����ΰ��� */
-        BoxX[0]/*+turn*0.1*/, BoxY[0] /*+turn*0.01*/,BoxZ[0]/*+turn*0.01f*//*+sin(turn/180)*/,                         /* �������ΰ��� */
-        0, 0.5/*+turn*0.5*/, 0.0);
+        BoxX[0], BoxY[0],BoxZ[0],                         /* �������ΰ��� */
+        0, 0.5, 0.0);
    
     /* Ω���Τ����� */
     for (i = 0; i < 100; i++) {
@@ -468,9 +474,15 @@ void keyboard(unsigned char key, int x, int y)
         if(turn2 == -64){
             turn2= 0;
         }
-        if(turn == -64){
-            turn= 0;
+          turn3 = turn3 + 1;
+        if(turn3 == 64){
+            turn3= 0;
         }
+        
+          
+        
+        
+
         break;
     case 'j':
         if(turn<0){
