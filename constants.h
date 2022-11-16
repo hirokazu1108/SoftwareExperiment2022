@@ -43,12 +43,16 @@ public:
     void SetDir(float turn_xz);
 };
 
-class Bullet{
-public:
-    int type;
-    float spead;
-    glm::vec3 pos;
-    glm::vec3 dir;
+/* 弾のクラス */
+class BULLET{
+    public:
+        int type;           // 弾の種類
+        glm::vec3 pos;      // 弾の座標
+        glm::vec3 speed;    // 弾の速度
+        glm::vec3 dir;      // 弾の方向ベクトル
+        bool isEnable;      // 弾が表示されるときtrue, 表示されないときfalse
+        int lifetime;       // 弾の表示時間
+        BULLET(){pos.x = pos.y = pos.z = dir.x = dir.y = dir.z = 0;};
 };
 
 
