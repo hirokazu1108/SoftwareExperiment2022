@@ -112,9 +112,9 @@ void display(void)
        //CameraX = BoxX[0] +sin(turn*0.1f)*5 ;
         //CameraY = BoxY[0] + sin(turn2*0.1f)*5;
         //CameraZ = BoxZ[0]+cos(turn*0.1f)*5;
-        CameraX = BoxX[0] /*+sin(turn*0.1f)*5*/  +sin(turn*0.1f)*5 *cos(turn3*0.1f);
-        CameraY = BoxY[0] + sin(turn2*0.1f)*5;
-        CameraZ = BoxZ[0] /*+cos(turn*0.1f)*5*/ +cos(turn*0.1f)*5 *cos(turn3*0.1f);
+        CameraX = BoxX[0] /*+sin(turn*0.1f)*5*/  +sin(turn)*5 *cos(turn3);
+        CameraY = BoxY[0] + sin(turn2)*5;
+        CameraZ = BoxZ[0] /*+cos(turn*0.1f)*5*/ +cos(turn)*5 *cos(turn3);
         
         
         }
@@ -123,9 +123,9 @@ void display(void)
         CameraY = CameraY;
         CameraZ = CameraZ;
 
-        CameraX = BoxX[0] /*+sin(turn*0.1f)*5 */ + sin(turn*0.1f)*5 *cos(turn3*0.1f);
-        CameraY = BoxY[0] + sin(turn2*0.1f)*5;
-        CameraZ = BoxZ[0] /*+cos(turn*0.1f)*5 */+cos(turn*0.1f)*5 *cos(turn3*0.1f);
+        CameraX = BoxX[0] /*+sin(turn*0.1f)*5 */ + sin(turn)*5 *cos(turn3);
+        CameraY = BoxY[0] + sin(turn2)*5;
+        CameraZ = BoxZ[0] /*+cos(turn*0.1f)*5 */+cos(turn)*5 *cos(turn3);
         /*CameraX = BoxX[0] +sin(turn*0.1f)*5 *cos(turn3*0.1f);
         CameraY = BoxY[0] + sin(turn2*0.1f)*5;
         CameraZ = BoxZ[0] +cos(turn*0.1f)*5 *sin(turn3*0.1f);*/
@@ -162,7 +162,7 @@ void display(void)
                     //flag = 0;
                 }
                 else{
-                glRotatef(turn*5.75, 0, 1, 0);
+                glRotatef(turn, 0, 1, 0);
                 }
             } else {
                 glTranslatef(BoxX[1], 0, 2);
@@ -409,9 +409,9 @@ void keyboard(unsigned char key, int x, int y)
         
         //BoxX[0]=BoxX[0]-1;
         //if(turn>=0){
-         BoxX[0] = BoxX[0]-sin(turn*0.1f);
-         BoxZ[0] =BoxZ[0]-cos(turn*0.1f);
-         BoxY[0] = BoxY[0] - sin(turn2*0.1f);
+         BoxX[0] = BoxX[0]-sin(turn);
+         BoxZ[0] =BoxZ[0]-cos(turn);
+         BoxY[0] = BoxY[0] - sin(turn2);
        // }
        /* else{
          BoxX[0] = BoxX[0]-cos(turn*0.1f);
@@ -430,13 +430,13 @@ void keyboard(unsigned char key, int x, int y)
         flag = 0;
         if(turn>0){
             double a;
-            a = -64 + turn;
+            a = -2 * M_PI + turn;
             turn = a;
         }
-        turn = turn - 1;
+        turn = turn - (M_PI / 180);
 
         printf("zahyouhane~%lf\n",turn);
-        if(turn == -64){
+        if(turn == -2 * M_PI){
             turn = 0;
         }
         /*CameraX = BoxX[0] +sin(turn*0.1f)*5;
@@ -447,12 +447,12 @@ void keyboard(unsigned char key, int x, int y)
     flag = 0;
         if(turn<0){
             double a;
-            a = 64 + turn;
+            a = 2 * M_PI + turn;
             turn = a;
         }
-        turn = turn + 1;
+        turn = turn + (M_PI / 180);
         printf("zahyouhane~%lf\n",turn);
-        if(turn == 64){
+        if(turn == 2 * M_PI){
             turn = 0;
         }
        /* CameraX = BoxX[0] +sin(turn*0.1f)*5;
@@ -465,17 +465,17 @@ void keyboard(unsigned char key, int x, int y)
         
         if(turn2>0){
             double a;
-            a = -64 + turn2;
+            a = -2 * M_PI + turn2;
             turn2 = a;
         }
-        turn2 = turn2 - 1;
+        turn2 = turn2 - (M_PI / 180);
         //turn = turn -1;
         printf("zahyouhane~%lf\n",turn2);
-        if(turn2 == -64){
+        if(turn2 == -2 * M_PI){
             turn2= 0;
         }
-          turn3 = turn3 + 1;
-        if(turn3 == 64){
+          turn3 = turn3 + (M_PI / 180);
+        if(turn3 == 2 * M_PI){
             turn3= 0;
         }
         
@@ -487,12 +487,12 @@ void keyboard(unsigned char key, int x, int y)
     case 'j':
         if(turn<0){
             double a;
-            a = 64 + turn2;
+            a = 2 * M_PI + turn2;
             turn2 = a;
         }
-        turn2 = turn2 + 1;
+        turn2 = turn2 + (M_PI / 180);
         printf("zahyouhane~%lf\n",turn2);
-        if(turn2 == 64){
+        if(turn2 == 2 * M_PI){
             turn2 = 0;
         }
         break;
