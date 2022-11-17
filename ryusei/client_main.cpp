@@ -4,7 +4,10 @@
  * -------------------------------------------------------------------- */
 
 /* �إå��ե����� */
+#include <stdarg.h>
 #include "client.h"
+#include "trackball.h"
+#include "glm.h"
 
 #define RAD (M_PI / 180.0)
 typedef struct {
@@ -57,6 +60,19 @@ int rb;
 int af;
 joyconlib_t jc;
 
+GLuint     model_list = 0;		/* display list for object */
+char*      model_file = NULL;		/* name of the obect file */
+GLboolean  facet_normal = GL_FALSE;	/* draw with facet normal? */
+GLMmodel*  model;
+GLfloat    smoothing_angle = 90.0;	/* smoothing angle */
+GLfloat    scale;			/* scaling factor */
+GLboolean  bounding_box = GL_FALSE;
+GLboolean  performance = GL_FALSE;
+GLboolean  stats = GL_FALSE;
+GLfloat    weld_distance = 0.00001;
+GLuint     material_mode = 1;
+
+
 /* �ؿ��Υץ��ȥ�������� */
 
 void display(void);
@@ -66,6 +82,8 @@ void resize(int w, int h);
 void myInit(char *windowTitle);
 void drawString3D(const char *str, float charSize, float lineWidth);
 void init(void);
+void text(GLuint x, GLuint y, GLfloat scale, char* format, ...);
+void lists(void);
 int joyconev();
 #define TEX_HEIGHT 32
 #define TEX_WIDTH 32
@@ -85,6 +103,13 @@ int main(int argc, char **argv)
     glutInit(&argc, argv); /* OpenGL �ν���� */
     myInit(argv[0]);       /* ������ɥ�ɽ������������ν���� */
     
+    model_file = argv[1];
+    if (!model_file) {
+    fprintf(stderr, "usage: smooth model_file.obj\n");
+    exit(1);
+    }
+    init();
+
     glutMainLoop();
 
     // glutReshapeFunc(reshape);
@@ -152,7 +177,7 @@ void display(void)
         glPushMatrix();           /* ������֤���¸ */
         glColor3f(1.0, 1.0, 1.0); /* ���迧����ˤ��� */
         glScalef(1.0, 1.0, 1.0);
-        if (i < 2) {
+        if (i < 1) {
             /* ������֤�(BoxX, i, 0)�˰�ư */
             // glutWireCube (0.5);
             if (i == 0) {
@@ -168,7 +193,8 @@ void display(void)
                 glTranslatef(BoxX[1], 0, 2);
                 glRotatef(j, 0, 0, 1.0);
             }
-            glutSolidCube(1.0);
+            glCallList(model_list);
+            //glutSolidCube(1.0);
            // glutWireSphere(0.4, 20.0, 10.0);
         } else if (i == 2) {
             glTranslatef(BoxX[i], 0, -2);
@@ -189,9 +215,8 @@ void display(void)
                 glScalef(2.0, 5.0, 0.5);
                 glutSolidCube(1.0);
             }
+            glPopMatrix(); /* ������֤��᤹ */
         }
-       
-        glPopMatrix(); /* ������֤��᤹ */
     }
 
     //����ɽ��
@@ -310,8 +335,6 @@ void display(void)
         glColor3f(1.0, 1.0, 1.0);
     }
     glPopMatrix();
-    glFlush();
-    glutSwapBuffers();
 
     glFlush();
     /* �嵭�����褵�줿CG���˥����˽��� */
@@ -329,6 +352,104 @@ void display(void)
   glLoadIdentity();
 }
 */
+
+void 
+text(GLuint x, GLuint y, GLfloat scale, char* format, ...)
+{
+  va_list args;
+  char buffer[255], *p;
+  GLfloat font_scale = 119.05 + 33.33;
+
+  va_start(args, format);
+  vsprintf(buffer, format, args);
+  va_end(args);
+
+  glMatrixMode(GL_PROJECTION);
+  glPushMatrix();
+  glLoadIdentity();
+  gluOrtho2D(0, glutGet(GLUT_WINDOW_WIDTH), 0, glutGet(GLUT_WINDOW_HEIGHT));
+
+  glMatrixMode(GL_MODELVIEW);
+  glPushMatrix();
+  glLoadIdentity();
+
+  glPushAttrib(GL_ENABLE_BIT);
+  glDisable(GL_LIGHTING);
+  glDisable(GL_TEXTURE_2D);
+  glDisable(GL_DEPTH_TEST);
+  glTranslatef(x, y, 0.0);
+
+  glScalef(scale/font_scale, scale/font_scale, scale/font_scale);
+
+  for(p = buffer; *p; p++)
+    glutStrokeCharacter(GLUT_STROKE_ROMAN, *p);
+  
+  glPopAttrib();
+
+  glPopMatrix();
+  glMatrixMode(GL_PROJECTION);
+  glPopMatrix();
+  glMatrixMode(GL_MODELVIEW);
+}
+
+
+void
+init(void)
+{
+  tbInit(GLUT_MIDDLE_BUTTON);
+  
+  /* read in the model */
+  model = glmReadOBJ(model_file);
+  scale = glmUnitize(model);
+  glmFacetNormals(model);
+  glmVertexNormals(model, smoothing_angle);
+
+  /* create new display lists */
+  lists();
+
+  glEnable(GL_LIGHTING);
+  glEnable(GL_LIGHT0);
+  glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+
+  glEnable(GL_DEPTH_TEST);
+
+  glEnable(GL_CULL_FACE);
+}
+
+
+void lists(void)
+{
+  GLfloat ambient[] = { 0.2, 0.2, 0.2, 1.0 };
+  GLfloat diffuse[] = { 0.8, 0.8, 0.8, 1.0 };
+  GLfloat specular[] = { 0.0, 0.0, 0.0, 1.0 };
+  GLfloat shininess = 65.0;
+
+  if (model_list)
+    glDeleteLists(model_list, 1);
+
+  glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
+  glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
+  glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+  glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
+
+  /* generate a list */
+  if (material_mode == 0) { 
+    if (facet_normal)
+      model_list = glmList(model, GLM_FLAT);
+    else
+      model_list = glmList(model, GLM_SMOOTH);
+  } else if (material_mode == 1) {
+    if (facet_normal)
+      model_list = glmList(model, GLM_FLAT | GLM_COLOR);
+    else
+      model_list = glmList(model, GLM_SMOOTH | GLM_COLOR);
+  } else if (material_mode == 2) {
+    if (facet_normal)
+      model_list = glmList(model, GLM_FLAT | GLM_MATERIAL);
+    else
+      model_list = glmList(model, GLM_SMOOTH | GLM_MATERIAL);
+  }
+}
 
 void resize(int w, int h)
 {
