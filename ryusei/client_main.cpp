@@ -170,7 +170,7 @@ void display(void)
    
         gluLookAt(CameraX, CameraY, CameraZ, /* �����ΰ��� */
         BoxX[0], BoxY[0],BoxZ[0],                         /* �������ΰ��� */
-        0, 0.5*cos(turn2), 0.0);
+        0, 0.5*cos(turn2), 0);
    
     /* Ω���Τ����� */
     for (i = 0; i < 100; i++) {
@@ -187,10 +187,28 @@ void display(void)
                    // glRotatef(turn*5.75, 0, 0, 1);
                     //flag = 0;
                 }
-                
+                glRotatef(turn2*-1*57.5, 1, 0, 0); 
+               // glRotatef(turn3*57.5, 0, 1, 0);
+               if(turn != 0 || turn != M_PI){
+                    if(cos(turn2)>= 0){               
+                     glRotatef(turn*57.5, 0, 1, 0);
+                    //glRotatef(turn2*1*57.5, 1, 0, 0); 
+                }
+                else{
+                    glRotatef(turn*57.5*-1, 0, 1, 0);
+                    //glRotatef(turn2*-1*57.5, 1, 0, 0); 
+                }
+               }
+               else{
+                if(cos(turn2)>= 0){               
                 glRotatef(turn*57.5, 0, 1, 0);
-                
-                
+                //glRotatef(turn2*1*57.5, 1, 0, 0); 
+                }
+                else{
+                    glRotatef(turn*57.5*-1, 0, 1, 0);
+                    //glRotatef(turn2*-1*57.5, 1, 0, 0); 
+                }
+               }
             } else {
                 glTranslatef(BoxX[1], 0, 2);
                 glRotatef(j, 0, 0, 1.0);
@@ -530,16 +548,7 @@ void keyboard(unsigned char key, int x, int y)
     case 'q':
         exit(0); /* �ץ�����ཪλ */
         break;
-    case 'b':
-        
-       
-         BoxX[0] = BoxX[0]-sin(turn)*cos(turn2);
-         BoxZ[0] =BoxZ[0]-cos(turn)*cos(turn2);
-         BoxY[0] = BoxY[0] - sin(turn2);
-      
-        printf("%f\n",BoxX[0]);
-        
-        break;
+    
     case 'd':
         flag = 0;
         if(turn>0){
@@ -635,7 +644,18 @@ void keyboard(unsigned char key, int x, int y)
         
     }
     
-    
+    //switch (key) {
+      //  case 'b':
+        
+       if(key == 'b'){
+         BoxX[0] = BoxX[0]-sin(turn)*cos(turn2);
+         BoxZ[0] =BoxZ[0]-cos(turn)*cos(turn2);
+         BoxY[0] = BoxY[0] - sin(turn2);
+      
+        printf("%f\n",BoxX[0]);
+       }
+      //  break;
+    //}
 
     // jyoikonn�ν���
     //�����ν���
@@ -716,7 +736,7 @@ void myInit(char *windowTitle)
     /* CG�������� */
     glMatrixMode(GL_PROJECTION);             /* Ʃ�����(������ˡ)����⡼�ɤ��ڤ��ؤ� */
     glLoadIdentity();                        /* Ʃ����ƹ�������� */
-    gluPerspective(45.0, aspect, 1.0, 20.0); /* Ʃ����ƹ�������� */
+    gluPerspective(90.0, aspect, 1.0, 20.0); /* Ʃ����ƹ�������� */
                                              /* �����45��, �Ĳ��� aspect���������̤ޤǤα��� 1.0���������̤ޤǤα��� 20.0 */
     glEnable(GL_DEPTH_TEST);                 /* ���̾õ��ͭ���ˤ��� */
     glClearColor(0.0, 0.0, 0.0, 0.0);
