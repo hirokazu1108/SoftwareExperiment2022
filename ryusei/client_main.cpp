@@ -177,6 +177,7 @@ void display(void)
         glPushMatrix();           /* ������֤���¸ */
         glColor3f(1.0, 1.0, 1.0); /* ���迧����ˤ��� */
         glScalef(1.0, 1.0, 1.0);
+         
         if (i < 1) {
             /* ������֤�(BoxX, i, 0)�˰�ư */
             // glutWireCube (0.5);
@@ -186,14 +187,17 @@ void display(void)
                    // glRotatef(turn*5.75, 0, 0, 1);
                     //flag = 0;
                 }
-                else{
-                glRotatef(turn, 0, 1, 0);
-                }
+                
+                glRotatef(turn*57.5, 0, 1, 0);
+                
+                
             } else {
                 glTranslatef(BoxX[1], 0, 2);
                 glRotatef(j, 0, 0, 1.0);
             }
+            
             glCallList(model_list);
+             
             //glutSolidCube(1.0);
            // glutWireSphere(0.4, 20.0, 10.0);
         } else if (i == 2) {
@@ -325,7 +329,7 @@ void display(void)
     glColor3f(1.0, 1.0, 0);            /* ���迧����(1.0,1.0,1.0)�ˤ��� */
     glRotatef(90, 0, 1.0, 0);          /* Y���濴��BoxRotate(��)��ž */
     glTranslatef(-0.18, 0.5, BoxX[0]); /* ʸ��ɽ����ɸ */
-
+    
    
 
     glPushMatrix();
@@ -407,8 +411,8 @@ init(void)
   /* create new display lists */
   lists();
 
-  glEnable(GL_LIGHTING);
-  glEnable(GL_LIGHT0);
+  //glEnable(GL_LIGHTING);
+  //glEnable(GL_LIGHT0);
   glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 
   glEnable(GL_DEPTH_TEST);
@@ -528,26 +532,15 @@ void keyboard(unsigned char key, int x, int y)
         break;
     case 'b':
         
-        //BoxX[0]=BoxX[0]-1;
-        //if(turn>=0){
-         BoxX[0] = BoxX[0]-sin(turn);
-         BoxZ[0] =BoxZ[0]-cos(turn);
+       
+         BoxX[0] = BoxX[0]-sin(turn)*cos(turn2);
+         BoxZ[0] =BoxZ[0]-cos(turn)*cos(turn2);
          BoxY[0] = BoxY[0] - sin(turn2);
-       // }
-       /* else{
-         BoxX[0] = BoxX[0]-cos(turn*0.1f);
-         BoxZ[0] =BoxZ[0]-sin(turn*0.1f);
-        }*/
-         //BoxZ[0] * /*cos(turn/180)*/sin(turn/180);
+      
         printf("%f\n",BoxX[0]);
-         //BoxY[0]= BoxY[0]+0.01*cos(turn/180.0);
-      // BoxX[0] -= 1;
+        
         break;
     case 'd':
-        //BoxX[0]=BoxX[0]+1;
-        // BoxY[0]= BoxY[0]-0.01*cos(turn/180.0*3.141592);
-        break;
-    case 's':
         flag = 0;
         if(turn>0){
             double a;
@@ -560,9 +553,27 @@ void keyboard(unsigned char key, int x, int y)
         if(turn == -2 * M_PI){
             turn = 0;
         }
-        /*CameraX = BoxX[0] +sin(turn*0.1f)*5;
-        CameraY = BoxY[0];
-        CameraZ = BoxZ[0]+cos(turn*0.1f)*5;*/
+        break;
+    case 's':
+        flag = 2;
+        //turn2 = turn2-1;
+        
+        if(turn2<0){
+            double a;
+            a = 2 * M_PI + turn2;
+            turn2 = a;
+        }
+        turn2 = turn2 + (M_PI / 180);
+        //turn = turn -1;
+        printf("zahyouhane~%lf\n",turn2);
+        if(turn2 == 2 * M_PI){
+            turn2= 0;
+        }
+          turn3 = turn3 - (M_PI / 180);
+        if(turn3 == 2 * M_PI){
+            turn3= 0;
+        }
+       
         break;
     case 'a':
     flag = 0;
@@ -576,9 +587,7 @@ void keyboard(unsigned char key, int x, int y)
         if(turn == 2 * M_PI){
             turn = 0;
         }
-       /* CameraX = BoxX[0] +sin(turn*0.1f)*5;
-        CameraY = BoxY[0];
-        CameraZ = BoxZ[0]+cos(turn*0.1f)*5;*/
+      
         break;
     case 'w':
         flag = 2;
