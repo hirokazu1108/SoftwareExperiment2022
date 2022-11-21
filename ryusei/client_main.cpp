@@ -399,6 +399,7 @@ void keyboard(unsigned char key, int x, int y)
     //��ž��ɸ
      int xMove = x - xBegin;
      int yMove = y - yBegin;
+     int muki2 = 1;
 
     /* �����ܡ��ɽ��� */
     switch (key) {
@@ -409,9 +410,15 @@ void keyboard(unsigned char key, int x, int y)
         
         //BoxX[0]=BoxX[0]-1;
         //if(turn>=0){
-         BoxX[0] = BoxX[0]-sin(turn);
+        if(turn2>0){
+
+        }
+        else if(0.5*cos(turn2) < 0 && 0.5*cos(turn2) >= -0.5){
+            muki2 = -1;
+        }
+         BoxX[0] = BoxX[0]-sin(turn)*muki2;
          BoxZ[0] =BoxZ[0]-cos(turn);
-         BoxY[0] = BoxY[0] - sin(turn2);
+         BoxY[0] = BoxY[0] - sin(turn2)*muki2;
        // }
        /* else{
          BoxX[0] = BoxX[0]-cos(turn*0.1f);
@@ -422,11 +429,29 @@ void keyboard(unsigned char key, int x, int y)
          //BoxY[0]= BoxY[0]+0.01*cos(turn/180.0);
       // BoxX[0] -= 1;
         break;
-    case 'd':
+    case 'w':
         //BoxX[0]=BoxX[0]+1;
         // BoxY[0]= BoxY[0]-0.01*cos(turn/180.0*3.141592);
+        flag = 2;
+        //turn2 = turn2-1;
+        
+        if(turn2<0){
+            double a;
+            a = -2 * M_PI + turn2;
+            turn2 = a;
+        }
+        turn2 = turn2 + (M_PI / 180);
+        //turn = turn -1;
+        printf("zahyouhane~%lf\n",turn2);
+        if(turn2 == 2 * M_PI){
+            turn2= 0;
+        }
+          turn3 = turn3 - (M_PI / 180);
+        if(turn3 == -2 * M_PI){
+            turn3= 0;
+        }
         break;
-    case 's':
+    case 'd':
         flag = 0;
         if(turn>0){
             double a;
@@ -459,7 +484,7 @@ void keyboard(unsigned char key, int x, int y)
         CameraY = BoxY[0];
         CameraZ = BoxZ[0]+cos(turn*0.1f)*5;*/
         break;
-    case 'w':
+    case 's':
         flag = 2;
         //turn2 = turn2-1;
         
