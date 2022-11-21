@@ -502,4 +502,221 @@ void keyboard(unsigned char key, int x, int y)
         CameraY = player[clientID].pos.y;
         CameraZ = player[clientID].pos.z+cos(player[clientID].turn1*0.1f)*5;*/
         break;
-    case
+    case 'a':
+        flag = 0;
+        if(player[clientID].turn1<0){
+            double a;
+            a = 2 * M_PI + player[clientID].turn1;
+            player[clientID].turn1 = a;
+        }
+        player[clientID].turn1 = player[clientID].turn1 + (M_PI / 180);
+        printf("zahyouhane~%lf\n",player[clientID].turn1);
+        if(player[clientID].turn1 == 2 * M_PI){
+            player[clientID].turn1 = 0;
+        }
+       /* CameraX = player[clientID].pos.x +sin(player[clientID].turn1*0.1f)*5;
+        CameraY = player[clientID].pos.y;
+        CameraZ = player[clientID].pos.z+cos(player[clientID].turn1*0.1f)*5;*/
+        break;
+    case 'w':
+        flag = 2;
+        //player[clientID].turn2 = player[clientID].turn2-1;
+        
+        if(player[clientID].turn2>0){
+            double a;
+            a = -2 * M_PI + player[clientID].turn2;
+            player[clientID].turn2 = a;
+        }
+        player[clientID].turn2 = player[clientID].turn2 - (M_PI / 180);
+        //player[clientID].turn1 = player[clientID].turn1 -1;
+        printf("zahyouhane~%lf\n",player[clientID].turn2);
+        if(player[clientID].turn2 == -2 * M_PI){
+            player[clientID].turn2= 0;
+        }
+          player[clientID].turn3 = player[clientID].turn3 + (M_PI / 180);
+        if(player[clientID].turn3 == 2 * M_PI){
+            player[clientID].turn3= 0;
+        }
+        break;
+    case 'j':
+        if(player[clientID].turn1<0){
+            double a;
+            a = 2 * M_PI + player[clientID].turn2;
+            player[clientID].turn2 = a;
+        }
+        player[clientID].turn2 = player[clientID].turn2 + (M_PI / 180);
+        printf("zahyouhane~%lf\n",player[clientID].turn2);
+        if(player[clientID].turn2 == 2 * M_PI){
+            player[clientID].turn2 = 0;
+        }
+        break;
+    default:
+        junp  = 0;
+        junpf = 0;
+        //player[clientID].turn1 = 0;
+        break;
+    }
+    
+    /*回転　ベクトル(hirokazu)
+    printf("player[clientID].turn1:%lf\n",player[clientID].turn1);
+    player[clientID].SetDir(player[clientID].turn1);
+    printf("dir(%f,%f,%f)\n",player[clientID].dir.x,player[clientID].dir.y,player[clientID].dir.z);
+    */
+
+    // jyoikonnの処理
+    //カメラの処理
+    /* CameraAzimuth   += (float)xMove / 2.0;
+     CameraElevation += (float)yMove / 2.0;
+     if (CameraElevation >  90.0){
+       CameraElevation =  90.0;
+           }
+     if (CameraElevation < -90.0){
+       CameraElevation = -90.0;
+     }
+   CameraX += BoxVx[0];// CameraDistance * cos(CameraAzimuth * RAD) * cos(CameraElevation * RAD);
+   CameraY = CameraDistance * sin(CameraElevation * RAD);
+   CameraZ = CameraDistance * sin(CameraAzimuth * RAD) * cos(CameraElevation * RAD);
+   printf("Camera AZ:%.1f, EL:%.1f, dist:%.1f, x,y,z= %.1f, %.1f, %.1f\n",
+       CameraAzimuth, CameraElevation, CameraDistance, CameraX, CameraY, CameraZ);*/
+
+   // 現在のマウスポインタの座標を次の始点用に記録する
+   xBegin = x;
+   yBegin = y;
+    /* 描画要求（直後に display() 関数が呼ばれる） */
+    glutPostRedisplay();
+
+    /* コンパイル時の警告対策（定義された変数を使わないと警告になるので） */
+    x = y = 0;
+}
+
+//ジョイコンの処理
+/*int joyconev()
+{
+    joycon_get_state(&jc);
+    if (rb) {
+        joycon_rumble(&jc, 50);
+        rb = 0;
+    }
+    if (jc.button.btn.Home) {
+        joycon_rumble(&jc, 50);
+        exit(0);
+        return 0;
+    }
+    
+    return 1;
+}
+*/
+
+/***********************************************************
+|  関数：myInit()
+|  説明：ウインドウ表示と描画設定の初期化
+|  引数：char *windowTitle      ウインドウのタイトルバーに表示する文字列
+|  戻値：なし
+***********************************************************/
+void myInit(char *windowTitle)
+{
+    /* ウインドウのサイズ */
+    int winWidth  = WINDOW_WIDTH;
+    int winHeight = WINDOW_HEIGHT;
+    /* ウインドウの縦横の比を計算 */
+    float aspect = (float)winWidth / (float)winHeight;
+    // window = SDL_CreateWindow(windowTitle, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, 0);
+
+    /*以下がｇｌｓ０３のmain*/
+
+    /* OpenGLウインドウ作成までの初期化 */
+    glutInitWindowPosition(0, 0);            /* ウインドウ表示位置 */
+    glutInitWindowSize(winWidth, winHeight); /* ウインドウサイズ */
+    // glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);   /* 描画モード */
+
+    glutCreateWindow(windowTitle);                      /* ウインドウの表示 */
+    glClearColor(0.0, 0.0, 0.0, 1.0);                   /* 画面消去色の設定 */
+    
+
+    /* イベント発生時に呼び出す関数の登録 */
+    glutKeyboardFunc(keyboard);  /* キーボードを押した時 */
+    glutReshapeFunc(resize);
+    glutDisplayFunc(display);    /* 画面表示 */
+    glutTimerFunc(15, timer, 0); /* タイマーを15ミリ秒後に設定 */
+
+    /* CG描画設定 */
+    glMatrixMode(GL_PROJECTION);             /* 透視投影(遠近投影法)設定モードに切り替え */
+    glLoadIdentity();                        /* 透視投影行列を初期化 */
+    gluPerspective(45.0, aspect, 1.0, 20.0); /* 透視投影行列の設定 */
+                                             /* 視野角45度, 縦横比 aspect，描画前面までの奥行 1.0，描画背面までの奥行 20.0 */
+    glEnable(GL_DEPTH_TEST);                 /* 隠面消去を有効にする */
+    glClearColor(0.0, 0.0, 0.0, 0.0);
+    glDepthFunc(GL_LEQUAL);
+    glEnable(GL_DEPTH_TEST);
+   // initTexture();
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEX_WIDTH, TEX_HEIGHT,
+        0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+
+    /* 箱の座標と速度の初期値設定 */
+
+    
+}
+
+void Player::SetDir(float turn_xz){
+    float rad = turn_xz*0.1f; //rad = turn *0.1f ラジアンに直す 64*0.1 == 2PI
+    
+    glm::vec3 d;
+    d.x = -cos(rad);
+    d.y = 0.0f;
+    d.z = sin(rad);
+
+    dir.x = d.x;
+    dir.y = d.y;
+    dir.z = d.z;
+}
+
+void create_bullet(int num){
+    
+    array_bullet[num].pos = player[clientID].pos;
+    array_bullet[num].isEnable = true;
+    array_bullet[num].lifetime = 0;
+}
+
+void draw_bullet(int num){
+    for(int i = 0; i < num; i++){
+        if(array_bullet[i].isEnable == true){
+            glPushMatrix();
+            glColor3f(1.0, 1.0, 1.0);
+            glTranslatef(array_bullet[i].pos.x, array_bullet[i].pos.y, array_bullet[i].pos.z);
+            glutSolidSphere(0.3, 200, 200);
+            glPopMatrix();
+        }
+    }
+}
+
+void move_bullet(int num){
+    for(int i = 0; i < num; i++){
+        if(array_bullet[i].isEnable == true){
+            array_bullet[i].pos.x = array_bullet[i].pos.x - BULLET_SPEED * sin(player[clientID].turn1);
+            //array_bullet[i].pos.y = array_bullet[i].pos.y - BULLET_SPEED * sin(player[clientID].turn2);
+            array_bullet[i].pos.z = array_bullet[i].pos.z - BULLET_SPEED * cos(player[clientID].turn1); 
+        }
+    }
+}
+
+void add_lifetime(int add_lifetimeID){
+    for(int i = 0; i < bullet_Num; i++){
+        if(array_bullet[i].isEnable == true){
+            array_bullet[i].lifetime++;
+        }
+    }  
+}
+
+void del_bullet(){
+    for(int i = 0; i < bullet_Num; i++){
+        if(array_bullet[i].lifetime == 5){
+            array_bullet[i].isEnable = false;
+            array_bullet[i].pos = {0.0, 0.0, 0.0};
+        }
+    } 
+}
