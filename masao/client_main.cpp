@@ -49,9 +49,8 @@ int flag        = 106;
 int j           = 0; // 2のはやさ
 int f           = 0; //３のはやさ
 int ps          = 0;
-double junp;
-int junpf = 0;
 int bullet_Num=0;   // 発射された弾の個数
+bool can_attack = true;     // 弾の発射が可能ならtrue
 
 int bf;
 int jnk; //ジョイコンの入力コマンド
@@ -75,6 +74,7 @@ void draw_bullet(int num);  // 弾の描画
 void move_bullet(int num);    // 弾丸の動き
 void add_lifetime(int add_lifetimeID);  // 弾のライフタイムを加算
 void del_bullet(void);  // 弾の消去
+void reload_attack(int reload_attackID);    // リロード時間を設ける関数
 #define TEX_HEIGHT 32
 #define TEX_WIDTH 32
 static GLubyte image[TEX_HEIGHT][TEX_WIDTH][4];
@@ -204,7 +204,7 @@ void display(void)
         0, 0.5*cos(player[clientID].turn2), 0.0);         /* カメラ上方向のベクトル */
 
     /* 立方体の描画 */
-    for (i = 0; i < 100; i++) {
+    for (i = 0; i < 1; i++) {
         glPushMatrix();           /* 描画位置を保存 */
         glColor3f(1.0, 1.0, 1.0); /* 描画色を白にする */
         glScalef(1.0, 1.0, 1.0);
@@ -273,79 +273,10 @@ void display(void)
     //ゴール床表示
    
 
-    for (i = 0; i < 20; i++) {
-        glPushMatrix();
-        glColor3f(1.0, 0.0, 1.0);
-        glTranslatef(i * -15 - 10, -1.5, 4);
-        glRotatef(-90, 1.0, 0.0, 0.0);
-        glutSolidCone(0.5, 3.6, 10, 2);
-        glPopMatrix();
-    }
-    for (i = 0; i < 20; i++) {
-        glPushMatrix();
-        glColor3f(1.0, 0.0, 0.0);
-        glTranslatef(i * -15 - 10, -1.5, -4);
-        glRotatef(-90, 1.0, 0.0, 0.0);
-        glutSolidCone(0.5, 3.6, 10, 2);
-        glPopMatrix();
-    }
+   
 
-    for (i = 0; i < 50; i++) {
-        glPushMatrix();
 
-        if (i % 2) {
-            glColor3f(1.0, 0.0, 0.0);
-            glTranslatef(i * -15 - 10, -1.5, i % 4);
-        } else {
-            glColor3f(0.0, 1.0, 0.0);
-            glTranslatef(i * -15 - 10, 2, (i * -1) % 4 * -1);
-        }
-        glRotatef(-90, 1.0, 0.0, 0.0);
-        glutSolidCube(0.1);
-        glPopMatrix();
-    }
-
-    for (i = 0; i < 50; i++) {
-        glPushMatrix();
-        glColor3f(1.0, 0.0, 1.0);
-
-        glTranslatef(i * -15 - 10, -1.5, 3);
-
-        glRotatef(-90, 1.0, 0.0, 0.0);
-        glutSolidCube(0.1);
-        glPopMatrix();
-    }
-
-    // 障害物
-    for (i = 0; i < 5; i++) {
-        glPushMatrix();
-        glColor3f(0.0, 0.0, 1.0);
-        glTranslatef(i * -100 - 10, -0.4, 0);
-        glRotatef(-90, 1.0, 0.0, 0.0);
-        glutSolidCone(0.2, 0.6, 10, 2);
-        glPopMatrix();
-    }
-    for (i = 0; i < 5; i++) {
-        glPushMatrix();
-        glColor3f(0.0, 1.0, 0.0);
-        glTranslatef(i * -100 - 70, -0.4, -1.4);
-        glRotatef(-90, 1.0, 0.0, 0.0);
-        glutSolidCone(0.2, 0.6, 10, 2);
-        glPopMatrix();
-    }
-    for (i = 0; i < 5; i++) {
-        glPushMatrix();
-        glColor3f(1.0, 0.0, 0.0);
-        glTranslatef(i * -100 - 50, -0.4, 1.4);
-        glRotatef(-90, 1.0, 0.0, 0.0);
-        glutSolidCone(0.2, 0.6, 10, 2);
-        glPopMatrix();
-    }
-
-    //printf("%d   %f %f %f\n", jnk, player[clientID].pos.x, BoxX[1], BoxX[2]);
-    if (flag < 100) {
-      //  Goal();
-    }
+  
 
 
     glPushMatrix();                    /* 視点位置を保存 */
@@ -374,17 +305,6 @@ void display(void)
     SendPlayerDataCommand(); //PlayerDataの送信
 }
 
-/*void reshape(int w, int h)
-{
-    printf("%d %d\n",w,h);
-  glViewport(0, 0, (GLsizei) w, (GLsizei) h);
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glFrustum(-5.0, 5.0,-5.0, 5.0, 5.0, 500.0);
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-}
-*/
 
 void resize(int w, int h)
 {
@@ -433,7 +353,7 @@ void timer(int timerID)
         /* 箱が端に到達したら移動方向を反転 */
         // if( BoxX[i] > 22.0 || BoxX[i] < -22.0) BoxVx[i] = -BoxVx[i];
     }
-    //printf("  %lf  ", BoxVx[0]);
+  
    
 
 
@@ -464,26 +384,19 @@ void keyboard(unsigned char key, int x, int y)
         exit(0); /* プログラム終了 */
         break;
     case 'b':
-       //player[clientID].pos.x=player[clientID].pos.x-1;
-        //if(player[clientID].turn1>=0){
          player[clientID].pos.x = player[clientID].pos.x-sin(player[clientID].turn1);
          player[clientID].pos.z =player[clientID].pos.z-cos(player[clientID].turn1);
          player[clientID].pos.y = player[clientID].pos.y - sin(player[clientID].turn2);
-       // }
-       /* else{
-         player[clientID].pos.x = player[clientID].pos.x-cos(player[clientID].turn1*0.1f);
-         player[clientID].pos.z =player[clientID].pos.z-sin(player[clientID].turn1*0.1f);
-        }*/
-         //player[clientID].pos.z * /*cos(player[clientID].turn1/180)*/sin(player[clientID].turn1/180);
-        printf("%f\n",player[clientID].pos.x);
-         //player[clientID].pos.y= player[clientID].pos.y+0.01*cos(player[clientID].turn1/180.0);
-      // player[clientID].pos.x -= 1;
         break;
     case 'd':
-        if(bullet_Num > MAX_BULLET_NUM){bullet_Num = 0;}
-        create_bullet(bullet_Num);
-        glutTimerFunc(1000, add_lifetime, 0);
-        bullet_Num++;
+        if(can_attack == true){
+            if(bullet_Num > MAX_BULLET_NUM){bullet_Num = 0;}
+            create_bullet(bullet_Num);
+            glutTimerFunc(1000, add_lifetime, 0);
+            can_attack = false;
+            glutTimerFunc(1000, reload_attack, 0);
+            bullet_Num++;
+        }
         break;
     case 's':
         flag = 0;
@@ -493,14 +406,10 @@ void keyboard(unsigned char key, int x, int y)
             player[clientID].turn1 = a;
         }
         player[clientID].turn1 = player[clientID].turn1 - (M_PI / 180);
-
-        printf("zahyouhane~%lf\n",player[clientID].turn1);
         if(player[clientID].turn1 == -2 * M_PI){
             player[clientID].turn1 = 0;
         }
-        /*CameraX = player[clientID].pos.x +sin(player[clientID].turn1*0.1f)*5;
-        CameraY = player[clientID].pos.y;
-        CameraZ = player[clientID].pos.z+cos(player[clientID].turn1*0.1f)*5;*/
+
         break;
     case 'a':
         flag = 0;
@@ -510,17 +419,13 @@ void keyboard(unsigned char key, int x, int y)
             player[clientID].turn1 = a;
         }
         player[clientID].turn1 = player[clientID].turn1 + (M_PI / 180);
-        printf("zahyouhane~%lf\n",player[clientID].turn1);
         if(player[clientID].turn1 == 2 * M_PI){
             player[clientID].turn1 = 0;
         }
-       /* CameraX = player[clientID].pos.x +sin(player[clientID].turn1*0.1f)*5;
-        CameraY = player[clientID].pos.y;
-        CameraZ = player[clientID].pos.z+cos(player[clientID].turn1*0.1f)*5;*/
+       
         break;
     case 'w':
         flag = 2;
-        //player[clientID].turn2 = player[clientID].turn2-1;
         
         if(player[clientID].turn2>0){
             double a;
@@ -528,8 +433,6 @@ void keyboard(unsigned char key, int x, int y)
             player[clientID].turn2 = a;
         }
         player[clientID].turn2 = player[clientID].turn2 - (M_PI / 180);
-        //player[clientID].turn1 = player[clientID].turn1 -1;
-        printf("zahyouhane~%lf\n",player[clientID].turn2);
         if(player[clientID].turn2 == -2 * M_PI){
             player[clientID].turn2= 0;
         }
@@ -545,39 +448,13 @@ void keyboard(unsigned char key, int x, int y)
             player[clientID].turn2 = a;
         }
         player[clientID].turn2 = player[clientID].turn2 + (M_PI / 180);
-        printf("zahyouhane~%lf\n",player[clientID].turn2);
         if(player[clientID].turn2 == 2 * M_PI){
             player[clientID].turn2 = 0;
         }
         break;
-    default:
-        junp  = 0;
-        junpf = 0;
-        //player[clientID].turn1 = 0;
-        break;
     }
     
-    /*回転　ベクトル(hirokazu)
-    printf("player[clientID].turn1:%lf\n",player[clientID].turn1);
-    player[clientID].SetDir(player[clientID].turn1);
-    printf("dir(%f,%f,%f)\n",player[clientID].dir.x,player[clientID].dir.y,player[clientID].dir.z);
-    */
 
-    // jyoikonnの処理
-    //カメラの処理
-    /* CameraAzimuth   += (float)xMove / 2.0;
-     CameraElevation += (float)yMove / 2.0;
-     if (CameraElevation >  90.0){
-       CameraElevation =  90.0;
-           }
-     if (CameraElevation < -90.0){
-       CameraElevation = -90.0;
-     }
-   CameraX += BoxVx[0];// CameraDistance * cos(CameraAzimuth * RAD) * cos(CameraElevation * RAD);
-   CameraY = CameraDistance * sin(CameraElevation * RAD);
-   CameraZ = CameraDistance * sin(CameraAzimuth * RAD) * cos(CameraElevation * RAD);
-   printf("Camera AZ:%.1f, EL:%.1f, dist:%.1f, x,y,z= %.1f, %.1f, %.1f\n",
-       CameraAzimuth, CameraElevation, CameraDistance, CameraX, CameraY, CameraZ);*/
 
    // 現在のマウスポインタの座標を次の始点用に記録する
    xBegin = x;
@@ -589,23 +466,6 @@ void keyboard(unsigned char key, int x, int y)
     x = y = 0;
 }
 
-//ジョイコンの処理
-/*int joyconev()
-{
-    joycon_get_state(&jc);
-    if (rb) {
-        joycon_rumble(&jc, 50);
-        rb = 0;
-    }
-    if (jc.button.btn.Home) {
-        joycon_rumble(&jc, 50);
-        exit(0);
-        return 0;
-    }
-    
-    return 1;
-}
-*/
 
 /***********************************************************
 |  関数：myInit()
@@ -697,9 +557,9 @@ void draw_bullet(int num){
 void move_bullet(int num){
     for(int i = 0; i < num; i++){
         if(array_bullet[i].isEnable == true){
-            array_bullet[i].pos.x = array_bullet[i].pos.x - BULLET_SPEED * sin(player[clientID].turn1);
-            //array_bullet[i].pos.y = array_bullet[i].pos.y - BULLET_SPEED * sin(player[clientID].turn2);
-            array_bullet[i].pos.z = array_bullet[i].pos.z - BULLET_SPEED * cos(player[clientID].turn1); 
+            array_bullet[i].pos.x = array_bullet[i].pos.x - sin(player[clientID].turn1);
+            //array_bullet[i].pos.y = array_bullet[i].pos.y - sin(player[clientID].turn2);
+            array_bullet[i].pos.z = array_bullet[i].pos.z - cos(player[clientID].turn1); 
         }
     }
 }
@@ -719,4 +579,8 @@ void del_bullet(){
             array_bullet[i].pos = {0.0, 0.0, 0.0};
         }
     } 
+}
+
+void reload_attack(int reload_attackID){
+    can_attack = true;
 }
