@@ -50,6 +50,13 @@ int f           = 0; //���ΤϤ䤵
 int ps          = 0;
 double junp;
 int junpf = 0;
+bool key = false;
+bool key2 = false;
+bool key3 = false;
+bool key4 = false;
+bool key5 = false;
+bool key6 = false;
+
 
 
 
@@ -542,11 +549,7 @@ void keyboard(unsigned char key, int x, int y)
 {
 
     //��ž��ɸ
-    int w;
-    int a;
-    int s;
-    int d;
-    int b;
+    
      int xMove = x - xBegin;
      int yMove = y - yBegin;
     printf("%d\n",key);
@@ -554,7 +557,7 @@ void keyboard(unsigned char key, int x, int y)
     
     // int glfwGetKey('d');
     /* �����ܡ��ɽ��� */
-    switch (key) {
+    /*switch (key) {
     case 'q':
         exit(0);
         break;
@@ -628,14 +631,6 @@ void keyboard(unsigned char key, int x, int y)
             turn3= 0;
         }
         
-    case 'b':
-        BoxX[0] = BoxX[0]-sin(turn)*cos(turn2);
-        BoxZ[0] =BoxZ[0]-cos(turn)*cos(turn2);
-        BoxY[0] = BoxY[0] - sin(turn2);
-        break; 
-        
-        
-
         break;
     case 'j':
         if(turn<0){
@@ -653,12 +648,11 @@ void keyboard(unsigned char key, int x, int y)
         junp  = 0;
         junpf = 0;
         //turn = 0;
-        w = a = s = d = b = 0;
         break;
 
         
-    }
-    /* if(key == 'q'){
+    }*/
+    if(key == 'q'){
       exit(0);
         
        }
@@ -666,6 +660,7 @@ void keyboard(unsigned char key, int x, int y)
 
      if(key == 'd'){
         flag = 0;
+        key = true;
         if(turn>0){
             double a;
             a = -2 * M_PI + turn;
@@ -683,7 +678,7 @@ void keyboard(unsigned char key, int x, int y)
     if(key == 's'){
          flag = 2;
         //turn2 = turn2-1;
-        
+        key2 = true;
         if(turn2<0){
             double a;
             a = 2 * M_PI + turn2;
@@ -703,6 +698,7 @@ void keyboard(unsigned char key, int x, int y)
     
     if(key == 'a'){
         flag = 0;
+        key3 = true;
         if(turn<0){
             double a;
             a = 2 * M_PI + turn;
@@ -718,6 +714,7 @@ void keyboard(unsigned char key, int x, int y)
 
     if(key == 'w'){
         flag = 2;
+        key4 = true;
         //turn2 = turn2-1;
         
         if(turn2>0){
@@ -736,18 +733,77 @@ void keyboard(unsigned char key, int x, int y)
             turn3= 0;
         }
         
-       }*/
+       }
+
         
+
+       /*if(key5 == true && key2 == true){
+        BoxX[0] = BoxX[0]-sin(turn)*cos(turn2);
+         BoxZ[0] =BoxZ[0]-cos(turn)*cos(turn2);
+         BoxY[0] = BoxY[0] - sin(turn2);
+
+        if(turn2<0){
+            double a;
+            a = 2 * M_PI + turn2;
+            turn2 = a;
+        }
+        turn2 = turn2 + (M_PI / 180);
+        //turn = turn -1;
+        printf("zahyouhane~%lf\n",turn2);
+        if(turn2 == 2 * M_PI){
+            turn2= 0;
+        }
+          turn3 = turn3 - (M_PI / 180);
+        if(turn3 == 2 * M_PI){
+            turn3= 0;
+        }
+        }*/
+
+        if(key == true && key2 == true){
+             if(turn>0){
+            double a;
+            a = -2 * M_PI + turn;
+            turn = a;
+        }
+        turn = turn - (M_PI / 180);
+
+        printf("zahyouhane~%lf\n",turn);
+        if(turn == -2 * M_PI){
+            turn = 0;
+        }
+        if(turn2<0){
+            double a;
+            a = 2 * M_PI + turn2;
+            turn2 = a;
+        }
+        turn2 = turn2 + (M_PI / 180);
+        //turn = turn -1;
+        printf("zahyouhane~%lf\n",turn2);
+        if(turn2 == 2 * M_PI){
+            turn2= 0;
+        }
+          turn3 = turn3 - (M_PI / 180);
+        if(turn3 == 2 * M_PI){
+            turn3= 0;
+        }
+
         
-      // if(key == 'b'){
-         //BoxX[0] = BoxX[0]-sin(turn)*cos(turn2);
-         //BoxZ[0] =BoxZ[0]-cos(turn)*cos(turn2);
-         //BoxY[0] = BoxY[0] - sin(turn2);
+        }
+        
+
+
+        //if(key == 'b'){
+            key5 = true;
+         BoxX[0] = BoxX[0]-sin(turn)*cos(turn2);
+         BoxZ[0] =BoxZ[0]-cos(turn)*cos(turn2);
+         BoxY[0] = BoxY[0] - sin(turn2);
       
-        //printf("%f\n",BoxX[0]);
+        printf("%f\n",BoxX[0]);
        //}
-        //break;
-    //} 
+
+      
+      //  break;
+    //}
 
     // jyoikonn�ν���
     //�����ν���
@@ -793,6 +849,37 @@ void keyboard(unsigned char key, int x, int y)
 }
 */
 
+void keyboard2(unsigned char key, int x, int y)
+{
+     switch (key) {
+    case 'q':
+        exit(0);
+        break;
+    
+    case 'd':
+        key = false;
+        break;
+    case 's':
+        key2 = false;
+        break;
+    case 'a':
+        key3 = false;
+        break;
+    case 'w':
+        key4 = false;
+        break;
+    case 'b':
+        key5 = false;
+        break;
+    default:
+        junp  = 0;
+        junpf = 0;
+        //turn = 0;
+        break;
+        
+    }
+}
+
 /***********************************************************
 |  �ؿ���myInit()
 |  ������������ɥ�ɽ������������ν����
@@ -821,6 +908,7 @@ void myInit(char *windowTitle)
 
     /* ���٥��ȯ�����˸ƤӽФ��ؿ�����Ͽ */
     glutKeyboardFunc(keyboard);  /* �����ܡ��ɤ򲡤����� */
+    glutKeyboardUpFunc(keyboard2);
    // glutKeyboardFunc(keyboard2); 
     glutReshapeFunc(resize);
     glutDisplayFunc(display);    /* ����ɽ�� */
