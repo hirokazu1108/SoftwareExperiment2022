@@ -11,8 +11,6 @@ Player *player;
 int sendDataFlag = 0;
 
 #define RAD (M_PI / 180.0)
-#define MAX_BULLET_NUM   100    // 弾の最大数
-#define BULLET_SPEED   0.5f     // 弾の速度
 typedef struct {
     float ShiftX;
     float ShiftY;
@@ -24,7 +22,7 @@ typedef struct {
 Geometry Cube;
 
 BULLET bullet;
-class BULLET array_bullet[MAX_BULLET_NUM];
+BULLET array_bullet[MAX_BULLET_NUM];
 
 /* グローバル変数 */
 int xBegin            = 0;    /* マウスドラッグの始点X座標 */
@@ -388,13 +386,13 @@ void keyboard(unsigned char key, int x, int y)
          player[clientID].pos.z =player[clientID].pos.z-cos(player[clientID].turn1);
          player[clientID].pos.y = player[clientID].pos.y - sin(player[clientID].turn2);
         break;
-    case 'd':
+    case ' ':
         if(can_attack == true){
             if(bullet_Num > MAX_BULLET_NUM){bullet_Num = 0;}
             create_bullet(bullet_Num);
             glutTimerFunc(1000, add_lifetime, 0);
             can_attack = false;
-            glutTimerFunc(1000, reload_attack, 0);
+            glutTimerFunc(500, reload_attack, 0);
             bullet_Num++;
         }
         break;
@@ -540,6 +538,7 @@ void create_bullet(int num){
     array_bullet[num].pos = player[clientID].pos;
     array_bullet[num].isEnable = true;
     array_bullet[num].lifetime = 0;
+    SendBulletDataCommand(num);
 }
 
 void draw_bullet(int num){
