@@ -184,7 +184,7 @@ void display(void)
             if (i == 0) {
                 glTranslatef(BoxX[0], BoxY[0], BoxZ[0]);
                 if(flag == 2){
-                   // glRotatef(turn*5.75, 0, 0, 1);
+                    glRotatef(turn*5.75, 0, 0, 1);
                     //flag = 0;
                 }
                 glRotatef(turn2*-1*57.5, 1, 0, 0); 
@@ -202,11 +202,11 @@ void display(void)
                else{
                 if(cos(turn2)>= 0){               
                 glRotatef(turn*57.5, 0, 1, 0);
-                //glRotatef(turn2*1*57.5, 1, 0, 0); 
+                glRotatef(turn2*1*57.5, 1, 0, 0); 
                 }
                 else{
                     glRotatef(turn*57.5*-1, 0, 1, 0);
-                    //glRotatef(turn2*-1*57.5, 1, 0, 0); 
+                    glRotatef(turn2*-1*57.5, 1, 0, 0); 
                 }
                }
             } else {
@@ -536,17 +536,27 @@ void timer(int timerID)
 |  ������int y              �����������줿�Ȥ��Υޥ����ݥ��󥿤�Y��ɸ
 |  ���͡��ʤ�
 ***********************************************************/
+
+
 void keyboard(unsigned char key, int x, int y)
 {
 
     //��ž��ɸ
+    int w;
+    int a;
+    int s;
+    int d;
+    int b;
      int xMove = x - xBegin;
      int yMove = y - yBegin;
+    printf("%d\n",key);
 
+    
+    // int glfwGetKey('d');
     /* �����ܡ��ɽ��� */
     switch (key) {
     case 'q':
-        exit(0); /* �ץ�����ཪλ */
+        exit(0);
         break;
     
     case 'd':
@@ -618,7 +628,11 @@ void keyboard(unsigned char key, int x, int y)
             turn3= 0;
         }
         
-          
+    case 'b':
+        BoxX[0] = BoxX[0]-sin(turn)*cos(turn2);
+        BoxZ[0] =BoxZ[0]-cos(turn)*cos(turn2);
+        BoxY[0] = BoxY[0] - sin(turn2);
+        break; 
         
         
 
@@ -639,23 +653,101 @@ void keyboard(unsigned char key, int x, int y)
         junp  = 0;
         junpf = 0;
         //turn = 0;
+        w = a = s = d = b = 0;
         break;
 
         
     }
-    
-    //switch (key) {
-      //  case 'b':
+    /* if(key == 'q'){
+      exit(0);
         
-       if(key == 'b'){
-         BoxX[0] = BoxX[0]-sin(turn)*cos(turn2);
-         BoxZ[0] =BoxZ[0]-cos(turn)*cos(turn2);
-         BoxY[0] = BoxY[0] - sin(turn2);
-      
-        printf("%f\n",BoxX[0]);
        }
-      //  break;
-    //}
+
+
+     if(key == 'd'){
+        flag = 0;
+        if(turn>0){
+            double a;
+            a = -2 * M_PI + turn;
+            turn = a;
+        }
+        turn = turn - (M_PI / 180);
+
+        printf("zahyouhane~%lf\n",turn);
+        if(turn == -2 * M_PI){
+            turn = 0;
+        }
+       }
+
+
+    if(key == 's'){
+         flag = 2;
+        //turn2 = turn2-1;
+        
+        if(turn2<0){
+            double a;
+            a = 2 * M_PI + turn2;
+            turn2 = a;
+        }
+        turn2 = turn2 + (M_PI / 180);
+        //turn = turn -1;
+        printf("zahyouhane~%lf\n",turn2);
+        if(turn2 == 2 * M_PI){
+            turn2= 0;
+        }
+          turn3 = turn3 - (M_PI / 180);
+        if(turn3 == 2 * M_PI){
+            turn3= 0;
+        }
+       }
+    
+    if(key == 'a'){
+        flag = 0;
+        if(turn<0){
+            double a;
+            a = 2 * M_PI + turn;
+            turn = a;
+        }
+        turn = turn + (M_PI / 180);
+        printf("zahyouhane~%lf\n",turn);
+        if(turn == 2 * M_PI){
+            turn = 0;
+        }
+       }
+
+
+    if(key == 'w'){
+        flag = 2;
+        //turn2 = turn2-1;
+        
+        if(turn2>0){
+            double a;
+            a = -2 * M_PI + turn2;
+            turn2 = a;
+        }
+        turn2 = turn2 - (M_PI / 180);
+        //turn = turn -1;
+        printf("zahyouhane~%lf\n",turn2);
+        if(turn2 == -2 * M_PI){
+            turn2= 0;
+        }
+          turn3 = turn3 + (M_PI / 180);
+        if(turn3 == 2 * M_PI){
+            turn3= 0;
+        }
+        
+       }*/
+        
+        
+      // if(key == 'b'){
+         //BoxX[0] = BoxX[0]-sin(turn)*cos(turn2);
+         //BoxZ[0] =BoxZ[0]-cos(turn)*cos(turn2);
+         //BoxY[0] = BoxY[0] - sin(turn2);
+      
+        //printf("%f\n",BoxX[0]);
+       //}
+        //break;
+    //} 
 
     // jyoikonn�ν���
     //�����ν���
@@ -729,6 +821,7 @@ void myInit(char *windowTitle)
 
     /* ���٥��ȯ�����˸ƤӽФ��ؿ�����Ͽ */
     glutKeyboardFunc(keyboard);  /* �����ܡ��ɤ򲡤����� */
+   // glutKeyboardFunc(keyboard2); 
     glutReshapeFunc(resize);
     glutDisplayFunc(display);    /* ����ɽ�� */
     glutTimerFunc(15, timer, 0); /* �����ޡ���15�ߥ��ø������ */
