@@ -79,6 +79,23 @@ void SendPlayerDataCommand(void){
 
 }
 
+void SendBulletDataCommand(int num){
+
+    unsigned char	data[MAX_DATA];
+    int			dataSize;
+
+    dataSize = 0;
+    /* コマンドのセット */
+    SetCharData2DataBlock(data,BULLETDATA_COMMAND,&dataSize);
+    /* データの送信 */
+    SendData(data,dataSize);
+
+    //playerDataの送信
+
+    SendData(&array_bullet[num],sizeof(BULLET));
+
+}
+
 /*****
 static
 *****/

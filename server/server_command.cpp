@@ -4,6 +4,7 @@ static void SetIntData2DataBlock(void *data,int intData,int *dataSize);
 static void SetCharData2DataBlock(void *data,char charData,int *dataSize);
 
 int readNum = 0; //読み込んだ戦闘機
+int bullet_num = 0;
 /*****************************************************************
 ????	: ExecuteCommand
 ???	: ??????????????????????????????
@@ -41,6 +42,12 @@ int ExecuteCommand(char command,int pos)
                 readNum = 0;
             }
             
+            break;
+        case BULLETDATA_COMMAND:
+            BULLET b;
+            RecvData(pos, &b, sizeof(BULLET));
+            array_bullet[bullet_num] = b;
+            bullet_num ++;
             break;
 	    case END_COMMAND:
 			dataSize = 0;
