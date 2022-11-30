@@ -282,3 +282,15 @@ static void SendAllName(void)
 	}
 }
 
+
+/* µåÆ±»Î¤ÎÅö¤¿¤êÈ½Äê */
+bool OnColliderSphere(Sphere a, Sphere b){
+  
+  bool result = false;
+  glm::vec3 diff = a.pos - b.pos;
+
+  if(a.radius + b.radius > glm::length(diff)){
+    result = true;
+  }
+  return result;
+}
