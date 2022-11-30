@@ -50,7 +50,7 @@ int f           = 0; //���ΤϤ䤵
 int ps          = 0;
 double junp;
 int junpf = 0;
-bool key = false;
+bool key1 = false;
 bool key2 = false;
 bool key3 = false;
 bool key4 = false;
@@ -91,6 +91,7 @@ void drawString3D(const char *str, float charSize, float lineWidth);
 void init(void);
 void text(GLuint x, GLuint y, GLfloat scale, char* format, ...);
 void lists(void);
+void move(void);
 int joyconev();
 #define TEX_HEIGHT 32
 #define TEX_WIDTH 32
@@ -137,6 +138,7 @@ void display(void)
 {
     int i;
 
+        move();
         if(flag ==0){
         CameraX = CameraX;
         CameraY = CameraY;
@@ -535,6 +537,219 @@ void timer(int timerID)
     // SDL_Delay(10);
 }
 
+void move(){
+    if(key1 == true && key2 == true){
+            printf("nanamekaitenn\n");
+            if(turn>0){
+            double a;
+            a = -2 * M_PI + turn;
+            turn = a;
+        }
+        turn = turn - (M_PI / 180);
+
+        printf("zahyouhane~%lf\n",turn);
+        if(turn == -2 * M_PI){
+            turn = 0;
+        }
+        if(turn2<0){
+            double a;
+            a = 2 * M_PI + turn2;
+            turn2 = a;
+        }
+        turn2 = turn2 + (M_PI / 180);
+        //turn = turn -1;
+        printf("zahyouhane~%lf\n",turn2);
+        if(turn2 == 2 * M_PI){
+            turn2= 0;
+        }
+          turn3 = turn3 - (M_PI / 180);
+        if(turn3 == 2 * M_PI){
+            turn3= 0;
+        }
+        }
+    else if(key2 == true && key3 == true){
+        printf("hidarinanamekaitenn");
+        // flag = 2;
+        //turn2 = turn2-1;
+       // key2 = true;
+        if(turn2<0){
+            double a;
+            a = 2 * M_PI + turn2;
+            turn2 = a;
+        }
+        turn2 = turn2 + (M_PI / 180);
+        //turn = turn -1;
+        printf("zahyouhane~%lf\n",turn2);
+        if(turn2 == 2 * M_PI){
+            turn2= 0;
+        }
+          turn3 = turn3 - (M_PI / 180);
+        if(turn3 == 2 * M_PI){
+            turn3= 0;
+        }
+
+        if(turn<0){
+            double a;
+            a = 2 * M_PI + turn;
+            turn = a;
+        }
+        turn = turn + (M_PI / 180);
+        printf("zahyouhane~%lf\n",turn);
+        if(turn == 2 * M_PI){
+            turn = 0;
+        }
+    }
+    else if(key1 == true && key4 == true){
+         if(turn>0){
+            double a;
+            a = -2 * M_PI + turn;
+            turn = a;
+        }
+        turn = turn - (M_PI / 180);
+
+        printf("zahyouhane~%lf\n",turn);
+        if(turn == -2 * M_PI){
+            turn = 0;
+        }
+
+        if(turn2>0){
+            double a;
+            a = -2 * M_PI + turn2;
+            turn2 = a;
+        }
+        turn2 = turn2 - (M_PI / 180);
+        //turn = turn -1;
+        printf("zahyouhane~%lf\n",turn2);
+        if(turn2 == -2 * M_PI){
+            turn2= 0;
+        }
+          turn3 = turn3 + (M_PI / 180);
+        if(turn3 == 2 * M_PI){
+            turn3= 0;
+        }
+    }
+    else if(key3 == true && key4 == true){
+        if(turn<0){
+            double a;
+            a = 2 * M_PI + turn;
+            turn = a;
+        }
+        turn = turn + (M_PI / 180);
+        printf("zahyouhane~%lf\n",turn);
+        if(turn == 2 * M_PI){
+            turn = 0;
+        }
+         if(turn2>0){
+            double a;
+            a = -2 * M_PI + turn2;
+            turn2 = a;
+        }
+        turn2 = turn2 - (M_PI / 180);
+        //turn = turn -1;
+        printf("zahyouhane~%lf\n",turn2);
+        if(turn2 == -2 * M_PI){
+            turn2= 0;
+        }
+          turn3 = turn3 + (M_PI / 180);
+        if(turn3 == 2 * M_PI){
+            turn3= 0;
+        }
+    }
+
+
+    else if(key1 == true){
+        flag = 0;
+        //key = true;
+        if(turn>0){
+            double a;
+            a = -2 * M_PI + turn;
+            turn = a;
+        }
+        turn = turn - (M_PI / 180);
+
+        printf("zahyouhane~%lf\n",turn);
+        if(turn == -2 * M_PI){
+            turn = 0;
+        }
+       }
+
+
+   else if(key2 == true){
+         flag = 2;
+        //turn2 = turn2-1;
+        key2 = true;
+        if(turn2<0){
+            double a;
+            a = 2 * M_PI + turn2;
+            turn2 = a;
+        }
+        turn2 = turn2 + (M_PI / 180);
+        //turn = turn -1;
+        printf("zahyouhane~%lf\n",turn2);
+        if(turn2 == 2 * M_PI){
+            turn2= 0;
+        }
+          turn3 = turn3 - (M_PI / 180);
+        if(turn3 == 2 * M_PI){
+            turn3= 0;
+        }
+       }
+    
+    else if(key3 == true){
+        flag = 0;
+        key3 = true;
+        if(turn<0){
+            double a;
+            a = 2 * M_PI + turn;
+            turn = a;
+        }
+        turn = turn + (M_PI / 180);
+        printf("zahyouhane~%lf\n",turn);
+        if(turn == 2 * M_PI){
+            turn = 0;
+        }
+       }
+
+
+    else if(key4 == true){
+        flag = 2;
+        key4 = true;
+        //turn2 = turn2-1;
+        
+        if(turn2>0){
+            double a;
+            a = -2 * M_PI + turn2;
+            turn2 = a;
+        }
+        turn2 = turn2 - (M_PI / 180);
+        //turn = turn -1;
+        printf("zahyouhane~%lf\n",turn2);
+        if(turn2 == -2 * M_PI){
+            turn2= 0;
+        }
+          turn3 = turn3 + (M_PI / 180);
+        if(turn3 == 2 * M_PI){
+            turn3= 0;
+        }
+        
+       }
+       
+       if(key6==false){
+         key1 = false;
+         key2 = false;
+         key3 = false;
+         key4 = false;
+         key5 = false;
+         key6 = false;
+          printf("yobareteorimasutaishousann\n");
+       }
+        if(key6 == true){
+       // key6 = false;
+       
+       }
+       
+}
+
 /***********************************************************
 |  �ؿ���keyboard()
 |  �����������ܡ��ɤ������줿���Υ��٥�Ƚ���
@@ -549,12 +764,20 @@ void keyboard(unsigned char key, int x, int y)
 {
 
     //��ž��ɸ
-    
+     
+        key6 = true;
+     
      int xMove = x - xBegin;
      int yMove = y - yBegin;
-    printf("%d\n",key);
-
-    
+   
+  /*  if(key == NULL){
+        bool key1 = false;
+        bool key2 = false;
+        bool key3 = false;
+        bool key4 = false;
+        bool key5 = false;
+        bool key6 = false;
+    }*/
     // int glfwGetKey('d');
     /* �����ܡ��ɽ��� */
     /*switch (key) {
@@ -658,10 +881,10 @@ void keyboard(unsigned char key, int x, int y)
        }
 
 
-     if(key == 'd'){
-        flag = 0;
-        key = true;
-        if(turn>0){
+    if(key == 'd'){
+        //flag = 0;
+        key1 = true;
+       /*if(turn>0){
             double a;
             a = -2 * M_PI + turn;
             turn = a;
@@ -671,7 +894,7 @@ void keyboard(unsigned char key, int x, int y)
         printf("zahyouhane~%lf\n",turn);
         if(turn == -2 * M_PI){
             turn = 0;
-        }
+        }*/
        }
 
 
@@ -679,7 +902,7 @@ void keyboard(unsigned char key, int x, int y)
          flag = 2;
         //turn2 = turn2-1;
         key2 = true;
-        if(turn2<0){
+        /*if(turn2<0){
             double a;
             a = 2 * M_PI + turn2;
             turn2 = a;
@@ -693,13 +916,13 @@ void keyboard(unsigned char key, int x, int y)
           turn3 = turn3 - (M_PI / 180);
         if(turn3 == 2 * M_PI){
             turn3= 0;
-        }
+        }*/
        }
     
     if(key == 'a'){
         flag = 0;
         key3 = true;
-        if(turn<0){
+        /*if(turn<0){
             double a;
             a = 2 * M_PI + turn;
             turn = a;
@@ -708,7 +931,7 @@ void keyboard(unsigned char key, int x, int y)
         printf("zahyouhane~%lf\n",turn);
         if(turn == 2 * M_PI){
             turn = 0;
-        }
+        }*/
        }
 
 
@@ -717,7 +940,7 @@ void keyboard(unsigned char key, int x, int y)
         key4 = true;
         //turn2 = turn2-1;
         
-        if(turn2>0){
+        /*if(turn2>0){
             double a;
             a = -2 * M_PI + turn2;
             turn2 = a;
@@ -731,104 +954,21 @@ void keyboard(unsigned char key, int x, int y)
           turn3 = turn3 + (M_PI / 180);
         if(turn3 == 2 * M_PI){
             turn3= 0;
-        }
+        }*/
         
        }
-
-        
-
-       /*if(key5 == true && key2 == true){
-        BoxX[0] = BoxX[0]-sin(turn)*cos(turn2);
-         BoxZ[0] =BoxZ[0]-cos(turn)*cos(turn2);
-         BoxY[0] = BoxY[0] - sin(turn2);
-
-        if(turn2<0){
-            double a;
-            a = 2 * M_PI + turn2;
-            turn2 = a;
-        }
-        turn2 = turn2 + (M_PI / 180);
-        //turn = turn -1;
-        printf("zahyouhane~%lf\n",turn2);
-        if(turn2 == 2 * M_PI){
-            turn2= 0;
-        }
-          turn3 = turn3 - (M_PI / 180);
-        if(turn3 == 2 * M_PI){
-            turn3= 0;
-        }
-        }*/
-
-        if(key == true && key2 == true){
-             if(turn>0){
-            double a;
-            a = -2 * M_PI + turn;
-            turn = a;
-        }
-        turn = turn - (M_PI / 180);
-
-        printf("zahyouhane~%lf\n",turn);
-        if(turn == -2 * M_PI){
-            turn = 0;
-        }
-        if(turn2<0){
-            double a;
-            a = 2 * M_PI + turn2;
-            turn2 = a;
-        }
-        turn2 = turn2 + (M_PI / 180);
-        //turn = turn -1;
-        printf("zahyouhane~%lf\n",turn2);
-        if(turn2 == 2 * M_PI){
-            turn2= 0;
-        }
-          turn3 = turn3 - (M_PI / 180);
-        if(turn3 == 2 * M_PI){
-            turn3= 0;
-        }
-
-        
-        }
-        
-
-
-        //if(key == 'b'){
-            key5 = true;
+        if(key == 'b'){
+          //  key5 = true;
          BoxX[0] = BoxX[0]-sin(turn)*cos(turn2);
          BoxZ[0] =BoxZ[0]-cos(turn)*cos(turn2);
          BoxY[0] = BoxY[0] - sin(turn2);
       
         printf("%f\n",BoxX[0]);
-       //}
-
+       }
       
-      //  break;
-    //}
-
-    // jyoikonn�ν���
-    //�����ν���
-    /* CameraAzimuth   += (float)xMove / 2.0;
-     CameraElevation += (float)yMove / 2.0;
-     if (CameraElevation >  90.0){
-       CameraElevation =  90.0;
-           }
-     if (CameraElevation < -90.0){
-       CameraElevation = -90.0;
-     }
-   CameraX += BoxVx[0];// CameraDistance * cos(CameraAzimuth * RAD) * cos(CameraElevation * RAD);
-   CameraY = CameraDistance * sin(CameraElevation * RAD);
-   CameraZ = CameraDistance * sin(CameraAzimuth * RAD) * cos(CameraElevation * RAD);
-   printf("Camera AZ:%.1f, EL:%.1f, dist:%.1f, x,y,z= %.1f, %.1f, %.1f\n",
-       CameraAzimuth, CameraElevation, CameraDistance, CameraX, CameraY, CameraZ);*/
-
-   // ���ߤΥޥ����ݥ��󥿤κ�ɸ�򼡤λ����Ѥ˵�Ͽ����
-   xBegin = x;
-   yBegin = y;
-    /* �����׵��ľ��� display() �ؿ����ƤФ��� */
     glutPostRedisplay();
-
-    /* ����ѥ�����ηٹ��к���������줿�ѿ���Ȥ�ʤ��ȷٹ�ˤʤ�Τǡ� */
     x = y = 0;
+   // key6=false;
 }
 
 //���祤����ν���
@@ -851,9 +991,17 @@ void keyboard(unsigned char key, int x, int y)
 
 void keyboard2(unsigned char key, int x, int y)
 {
+    key6 = false;
+    printf("koregayobareteirunokawakaranasugitekomatteioriokjnlfjahgljarhgttlijjfgljadflhgbleurhbgladbflajbfgflqihbflajhflejrhglijrndfljadnflgjbwqelrhigb;ajdnflh");
+   /*key1 = false;
+         key2 = false;
+         key3 = false;
+         key4 = false;
+         key5 = false;
+         key6 = false;*/
      switch (key) {
     case 'q':
-        exit(0);
+      //  exit(0);
         break;
     
     case 'd':
@@ -872,12 +1020,10 @@ void keyboard2(unsigned char key, int x, int y)
         key5 = false;
         break;
     default:
-        junp  = 0;
-        junpf = 0;
-        //turn = 0;
         break;
         
     }
+    x = y = 0;
 }
 
 /***********************************************************
@@ -907,8 +1053,9 @@ void myInit(char *windowTitle)
     
 
     /* ���٥��ȯ�����˸ƤӽФ��ؿ�����Ͽ */
-    glutKeyboardFunc(keyboard);  /* �����ܡ��ɤ򲡤����� */
     glutKeyboardUpFunc(keyboard2);
+    glutKeyboardFunc(keyboard);  /* �����ܡ��ɤ򲡤����� */
+    //glutKeyboardUpFunc(keyboard2);
    // glutKeyboardFunc(keyboard2); 
     glutReshapeFunc(resize);
     glutDisplayFunc(display);    /* ����ɽ�� */
