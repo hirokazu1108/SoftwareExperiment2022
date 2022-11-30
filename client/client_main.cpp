@@ -126,6 +126,8 @@ int main(int argc, char **argv)
         player[i].mp = 0;
         player[i].hp = 0;
         player[i].reloadTime= 0;
+        player[i].collider.radius = 1.0;
+        player[i].collider.pos = player[i].pos;
     }
     
 
@@ -544,12 +546,6 @@ void keyboard(unsigned char key, int x, int y)
         //player[clientID].turn1 = 0;
         break;
     }
-    
-    /*回転　ベクトル(hirokazu)
-    printf("player[clientID].turn1:%lf\n",player[clientID].turn1);
-    player[clientID].SetDir(player[clientID].turn1);
-    printf("dir(%f,%f,%f)\n",player[clientID].dir.x,player[clientID].dir.y,player[clientID].dir.z);
-    */
 
     // jyoikonnの処理
     //カメラの処理
@@ -648,17 +644,4 @@ void myInit(char *windowTitle)
     /* 箱の座標と速度の初期値設定 */
 
     
-}
-
-void Player::SetDir(float turn_xz){
-    float rad = turn_xz*0.1f; //rad = turn *0.1f ラジアンに直す 64*0.1 == 2PI
-    
-    glm::vec3 d;
-    d.x = -cos(rad);
-    d.y = 0.0f;
-    d.z = sin(rad);
-
-    dir.x = d.x;
-    dir.y = d.y;
-    dir.z = d.z;
 }
