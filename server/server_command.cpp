@@ -43,12 +43,13 @@ int ExecuteCommand(char command,int pos)
             }
             
             break;
+            /*
         case BULLETDATA_COMMAND:
             BULLET b;
             RecvData(pos, &b, sizeof(BULLET));
             array_bullet[bullet_num] = b;
             bullet_num ++;
-            break;
+            break;*/
 	    case END_COMMAND:
 			dataSize = 0;
 			/* ??????????????? */

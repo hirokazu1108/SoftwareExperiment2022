@@ -49,7 +49,7 @@ public:
     int mp;
     int hp;
     int reloadTime;
-
+    Sphere collider;
 };
 
 /* å¼¾ã??????????? */
