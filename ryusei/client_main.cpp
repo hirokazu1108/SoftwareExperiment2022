@@ -193,31 +193,16 @@ void display(void)
             if (i == 0) {
                 glTranslatef(BoxX[0], BoxY[0], BoxZ[0]);
                 if(flag == 2){
-                    glRotatef(turn*5.75, 0, 0, 1);
+                    //glRotatef(turn*5.75, 0, 0, 1);
                     //flag = 0;
                 }
-                glRotatef(turn2*-1*57.5, 1, 0, 0); 
+                //glRotatef(turn2*-1*57.5, 1, 0, 0); 
                // glRotatef(turn3*57.5, 0, 1, 0);
-               if(turn != 0 || turn != M_PI){
-                    if(cos(turn2)>= 0){               
-                     glRotatef(turn*57.5, 0, 1, 0);
-                    //glRotatef(turn2*1*57.5, 1, 0, 0); 
-                }
-                else{
-                    glRotatef(turn*57.5*-1, 0, 1, 0);
-                    //glRotatef(turn2*-1*57.5, 1, 0, 0); 
-                }
-               }
-               else{
-                if(cos(turn2)>= 0){               
-                glRotatef(turn*57.5, 0, 1, 0);
-                glRotatef(turn2*1*57.5, 1, 0, 0); 
-                }
-                else{
-                    glRotatef(turn*57.5*-1, 0, 1, 0);
-                    glRotatef(turn2*-1*57.5, 1, 0, 0); 
-                }
-               }
+             
+               glRotatef(turn*57.5, 0, 1, 0);
+               glRotatef(turn2*57.5*-1, 1, 0, 0);
+            
+               
             } else {
                 glTranslatef(BoxX[1], 0, 2);
                 glRotatef(j, 0, 0, 1.0);
