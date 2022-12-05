@@ -136,6 +136,25 @@ int main(int argc, char **argv)
 ***********************************************************/
 void display(void)
 {
+
+    /*最初の部分はタイトル画面のUIを表示している*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     int i;
 
         move();
@@ -469,17 +488,16 @@ void lists(void)
 
 void resize(int w, int h)
 {
-    /* ������ɥ��νĲ������׻� */
+  
     float aspect = (float)w / (float)h;
-    /* ������ɥ����Τ�ӥ塼�ݡ��Ȥ��� */
+    
     glViewport(0, 0, w, h);
 
-    /* CG�������� */
-    glMatrixMode(GL_PROJECTION);             /* Ʃ�����(������ˡ)����⡼�ɤ��ڤ��ؤ� */
-    glLoadIdentity();                        /* Ʃ����ƹ�������� */
-    gluPerspective(45.0, aspect, 1.0, 20.0); /* Ʃ����ƹ�������� */
-                                             /* �����45��, �Ĳ��� aspect���������̤ޤǤα��� 1.0���������̤ޤǤα��� 20.0 */
-    /* ��ǥ�ӥ塼�Ѵ���������� */
+   
+    /*glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();                       
+    gluPerspective(45.0, aspect, 1.0, 20.0); */
+    
     glMatrixMode(GL_MODELVIEW);
 }
 
@@ -1032,6 +1050,7 @@ void myInit(char *windowTitle)
     glutInitWindowPosition(0, 0);            /* ������ɥ�ɽ������ */
     glutInitWindowSize(winWidth, winHeight); /* ������ɥ������� */
     // glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);   /* ����⡼�� */
+    
 
     glutCreateWindow(windowTitle);                      /* ������ɥ���ɽ�� */
     glClearColor(0.0, 0.0, 0.0, 1.0);                   /* ���̾õ������ */
@@ -1047,9 +1066,9 @@ void myInit(char *windowTitle)
     glutTimerFunc(15, timer, 0); /* �����ޡ���15�ߥ��ø������ */
 
     /* CG�������� */
-    glMatrixMode(GL_PROJECTION);             /* Ʃ�����(������ˡ)����⡼�ɤ��ڤ��ؤ� */
+     glMatrixMode(GL_PROJECTION);             /* Ʃ�����(������ˡ)����⡼�ɤ��ڤ��ؤ� */
     glLoadIdentity();                        /* Ʃ����ƹ�������� */
-    gluPerspective(90.0, aspect, 1.0, 20.0); /* Ʃ����ƹ�������� */
+    gluPerspective(45.0, aspect, 1.0, 100.0); /* Ʃ����ƹ�������� */
                                              /* �����45��, �Ĳ��� aspect���������̤ޤǤα��� 1.0���������̤ޤǤα��� 20.0 */
     glEnable(GL_DEPTH_TEST);                 /* ���̾õ��ͭ���ˤ��� */
     glClearColor(0.0, 0.0, 0.0, 0.0);
