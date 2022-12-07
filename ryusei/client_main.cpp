@@ -140,21 +140,39 @@ void display(void)
 
     /*最初の部分はタイトル画面のUIを表示している*/
     if(startflag == true){
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); /* ���̤�õ� */
-    glMatrixMode(GL_MODELVIEW);                         /* ������������֤ʤ����ꤹ��˥⡼�� */
-    glLoadIdentity();  
-    gluLookAt(CameraX, CameraY, CameraZ, /* �����ΰ��� */
-        BoxX[0], BoxY[0],BoxZ[0],                         /* �������ΰ��� */
-        0, 0.5*cos(turn2), 0);
-        glPushMatrix();
-         glColor3f(1.0, 0.0, 0);
-        glTranslatef(-1.0, 1.0, BoxX[0]);
-        drawString3D("PAS Race", 3.0, 2.0);
+     
+        glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);   /* 画面を消去 */
+    glMatrixMode(GL_MODELVIEW);             /* 幾何（描画位置など設定する）モード */
+    glLoadIdentity();                       /* 幾何を初期化する */
+
+    /* 視点の設定 */
+    gluLookAt(  CameraX, CameraY, CameraZ,  /* カメラの位置 */
+                0.0, 0.0, 0.0,  /* 注視点の位置 */
+                0.0, 1.0, 0.0); /* カメラ上方向のベクトル */
+    
+    /* 立方体の描画 */
+    glPushMatrix ();                /* 描画位置を保存 */
+    glColor3f(1.0, 1.0, 1.0);
+    glutWireCube (0.5);             /* ワイヤーの立方体を描画 */
+    glPopMatrix ();                 /* 描画位置を戻す */
+
+    /* 文字列を表示 */
+    glPushMatrix ();                        /* 視点位置を保存 */
+    glColor3f( 1.0, 1.0, 0 );             /* 描画色を白(1.0,1.0,1.0)にする */
+    glRotatef(BoxRotate, 0.0, 1.0, 0.0);   /* Y軸中心にBoxRotate(度)回転 */
+    glTranslatef(1.0, 0.0, 0);                /* 文字表示座標 */
+    drawString3D("Test!", 3.0, 3.0);        /* 文字列を表示する */
+    glPopMatrix ();                         /* 視点位置に戻す */
+
+    /* 上記で描画されたCGをモニターに出力 */
+    glutSwapBuffers();
+    
         if(j == 3){
             startflag = false;
         }
-        glPopMatrix();
+        
     }
+
     else{
     int i;
 
@@ -180,9 +198,6 @@ void display(void)
         CameraX = BoxX[0] /*+sin(turn*0.1f)*5 */ + sin(turn)*5 *cos(turn3);
         CameraY = BoxY[0] + sin(turn2)*5;
         CameraZ = BoxZ[0] /*+cos(turn*0.1f)*5 */+cos(turn)*5 *cos(turn3);
-        /*CameraX = BoxX[0] +sin(turn*0.1f)*5 *cos(turn3*0.1f);
-        CameraY = BoxY[0] + sin(turn2*0.1f)*5;
-        CameraZ = BoxZ[0] +cos(turn*0.1f)*5 *sin(turn3*0.1f);*/
         
         }
     /* ����� */
@@ -190,14 +205,7 @@ void display(void)
     glMatrixMode(GL_MODELVIEW);                         /* ������������֤ʤ����ꤹ��˥⡼�� */
     glLoadIdentity();                                   /* �������������� */
 
-    /* ���������� */
-    // glMatrixMode(GL_PROJECTION);
-        //gluLookAt(BoxX[0] +sin(turn*0.1f)*5, BoxY[0], BoxZ[0]+cos(turn*0.1f)*5, /* �����ΰ��� */
-        //BoxX[0]/*+turn*0.1*/, 0 /*+turn*0.01*/,BoxZ[0]/*+turn*0.01f*//*+sin(turn/180)*/,                         /* �������ΰ��� */
-        //0, 0.5/*+turn*0.5*/, 0.0); 
-
-   
-        gluLookAt(CameraX, CameraY+1, CameraZ, /* �����ΰ��� */
+        gluLookAt(CameraX, CameraY+0.5, CameraZ, /* �����ΰ��� */
         BoxX[0], BoxY[0],BoxZ[0],                         /* �������ΰ��� */
         0, 0.5*cos(turn2), 0);
    
@@ -380,17 +388,7 @@ void display(void)
     }
 }
 
-/*void reshape(int w, int h)
-{
-    printf("%d %d\n",w,h);
-  glViewport(0, 0, (GLsizei) w, (GLsizei) h);
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glFrustum(-5.0, 5.0,-5.0, 5.0, 5.0, 500.0);
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-}
-*/
+
 
 void 
 text(GLuint x, GLuint y, GLfloat scale, char* format, ...)
@@ -471,7 +469,7 @@ void lists(void)
   glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
   glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
 
-  /* generate a list */
+ 
   if (material_mode == 0) { 
     if (facet_normal)
       model_list = glmList(model, GLM_FLAT);
