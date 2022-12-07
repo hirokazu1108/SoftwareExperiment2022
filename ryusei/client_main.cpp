@@ -56,6 +56,7 @@ bool key3 = false;
 bool key4 = false;
 bool key5 = false;
 bool key6 = false;
+bool startflag = true;
 
 
 
@@ -138,23 +139,23 @@ void display(void)
 {
 
     /*最初の部分はタイトル画面のUIを表示している*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    if(startflag == true){
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); /* ���̤�õ� */
+    glMatrixMode(GL_MODELVIEW);                         /* ������������֤ʤ����ꤹ��˥⡼�� */
+    glLoadIdentity();  
+    gluLookAt(CameraX, CameraY, CameraZ, /* �����ΰ��� */
+        BoxX[0], BoxY[0],BoxZ[0],                         /* �������ΰ��� */
+        0, 0.5*cos(turn2), 0);
+        glPushMatrix();
+         glColor3f(1.0, 0.0, 0);
+        glTranslatef(-1.0, 1.0, BoxX[0]);
+        drawString3D("PAS Race", 3.0, 2.0);
+        if(j == 3){
+            startflag = false;
+        }
+        glPopMatrix();
+    }
+    else{
     int i;
 
         move();
@@ -196,7 +197,7 @@ void display(void)
         //0, 0.5/*+turn*0.5*/, 0.0); 
 
    
-        gluLookAt(CameraX, CameraY, CameraZ, /* �����ΰ��� */
+        gluLookAt(CameraX, CameraY+1, CameraZ, /* �����ΰ��� */
         BoxX[0], BoxY[0],BoxZ[0],                         /* �������ΰ��� */
         0, 0.5*cos(turn2), 0);
    
@@ -351,6 +352,8 @@ void display(void)
         glPopMatrix();
     }
 
+    
+
     printf("%d   %f %f %f\n", jnk, BoxX[0], BoxX[1], BoxX[2]);
     if (flag < 100) {
       //  Goal();
@@ -374,6 +377,7 @@ void display(void)
     glFlush();
     /* �嵭�����褵�줿CG���˥����˽��� */
     glutSwapBuffers();
+    }
 }
 
 /*void reshape(int w, int h)
@@ -882,7 +886,9 @@ void keyboard(unsigned char key, int x, int y)
       exit(0);
         
        }
-
+    if(key == 'l'){
+        j++;
+    }
 
     if(key == 'd'){
         //flag = 0;
