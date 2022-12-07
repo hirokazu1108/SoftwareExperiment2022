@@ -31,6 +31,7 @@ extern void SendBulletDataCommand(int num);
 
 extern int		gClientNum;
 extern int		clientID;
+extern int bullet_Num;   // 発射された弾の個数
 extern Player *player;
-extern BULLET array_bullet[MAX_BULLET_NUM];
+extern std::vector<BULLET> array_bullet;
 #endif

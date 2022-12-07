@@ -3,8 +3,7 @@
 static void SetIntData2DataBlock(void *data,int intData,int *dataSize);
 static void SetCharData2DataBlock(void *data,char charData,int *dataSize);
 
-int readNum = 0; //ÆÉ¤ß¹þ¤ó¤ÀÀïÆ®µ¡
-int bullet_num = 0;
+int readNum = 0; //ï¿½É¤ß¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ?ï¿½ï¿½
 /*****************************************************************
 ????	: ExecuteCommand
 ???	: ??????????????????????????????
@@ -17,7 +16,6 @@ int bullet_num = 0;
 int ExecuteCommand(char command,int pos)
 {
     unsigned char	data[MAX_DATA];
-    int data2[MAX_CLIENTS];
     int			dataSize,intData;
     int			endFlag = 1;
 
@@ -27,29 +25,38 @@ int ExecuteCommand(char command,int pos)
         case PLAYERDATA_COMMAND:{
             dataSize = 0;
             Player *p = (Player*)malloc(sizeof(Player));
-            RecvData(pos, p, sizeof(Player)); //Player¤Î¾ðÊó¤ò¼õ¤±¼è¤ë
-            player[pos] = *p; //Player¤Î¾ðÊó¤ò³ÊÇ¼
+            RecvData(pos, p, sizeof(Player)); //Playerï¿½Î¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?
+            player[pos] = *p; //Playerï¿½Î¾ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼
             free(p);
         }
             
-            readNum |= (1 << pos); //½¸¤Þ¤Ã¤¿¥¯¥é¥¤¥¢¥ó¥ÈÈÖ¹æ¤ÎÈ½Äê 1101¤Çclient[2]°Ê³°½¸¤Þ¤Ã¤Æ¤¤¤ë
+            readNum |= (1 << pos); //ï¿½ï¿½ï¿½Þ¤Ã¤ï¿½ï¿½ï¿½ï¿½é¥¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¹ï¿½ï¿½È½ï¿½ï¿½ 1101ï¿½ï¿½client[2]ï¿½Ê³ï¿½ï¿½ï¿½ï¿½Þ¤Ã¤Æ¤ï¿½ï¿½ï¿½
             if(readNum == (15>>(4-gClientNum))){
-			    SetCharData2DataBlock(data2,command,&dataSize);
-			    SendData(ALL_CLIENTS,data2,dataSize);
-
-                SendData(ALL_CLIENTS,player,sizeof(Player)*gClientNum); //Player¾ðÊó¤òÁ´°÷¤ËÁ÷¤ë
+			    SendData(ALL_CLIENTS,&command,sizeof(char));
+                SendData(ALL_CLIENTS,player,sizeof(Player)*gClientNum); //Playerï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?
 
                 readNum = 0;
             }
             
             break;
-            /*
-        case BULLETDATA_COMMAND:
+        
+        case BULLETDATA_COMMAND:{
             BULLET b;
             RecvData(pos, &b, sizeof(BULLET));
-            array_bullet[bullet_num] = b;
-            bullet_num ++;
-            break;*/
+            printf("%f, %f, %f\n", b.pos.x, b.pos.y, b.pos.z);
+			for(int i = 0; i < gClientNum; i++){
+                if(i != pos){
+                    SendData(i,&command,sizeof(char));
+                }
+            } 
+            for(int i = 0; i < gClientNum; i++){
+                if(i != pos){
+                    SendData(i, &b, sizeof(BULLET));
+                }
+            } 
+        }
+        break;
+
 	    case END_COMMAND:
 			dataSize = 0;
 			/* ??????????????? */

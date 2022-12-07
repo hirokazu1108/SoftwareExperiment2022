@@ -22,7 +22,7 @@ typedef struct {
 Geometry Cube;
 
 BULLET bullet;
-BULLET array_bullet[MAX_BULLET_NUM];
+std::vector<BULLET> array_bullet;
 
 /* グローバル変数 */
 int xBegin            = 0;    /* マウスドラッグの始点X座標 */
@@ -202,7 +202,7 @@ void display(void)
         0, 0.5*cos(player[clientID].turn2), 0.0);         /* カメラ上方向のベクトル */
 
     /* 立方体の描画 */
-    for (i = 0; i < 1; i++) {
+    for (i = 0; i < 2; i++) {
         glPushMatrix();           /* 描画位置を保存 */
         glColor3f(1.0, 1.0, 1.0); /* 描画色を白にする */
         glScalef(1.0, 1.0, 1.0);
@@ -271,11 +271,6 @@ void display(void)
     //ゴール床表示
    
 
-   
-
-
-  
-
 
     glPushMatrix();                    /* 視点位置を保存 */
     glColor3f(1.0, 1.0, 0);            /* 描画色を白(1.0,1.0,1.0)にする */
@@ -294,7 +289,7 @@ void display(void)
    
     move_bullet(bullet_Num);    // 弾の移動
     draw_bullet(bullet_Num);    // 弾の描画
-    del_bullet();               // 弾の削除
+
     
     glutSwapBuffers();
 
@@ -388,12 +383,11 @@ void keyboard(unsigned char key, int x, int y)
         break;
     case ' ':
         if(can_attack == true){
-            if(bullet_Num > MAX_BULLET_NUM){bullet_Num = 0;}
+            if(bullet_Num >= MAX_BULLET_NUM){bullet_Num = 0;}
             create_bullet(bullet_Num);
             glutTimerFunc(1000, add_lifetime, 0);
             can_attack = false;
             glutTimerFunc(500, reload_attack, 0);
-            bullet_Num++;
         }
         break;
     case 's':
@@ -520,66 +514,51 @@ void myInit(char *windowTitle)
     
 }
 
-void Player::SetDir(float turn_xz){
-    float rad = turn_xz*0.1f; //rad = turn *0.1f ラジアンに直す 64*0.1 == 2PI
-    
-    glm::vec3 d;
-    d.x = -cos(rad);
-    d.y = 0.0f;
-    d.z = sin(rad);
 
-    dir.x = d.x;
-    dir.y = d.y;
-    dir.z = d.z;
-}
 
 void create_bullet(int num){
-    
-    array_bullet[num].pos = player[clientID].pos;
-    array_bullet[num].isEnable = true;
-    array_bullet[num].lifetime = 0;
+    BULLET b;
+    b.pos = player[clientID].pos;
+    b.dir = {(- sin(player[clientID].turn1)), 0/*- sin(player[clientID].turn2)*/, - cos(player[clientID].turn1)};
+    b.lifetime = 0;
+    array_bullet.push_back(BULLET(b));
+    printf("send:%f, %f, %f\n", array_bullet[bullet_Num].pos.x, array_bullet[bullet_Num].pos.y, array_bullet[bullet_Num].pos.z);
+    bullet_Num++;
     SendBulletDataCommand(num);
 }
 
 void draw_bullet(int num){
     for(int i = 0; i < num; i++){
-        if(array_bullet[i].isEnable == true){
-            glPushMatrix();
-            glColor3f(1.0, 1.0, 1.0);
-            glTranslatef(array_bullet[i].pos.x, array_bullet[i].pos.y, array_bullet[i].pos.z);
-            glutSolidSphere(0.3, 200, 200);
-            glPopMatrix();
-        }
+        glPushMatrix();
+        glColor3f(1.0, 1.0, 1.0);
+        glTranslatef(array_bullet[i].pos.x, array_bullet[i].pos.y, array_bullet[i].pos.z);
+        glutSolidSphere(0.3, 200, 200);
+        glPopMatrix();
     }
 }
 
 void move_bullet(int num){
     for(int i = 0; i < num; i++){
-        if(array_bullet[i].isEnable == true){
-            array_bullet[i].pos.x = array_bullet[i].pos.x - sin(player[clientID].turn1);
-            //array_bullet[i].pos.y = array_bullet[i].pos.y - sin(player[clientID].turn2);
-            array_bullet[i].pos.z = array_bullet[i].pos.z - cos(player[clientID].turn1); 
-        }
+        array_bullet[i].pos += array_bullet[i].dir * 0.5f;
     }
-}
-
-void add_lifetime(int add_lifetimeID){
-    for(int i = 0; i < bullet_Num; i++){
-        if(array_bullet[i].isEnable == true){
-            array_bullet[i].lifetime++;
-        }
-    }  
 }
 
 void del_bullet(){
     for(int i = 0; i < bullet_Num; i++){
-        if(array_bullet[i].lifetime == 5){
-            array_bullet[i].isEnable = false;
-            array_bullet[i].pos = {0.0, 0.0, 0.0};
+        if(array_bullet[i].lifetime >= 5){
+            array_bullet.erase(array_bullet.begin() + i);       //  3番目の要素（9）を削除
+            bullet_Num --;
         }
     } 
 }
 
 void reload_attack(int reload_attackID){
     can_attack = true;
+}
+
+void add_lifetime(int add_lifetimeID){
+    for(int i = 0; i < bullet_Num; i++){
+        array_bullet[i].lifetime++;
+    }  
+    del_bullet();               // 弾の削除
 }

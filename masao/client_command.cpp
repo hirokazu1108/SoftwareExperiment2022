@@ -31,7 +31,17 @@ int ExecuteCommand(char command)
             }
             free(p);
         }
-            break;
+        break;
+
+        case BULLETDATA_COMMAND:{
+            BULLET b;
+            RecvData(&b, sizeof(BULLET));
+            array_bullet.push_back(BULLET(b));
+            printf("rec:%f, %f, %f\n", array_bullet[bullet_Num].pos.x, array_bullet[bullet_Num].pos.y, array_bullet[bullet_Num].pos.z);
+            bullet_Num++;   
+        }
+        break;
+
 		case END_COMMAND:
 			endFlag = 0;
 			break;
@@ -64,14 +74,10 @@ void SendEndCommand(void)
 
 void SendPlayerDataCommand(void){
 
-    unsigned char	data[MAX_DATA];
-    int			dataSize;
+    char com = PLAYERDATA_COMMAND;
 
-    dataSize = 0;
-    /* コマンドのセット */
-    SetCharData2DataBlock(data,PLAYERDATA_COMMAND,&dataSize);
     /* データの送信 */
-    SendData(data,dataSize);
+    SendData(&com,sizeof(char));
 
     //playerDataの送信
 
@@ -81,17 +87,14 @@ void SendPlayerDataCommand(void){
 
 void SendBulletDataCommand(int num){
 
-    unsigned char	data[MAX_DATA];
-    int			dataSize;
+    char com = BULLETDATA_COMMAND;
 
-    dataSize = 0;
-    /* コマンドのセット */
-    SetCharData2DataBlock(data,BULLETDATA_COMMAND,&dataSize);
     /* データの送信 */
-    SendData(data,dataSize);
+    SendData(&com,sizeof(char));
 
-    //playerDataの送信
+    //clientDataの送信
 
+    
     SendData(&array_bullet[num],sizeof(BULLET));
 
 }
