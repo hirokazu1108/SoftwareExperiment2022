@@ -202,7 +202,7 @@ void display(void)
         0, 0.5*cos(player[clientID].turn2), 0.0);         /* カメラ上方向のベクトル */
 
     /* 立方体の描画 */
-    for (i = 0; i < 2; i++) {
+    for (i = 0; i < 10; i++) {
         glPushMatrix();           /* 描画位置を保存 */
         glColor3f(1.0, 1.0, 1.0); /* 描画色を白にする */
         glScalef(1.0, 1.0, 1.0);
