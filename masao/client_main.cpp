@@ -71,8 +71,9 @@ void create_bullet(int num);    // 弾の生成
 void draw_bullet(int num);  // 弾の描画
 void move_bullet(int num);    // 弾丸の動き
 void add_lifetime(int add_lifetimeID);  // 弾のライフタイムを加算
+void count_time(int count_timeID);      // ゲーム開始からの経過時間（秒）をカウントする
 void del_bullet(void);  // 弾の消去
-void reload_attack(int reload_attackID);    // リロード時間を設ける関数
+void interval_attack(int interval_attackID);    // 弾の発射間隔を設ける関数
 #define TEX_HEIGHT 32
 #define TEX_WIDTH 32
 static GLubyte image[TEX_HEIGHT][TEX_WIDTH][4];
@@ -387,7 +388,11 @@ void keyboard(unsigned char key, int x, int y)
             create_bullet(bullet_Num);
             glutTimerFunc(1000, add_lifetime, 0);
             can_attack = false;
-            glutTimerFunc(500, reload_attack, 0);
+            glutTimerFunc(1000, interval_attack, 0);
+            if (bullet_Num != 0 || bullet_Num % 5 == 0){
+                can_attack = false;
+            }
+            glutTimerFunc(5000, interval_attack, 0);
         }
         break;
     case 's':
@@ -546,13 +551,13 @@ void move_bullet(int num){
 void del_bullet(){
     for(int i = 0; i < bullet_Num; i++){
         if(array_bullet[i].lifetime >= 5){
-            array_bullet.erase(array_bullet.begin() + i);       //  3番目の要素（9）を削除
-            bullet_Num --;
+            array_bullet.erase(array_bullet.begin() + i);       //  i番目の要素を削除
+            bullet_Num--;
         }
     } 
 }
 
-void reload_attack(int reload_attackID){
+void interval_attack(int interval_attackID){
     can_attack = true;
 }
 
@@ -561,4 +566,5 @@ void add_lifetime(int add_lifetimeID){
         array_bullet[i].lifetime++;
     }  
     del_bullet();               // 弾の削除
+    printf("bullet_Num:%d\n", bullet_Num);
 }
