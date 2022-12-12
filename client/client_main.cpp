@@ -422,6 +422,20 @@ void display(void)
     SendRecvManager();
     SendPlayerDataCommand(); //PlayerData??????ç¯??
 
+    //player??????ç¶???????????????
+       for(int i=0; i<gClientNum; i++){
+            for(int j=0; j<bullet_Num;j++){
+                if(OnColliderSphere(Sphere(BULLET_RADIUS,array_bullet[j].pos),player[i].collider)){
+                    player[i].hp--;
+                    deleteBullet(j);
+                    if(player[clientID].hp <= 0){
+                        char com=END_COMMAND;
+                        SendData(&com,sizeof(char));
+                    }
+                }
+            }
+       }
+        
     if(gameState == State_Result){
         if(player[clientID].hp > 0)
         {
@@ -1153,6 +1167,7 @@ void move(){
          player[clientID].collider.pos = player[clientID].pos;
       
         printf("%f\n",player[clientID].pos.x);
+        
        if(key6==false){
          key1 = false;
          key2 = false;
@@ -1166,6 +1181,8 @@ void move(){
        // key6 = false;
        
        }
+
+       
        
 }
 
@@ -1244,19 +1261,6 @@ void draw_bullet(int num){
         glTranslatef(array_bullet[i].pos.x, array_bullet[i].pos.y, array_bullet[i].pos.z);
         glutSolidSphere(BULLET_RADIUS, 200, 200);
         glPopMatrix();
-
-
-        //player??????ç¶???????????????
-        for(int j=0; j<gClientNum;j++){
-            if(OnColliderSphere(Sphere(BULLET_RADIUS,array_bullet[i].pos),player[j].collider)){
-                player[j].hp--;
-                deleteBullet(j);
-                if(player[clientID].hp <= 0){
-                    char com=END_COMMAND;
-                    SendData(&com,sizeof(char));
-                }
-           }
-        }
     }
 }
 
