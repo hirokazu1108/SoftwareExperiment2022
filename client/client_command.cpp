@@ -43,7 +43,8 @@ int ExecuteCommand(char command)
         break;
         
         case END_COMMAND:
-			endFlag = 0;
+			gameState = State_Result;
+            endFlag = 0;
 			break;
         default:
             break;
