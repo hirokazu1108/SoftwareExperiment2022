@@ -32,7 +32,17 @@ int ExecuteCommand(char command)
             free(p);
         }
             break;
-		case END_COMMAND:
+		
+        case BULLETDATA_COMMAND:{
+            BULLET b;
+            RecvData(&b, sizeof(BULLET));
+            array_bullet.push_back(BULLET(b));
+            printf("rec:%f, %f, %f\n", array_bullet[bullet_Num].pos.x, array_bullet[bullet_Num].pos.y, array_bullet[bullet_Num].pos.z);
+            bullet_Num++;   
+        }
+        break;
+        
+        case END_COMMAND:
 			endFlag = 0;
 			break;
         default:
@@ -76,6 +86,20 @@ void SendPlayerDataCommand(void){
     //playerDataの送信
 
     SendData(&(player[clientID]),sizeof(Player));
+
+}
+
+void SendBulletDataCommand(int num){
+
+    char com = BULLETDATA_COMMAND;
+
+    /* データの送信 */
+    SendData(&com,sizeof(char));
+
+    //clientDataの送信
+
+    
+    SendData(&array_bullet[num],sizeof(BULLET));
 
 }
 
