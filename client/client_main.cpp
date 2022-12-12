@@ -24,6 +24,9 @@ typedef struct {
 } Geometry;
 Geometry Cube;
 
+BULLET bullet;
+std::vector<BULLET> array_bullet;
+
 /* グローバル変数 */
 int xBegin            = 0;    /* マウスドラッグの始点X座標 */
 int yBegin            = 0;    /* マウスドラッグの始点Y座標 */
@@ -55,7 +58,10 @@ bool key3 = false;
 bool key4 = false;
 bool key5 = false;
 bool key6 = false;
+bool key7 = false;
 bool startflag = true;
+int bullet_Num = 0;   // 発射された弾の個数
+bool can_attack = true;     // 弾の発射が可能ならtrue
 
 int bf;
 int jnk; //ジョイコンの入力コマンド
@@ -88,6 +94,13 @@ void lists(void);
 void init(void);
 int joyconev();
 void move(void);
+void create_bullet(int num);    // 弾の生成
+void draw_bullet(int num);  // 弾の描画
+void move_bullet(int num);    // 弾丸の動き
+void add_lifetime(int add_lifetimeID);  // 弾のライフタイムを加算
+void count_time(int count_timeID);      // ゲーム開始からの経過時間（秒）をカウントする
+void del_bullet(void);  // 弾の消去
+void interval_attack(int interval_attackID);    // 弾の発射間隔を設ける関数
 #define TEX_HEIGHT 32
 #define TEX_WIDTH 32
 static GLubyte image[TEX_HEIGHT][TEX_WIDTH][4];
@@ -399,7 +412,8 @@ void display(void)
     glutSwapBuffers();
     
 
-    
+    move_bullet(bullet_Num);    // 弾の移動
+    draw_bullet(bullet_Num);    // 弾の描画
 
     /* ネットワークの処理 */
     SendRecvManager();
@@ -576,7 +590,6 @@ void keyboard(unsigned char key, int x, int y)
         }*/
        }
 
-
     if(key == 's'){
          flag = 2;
         //player[clientID].turn2 = player[clientID].turn2-1;
@@ -644,6 +657,10 @@ void keyboard(unsigned char key, int x, int y)
       
         printf("%f\n",player[clientID].pos.x);
        }
+
+       if(key == ' '){
+        key7 = true;
+    }   
       
     glutPostRedisplay();
     x = y = 0;
@@ -679,6 +696,9 @@ void keyboard2(unsigned char key, int x, int y)
         break;
     case 'b':
         key5 = false;
+        break;
+    case ' ':
+        key7 = false;
         break;
     default:
         break;
@@ -877,6 +897,16 @@ void move(){
         }
         
        }
+    if(key7 == true){
+        if(can_attack == true){
+            if(bullet_Num >= MAX_BULLET_NUM){bullet_Num = 0;}
+            create_bullet(bullet_Num);
+            glutTimerFunc(1000, add_lifetime, 0);
+            can_attack = false;
+            glutTimerFunc(1000, interval_attack, 0);
+            printf("ok\n");
+        }
+    }
        
        if(key6==false){
          key1 = false;
@@ -885,6 +915,7 @@ void move(){
          key4 = false;
          key5 = false;
          key6 = false;
+         key7 = false;
           printf("yobareteorimasutaishousann\n");
        }
         if(key6 == true){
@@ -948,4 +979,52 @@ void myInit(char *windowTitle)
     /* 箱の座標と速度の初期値設定 */
 
     
+}
+
+void create_bullet(int num){
+    BULLET b;
+    b.pos = player[clientID].pos;
+    b.dir = {(- sin(player[clientID].turn1)), - sin(player[clientID].turn2), - cos(player[clientID].turn1)};
+    b.lifetime = 0;
+    array_bullet.push_back(BULLET(b));
+    printf("send:%f, %f, %f\n", array_bullet[bullet_Num].pos.x, array_bullet[bullet_Num].pos.y, array_bullet[bullet_Num].pos.z);
+    bullet_Num++;
+    SendBulletDataCommand(num);
+}
+
+void draw_bullet(int num){
+    for(int i = 0; i < num; i++){
+        glPushMatrix();
+        glColor3f(1.0, 1.0, 1.0);
+        glTranslatef(array_bullet[i].pos.x, array_bullet[i].pos.y, array_bullet[i].pos.z);
+        glutSolidSphere(0.3, 200, 200);
+        glPopMatrix();
+    }
+}
+
+void move_bullet(int num){
+    for(int i = 0; i < num; i++){
+        array_bullet[i].pos += array_bullet[i].dir * 0.5f;
+    }
+}
+
+void del_bullet(){
+    for(int i = 0; i < bullet_Num; i++){
+        if(array_bullet[i].lifetime >= 5){
+            array_bullet.erase(array_bullet.begin() + i);       //  i番目の要素を削除
+            bullet_Num--;
+        }
+    } 
+}
+
+void interval_attack(int interval_attackID){
+    can_attack = true;
+}
+
+void add_lifetime(int add_lifetimeID){
+    for(int i = 0; i < bullet_Num; i++){
+        array_bullet[i].lifetime++;
+    }  
+    del_bullet();               // 弾の削除
+    printf("bullet_Num:%d\n", bullet_Num);
 }
