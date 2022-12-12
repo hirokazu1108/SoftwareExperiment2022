@@ -1,19 +1,19 @@
 #include "client.h"
 #include <netinet/in.h>
 /*****************************************************************
-¥Õ¥¡¥¤¥ëÌ¾	: client_command.c
-µ¡Ç½		: ¥¯¥é¥¤¥¢¥ó¥È¤Î¥³¥Ş¥ó¥É½èÍı
+ãƒ•ã‚¡ã‚¤ãƒ«å	: client_command.c
+æ©Ÿèƒ½		: ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã®ã‚³ãƒãƒ³ãƒ‰å‡¦ç†
 *****************************************************************/
 static void SetIntData2DataBlock(void *data,int intData,int *dataSize);
 static void SetCharData2DataBlock(void *data,char charData,int *dataSize);
 
 /*****************************************************************
-´Ø¿ôÌ¾	: ExecuteCommand
-µ¡Ç½	: ¥µ¡¼¥Ğ¡¼¤«¤éÁ÷¤é¤ì¤Æ¤­¤¿¥³¥Ş¥ó¥É¤ò¸µ¤Ë¡¤
-		  °ú¤­¿ô¤ò¼õ¿®¤·¡¤¼Â¹Ô¤¹¤ë
-°ú¿ô	: char	command		: ¥³¥Ş¥ó¥É
-½ĞÎÏ	: ¥×¥í¥°¥é¥à½ªÎ»¥³¥Ş¥ó¥É¤¬¤ª¤¯¤é¤ì¤Æ¤­¤¿»ş¤Ë¤Ï0¤òÊÖ¤¹¡¥
-		  ¤½¤ì°Ê³°¤Ï1¤òÊÖ¤¹
+é–¢æ•°å	: ExecuteCommand
+æ©Ÿèƒ½	: ã‚µãƒ¼ãƒãƒ¼ã‹ã‚‰é€ã‚‰ã‚Œã¦ããŸã‚³ãƒãƒ³ãƒ‰ã‚’å…ƒã«ï¼Œ
+		  å¼•ãæ•°ã‚’å—ä¿¡ã—ï¼Œå®Ÿè¡Œã™ã‚‹
+å¼•æ•°	: char	command		: ã‚³ãƒãƒ³ãƒ‰
+å‡ºåŠ›	: ãƒ—ãƒ­ã‚°ãƒ©ãƒ çµ‚äº†ã‚³ãƒãƒ³ãƒ‰ãŒãŠãã‚‰ã‚Œã¦ããŸæ™‚ã«ã¯0ã‚’è¿”ã™ï¼
+		  ãã‚Œä»¥å¤–ã¯1ã‚’è¿”ã™
 *****************************************************************/
 int ExecuteCommand(char command)
 {
@@ -23,7 +23,7 @@ int ExecuteCommand(char command)
         case PLAYERDATA_COMMAND:{
             Player *p = (Player*)malloc(sizeof(Player)*gClientNum);
             RecvData(p,sizeof(Player)*gClientNum);
-            //³ÊÇ¼¤¹¤ë½èÍı
+            //æ ¼ç´ã™ã‚‹å‡¦ç†
             for(int i = 0; i <gClientNum;i++)
             {
                 if(i != clientID)
@@ -53,11 +53,11 @@ int ExecuteCommand(char command)
 }
 
 /*****************************************************************
-´Ø¿ôÌ¾	: SendEndCommand
-µ¡Ç½	: ¥×¥í¥°¥é¥à¤Î½ªÎ»¤òÃÎ¤é¤»¤ë¤¿¤á¤Ë¡¤
-		  ¥µ¡¼¥Ğ¡¼¤Ë¥Ç¡¼¥¿¤òÁ÷¤ë
-°ú¿ô	: ¤Ê¤·
-½ĞÎÏ	: ¤Ê¤·
+é–¢æ•°å	: SendEndCommand
+æ©Ÿèƒ½	: ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã®çµ‚äº†ã‚’çŸ¥ã‚‰ã›ã‚‹ãŸã‚ã«ï¼Œ
+		  ã‚µãƒ¼ãƒãƒ¼ã«ãƒ‡ãƒ¼ã‚¿ã‚’é€ã‚‹
+å¼•æ•°	: ãªã—
+å‡ºåŠ›	: ãªã—
 *****************************************************************/
 void SendEndCommand(void)
 {
@@ -65,10 +65,10 @@ void SendEndCommand(void)
     int			dataSize;
 
     dataSize = 0;
-    /* ¥³¥Ş¥ó¥É¤Î¥»¥Ã¥È */
+    /* ã‚³ãƒãƒ³ãƒ‰ã®ã‚»ãƒƒãƒˆ */
     SetCharData2DataBlock(data,END_COMMAND,&dataSize);
 
-    /* ¥Ç¡¼¥¿¤ÎÁ÷¿® */
+    /* ãƒ‡ãƒ¼ã‚¿ã®é€ä¿¡ */
     SendData(data,dataSize);
 }
 
@@ -78,12 +78,12 @@ void SendPlayerDataCommand(void){
     int			dataSize;
 
     dataSize = 0;
-    /* ¥³¥Ş¥ó¥É¤Î¥»¥Ã¥È */
+    /* ã‚³ãƒãƒ³ãƒ‰ã®ã‚»ãƒƒãƒˆ */
     SetCharData2DataBlock(data,PLAYERDATA_COMMAND,&dataSize);
-    /* ¥Ç¡¼¥¿¤ÎÁ÷¿® */
+    /* ãƒ‡ãƒ¼ã‚¿ã®é€ä¿¡ */
     SendData(data,dataSize);
 
-    //playerData¤ÎÁ÷¿®
+    //playerDataã®é€ä¿¡
 
     SendData(&(player[clientID]),sizeof(Player));
 
@@ -93,10 +93,10 @@ void SendBulletDataCommand(int num){
 
     char com = BULLETDATA_COMMAND;
 
-    /* ¥Ç¡¼¥¿¤ÎÁ÷¿® */
+    /* ãƒ‡ãƒ¼ã‚¿ã®é€ä¿¡ */
     SendData(&com,sizeof(char));
 
-    //clientData¤ÎÁ÷¿®
+    //clientDataã®é€ä¿¡
 
     
     SendData(&array_bullet[num],sizeof(BULLET));
@@ -107,46 +107,46 @@ void SendBulletDataCommand(int num){
 static
 *****/
 /*****************************************************************
-´Ø¿ôÌ¾	: SetIntData2DataBlock
-µ¡Ç½	: int ·¿¤Î¥Ç¡¼¥¿¤òÁ÷¿®ÍÑ¥Ç¡¼¥¿¤ÎºÇ¸å¤Ë¥»¥Ã¥È¤¹¤ë
-°ú¿ô	: void		*data		: Á÷¿®ÍÑ¥Ç¡¼¥¿
-		  int		intData		: ¥»¥Ã¥È¤¹¤ë¥Ç¡¼¥¿
-		  int		*dataSize	: Á÷¿®ÍÑ¥Ç¡¼¥¿¤Î¸½ºß¤Î¥µ¥¤¥º
-½ĞÎÏ	: ¤Ê¤·
+é–¢æ•°å	: SetIntData2DataBlock
+æ©Ÿèƒ½	: int å‹ã®ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡ç”¨ãƒ‡ãƒ¼ã‚¿ã®æœ€å¾Œã«ã‚»ãƒƒãƒˆã™ã‚‹
+å¼•æ•°	: void		*data		: é€ä¿¡ç”¨ãƒ‡ãƒ¼ã‚¿
+		  int		intData		: ã‚»ãƒƒãƒˆã™ã‚‹ãƒ‡ãƒ¼ã‚¿
+		  int		*dataSize	: é€ä¿¡ç”¨ãƒ‡ãƒ¼ã‚¿ã®ç¾åœ¨ã®ã‚µã‚¤ã‚º
+å‡ºåŠ›	: ãªã—
 *****************************************************************/
 static void SetIntData2DataBlock(void *data,int intData,int *dataSize)
 {
     int tmp;
 
-    /* °ú¤­¿ô¥Á¥§¥Ã¥¯ */
+    /* å¼•ãæ•°ãƒã‚§ãƒƒã‚¯ */
     assert(data!=NULL);
     assert(0<=(*dataSize));
 
     tmp = htonl(intData);
 
-    /* int ·¿¤Î¥Ç¡¼¥¿¤òÁ÷¿®ÍÑ¥Ç¡¼¥¿¤ÎºÇ¸å¤Ë¥³¥Ô¡¼¤¹¤ë */
+    /* int å‹ã®ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡ç”¨ãƒ‡ãƒ¼ã‚¿ã®æœ€å¾Œã«ã‚³ãƒ”ãƒ¼ã™ã‚‹ */
     memcpy(data + (*dataSize),&tmp,sizeof(int));
-    /* ¥Ç¡¼¥¿¥µ¥¤¥º¤òÁı¤ä¤¹ */
+    /* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å¢—ã‚„ã™ */
     (*dataSize) += sizeof(int);
 }
 
 /*****************************************************************
-´Ø¿ôÌ¾	: SetCharData2DataBlock
-µ¡Ç½	: char ·¿¤Î¥Ç¡¼¥¿¤òÁ÷¿®ÍÑ¥Ç¡¼¥¿¤ÎºÇ¸å¤Ë¥»¥Ã¥È¤¹¤ë
-°ú¿ô	: void		*data		: Á÷¿®ÍÑ¥Ç¡¼¥¿
-		  int		intData		: ¥»¥Ã¥È¤¹¤ë¥Ç¡¼¥¿
-		  int		*dataSize	: Á÷¿®ÍÑ¥Ç¡¼¥¿¤Î¸½ºß¤Î¥µ¥¤¥º
-½ĞÎÏ	: ¤Ê¤·
+é–¢æ•°å	: SetCharData2DataBlock
+æ©Ÿèƒ½	: char å‹ã®ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡ç”¨ãƒ‡ãƒ¼ã‚¿ã®æœ€å¾Œã«ã‚»ãƒƒãƒˆã™ã‚‹
+å¼•æ•°	: void		*data		: é€ä¿¡ç”¨ãƒ‡ãƒ¼ã‚¿
+		  int		intData		: ã‚»ãƒƒãƒˆã™ã‚‹ãƒ‡ãƒ¼ã‚¿
+		  int		*dataSize	: é€ä¿¡ç”¨ãƒ‡ãƒ¼ã‚¿ã®ç¾åœ¨ã®ã‚µã‚¤ã‚º
+å‡ºåŠ›	: ãªã—
 *****************************************************************/
 static void SetCharData2DataBlock(void *data,char charData,int *dataSize)
 {
-    /* °ú¤­¿ô¥Á¥§¥Ã¥¯ */
+    /* å¼•ãæ•°ãƒã‚§ãƒƒã‚¯ */
     assert(data!=NULL);
     assert(0<=(*dataSize));
 
-    /* char ·¿¤Î¥Ç¡¼¥¿¤òÁ÷¿®ÍÑ¥Ç¡¼¥¿¤ÎºÇ¸å¤Ë¥³¥Ô¡¼¤¹¤ë */
+    /* char å‹ã®ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡ç”¨ãƒ‡ãƒ¼ã‚¿ã®æœ€å¾Œã«ã‚³ãƒ”ãƒ¼ã™ã‚‹ */
     *(char *)(data + (*dataSize)) = charData;
-    /* ¥Ç¡¼¥¿¥µ¥¤¥º¤òÁı¤ä¤¹ */
+    /* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å¢—ã‚„ã™ */
     (*dataSize) += sizeof(char);
 }
 

@@ -16,6 +16,6 @@ extern int SendRecvManager(void);
 /* server_command.c */
 extern int ExecuteCommand(char command,int pos);
 
-extern int	gClientNum; //¥¯¥é¥¤¥¢¥ó¥È¿ô
+extern int	gClientNum; //ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆæ•°
 extern Player *player;
 #endif
