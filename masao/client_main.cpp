@@ -389,10 +389,6 @@ void keyboard(unsigned char key, int x, int y)
             glutTimerFunc(1000, add_lifetime, 0);
             can_attack = false;
             glutTimerFunc(1000, interval_attack, 0);
-            if (bullet_Num != 0 || bullet_Num % 5 == 0){
-                can_attack = false;
-            }
-            glutTimerFunc(5000, interval_attack, 0);
         }
         break;
     case 's':
