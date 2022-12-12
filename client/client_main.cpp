@@ -4,7 +4,10 @@
  * -------------------------------------------------------------------- */
 
 /* ヘッダファイル */
+#include <stdarg.h>
 #include "client.h"
+#include "trackball.h"
+#include "glm.h"
 int		gClientNum;
 int		clientID;
 Player *player;
@@ -46,6 +49,13 @@ int f           = 0; //３のはやさ
 int ps          = 0;
 double junp;
 int junpf = 0;
+bool key1 = false;
+bool key2 = false;
+bool key3 = false;
+bool key4 = false;
+bool key5 = false;
+bool key6 = false;
+bool startflag = true;
 
 int bf;
 int jnk; //ジョイコンの入力コマンド
@@ -54,6 +64,17 @@ int rb;
 int af;
 joyconlib_t jc;
 
+GLuint     model_list = 0;		/* display list for object */
+char*      model_file = NULL;		/* name of the obect file */
+GLboolean  facet_normal = GL_FALSE;	/* draw with facet normal? */
+GLMmodel*  model;
+GLfloat    smoothing_angle = 90.0;	/* smoothing angle */
+GLfloat    scale;			/* scaling factor */
+GLboolean  bounding_box = GL_FALSE;
+GLboolean  performance = GL_FALSE;
+GLboolean  stats = GL_FALSE;
+GLfloat    weld_distance = 0.00001;
+GLuint     material_mode = 1;
 /* 関数のプロトタイプ宣言 */
 
 void display(void);
@@ -62,11 +83,15 @@ void keyboard(unsigned char key, int x, int y);
 void resize(int w, int h);
 void myInit(char *windowTitle);
 void drawString3D(const char *str, float charSize, float lineWidth);
+void text(GLuint x, GLuint y, GLfloat scale, char* format, ...);
+void lists(void);
 void init(void);
 int joyconev();
+void move(void);
 #define TEX_HEIGHT 32
 #define TEX_WIDTH 32
 static GLubyte image[TEX_HEIGHT][TEX_WIDTH][4];
+char *modelname = "sentouki.obj" ;
 
 /***********************************************************
 |  関数：main()
@@ -83,6 +108,13 @@ int main(int argc, char **argv)
     char	serverName[MAX_NAME_SIZE];
     
     sprintf(serverName, "localhost");
+
+    model_file = modelname;
+    if (!model_file) {
+    fprintf(stderr, "usage: smooth model_file.obj\n");
+    exit(1);
+    }
+    init();
 
     /* 引き数チェック */
   switch (argc) {
@@ -156,16 +188,17 @@ void display(void)
 {
     int i;
 
-    if(flag ==0){
+   move();
+        if(flag ==0){
         CameraX = CameraX;
         CameraY = CameraY;
         CameraZ = CameraZ;
-       //CameraX = player[clientID].pos.x +sin(player[clientID].turn1*0.1f)*5 ;
-        //CameraY = player[clientID].pos.y + sin(player[clientID].turn2*0.1f)*5;
-        //CameraZ = player[clientID].pos.z+cos(player[clientID].turn1*0.1f)*5;
-        CameraX = player[clientID].pos.x /*+sin(player[clientID].turn1*0.1f)*5*/  +sin(player[clientID].turn1)*5 *cos(player[clientID].turn3);
+       //CameraX = BoxX[0] +sin(turn*0.1f)*5 ;
+        //CameraY = BoxY[0] + sin(turn2*0.1f)*5;
+        //CameraZ = BoxZ[0]+cos(turn*0.1f)*5;
+        CameraX = player[clientID].pos.x /*+sin(turn*0.1f)*5*/  +sin(player[clientID].turn1)*5 *cos(player[clientID].turn3);
         CameraY = player[clientID].pos.y + sin(player[clientID].turn2)*5;
-        CameraZ = player[clientID].pos.z /*+cos(player[clientID].turn1*0.1f)*5*/ +cos(player[clientID].turn1)*5 *cos(player[clientID].turn3);
+        CameraZ = player[clientID].pos.z /*+cos(turn*0.1f)*5*/ +cos(player[clientID].turn1)*5 *cos(player[clientID].turn3);
         
         
         }
@@ -174,13 +207,11 @@ void display(void)
         CameraY = CameraY;
         CameraZ = CameraZ;
 
-        CameraX = player[clientID].pos.x /*+sin(player[clientID].turn1*0.1f)*5 */ + sin(player[clientID].turn1)*5 *cos(player[clientID].turn3);
+        CameraX = player[clientID].pos.x /*+sin(turn*0.1f)*5 */ + sin(player[clientID].turn1)*5 *cos(player[clientID].turn3);
         CameraY = player[clientID].pos.y + sin(player[clientID].turn2)*5;
-        CameraZ = player[clientID].pos.z /*+cos(player[clientID].turn1*0.1f)*5 */+cos(player[clientID].turn1)*5 *cos(player[clientID].turn3);
-        /*CameraX = player[clientID].pos.x +sin(player[clientID].turn1*0.1f)*5 *cos(player[clientID].turn3*0.1f);
-        CameraY = player[clientID].pos.y + sin(player[clientID].turn2*0.1f)*5;
-        CameraZ = player[clientID].pos.z +cos(player[clientID].turn1*0.1f)*5 *sin(player[clientID].turn3*0.1f);*/
-    }
+        CameraZ = player[clientID].pos.z /*+cos(turn*0.1f)*5 */+cos(player[clientID].turn1)*5 *cos(player[clientID].turn3);
+        
+        }
     
     /* 初期化 */
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); /* 画面を消去 */
@@ -196,24 +227,34 @@ void display(void)
 
     /* 立方体の描画 */
     for (i = 0; i < 100; i++) {
-        glPushMatrix();           /* 描画位置を保存 */
-        glColor3f(1.0, 1.0, 1.0); /* 描画色を白にする */
+        glPushMatrix();           /* ??????????¸ */
+        glColor3f(1.0, 1.0, 1.0); /* ???????????? */
         glScalef(1.0, 1.0, 1.0);
-        if (i < gClientNum+1) {
-            /* 描画位置を(BoxX, i, 0)に移動 */
+         
+        if (i < 1) {
+            /* ????????(BoxX, i, 0)???? */
             // glutWireCube (0.5);
-            if (i >=0 && i <= gClientNum) {
-                glTranslatef(player[i].pos.x, player[i].pos.y, player[i].pos.z);
-                glRotatef(player[clientID].turn1, 0, 1, 0);
+            if (i == 0) {
+                glTranslatef(player[clientID].pos.x, player[clientID].pos.y,player[clientID].pos.z);
+                if(flag == 2){
+                    //glRotatef(turn*5.75, 0, 0, 1);
+                    //flag = 0;
+                }
+                //glRotatef(turn2*-1*57.5, 1, 0, 0); 
+               // glRotatef(turn3*57.5, 0, 1, 0);
+             
+               glRotatef(player[clientID].turn1*57.5, 0, 1, 0);
+               glRotatef(player[clientID].turn2*57.5*-1, 1, 0, 0);
+            
+               
             }
-             else {
-                glTranslatef(BoxX[1], 0, 2);
-                glRotatef(j, 0, 0, 1.0);
-            }
-            glutSolidCube(1.0);
+            
+            glCallList(model_list);
+             
+            //glutSolidCube(1.0);
            // glutWireSphere(0.4, 20.0, 10.0);
         } else if (i == 2) {
-            glTranslatef(BoxX[i], 0, -2);
+            glTranslatef(0, 0, -2);
             // glutWireCube (0.5);
             glRotatef(f, 0, 0, 1.0);
 
@@ -222,21 +263,20 @@ void display(void)
             if (i % 2 == 0) {
 
                 glTranslatef(-1 * i * 10, 0, 5);
-                glColor3f(1.0, 0.0, 1.0); /* 描画色を白にする */
+                glColor3f(1.0, 0.0, 1.0); /* ???????????? */
                 glScalef(2.0, 5.0, 0.5);
                 glutSolidCube(1.0);
             } else {
                 glTranslatef(-1 * i * 10, 0, -5);
-                glColor3f(0.0, 1.0, 1.0); /* 描画色を白にする */
+                glColor3f(0.0, 1.0, 1.0); /* ???????????? */
                 glScalef(2.0, 5.0, 0.5);
                 glutSolidCube(1.0);
             }
+            glPopMatrix(); /* ?????????? */
         }
-        /* ワイヤーの立方体を描画 */
-        glPopMatrix(); /* 描画位置を戻す */
     }
 
-    //床の表示
+    //???????
     glPushMatrix();
     glColor3f(1.0, 0.0, 0.0);
     glTranslatef(0.0, -0.8, 0.0);
@@ -244,8 +284,8 @@ void display(void)
     glutSolidCube(1.0);
     glPopMatrix();
 
-    //敵１床
-    glColor3f(1.0, 1.0, 1.0); /* 描画色を白にする */
+    //Ũ????
+        glColor3f(1.0, 1.0, 1.0); /* ???????????? */
     glPushMatrix();
     glColor3f(0.0, 1.0, 0.0);
     glTranslatef(0.0, -0.8, 1.5);
@@ -253,7 +293,7 @@ void display(void)
     glutSolidCube(1.0);
     glPopMatrix();
 
-    //敵２床
+    //Ũ????
     glPushMatrix();
     glColor3f(0.0, 0.0, 1.0);
     glTranslatef(0.0, -0.8, -1.5);
@@ -261,7 +301,7 @@ void display(void)
     glutSolidCube(1.0);
     glPopMatrix();
 
-    //ゴール床表示
+    //?????????
    
 
     for (i = 0; i < 20; i++) {
@@ -307,7 +347,7 @@ void display(void)
         glPopMatrix();
     }
 
-    // 障害物
+    // ???
     for (i = 0; i < 5; i++) {
         glPushMatrix();
         glColor3f(0.0, 0.0, 1.0);
@@ -333,17 +373,18 @@ void display(void)
         glPopMatrix();
     }
 
-    //printf("%d   %f %f %f\n", jnk, player[clientID].pos.x, BoxX[1], BoxX[2]);
+    
+
+    //printf("%d   %f %f %f\n", jnk, BoxX[0], BoxX[1], BoxX[2]);
     if (flag < 100) {
       //  Goal();
     }
 
-
-    glPushMatrix();                    /* 視点位置を保存 */
-    glColor3f(1.0, 1.0, 0);            /* 描画色を白(1.0,1.0,1.0)にする */
-    glRotatef(90, 0, 1.0, 0);          /* Y軸中心にBoxRotate(度)回転 */
-    glTranslatef(-0.18, 0.5, player[clientID].pos.x); /* 文字表示座標 */
-
+    glPushMatrix();                    /* ???????????¸ */
+    glColor3f(1.0, 1.0, 0);            /* ????????(1.0,1.0,1.0)????? */
+    glRotatef(90, 0, 1.0, 0);          /* Y??????BoxRotate(??)??ž */
+    glTranslatef(-0.18, 0.5, player[clientID].pos.x); /* ????????? */
+    
    
 
     glPushMatrix();
@@ -354,10 +395,10 @@ void display(void)
     }
     glPopMatrix();
 
-   
-
-    /* 上記で描画されたCGをモニターに出力 */
-     glutSwapBuffers();
+    glFlush();
+    /* ?嵭?????褵??CG???????????? */
+    glutSwapBuffers();
+    
 
     
 
@@ -378,21 +419,80 @@ void display(void)
 }
 */
 
+void
+init(void)
+{
+  tbInit(GLUT_MIDDLE_BUTTON);
+  
+  /* read in the model */
+  model = glmReadOBJ(model_file);
+  scale = glmUnitize(model);
+  glmFacetNormals(model);
+  glmVertexNormals(model, smoothing_angle);
+
+  /* create new display lists */
+  lists();
+
+  //glEnable(GL_LIGHTING);
+  //glEnable(GL_LIGHT0);
+  glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+
+  glEnable(GL_DEPTH_TEST);
+
+  glEnable(GL_CULL_FACE);
+}
+
+
+void lists(void)
+{
+  GLfloat ambient[] = { 0.2, 0.2, 0.2, 1.0 };
+  GLfloat diffuse[] = { 0.8, 0.8, 0.8, 1.0 };
+  GLfloat specular[] = { 0.0, 0.0, 0.0, 1.0 };
+  GLfloat shininess = 65.0;
+
+  if (model_list)
+    glDeleteLists(model_list, 1);
+
+  glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
+  glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
+  glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+  glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
+
+ 
+  if (material_mode == 0) { 
+    if (facet_normal)
+      model_list = glmList(model, GLM_FLAT);
+    else
+      model_list = glmList(model, GLM_SMOOTH);
+  } else if (material_mode == 1) {
+    if (facet_normal)
+      model_list = glmList(model, GLM_FLAT | GLM_COLOR);
+    else
+      model_list = glmList(model, GLM_SMOOTH | GLM_COLOR);
+  } else if (material_mode == 2) {
+    if (facet_normal)
+      model_list = glmList(model, GLM_FLAT | GLM_MATERIAL);
+    else
+      model_list = glmList(model, GLM_SMOOTH | GLM_MATERIAL);
+  }
+}
+
 void resize(int w, int h)
 {
-    /* ウインドウの縦横の比を計算 */
+  
     float aspect = (float)w / (float)h;
-    /* ウィンドウ全体をビューポートする */
+    
     glViewport(0, 0, w, h);
 
-    /* CG描画設定 */
-    glMatrixMode(GL_PROJECTION);             /* 透視投影(遠近投影法)設定モードに切り替え */
-    glLoadIdentity();                        /* 透視投影行列を初期化 */
-    gluPerspective(45.0, aspect, 1.0, 20.0); /* 透視投影行列の設定 */
-                                             /* 視野角45度, 縦横比 aspect，描画前面までの奥行 1.0，描画背面までの奥行 20.0 */
-    /* モデルビュー変換行列の設定 */
+   
+    /*glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();                       
+    gluPerspective(45.0, aspect, 1.0, 20.0); */
+    
     glMatrixMode(GL_MODELVIEW);
 }
+
+
 
 void drawString3D(const char *str, float charSize, float lineWidth)
 {
@@ -421,7 +521,7 @@ void timer(int timerID)
 
     for (i = 0; i < 3; i++) {
         /* 箱をX方向に移動 */
-        BoxX[i] += BoxVx[i];
+       // BoxX[i] += BoxVx[i];
         /* 箱が端に到達したら移動方向を反転 */
         // if( BoxX[i] > 22.0 || BoxX[i] < -22.0) BoxVx[i] = -BoxVx[i];
     }
@@ -446,38 +546,152 @@ void timer(int timerID)
 void keyboard(unsigned char key, int x, int y)
 {
 
-    //回転座標
+    //??ž???
+     
+        key6 = true;
+     
      int xMove = x - xBegin;
      int yMove = y - yBegin;
+   
+      if(key == 'q'){
+      exit(0);
+        
+       }
+    if(key == 'l'){
+        j++;
+    }
 
-    /* キーボード処理 */
-    switch (key) {
-    case 'q':
-        exit(0); /* プログラム終了 */
-        break;
-    case 'b':
-       //player[clientID].pos.x=player[clientID].pos.x-1;
-        //if(player[clientID].turn1>=0){
-         player[clientID].pos.x = player[clientID].pos.x-sin(player[clientID].turn1);
-         player[clientID].pos.z =player[clientID].pos.z-cos(player[clientID].turn1);
-         player[clientID].pos.y = player[clientID].pos.y - sin(player[clientID].turn2);
-       // }
-       /* else{
-         player[clientID].pos.x = player[clientID].pos.x-cos(player[clientID].turn1*0.1f);
-         player[clientID].pos.z =player[clientID].pos.z-sin(player[clientID].turn1*0.1f);
+    if(key == 'd'){
+        //flag = 0;
+        key1 = true;
+       /*if(turn>0){
+            double a;
+            a = -2 * M_PI + turn;
+            turn = a;
+        }
+        turn = turn - (M_PI / 180);
+
+        printf("zahyouhane~%lf\n",turn);
+        if(turn == -2 * M_PI){
+            turn = 0;
         }*/
-         //player[clientID].pos.z * /*cos(player[clientID].turn1/180)*/sin(player[clientID].turn1/180);
+       }
+
+
+    if(key == 's'){
+         flag = 2;
+        //player[clientID].turn2 = player[clientID].turn2-1;
+        key2 = true;
+        /*if(player[clientID].turn2<0){
+            double a;
+            a = 2 * M_PI + player[clientID].turn2;
+            player[clientID].turn2 = a;
+        }
+        player[clientID].turn2 = player[clientID].turn2 + (M_PI / 180);
+        //turn = turn -1;
+        printf("zahyouhane~%lf\n",player[clientID].turn2);
+        if(player[clientID].turn2 == 2 * M_PI){
+            player[clientID].turn2= 0;
+        }
+          player[clientID].turn3 = player[clientID].turn3 - (M_PI / 180);
+        if(player[clientID].turn3 == 2 * M_PI){
+            player[clientID].turn3= 0;
+        }*/
+       }
+    
+    if(key == 'a'){
+        flag = 0;
+        key3 = true;
+        /*if(turn<0){
+            double a;
+            a = 2 * M_PI + turn;
+            turn = a;
+        }
+        turn = turn + (M_PI / 180);
+        printf("zahyouhane~%lf\n",turn);
+        if(turn == 2 * M_PI){
+            turn = 0;
+        }*/
+       }
+
+
+    if(key == 'w'){
+        flag = 2;
+        key4 = true;
+        //player[clientID].turn2 = player[clientID].turn2-1;
+        
+        /*if(player[clientID].turn2>0){
+            double a;
+            a = -2 * M_PI + player[clientID].turn2;
+            player[clientID].turn2 = a;
+        }
+        player[clientID].turn2 = player[clientID].turn2 - (M_PI / 180);
+        //turn = turn -1;
+        printf("zahyouhane~%lf\n",player[clientID].turn2);
+        if(player[clientID].turn2 == -2 * M_PI){
+            player[clientID].turn2= 0;
+        }
+          player[clientID].turn3 = player[clientID].turn3 + (M_PI / 180);
+        if(player[clientID].turn3 == 2 * M_PI){
+            player[clientID].turn3= 0;
+        }*/
+        
+       }
+        if(key == 'b'){
+          //  key5 = true;
+         player[clientID].pos.x = player[clientID].pos.x-sin(player[clientID].turn1)*cos(player[clientID].turn2);
+         player[clientID].pos.z =player[clientID].pos.z-cos(player[clientID].turn1)*cos(player[clientID].turn2);
+         player[clientID].pos.y = player[clientID].pos.y - sin(player[clientID].turn2);
+      
         printf("%f\n",player[clientID].pos.x);
-         //player[clientID].pos.y= player[clientID].pos.y+0.01*cos(player[clientID].turn1/180.0);
-      // player[clientID].pos.x -= 1;
+       }
+      
+    glutPostRedisplay();
+    x = y = 0;
+   // key6=false;
+}
+
+void keyboard2(unsigned char key, int x, int y)
+{
+    key6 = false;
+    printf("koregayobareteirunokawakaranasugitekomatteioriokjnlfjahgljarhgttlijjfgljadflhgbleurhbgladbflajbfgflqihbflajhflejrhglijrndfljadnflgjbwqelrhigb;ajdnflh");
+   /*key1 = false;
+         key2 = false;
+         key3 = false;
+         key4 = false;
+         key5 = false;
+         key6 = false;*/
+     switch (key) {
+    case 'q':
+      //  exit(0);
         break;
+    
     case 'd':
-        //player[clientID].pos.x=player[clientID].pos.x+1;
-        // player[clientID].pos.y= player[clientID].pos.y-0.01*cos(player[clientID].turn1/180.0*3.141592);
+        key = false;
         break;
     case 's':
-        flag = 0;
-        if(player[clientID].turn1>0){
+        key2 = false;
+        break;
+    case 'a':
+        key3 = false;
+        break;
+    case 'w':
+        key4 = false;
+        break;
+    case 'b':
+        key5 = false;
+        break;
+    default:
+        break;
+        
+    }
+    x = y = 0;
+}
+
+void move(){
+    if(key1 == true && key2 == true){
+            printf("nanamekaitenn\n");
+            if(player[clientID].turn1>0){
             double a;
             a = -2 * M_PI + player[clientID].turn1;
             player[clientID].turn1 = a;
@@ -488,37 +702,71 @@ void keyboard(unsigned char key, int x, int y)
         if(player[clientID].turn1 == -2 * M_PI){
             player[clientID].turn1 = 0;
         }
-        /*CameraX = player[clientID].pos.x +sin(player[clientID].turn1*0.1f)*5;
-        CameraY = player[clientID].pos.y;
-        CameraZ = player[clientID].pos.z+cos(player[clientID].turn1*0.1f)*5;*/
-        break;
-    case 'a':
-        flag = 0;
+        if(player[clientID].turn2<0){
+            double a;
+            a = 2 * M_PI + player[clientID].turn2;
+            player[clientID].turn2 = a;
+        }
+        player[clientID].turn2 = player[clientID].turn2 + (M_PI / 180);
+        //turn = turn -1;
+        printf("zahyouhane~%lf\n",player[clientID].turn2);
+        if(player[clientID].turn2 == 2 * M_PI){
+            player[clientID].turn2= 0;
+        }
+          player[clientID].turn3 = player[clientID].turn3 - (M_PI / 180);
+        if(player[clientID].turn3 == 2 * M_PI){
+            player[clientID].turn3= 0;
+        }
+        }
+    else if(key2 == true && key3 == true){
+        printf("hidarinanamekaitenn");
+        // flag = 2;
+        //player[clientID].turn2 = player[clientID].turn2-1;
+       // key2 = true;
+        if(player[clientID].turn2<0){
+            double a;
+            a = 2 * M_PI + player[clientID].turn2;
+            player[clientID].turn2 = a;
+        }
+        player[clientID].turn2 = player[clientID].turn2 + (M_PI / 180);
+        //turn = turn -1;
+        printf("zahyouhane~%lf\n",player[clientID].turn2);
+        if(player[clientID].turn2 == 2 * M_PI){
+            player[clientID].turn2= 0;
+        }
+          player[clientID].turn3 = player[clientID].turn3 - (M_PI / 180);
+        if(player[clientID].turn3 == 2 * M_PI){
+            player[clientID].turn3= 0;
+        }
+
         if(player[clientID].turn1<0){
             double a;
             a = 2 * M_PI + player[clientID].turn1;
             player[clientID].turn1 = a;
         }
         player[clientID].turn1 = player[clientID].turn1 + (M_PI / 180);
-        printf("zahyouhane~%lf\n",player[clientID].turn1);
         if(player[clientID].turn1 == 2 * M_PI){
             player[clientID].turn1 = 0;
         }
-       /* CameraX = player[clientID].pos.x +sin(player[clientID].turn1*0.1f)*5;
-        CameraY = player[clientID].pos.y;
-        CameraZ = player[clientID].pos.z+cos(player[clientID].turn1*0.1f)*5;*/
-        break;
-    case 'w':
-        flag = 2;
-        //player[clientID].turn2 = player[clientID].turn2-1;
-        
+    }
+    else if(key1 == true && key4 == true){
+         if(player[clientID].turn1>0){
+            double a;
+            a = -2 * M_PI + player[clientID].turn1;
+            player[clientID].turn1= a;
+        }
+        player[clientID].turn1= player[clientID].turn1 - (M_PI / 180);
+        if(player[clientID].turn1 == -2 * M_PI){
+            player[clientID].turn1 = 0;
+        }
+
         if(player[clientID].turn2>0){
             double a;
             a = -2 * M_PI + player[clientID].turn2;
             player[clientID].turn2 = a;
         }
         player[clientID].turn2 = player[clientID].turn2 - (M_PI / 180);
-        //player[clientID].turn1 = player[clientID].turn1 -1;
+        //turn = turn -1;
         printf("zahyouhane~%lf\n",player[clientID].turn2);
         if(player[clientID].turn2 == -2 * M_PI){
             player[clientID].turn2= 0;
@@ -527,69 +775,125 @@ void keyboard(unsigned char key, int x, int y)
         if(player[clientID].turn3 == 2 * M_PI){
             player[clientID].turn3= 0;
         }
-        break;
-    case 'j':
+    }
+    else if(key3 == true && key4 == true){
         if(player[clientID].turn1<0){
+            double a;
+            a = 2 * M_PI + player[clientID].turn1;
+            player[clientID].turn1 = a;
+        }
+        player[clientID].turn1 = player[clientID].turn1 + (M_PI / 180);
+        printf("zahyouhane~%lf\n",player[clientID].turn1);
+        if(player[clientID].turn1 == 2 * M_PI){
+            player[clientID].turn1= 0;
+        }
+         if(player[clientID].turn2>0){
+            double a;
+            a = -2 * M_PI + player[clientID].turn2;
+            player[clientID].turn2 = a;
+        }
+        player[clientID].turn2 = player[clientID].turn2 - (M_PI / 180);
+        //turn = turn -1;
+        printf("zahyouhane~%lf\n",player[clientID].turn2);
+        if(player[clientID].turn2 == -2 * M_PI){
+            player[clientID].turn2= 0;
+        }
+          player[clientID].turn3 = player[clientID].turn3 + (M_PI / 180);
+        if(player[clientID].turn3 == 2 * M_PI){
+            player[clientID].turn3= 0;
+        }
+    }
+
+
+    else if(key1 == true){
+        flag = 0;
+        //key = true;
+        if(player[clientID].turn1>0){
+            double a;
+            a = -2 * M_PI + player[clientID].turn1;
+            player[clientID].turn1 = a;
+        }
+        player[clientID].turn1= player[clientID].turn1 - (M_PI / 180);
+        if(player[clientID].turn1 == -2 * M_PI){
+            player[clientID].turn1 = 0;
+        }
+       }
+
+
+   else if(key2 == true){
+         flag = 2;
+        //player[clientID].turn2 = player[clientID].turn2-1;
+        key2 = true;
+        if(player[clientID].turn2<0){
             double a;
             a = 2 * M_PI + player[clientID].turn2;
             player[clientID].turn2 = a;
         }
         player[clientID].turn2 = player[clientID].turn2 + (M_PI / 180);
+        //turn = turn -1;
         printf("zahyouhane~%lf\n",player[clientID].turn2);
         if(player[clientID].turn2 == 2 * M_PI){
-            player[clientID].turn2 = 0;
+            player[clientID].turn2= 0;
         }
-        break;
-    default:
-        junp  = 0;
-        junpf = 0;
-        //player[clientID].turn1 = 0;
-        break;
-    }
-
-    // jyoikonnの処理
-    //カメラの処理
-    /* CameraAzimuth   += (float)xMove / 2.0;
-     CameraElevation += (float)yMove / 2.0;
-     if (CameraElevation >  90.0){
-       CameraElevation =  90.0;
-           }
-     if (CameraElevation < -90.0){
-       CameraElevation = -90.0;
-     }
-   CameraX += BoxVx[0];// CameraDistance * cos(CameraAzimuth * RAD) * cos(CameraElevation * RAD);
-   CameraY = CameraDistance * sin(CameraElevation * RAD);
-   CameraZ = CameraDistance * sin(CameraAzimuth * RAD) * cos(CameraElevation * RAD);
-   printf("Camera AZ:%.1f, EL:%.1f, dist:%.1f, x,y,z= %.1f, %.1f, %.1f\n",
-       CameraAzimuth, CameraElevation, CameraDistance, CameraX, CameraY, CameraZ);*/
-
-   // 現在のマウスポインタの座標を次の始点用に記録する
-   xBegin = x;
-   yBegin = y;
-    /* 描画要求（直後に display() 関数が呼ばれる） */
-    glutPostRedisplay();
-
-    /* コンパイル時の警告対策（定義された変数を使わないと警告になるので） */
-    x = y = 0;
-}
-
-//ジョイコンの処理
-/*int joyconev()
-{
-    joycon_get_state(&jc);
-    if (rb) {
-        joycon_rumble(&jc, 50);
-        rb = 0;
-    }
-    if (jc.button.btn.Home) {
-        joycon_rumble(&jc, 50);
-        exit(0);
-        return 0;
-    }
+          player[clientID].turn3 = player[clientID].turn3 - (M_PI / 180);
+        if(player[clientID].turn3 == 2 * M_PI){
+            player[clientID].turn3= 0;
+        }
+       }
     
-    return 1;
+    else if(key3 == true){
+        flag = 0;
+        key3 = true;
+        if(player[clientID].turn1<0){
+            double a;
+            a = 2 * M_PI + player[clientID].turn1;
+            player[clientID].turn1 = a;
+        }
+        player[clientID].turn1 = player[clientID].turn1 + (M_PI / 180);
+        if(player[clientID].turn1 == 2 * M_PI){
+            player[clientID].turn1 = 0;
+        }
+       }
+
+
+    else if(key4 == true){
+        flag = 2;
+        key4 = true;
+        //player[clientID].turn2 = player[clientID].turn2-1;
+        
+        if(player[clientID].turn2>0){
+            double a;
+            a = -2 * M_PI + player[clientID].turn2;
+            player[clientID].turn2 = a;
+        }
+        player[clientID].turn2 = player[clientID].turn2 - (M_PI / 180);
+        //turn = turn -1;
+        printf("zahyouhane~%lf\n",player[clientID].turn2);
+        if(player[clientID].turn2 == -2 * M_PI){
+            player[clientID].turn2= 0;
+        }
+          player[clientID].turn3 = player[clientID].turn3 + (M_PI / 180);
+        if(player[clientID].turn3 == 2 * M_PI){
+            player[clientID].turn3= 0;
+        }
+        
+       }
+       
+       if(key6==false){
+         key1 = false;
+         key2 = false;
+         key3 = false;
+         key4 = false;
+         key5 = false;
+         key6 = false;
+          printf("yobareteorimasutaishousann\n");
+       }
+        if(key6 == true){
+       // key6 = false;
+       
+       }
+       
 }
-*/
 
 /***********************************************************
 |  関数：myInit()
@@ -618,6 +922,7 @@ void myInit(char *windowTitle)
     
 
     /* イベント発生時に呼び出す関数の登録 */
+    glutKeyboardUpFunc(keyboard2);
     glutKeyboardFunc(keyboard);  /* キーボードを押した時 */
     glutReshapeFunc(resize);
     glutDisplayFunc(display);    /* 画面表示 */
@@ -626,7 +931,7 @@ void myInit(char *windowTitle)
     /* CG描画設定 */
     glMatrixMode(GL_PROJECTION);             /* 透視投影(遠近投影法)設定モードに切り替え */
     glLoadIdentity();                        /* 透視投影行列を初期化 */
-    gluPerspective(45.0, aspect, 1.0, 20.0); /* 透視投影行列の設定 */
+    gluPerspective(45.0, aspect, 1.0, 100.0); /* 透視投影行列の設定 */
                                              /* 視野角45度, 縦横比 aspect，描画前面までの奥行 1.0，描画背面までの奥行 20.0 */
     glEnable(GL_DEPTH_TEST);                 /* 隠面消去を有効にする */
     glClearColor(0.0, 0.0, 0.0, 0.0);
