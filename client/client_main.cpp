@@ -410,7 +410,7 @@ void display(void)
     move_bullet(bullet_Num);    // ç¶£é??????±ç³¸??
     draw_bullet(bullet_Num);    // ç¶£é??????????
 
-    drawPlayerCollider();
+    //drawPlayerCollider();
 
     glFlush();
     /* ?ç¶?????????????CG???????????? */
@@ -710,8 +710,8 @@ void keyboard2(unsigned char key, int x, int y)
 }
 
 void move(){
-    if(key1 == true && key2 == true){
-            printf("nanamekaitenn\n");
+
+    if(key1 == true && key2 == true && key7 == true){
             if(player[clientID].turn1>0){
             double a;
             a = -2 * M_PI + player[clientID].turn1;
@@ -719,7 +719,6 @@ void move(){
         }
         player[clientID].turn1 = player[clientID].turn1 - (M_PI / 180);
 
-        printf("zahyouhane~%lf\n",player[clientID].turn1);
         if(player[clientID].turn1 == -2 * M_PI){
             player[clientID].turn1 = 0;
         }
@@ -730,7 +729,6 @@ void move(){
         }
         player[clientID].turn2 = player[clientID].turn2 + (M_PI / 180);
         //turn = turn -1;
-        printf("zahyouhane~%lf\n",player[clientID].turn2);
         if(player[clientID].turn2 == 2 * M_PI){
             player[clientID].turn2= 0;
         }
@@ -738,9 +736,15 @@ void move(){
         if(player[clientID].turn3 == 2 * M_PI){
             player[clientID].turn3= 0;
         }
+        if(can_attack == true){
+            if(bullet_Num >= MAX_BULLET_NUM){bullet_Num = 0;}
+            create_bullet(bullet_Num);
+            glutTimerFunc(1000, add_lifetime, 0);
+            can_attack = false;
+            glutTimerFunc(1000, interval_attack, 0);
         }
-    else if(key2 == true && key3 == true){
-        printf("hidarinanamekaitenn");
+        }
+    else if(key2 == true && key3 == true&&key7 == true){
         // flag = 2;
         //player[clientID].turn2 = player[clientID].turn2-1;
        // key2 = true;
@@ -751,7 +755,134 @@ void move(){
         }
         player[clientID].turn2 = player[clientID].turn2 + (M_PI / 180);
         //turn = turn -1;
-        printf("zahyouhane~%lf\n",player[clientID].turn2);
+        if(player[clientID].turn2 == 2 * M_PI){
+            player[clientID].turn2= 0;
+        }
+          player[clientID].turn3 = player[clientID].turn3 - (M_PI / 180);
+        if(player[clientID].turn3 == 2 * M_PI){
+            player[clientID].turn3= 0;
+        }
+
+        if(player[clientID].turn1<0){
+            double a;
+            a = 2 * M_PI + player[clientID].turn1;
+            player[clientID].turn1 = a;
+        }
+        player[clientID].turn1 = player[clientID].turn1 + (M_PI / 180);
+        if(player[clientID].turn1 == 2 * M_PI){
+            player[clientID].turn1 = 0;
+        }
+        if(can_attack == true){
+            if(bullet_Num >= MAX_BULLET_NUM){bullet_Num = 0;}
+            create_bullet(bullet_Num);
+            glutTimerFunc(1000, add_lifetime, 0);
+            can_attack = false;
+            glutTimerFunc(1000, interval_attack, 0);
+        }
+    }
+    else if(key1 == true && key4 == true && key7 == true){
+         if(player[clientID].turn1>0){
+            double a;
+            a = -2 * M_PI + player[clientID].turn1;
+            player[clientID].turn1= a;
+        }
+        player[clientID].turn1= player[clientID].turn1 - (M_PI / 180);
+        if(player[clientID].turn1 == -2 * M_PI){
+            player[clientID].turn1 = 0;
+        }
+
+        if(player[clientID].turn2>0){
+            double a;
+            a = -2 * M_PI + player[clientID].turn2;
+            player[clientID].turn2 = a;
+        }
+        player[clientID].turn2 = player[clientID].turn2 - (M_PI / 180);
+        //turn = turn -1;
+        if(player[clientID].turn2 == -2 * M_PI){
+            player[clientID].turn2= 0;
+        }
+          player[clientID].turn3 = player[clientID].turn3 + (M_PI / 180);
+        if(player[clientID].turn3 == 2 * M_PI){
+            player[clientID].turn3= 0;
+        }
+        if(can_attack == true){
+            if(bullet_Num >= MAX_BULLET_NUM){bullet_Num = 0;}
+            create_bullet(bullet_Num);
+            glutTimerFunc(1000, add_lifetime, 0);
+            can_attack = false;
+            glutTimerFunc(1000, interval_attack, 0);
+        }
+    }
+    else if(key3 == true && key4 == true && key7 == true){
+        if(player[clientID].turn1<0){
+            double a;
+            a = 2 * M_PI + player[clientID].turn1;
+            player[clientID].turn1 = a;
+        }
+        player[clientID].turn1 = player[clientID].turn1 + (M_PI / 180);
+        if(player[clientID].turn1 == 2 * M_PI){
+            player[clientID].turn1= 0;
+        }
+         if(player[clientID].turn2>0){
+            double a;
+            a = -2 * M_PI + player[clientID].turn2;
+            player[clientID].turn2 = a;
+        }
+        player[clientID].turn2 = player[clientID].turn2 - (M_PI / 180);
+        //turn = turn -1;
+        if(player[clientID].turn2 == -2 * M_PI){
+            player[clientID].turn2= 0;
+        }
+          player[clientID].turn3 = player[clientID].turn3 + (M_PI / 180);
+        if(player[clientID].turn3 == 2 * M_PI){
+            player[clientID].turn3= 0;
+        }
+        if(can_attack == true){
+            if(bullet_Num >= MAX_BULLET_NUM){bullet_Num = 0;}
+            create_bullet(bullet_Num);
+            glutTimerFunc(1000, add_lifetime, 0);
+            can_attack = false;
+            glutTimerFunc(1000, interval_attack, 0);
+        }
+    }
+    
+    else if(key1 == true && key2 == true){
+            if(player[clientID].turn1>0){
+            double a;
+            a = -2 * M_PI + player[clientID].turn1;
+            player[clientID].turn1 = a;
+        }
+        player[clientID].turn1 = player[clientID].turn1 - (M_PI / 180);
+
+        if(player[clientID].turn1 == -2 * M_PI){
+            player[clientID].turn1 = 0;
+        }
+        if(player[clientID].turn2<0){
+            double a;
+            a = 2 * M_PI + player[clientID].turn2;
+            player[clientID].turn2 = a;
+        }
+        player[clientID].turn2 = player[clientID].turn2 + (M_PI / 180);
+        //turn = turn -1;
+        if(player[clientID].turn2 == 2 * M_PI){
+            player[clientID].turn2= 0;
+        }
+          player[clientID].turn3 = player[clientID].turn3 - (M_PI / 180);
+        if(player[clientID].turn3 == 2 * M_PI){
+            player[clientID].turn3= 0;
+        }
+        }
+    else if(key2 == true && key3 == true){
+        // flag = 2;
+        //player[clientID].turn2 = player[clientID].turn2-1;
+       // key2 = true;
+        if(player[clientID].turn2<0){
+            double a;
+            a = 2 * M_PI + player[clientID].turn2;
+            player[clientID].turn2 = a;
+        }
+        player[clientID].turn2 = player[clientID].turn2 + (M_PI / 180);
+        //turn = turn -1;
         if(player[clientID].turn2 == 2 * M_PI){
             player[clientID].turn2= 0;
         }
@@ -788,7 +919,6 @@ void move(){
         }
         player[clientID].turn2 = player[clientID].turn2 - (M_PI / 180);
         //turn = turn -1;
-        printf("zahyouhane~%lf\n",player[clientID].turn2);
         if(player[clientID].turn2 == -2 * M_PI){
             player[clientID].turn2= 0;
         }
@@ -804,7 +934,6 @@ void move(){
             player[clientID].turn1 = a;
         }
         player[clientID].turn1 = player[clientID].turn1 + (M_PI / 180);
-        printf("zahyouhane~%lf\n",player[clientID].turn1);
         if(player[clientID].turn1 == 2 * M_PI){
             player[clientID].turn1= 0;
         }
@@ -815,7 +944,6 @@ void move(){
         }
         player[clientID].turn2 = player[clientID].turn2 - (M_PI / 180);
         //turn = turn -1;
-        printf("zahyouhane~%lf\n",player[clientID].turn2);
         if(player[clientID].turn2 == -2 * M_PI){
             player[clientID].turn2= 0;
         }
@@ -824,6 +952,106 @@ void move(){
             player[clientID].turn3= 0;
         }
     }
+    else if(key1 == true && key7 == true){
+        flag = 0;
+        //key = true;
+        if(player[clientID].turn1>0){
+            double a;
+            a = -2 * M_PI + player[clientID].turn1;
+            player[clientID].turn1 = a;
+        }
+        player[clientID].turn1= player[clientID].turn1 - (M_PI / 180);
+        if(player[clientID].turn1 == -2 * M_PI){
+            player[clientID].turn1 = 0;
+        }
+         if(can_attack == true){
+            if(bullet_Num >= MAX_BULLET_NUM){bullet_Num = 0;}
+            create_bullet(bullet_Num);
+            glutTimerFunc(1000, add_lifetime, 0);
+            can_attack = false;
+            glutTimerFunc(1000, interval_attack, 0);
+        }
+       }
+
+
+   else if(key2 == true&&key7 == true){
+         flag = 2;
+        //player[clientID].turn2 = player[clientID].turn2-1;
+        key2 = true;
+        if(player[clientID].turn2<0){
+            double a;
+            a = 2 * M_PI + player[clientID].turn2;
+            player[clientID].turn2 = a;
+        }
+        player[clientID].turn2 = player[clientID].turn2 + (M_PI / 180);
+        //turn = turn -1;
+        if(player[clientID].turn2 == 2 * M_PI){
+            player[clientID].turn2= 0;
+        }
+          player[clientID].turn3 = player[clientID].turn3 - (M_PI / 180);
+        if(player[clientID].turn3 == 2 * M_PI){
+            player[clientID].turn3= 0;
+        }
+         if(can_attack == true){
+            if(bullet_Num >= MAX_BULLET_NUM){bullet_Num = 0;}
+            create_bullet(bullet_Num);
+            glutTimerFunc(1000, add_lifetime, 0);
+            can_attack = false;
+            glutTimerFunc(1000, interval_attack, 0);
+        }
+       }
+    
+    else if(key3 == true&&key7 == true){
+        flag = 0;
+        key3 = true;
+        if(player[clientID].turn1<0){
+            double a;
+            a = 2 * M_PI + player[clientID].turn1;
+            player[clientID].turn1 = a;
+        }
+        player[clientID].turn1 = player[clientID].turn1 + (M_PI / 180);
+        if(player[clientID].turn1 == 2 * M_PI){
+            player[clientID].turn1 = 0;
+        }
+         if(can_attack == true){
+            if(bullet_Num >= MAX_BULLET_NUM){bullet_Num = 0;}
+            create_bullet(bullet_Num);
+            glutTimerFunc(1000, add_lifetime, 0);
+            can_attack = false;
+            glutTimerFunc(1000, interval_attack, 0);
+        }
+       }
+
+
+    else if(key4 == true&&key7==true){
+        flag = 2;
+        key4 = true;
+        //player[clientID].turn2 = player[clientID].turn2-1;
+        
+        if(player[clientID].turn2>0){
+            double a;
+            a = -2 * M_PI + player[clientID].turn2;
+            player[clientID].turn2 = a;
+        }
+        player[clientID].turn2 = player[clientID].turn2 - (M_PI / 180);
+        //turn = turn -1;
+        if(player[clientID].turn2 == -2 * M_PI){
+            player[clientID].turn2= 0;
+        }
+          player[clientID].turn3 = player[clientID].turn3 + (M_PI / 180);
+        if(player[clientID].turn3 == 2 * M_PI){
+            player[clientID].turn3= 0;
+        }
+         if(can_attack == true){
+            if(bullet_Num >= MAX_BULLET_NUM){bullet_Num = 0;}
+            create_bullet(bullet_Num);
+            glutTimerFunc(1000, add_lifetime, 0);
+            can_attack = false;
+            glutTimerFunc(1000, interval_attack, 0);
+        }
+       }
+
+
 
 
     else if(key1 == true){
@@ -852,7 +1080,6 @@ void move(){
         }
         player[clientID].turn2 = player[clientID].turn2 + (M_PI / 180);
         //turn = turn -1;
-        printf("zahyouhane~%lf\n",player[clientID].turn2);
         if(player[clientID].turn2 == 2 * M_PI){
             player[clientID].turn2= 0;
         }
@@ -889,7 +1116,6 @@ void move(){
         }
         player[clientID].turn2 = player[clientID].turn2 - (M_PI / 180);
         //turn = turn -1;
-        printf("zahyouhane~%lf\n",player[clientID].turn2);
         if(player[clientID].turn2 == -2 * M_PI){
             player[clientID].turn2= 0;
         }
@@ -899,17 +1125,21 @@ void move(){
         }
         
        }
-    if(key7 == true){
+    else if(key7 == true){
         if(can_attack == true){
             if(bullet_Num >= MAX_BULLET_NUM){bullet_Num = 0;}
             create_bullet(bullet_Num);
             glutTimerFunc(1000, add_lifetime, 0);
             can_attack = false;
             glutTimerFunc(1000, interval_attack, 0);
-            printf("ok\n");
         }
     }
-       
+     player[clientID].pos.x = player[clientID].pos.x-sin(player[clientID].turn1)*cos(player[clientID].turn2)*0.5;
+         player[clientID].pos.z =player[clientID].pos.z-cos(player[clientID].turn1)*cos(player[clientID].turn2)*0.5;
+         player[clientID].pos.y = player[clientID].pos.y - sin(player[clientID].turn2)*0.5;
+         player[clientID].collider.pos = player[clientID].pos;
+      
+        printf("%f\n",player[clientID].pos.x);
        if(key6==false){
          key1 = false;
          key2 = false;
@@ -918,7 +1148,6 @@ void move(){
          key5 = false;
          key6 = false;
          key7 = false;
-          printf("yobareteorimasutaishousann\n");
        }
         if(key6 == true){
        // key6 = false;
