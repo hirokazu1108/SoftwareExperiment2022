@@ -56,7 +56,7 @@ int main(int argc,char *argv[])
         player[i].turn3 = 0;
         player[i].type = 0;
         player[i].mp = 0;
-        player[i].hp = 0;
+        player[i].hp = 3;
         player[i].reloadTime= 0;
         player[i].collider.radius = 1.0;
         player[i].collider.pos = player[i].pos;
