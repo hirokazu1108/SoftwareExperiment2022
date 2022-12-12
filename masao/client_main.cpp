@@ -1,10 +1,13 @@
 /* --------------------------------------------------------------------
  * gls04.c
- * 2å€‹ã®ç«‹æ–¹ä½“ã‚’åˆ¥ã€…ã«å‹•ã‹ã™
+ * 2¸Ä¤ÎÎ©ÊıÂÎ¤òÊÌ¡¹¤ËÆ°¤«¤¹
  * -------------------------------------------------------------------- */
 
-/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ¥Ø¥Ã¥À¥Õ¥¡¥¤¥ë */
+#include <stdarg.h>
 #include "client.h"
+#include "trackball.h"
+#include "glm.h"
 int		gClientNum;
 int		clientID;
 Player *player;
@@ -24,18 +27,18 @@ Geometry Cube;
 BULLET bullet;
 std::vector<BULLET> array_bullet;
 
-/* ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•° */
-int xBegin            = 0;    /* ãƒã‚¦ã‚¹ãƒ‰ãƒ©ãƒƒã‚°ã®å§‹ç‚¹Xåº§æ¨™ */
-int yBegin            = 0;    /* ãƒã‚¦ã‚¹ãƒ‰ãƒ©ãƒƒã‚°ã®å§‹ç‚¹Yåº§æ¨™ */
-int PressButton       = 0;    /* ç¾åœ¨æŠ¼ã•ã‚Œã¦ã„ã‚‹ãƒã‚¦ã‚¹ãƒœã‚¿ãƒ³ï¼ˆ1:å·¦,2:ä¸­,3:å³ï¼‰ */
-float CameraAzimuth   = 90.0; /* ã‚«ãƒ¡ãƒ©ã®ä½ç½®ï¼ˆæ–¹ä½è§’ï¼‰ */
-float CameraElevation = 0.0;  /* ã‚«ãƒ¡ãƒ©ã®ä½ç½®ï¼ˆä»°è§’ï¼‰ */
-float CameraDistance  = 5.0;  /* ã‚«ãƒ¡ãƒ©ã®ä½ç½®ï¼ˆåŸç‚¹ã‹ã‚‰ã®è·é›¢ï¼‰ */
-float CameraX         = 0;  /* ã‚«ãƒ¡ãƒ©ã®ä½ç½®ï¼ˆXåº§æ¨™ï¼‰ */
-float CameraY         = 1.0;  /* ã‚«ãƒ¡ãƒ©ã®ä½ç½®ï¼ˆYåº§æ¨™ï¼‰ */
-float CameraZ         = 0.0;  /* ã‚«ãƒ¡ãƒ©ã®ä½ç½®ï¼ˆZåº§æ¨™ï¼‰ */
-float BoxX[3];                /* ç®±ã®Xåº§æ¨™ */
-float BoxVx[3];               /* ç®±ã®Xæ–¹å‘ç§»å‹•é€Ÿåº¦ */
+/* ¥°¥í¡¼¥Ğ¥ëÊÑ¿ô */
+int xBegin            = 0;    /* ¥Ş¥¦¥¹¥É¥é¥Ã¥°¤Î»ÏÅÀXºÂÉ¸ */
+int yBegin            = 0;    /* ¥Ş¥¦¥¹¥É¥é¥Ã¥°¤Î»ÏÅÀYºÂÉ¸ */
+int PressButton       = 0;    /* ¸½ºß²¡¤µ¤ì¤Æ¤¤¤ë¥Ş¥¦¥¹¥Ü¥¿¥ó¡Ê1:º¸,2:Ãæ,3:±¦¡Ë */
+float CameraAzimuth   = 90.0; /* ¥«¥á¥é¤Î°ÌÃÖ¡ÊÊı°Ì³Ñ¡Ë */
+float CameraElevation = 0.0;  /* ¥«¥á¥é¤Î°ÌÃÖ¡Ê¶Ä³Ñ¡Ë */
+float CameraDistance  = 5.0;  /* ¥«¥á¥é¤Î°ÌÃÖ¡Ê¸¶ÅÀ¤«¤é¤Îµ÷Î¥¡Ë */
+float CameraX         = 0;  /* ¥«¥á¥é¤Î°ÌÃÖ¡ÊXºÂÉ¸¡Ë */
+float CameraY         = 1.0;  /* ¥«¥á¥é¤Î°ÌÃÖ¡ÊYºÂÉ¸¡Ë */
+float CameraZ         = 0.0;  /* ¥«¥á¥é¤Î°ÌÃÖ¡ÊZºÂÉ¸¡Ë */
+float BoxX[3];                /* È¢¤ÎXºÂÉ¸ */
+float BoxVx[3];               /* È¢¤ÎXÊı¸ş°ÜÆ°Â®ÅÙ */
 float BoxY[3];
 float BoxZ[3];
 char left  = 0;
@@ -44,20 +47,41 @@ char buf[256];
 int kasoku;
 float BoxRotate = 10.0;
 int flag        = 106;
-int j           = 0; // 2ã®ã¯ã‚„ã•
-int f           = 0; //ï¼“ã®ã¯ã‚„ã•
+int j           = 0; // 2¤Î¤Ï¤ä¤µ
+int f           = 0; //£³¤Î¤Ï¤ä¤µ
 int ps          = 0;
-int bullet_Num=0;   // ç™ºå°„ã•ã‚ŒãŸå¼¾ã®å€‹æ•°
-bool can_attack = true;     // å¼¾ã®ç™ºå°„ãŒå¯èƒ½ãªã‚‰true
+double junp;
+int junpf = 0;
+bool key1 = false;
+bool key2 = false;
+bool key3 = false;
+bool key4 = false;
+bool key5 = false;
+bool key6 = false;
+bool key7 = false;
+bool startflag = true;
+int bullet_Num = 0;   // È¯¼Í¤µ¤ì¤¿ÃÆ¤Î¸Ä¿ô
+bool can_attack = true;     // ÃÆ¤ÎÈ¯¼Í¤¬²ÄÇ½¤Ê¤étrue
 
 int bf;
-int jnk; //ã‚¸ãƒ§ã‚¤ã‚³ãƒ³ã®å…¥åŠ›ã‚³ãƒãƒ³ãƒ‰
+int jnk; //¥¸¥ç¥¤¥³¥ó¤ÎÆşÎÏ¥³¥Ş¥ó¥É
 int r=0;
 int rb;
 int af;
 joyconlib_t jc;
 
-/* é–¢æ•°ã®ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ—å®£è¨€ */
+GLuint     model_list = 0;		/* display list for object */
+char*      model_file = NULL;		/* name of the obect file */
+GLboolean  facet_normal = GL_FALSE;	/* draw with facet normal? */
+GLMmodel*  model;
+GLfloat    smoothing_angle = 90.0;	/* smoothing angle */
+GLfloat    scale;			/* scaling factor */
+GLboolean  bounding_box = GL_FALSE;
+GLboolean  performance = GL_FALSE;
+GLboolean  stats = GL_FALSE;
+GLfloat    weld_distance = 0.00001;
+GLuint     material_mode = 1;
+/* ´Ø¿ô¤Î¥×¥í¥È¥¿¥¤¥×Àë¸À */
 
 void display(void);
 void timer(int timerID);
@@ -65,25 +89,29 @@ void keyboard(unsigned char key, int x, int y);
 void resize(int w, int h);
 void myInit(char *windowTitle);
 void drawString3D(const char *str, float charSize, float lineWidth);
+void text(GLuint x, GLuint y, GLfloat scale, char* format, ...);
+void lists(void);
 void init(void);
 int joyconev();
-void create_bullet(int num);    // å¼¾ã®ç”Ÿæˆ
-void draw_bullet(int num);  // å¼¾ã®æç”»
-void move_bullet(int num);    // å¼¾ä¸¸ã®å‹•ã
-void add_lifetime(int add_lifetimeID);  // å¼¾ã®ãƒ©ã‚¤ãƒ•ã‚¿ã‚¤ãƒ ã‚’åŠ ç®—
-void count_time(int count_timeID);      // ã‚²ãƒ¼ãƒ é–‹å§‹ã‹ã‚‰ã®çµŒéæ™‚é–“ï¼ˆç§’ï¼‰ã‚’ã‚«ã‚¦ãƒ³ãƒˆã™ã‚‹
-void del_bullet(void);  // å¼¾ã®æ¶ˆå»
-void interval_attack(int interval_attackID);    // å¼¾ã®ç™ºå°„é–“éš”ã‚’è¨­ã‘ã‚‹é–¢æ•°
+void move(void);
+void create_bullet(int num);    // ÃÆ¤ÎÀ¸À®
+void draw_bullet(int num);  // ÃÆ¤ÎÉÁ²è
+void move_bullet(int num);    // ÃÆ´İ¤ÎÆ°¤­
+void add_lifetime(int add_lifetimeID);  // ÃÆ¤Î¥é¥¤¥Õ¥¿¥¤¥à¤ò²Ã»»
+void count_time(int count_timeID);      // ¥²¡¼¥à³«»Ï¤«¤é¤Î·Ğ²á»ş´Ö¡ÊÉÃ¡Ë¤ò¥«¥¦¥ó¥È¤¹¤ë
+void del_bullet(void);  // ÃÆ¤Î¾Ãµî
+void interval_attack(int interval_attackID);    // ÃÆ¤ÎÈ¯¼Í´Ö³Ö¤òÀß¤±¤ë´Ø¿ô
 #define TEX_HEIGHT 32
 #define TEX_WIDTH 32
 static GLubyte image[TEX_HEIGHT][TEX_WIDTH][4];
+char *modelname = "sentouki.obj" ;
 
 /***********************************************************
-|  é–¢æ•°ï¼šmain()
-|  èª¬æ˜ï¼šãƒ¡ã‚¤ãƒ³é–¢æ•°
-|  å¼•æ•°ï¼šint argc       å®Ÿè¡Œæ™‚å¼•æ•°ã®æ•°
-|  å¼•æ•°ï¼šchar** argv    å®Ÿè¡Œæ™‚å¼•æ•°ã®å†…å®¹ï¼ˆæ–‡å­—åˆ—é…åˆ—ï¼‰
-|  æˆ»å€¤ï¼šint            0:æ­£å¸¸çµ‚äº†
+|  ´Ø¿ô¡§main()
+|  ÀâÌÀ¡§¥á¥¤¥ó´Ø¿ô
+|  °ú¿ô¡§int argc       ¼Â¹Ô»ş°ú¿ô¤Î¿ô
+|  °ú¿ô¡§char** argv    ¼Â¹Ô»ş°ú¿ô¤ÎÆâÍÆ¡ÊÊ¸»úÎóÇÛÎó¡Ë
+|  ÌáÃÍ¡§int            0:Àµ¾ï½ªÎ»
 ***********************************************************/
 int main(int argc, char **argv)
 {
@@ -94,7 +122,7 @@ int main(int argc, char **argv)
     
     sprintf(serverName, "localhost");
 
-    /* å¼•ãæ•°ãƒã‚§ãƒƒã‚¯ */
+    /* °ú¤­¿ô¥Á¥§¥Ã¥¯ */
   switch (argc) {
   case 1:
     break;
@@ -110,7 +138,7 @@ int main(int argc, char **argv)
     return 1;
   }
 
-    /* ã‚µãƒ¼ãƒãƒ¼ã¨ã®æ¥ç¶š */
+    /* ¥µ¡¼¥Ğ¡¼¤È¤ÎÀÜÂ³ */
     if(SetUpClient(serverName,port,&clientID,&gClientNum,name)==-1){
 		fprintf(stderr,"setup failed : SetUpClient\n");
 		return -1;
@@ -136,44 +164,55 @@ int main(int argc, char **argv)
         player[i].mp = 0;
         player[i].hp = 0;
         player[i].reloadTime= 0;
+        //player[i].collider.radius = 1.0;
+        //player[i].collider.pos = player[i].pos;
     }
     
 
     
-    /* åˆæœŸåŒ– */
-    glutInit(&argc, argv); /* OpenGL ã®åˆæœŸåŒ– */
-    myInit(argv[0]);       /* ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦è¡¨ç¤ºã¨æç”»è¨­å®šã®åˆæœŸåŒ– */
+    /* ½é´ü²½ */
+    glutInit(&argc, argv); /* OpenGL ¤Î½é´ü²½ */
+    myInit(argv[0]);       /* ¥¦¥¤¥ó¥É¥¦É½¼¨¤ÈÉÁ²èÀßÄê¤Î½é´ü²½ */
     
+
+    model_file = modelname;
+    if (!model_file) {
+    fprintf(stderr, "usage: smooth model_file.obj\n");
+    exit(1);
+    }
+    init();
+
     glutMainLoop();
 
     // glutReshapeFunc(reshape);
-    /* ã‚¤ãƒ™ãƒ³ãƒˆå‡¦ç†ãƒ«ãƒ¼ãƒ— */
+    /* ¥¤¥Ù¥ó¥È½èÍı¥ë¡¼¥× */
 
-    /* ãƒ—ãƒ­ã‚°ãƒ©ãƒ çµ‚äº† */
+    /* ¥×¥í¥°¥é¥à½ªÎ» */
     return (0);
 }
 
 
 /**********************************************************
-|  é–¢æ•°ï¼šdisplay()
-|  èª¬æ˜ï¼šã€Œï¼‘æšã®ã€ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯æç”»ã‚¤ãƒ™ãƒ³ãƒˆå‡¦ç†
-|  å¼•æ•°ï¼šãªã—
-|  æˆ»å€¤ï¼šãªã—
+|  ´Ø¿ô¡§display()
+|  ÀâÌÀ¡§¡Ö£±Ëç¤Î¡×¥°¥é¥Õ¥£¥Ã¥¯ÉÁ²è¥¤¥Ù¥ó¥È½èÍı
+|  °ú¿ô¡§¤Ê¤·
+|  ÌáÃÍ¡§¤Ê¤·
 ***********************************************************/
 void display(void)
 {
     int i;
 
-    if(flag ==0){
+   move();
+        if(flag ==0){
         CameraX = CameraX;
         CameraY = CameraY;
         CameraZ = CameraZ;
-       //CameraX = player[clientID].pos.x +sin(player[clientID].turn1*0.1f)*5 ;
-        //CameraY = player[clientID].pos.y + sin(player[clientID].turn2*0.1f)*5;
-        //CameraZ = player[clientID].pos.z+cos(player[clientID].turn1*0.1f)*5;
-        CameraX = player[clientID].pos.x /*+sin(player[clientID].turn1*0.1f)*5*/  +sin(player[clientID].turn1)*5 *cos(player[clientID].turn3);
+       //CameraX = BoxX[0] +sin(turn*0.1f)*5 ;
+        //CameraY = BoxY[0] + sin(turn2*0.1f)*5;
+        //CameraZ = BoxZ[0]+cos(turn*0.1f)*5;
+        CameraX = player[clientID].pos.x /*+sin(turn*0.1f)*5*/  +sin(player[clientID].turn1)*5 *cos(player[clientID].turn3);
         CameraY = player[clientID].pos.y + sin(player[clientID].turn2)*5;
-        CameraZ = player[clientID].pos.z /*+cos(player[clientID].turn1*0.1f)*5*/ +cos(player[clientID].turn1)*5 *cos(player[clientID].turn3);
+        CameraZ = player[clientID].pos.z /*+cos(turn*0.1f)*5*/ +cos(player[clientID].turn1)*5 *cos(player[clientID].turn3);
         
         
         }
@@ -182,46 +221,52 @@ void display(void)
         CameraY = CameraY;
         CameraZ = CameraZ;
 
-        CameraX = player[clientID].pos.x /*+sin(player[clientID].turn1*0.1f)*5 */ + sin(player[clientID].turn1)*5 *cos(player[clientID].turn3);
+        CameraX = player[clientID].pos.x /*+sin(turn*0.1f)*5 */ + sin(player[clientID].turn1)*5 *cos(player[clientID].turn3);
         CameraY = player[clientID].pos.y + sin(player[clientID].turn2)*5;
-        CameraZ = player[clientID].pos.z /*+cos(player[clientID].turn1*0.1f)*5 */+cos(player[clientID].turn1)*5 *cos(player[clientID].turn3);
-        /*CameraX = player[clientID].pos.x +sin(player[clientID].turn1*0.1f)*5 *cos(player[clientID].turn3*0.1f);
-        CameraY = player[clientID].pos.y + sin(player[clientID].turn2*0.1f)*5;
-        CameraZ = player[clientID].pos.z +cos(player[clientID].turn1*0.1f)*5 *sin(player[clientID].turn3*0.1f);*/
-    }
+        CameraZ = player[clientID].pos.z /*+cos(turn*0.1f)*5 */+cos(player[clientID].turn1)*5 *cos(player[clientID].turn3);
+        
+        }
     
-    /* åˆæœŸåŒ– */
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); /* ç”»é¢ã‚’æ¶ˆå» */
-    glMatrixMode(GL_MODELVIEW);                         /* å¹¾ä½•ï¼ˆæç”»ä½ç½®ãªã©è¨­å®šã™ã‚‹ï¼‰ãƒ¢ãƒ¼ãƒ‰ */
-    glLoadIdentity();                                   /* å¹¾ä½•ã‚’åˆæœŸåŒ–ã™ã‚‹ */
+    /* ½é´ü²½ */
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); /* ²èÌÌ¤ò¾Ãµî */
+    glMatrixMode(GL_MODELVIEW);                         /* ´ö²¿¡ÊÉÁ²è°ÌÃÖ¤Ê¤ÉÀßÄê¤¹¤ë¡Ë¥â¡¼¥É */
+    glLoadIdentity();                                   /* ´ö²¿¤ò½é´ü²½¤¹¤ë */
 
-    /* è¦–ç‚¹ã®è¨­å®š */
+    /* »ëÅÀ¤ÎÀßÄê */
     // glMatrixMode(GL_PROJECTION);
     
-    gluLookAt(CameraX, CameraY, CameraZ, /* ã‚«ãƒ¡ãƒ©ã®ä½ç½® */
-        player[clientID].pos.x, player[clientID].pos.y,player[clientID].pos.z,        /* æ³¨è¦–ç‚¹ã®ä½ç½® */
-        0, 0.5*cos(player[clientID].turn2), 0.0);         /* ã‚«ãƒ¡ãƒ©ä¸Šæ–¹å‘ã®ãƒ™ã‚¯ãƒˆãƒ« */
+    gluLookAt(CameraX, CameraY, CameraZ, /* ¥«¥á¥é¤Î°ÌÃÖ */
+        player[clientID].pos.x, player[clientID].pos.y,player[clientID].pos.z,        /* Ãí»ëÅÀ¤Î°ÌÃÖ */
+        0, 0.5*cos(player[clientID].turn2), 0.0);         /* ¥«¥á¥é¾åÊı¸ş¤Î¥Ù¥¯¥È¥ë */
 
-    /* ç«‹æ–¹ä½“ã®æç”» */
-    for (i = 0; i < 10; i++) {
-        glPushMatrix();           /* æç”»ä½ç½®ã‚’ä¿å­˜ */
-        glColor3f(1.0, 1.0, 1.0); /* æç”»è‰²ã‚’ç™½ã«ã™ã‚‹ */
+    /* Î©ÊıÂÎ¤ÎÉÁ²è */
+    for (i = 0; i < 100; i++) {
+        glPushMatrix();           /* ??????????¢± */
+        glColor3f(1.0, 1.0, 1.0); /* ???????????? */
         glScalef(1.0, 1.0, 1.0);
-        if (i < gClientNum+1) {
-            /* æç”»ä½ç½®ã‚’(BoxX, i, 0)ã«ç§»å‹• */
+         
+        if (i < gClientNum) {
+            /* ????????(BoxX, i, 0)???? */
             // glutWireCube (0.5);
-            if (i >=0 && i <= gClientNum) {
-                glTranslatef(player[i].pos.x, player[i].pos.y, player[i].pos.z);
-                glRotatef(player[clientID].turn1, 0, 1, 0);
+
+            glTranslatef(player[i].pos.x, player[i].pos.y,player[i].pos.z);
+           if(flag == 2){
+                //glRotatef(turn*5.75, 0, 0, 1);
+                    //flag = 0;
             }
-             else {
-                glTranslatef(BoxX[1], 0, 2);
-                glRotatef(j, 0, 0, 1.0);
-            }
-            glutSolidCube(1.0);
+                //glRotatef(turn2*-1*57.5, 1, 0, 0); 
+               // glRotatef(turn3*57.5, 0, 1, 0);
+             
+               glRotatef(player[i].turn1*57.5, 0, 1, 0);
+               glRotatef(player[i].turn2*57.5*-1, 1, 0, 0);
+            
+
+            glCallList(model_list);
+             
+            //glutSolidCube(1.0);
            // glutWireSphere(0.4, 20.0, 10.0);
-        } else if (i == 2) {
-            glTranslatef(BoxX[i], 0, -2);
+        } else if (i == gClientNum) {
+            glTranslatef(0, 0, -2);
             // glutWireCube (0.5);
             glRotatef(f, 0, 0, 1.0);
 
@@ -230,21 +275,20 @@ void display(void)
             if (i % 2 == 0) {
 
                 glTranslatef(-1 * i * 10, 0, 5);
-                glColor3f(1.0, 0.0, 1.0); /* æç”»è‰²ã‚’ç™½ã«ã™ã‚‹ */
+                glColor3f(1.0, 0.0, 1.0); /* ???????????? */
                 glScalef(2.0, 5.0, 0.5);
                 glutSolidCube(1.0);
             } else {
                 glTranslatef(-1 * i * 10, 0, -5);
-                glColor3f(0.0, 1.0, 1.0); /* æç”»è‰²ã‚’ç™½ã«ã™ã‚‹ */
+                glColor3f(0.0, 1.0, 1.0); /* ???????????? */
                 glScalef(2.0, 5.0, 0.5);
                 glutSolidCube(1.0);
             }
+            glPopMatrix(); /* ?????????? */
         }
-        /* ãƒ¯ã‚¤ãƒ¤ãƒ¼ã®ç«‹æ–¹ä½“ã‚’æç”» */
-        glPopMatrix(); /* æç”»ä½ç½®ã‚’æˆ»ã™ */
     }
 
-    //åºŠã®è¡¨ç¤º
+    //???????
     glPushMatrix();
     glColor3f(1.0, 0.0, 0.0);
     glTranslatef(0.0, -0.8, 0.0);
@@ -252,8 +296,8 @@ void display(void)
     glutSolidCube(1.0);
     glPopMatrix();
 
-    //æ•µï¼‘åºŠ
-    glColor3f(1.0, 1.0, 1.0); /* æç”»è‰²ã‚’ç™½ã«ã™ã‚‹ */
+    //ªì????
+        glColor3f(1.0, 1.0, 1.0); /* ???????????? */
     glPushMatrix();
     glColor3f(0.0, 1.0, 0.0);
     glTranslatef(0.0, -0.8, 1.5);
@@ -261,7 +305,7 @@ void display(void)
     glutSolidCube(1.0);
     glPopMatrix();
 
-    //æ•µï¼’åºŠ
+    //ªì????
     glPushMatrix();
     glColor3f(0.0, 0.0, 1.0);
     glTranslatef(0.0, -0.8, -1.5);
@@ -269,15 +313,90 @@ void display(void)
     glutSolidCube(1.0);
     glPopMatrix();
 
-    //ã‚´ãƒ¼ãƒ«åºŠè¡¨ç¤º
+    //?????????
    
 
+    for (i = 0; i < 20; i++) {
+        glPushMatrix();
+        glColor3f(1.0, 0.0, 1.0);
+        glTranslatef(i * -15 - 10, -1.5, 4);
+        glRotatef(-90, 1.0, 0.0, 0.0);
+        glutSolidCone(0.5, 3.6, 10, 2);
+        glPopMatrix();
+    }
+    for (i = 0; i < 20; i++) {
+        glPushMatrix();
+        glColor3f(1.0, 0.0, 0.0);
+        glTranslatef(i * -15 - 10, -1.5, -4);
+        glRotatef(-90, 1.0, 0.0, 0.0);
+        glutSolidCone(0.5, 3.6, 10, 2);
+        glPopMatrix();
+    }
 
-    glPushMatrix();                    /* è¦–ç‚¹ä½ç½®ã‚’ä¿å­˜ */
-    glColor3f(1.0, 1.0, 0);            /* æç”»è‰²ã‚’ç™½(1.0,1.0,1.0)ã«ã™ã‚‹ */
-    glRotatef(90, 0, 1.0, 0);          /* Yè»¸ä¸­å¿ƒã«BoxRotate(åº¦)å›è»¢ */
-    glTranslatef(-0.18, 0.5, player[clientID].pos.x); /* æ–‡å­—è¡¨ç¤ºåº§æ¨™ */
+    for (i = 0; i < 50; i++) {
+        glPushMatrix();
 
+        if (i % 2) {
+            glColor3f(1.0, 0.0, 0.0);
+            glTranslatef(i * -15 - 10, -1.5, i % 4);
+        } else {
+            glColor3f(0.0, 1.0, 0.0);
+            glTranslatef(i * -15 - 10, 2, (i * -1) % 4 * -1);
+        }
+        glRotatef(-90, 1.0, 0.0, 0.0);
+        glutSolidCube(0.1);
+        glPopMatrix();
+    }
+
+    for (i = 0; i < 50; i++) {
+        glPushMatrix();
+        glColor3f(1.0, 0.0, 1.0);
+
+        glTranslatef(i * -15 - 10, -1.5, 3);
+
+        glRotatef(-90, 1.0, 0.0, 0.0);
+        glutSolidCube(0.1);
+        glPopMatrix();
+    }
+
+    // ???
+    for (i = 0; i < 5; i++) {
+        glPushMatrix();
+        glColor3f(0.0, 0.0, 1.0);
+        glTranslatef(i * -100 - 10, -0.4, 0);
+        glRotatef(-90, 1.0, 0.0, 0.0);
+        glutSolidCone(0.2, 0.6, 10, 2);
+        glPopMatrix();
+    }
+    for (i = 0; i < 5; i++) {
+        glPushMatrix();
+        glColor3f(0.0, 1.0, 0.0);
+        glTranslatef(i * -100 - 70, -0.4, -1.4);
+        glRotatef(-90, 1.0, 0.0, 0.0);
+        glutSolidCone(0.2, 0.6, 10, 2);
+        glPopMatrix();
+    }
+    for (i = 0; i < 5; i++) {
+        glPushMatrix();
+        glColor3f(1.0, 0.0, 0.0);
+        glTranslatef(i * -100 - 50, -0.4, 1.4);
+        glRotatef(-90, 1.0, 0.0, 0.0);
+        glutSolidCone(0.2, 0.6, 10, 2);
+        glPopMatrix();
+    }
+
+    
+
+    //printf("%d   %f %f %f\n", jnk, BoxX[0], BoxX[1], BoxX[2]);
+    if (flag < 100) {
+      //  Goal();
+    }
+
+    glPushMatrix();                    /* ???????????¢± */
+    glColor3f(1.0, 1.0, 0);            /* ????????(1.0,1.0,1.0)????? */
+    glRotatef(90, 0, 1.0, 0);          /* Y??????BoxRotate(??)??«ö */
+    glTranslatef(-0.18, 0.5, player[clientID].pos.x); /* ????????? */
+    
    
 
     glPushMatrix();
@@ -287,34 +406,106 @@ void display(void)
         glColor3f(1.0, 1.0, 1.0);
     }
     glPopMatrix();
-   
-    move_bullet(bullet_Num);    // å¼¾ã®ç§»å‹•
-    draw_bullet(bullet_Num);    // å¼¾ã®æç”»
 
-    
+    glFlush();
+    /* ?»Ş?????Üç??CG???????????? */
     glutSwapBuffers();
+    
 
-    /* ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã®å‡¦ç† */
+    move_bullet(bullet_Num);    // ÃÆ¤Î°ÜÆ°
+    draw_bullet(bullet_Num);    // ÃÆ¤ÎÉÁ²è
+
+    /* ¥Í¥Ã¥È¥ï¡¼¥¯¤Î½èÍı */
     SendRecvManager();
-    SendPlayerDataCommand(); //PlayerDataã®é€ä¿¡
+    SendPlayerDataCommand(); //PlayerData¤ÎÁ÷¿®
 }
 
+/*void reshape(int w, int h)
+{
+    printf("%d %d\n",w,h);
+  glViewport(0, 0, (GLsizei) w, (GLsizei) h);
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glFrustum(-5.0, 5.0,-5.0, 5.0, 5.0, 500.0);
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+}
+*/
+
+void
+init(void)
+{
+  tbInit(GLUT_MIDDLE_BUTTON);
+  
+  /* read in the model */
+  model = glmReadOBJ(model_file);
+  scale = glmUnitize(model);
+  glmFacetNormals(model);
+  glmVertexNormals(model, smoothing_angle);
+
+  /* create new display lists */
+  lists();
+
+  //glEnable(GL_LIGHTING);
+  //glEnable(GL_LIGHT0);
+  glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+
+  glEnable(GL_DEPTH_TEST);
+
+  glEnable(GL_CULL_FACE);
+}
+
+
+void lists(void)
+{
+  GLfloat ambient[] = { 0.2, 0.2, 0.2, 1.0 };
+  GLfloat diffuse[] = { 0.8, 0.8, 0.8, 1.0 };
+  GLfloat specular[] = { 0.0, 0.0, 0.0, 1.0 };
+  GLfloat shininess = 65.0;
+
+  if (model_list)
+    glDeleteLists(model_list, 1);
+
+  glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
+  glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
+  glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+  glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
+
+ 
+  if (material_mode == 0) { 
+    if (facet_normal)
+      model_list = glmList(model, GLM_FLAT);
+    else
+      model_list = glmList(model, GLM_SMOOTH);
+  } else if (material_mode == 1) {
+    if (facet_normal)
+      model_list = glmList(model, GLM_FLAT | GLM_COLOR);
+    else
+      model_list = glmList(model, GLM_SMOOTH | GLM_COLOR);
+  } else if (material_mode == 2) {
+    if (facet_normal)
+      model_list = glmList(model, GLM_FLAT | GLM_MATERIAL);
+    else
+      model_list = glmList(model, GLM_SMOOTH | GLM_MATERIAL);
+  }
+}
 
 void resize(int w, int h)
 {
-    /* ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ã®ç¸¦æ¨ªã®æ¯”ã‚’è¨ˆç®— */
+  
     float aspect = (float)w / (float)h;
-    /* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦å…¨ä½“ã‚’ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆã™ã‚‹ */
+    
     glViewport(0, 0, w, h);
 
-    /* CGæç”»è¨­å®š */
-    glMatrixMode(GL_PROJECTION);             /* é€è¦–æŠ•å½±(é è¿‘æŠ•å½±æ³•)è¨­å®šãƒ¢ãƒ¼ãƒ‰ã«åˆ‡ã‚Šæ›¿ãˆ */
-    glLoadIdentity();                        /* é€è¦–æŠ•å½±è¡Œåˆ—ã‚’åˆæœŸåŒ– */
-    gluPerspective(45.0, aspect, 1.0, 20.0); /* é€è¦–æŠ•å½±è¡Œåˆ—ã®è¨­å®š */
-                                             /* è¦–é‡è§’45åº¦, ç¸¦æ¨ªæ¯” aspectï¼Œæç”»å‰é¢ã¾ã§ã®å¥¥è¡Œ 1.0ï¼Œæç”»èƒŒé¢ã¾ã§ã®å¥¥è¡Œ 20.0 */
-    /* ãƒ¢ãƒ‡ãƒ«ãƒ“ãƒ¥ãƒ¼å¤‰æ›è¡Œåˆ—ã®è¨­å®š */
+   
+    /*glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();                       
+    gluPerspective(45.0, aspect, 1.0, 20.0); */
+    
     glMatrixMode(GL_MODELVIEW);
 }
+
+
 
 void drawString3D(const char *str, float charSize, float lineWidth)
 {
@@ -330,59 +521,216 @@ void drawString3D(const char *str, float charSize, float lineWidth)
     glPopMatrix();
 }
 /*
-|  èª¬æ˜ï¼šã‚¿ã‚¤ãƒãƒ¼ï¼ˆè¨­å®šæ™‚é–“çµŒéï¼‰ã‚¤ãƒ™ãƒ³ãƒˆå‡¦ç†
-|  å¼•æ•°ï¼šint timerID    ã‚¤ãƒ™ãƒ³ãƒˆãŒç™ºç”Ÿã—ãŸã‚¿ã‚¤ãƒãƒ¼ã®è­˜åˆ¥ID
-|  æˆ»å€¤ï¼šãªã—
+|  ÀâÌÀ¡§¥¿¥¤¥Ş¡¼¡ÊÀßÄê»ş´Ö·Ğ²á¡Ë¥¤¥Ù¥ó¥È½èÍı
+|  °ú¿ô¡§int timerID    ¥¤¥Ù¥ó¥È¤¬È¯À¸¤·¤¿¥¿¥¤¥Ş¡¼¤Î¼±ÊÌID
+|  ÌáÃÍ¡§¤Ê¤·
 ***********************************************************/
 void timer(int timerID)
 {
     int i;
 
-    /* æ¬¡ã®ã‚¿ã‚¤ãƒãƒ¼ã‚’15ãƒŸãƒªç§’å¾Œã«è¨­å®š */
+    /* ¼¡¤Î¥¿¥¤¥Ş¡¼¤ò15¥ß¥êÉÃ¸å¤ËÀßÄê */
     glutTimerFunc(15, timer, 0);
 
     for (i = 0; i < 3; i++) {
-        /* ç®±ã‚’Xæ–¹å‘ã«ç§»å‹• */
-        BoxX[i] += BoxVx[i];
-        /* ç®±ãŒç«¯ã«åˆ°é”ã—ãŸã‚‰ç§»å‹•æ–¹å‘ã‚’åè»¢ */
+        /* È¢¤òXÊı¸ş¤Ë°ÜÆ° */
+       // BoxX[i] += BoxVx[i];
+        /* È¢¤¬Ã¼¤ËÅşÃ£¤·¤¿¤é°ÜÆ°Êı¸ş¤òÈ¿Å¾ */
         // if( BoxX[i] > 22.0 || BoxX[i] < -22.0) BoxVx[i] = -BoxVx[i];
     }
-  
+    //printf("  %lf  ", BoxVx[0]);
    
 
 
-    /* æç”»è¦æ±‚ï¼ˆç›´å¾Œã« display() é–¢æ•°ãŒå‘¼ã°ã‚Œã‚‹ï¼‰ */
+    /* ÉÁ²èÍ×µá¡ÊÄ¾¸å¤Ë display() ´Ø¿ô¤¬¸Æ¤Ğ¤ì¤ë¡Ë */
     glutPostRedisplay();
     // SDL_Delay(10);
     
 }
 
 /***********************************************************
-|  é–¢æ•°ï¼škeyboard()
-|  èª¬æ˜ï¼šã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ãŒæŠ¼ã•ã‚ŒãŸæ™‚ã®ã‚¤ãƒ™ãƒ³ãƒˆå‡¦ç†
-|  å¼•æ•°ï¼šunsigned char key  æŠ¼ã•ã‚ŒãŸã‚­ãƒ¼ã®æ–‡å­—ã‚³ãƒ¼ãƒ‰
-|  å¼•æ•°ï¼šint x              ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã¨ãã®ãƒã‚¦ã‚¹ãƒã‚¤ãƒ³ã‚¿ã®Xåº§æ¨™
-|  å¼•æ•°ï¼šint y              ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã¨ãã®ãƒã‚¦ã‚¹ãƒã‚¤ãƒ³ã‚¿ã®Yåº§æ¨™
-|  æˆ»å€¤ï¼šãªã—
+|  ´Ø¿ô¡§keyboard()
+|  ÀâÌÀ¡§¥­¡¼¥Ü¡¼¥É¤¬²¡¤µ¤ì¤¿»ş¤Î¥¤¥Ù¥ó¥È½èÍı
+|  °ú¿ô¡§unsigned char key  ²¡¤µ¤ì¤¿¥­¡¼¤ÎÊ¸»ú¥³¡¼¥É
+|  °ú¿ô¡§int x              ¥­¡¼¤¬²¡¤µ¤ì¤¿¤È¤­¤Î¥Ş¥¦¥¹¥İ¥¤¥ó¥¿¤ÎXºÂÉ¸
+|  °ú¿ô¡§int y              ¥­¡¼¤¬²¡¤µ¤ì¤¿¤È¤­¤Î¥Ş¥¦¥¹¥İ¥¤¥ó¥¿¤ÎYºÂÉ¸
+|  ÌáÃÍ¡§¤Ê¤·
 ***********************************************************/
 void keyboard(unsigned char key, int x, int y)
 {
 
-    //å›è»¢åº§æ¨™
+    //??«ö???
+     
+        key6 = true;
+     
      int xMove = x - xBegin;
      int yMove = y - yBegin;
+   
+      if(key == 'q'){
+      exit(0);
+        
+       }
+    if(key == 'l'){
+        j++;
+    }
 
-    /* ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰å‡¦ç† */
-    switch (key) {
+    if(key == 'd'){
+        //flag = 0;
+        key1 = true;
+       /*if(turn>0){
+            double a;
+            a = -2 * M_PI + turn;
+            turn = a;
+        }
+        turn = turn - (M_PI / 180);
+
+        printf("zahyouhane~%lf\n",turn);
+        if(turn == -2 * M_PI){
+            turn = 0;
+        }*/
+       }
+
+    if(key == 's'){
+         flag = 2;
+        //player[clientID].turn2 = player[clientID].turn2-1;
+        key2 = true;
+        /*if(player[clientID].turn2<0){
+            double a;
+            a = 2 * M_PI + player[clientID].turn2;
+            player[clientID].turn2 = a;
+        }
+        player[clientID].turn2 = player[clientID].turn2 + (M_PI / 180);
+        //turn = turn -1;
+        printf("zahyouhane~%lf\n",player[clientID].turn2);
+        if(player[clientID].turn2 == 2 * M_PI){
+            player[clientID].turn2= 0;
+        }
+          player[clientID].turn3 = player[clientID].turn3 - (M_PI / 180);
+        if(player[clientID].turn3 == 2 * M_PI){
+            player[clientID].turn3= 0;
+        }*/
+       }
+    
+    if(key == 'a'){
+        flag = 0;
+        key3 = true;
+        /*if(turn<0){
+            double a;
+            a = 2 * M_PI + turn;
+            turn = a;
+        }
+        turn = turn + (M_PI / 180);
+        printf("zahyouhane~%lf\n",turn);
+        if(turn == 2 * M_PI){
+            turn = 0;
+        }*/
+       }
+
+
+    if(key == 'w'){
+        flag = 2;
+        key4 = true;
+        //player[clientID].turn2 = player[clientID].turn2-1;
+        
+        /*if(player[clientID].turn2>0){
+            double a;
+            a = -2 * M_PI + player[clientID].turn2;
+            player[clientID].turn2 = a;
+        }
+        player[clientID].turn2 = player[clientID].turn2 - (M_PI / 180);
+        //turn = turn -1;
+        printf("zahyouhane~%lf\n",player[clientID].turn2);
+        if(player[clientID].turn2 == -2 * M_PI){
+            player[clientID].turn2= 0;
+        }
+          player[clientID].turn3 = player[clientID].turn3 + (M_PI / 180);
+        if(player[clientID].turn3 == 2 * M_PI){
+            player[clientID].turn3= 0;
+        }*/
+        
+       }
+        if(key == 'b'){
+          //  key5 = true;
+         player[clientID].pos.x = player[clientID].pos.x-sin(player[clientID].turn1)*cos(player[clientID].turn2);
+         player[clientID].pos.z =player[clientID].pos.z-cos(player[clientID].turn1)*cos(player[clientID].turn2);
+         player[clientID].pos.y = player[clientID].pos.y - sin(player[clientID].turn2);
+       }
+
+       if(key == ' '){
+        key7 = true;
+    }   
+      
+    glutPostRedisplay();
+    x = y = 0;
+   // key6=false;
+}
+
+void keyboard2(unsigned char key, int x, int y)
+{
+    key6 = false;
+   /*key1 = false;
+         key2 = false;
+         key3 = false;
+         key4 = false;
+         key5 = false;
+         key6 = false;*/
+     switch (key) {
     case 'q':
-        exit(0); /* ãƒ—ãƒ­ã‚°ãƒ©ãƒ çµ‚äº† */
+      //  exit(0);
+        break;
+    
+    case 'd':
+        key = false;
+        break;
+    case 's':
+        key2 = false;
+        break;
+    case 'a':
+        key3 = false;
+        break;
+    case 'w':
+        key4 = false;
         break;
     case 'b':
-         player[clientID].pos.x = player[clientID].pos.x-sin(player[clientID].turn1);
-         player[clientID].pos.z =player[clientID].pos.z-cos(player[clientID].turn1);
-         player[clientID].pos.y = player[clientID].pos.y - sin(player[clientID].turn2);
+        key5 = false;
         break;
     case ' ':
+        key7 = false;
+        break;
+    default:
+        break;
+        
+    }
+    x = y = 0;
+}
+
+void move(){
+
+    if(key1 == true && key2 == true && key7 == true){
+            if(player[clientID].turn1>0){
+            double a;
+            a = -2 * M_PI + player[clientID].turn1;
+            player[clientID].turn1 = a;
+        }
+        player[clientID].turn1 = player[clientID].turn1 - (M_PI / 180);
+
+        if(player[clientID].turn1 == -2 * M_PI){
+            player[clientID].turn1 = 0;
+        }
+        if(player[clientID].turn2<0){
+            double a;
+            a = 2 * M_PI + player[clientID].turn2;
+            player[clientID].turn2 = a;
+        }
+        player[clientID].turn2 = player[clientID].turn2 + (M_PI / 180);
+        //turn = turn -1;
+        if(player[clientID].turn2 == 2 * M_PI){
+            player[clientID].turn2= 0;
+        }
+          player[clientID].turn3 = player[clientID].turn3 - (M_PI / 180);
+        if(player[clientID].turn3 == 2 * M_PI){
+            player[clientID].turn3= 0;
+        }
         if(can_attack == true){
             if(bullet_Num >= MAX_BULLET_NUM){bullet_Num = 0;}
             create_bullet(bullet_Num);
@@ -390,22 +738,26 @@ void keyboard(unsigned char key, int x, int y)
             can_attack = false;
             glutTimerFunc(1000, interval_attack, 0);
         }
-        break;
-    case 's':
-        flag = 0;
-        if(player[clientID].turn1>0){
-            double a;
-            a = -2 * M_PI + player[clientID].turn1;
-            player[clientID].turn1 = a;
         }
-        player[clientID].turn1 = player[clientID].turn1 - (M_PI / 180);
-        if(player[clientID].turn1 == -2 * M_PI){
-            player[clientID].turn1 = 0;
+    else if(key2 == true && key3 == true&&key7 == true){
+        // flag = 2;
+        //player[clientID].turn2 = player[clientID].turn2-1;
+       // key2 = true;
+        if(player[clientID].turn2<0){
+            double a;
+            a = 2 * M_PI + player[clientID].turn2;
+            player[clientID].turn2 = a;
+        }
+        player[clientID].turn2 = player[clientID].turn2 + (M_PI / 180);
+        //turn = turn -1;
+        if(player[clientID].turn2 == 2 * M_PI){
+            player[clientID].turn2= 0;
+        }
+          player[clientID].turn3 = player[clientID].turn3 - (M_PI / 180);
+        if(player[clientID].turn3 == 2 * M_PI){
+            player[clientID].turn3= 0;
         }
 
-        break;
-    case 'a':
-        flag = 0;
         if(player[clientID].turn1<0){
             double a;
             a = 2 * M_PI + player[clientID].turn1;
@@ -415,17 +767,32 @@ void keyboard(unsigned char key, int x, int y)
         if(player[clientID].turn1 == 2 * M_PI){
             player[clientID].turn1 = 0;
         }
-       
-        break;
-    case 'w':
-        flag = 2;
-        
+        if(can_attack == true){
+            if(bullet_Num >= MAX_BULLET_NUM){bullet_Num = 0;}
+            create_bullet(bullet_Num);
+            glutTimerFunc(1000, add_lifetime, 0);
+            can_attack = false;
+            glutTimerFunc(1000, interval_attack, 0);
+        }
+    }
+    else if(key1 == true && key4 == true && key7 == true){
+         if(player[clientID].turn1>0){
+            double a;
+            a = -2 * M_PI + player[clientID].turn1;
+            player[clientID].turn1= a;
+        }
+        player[clientID].turn1= player[clientID].turn1 - (M_PI / 180);
+        if(player[clientID].turn1 == -2 * M_PI){
+            player[clientID].turn1 = 0;
+        }
+
         if(player[clientID].turn2>0){
             double a;
             a = -2 * M_PI + player[clientID].turn2;
             player[clientID].turn2 = a;
         }
         player[clientID].turn2 = player[clientID].turn2 - (M_PI / 180);
+        //turn = turn -1;
         if(player[clientID].turn2 == -2 * M_PI){
             player[clientID].turn2= 0;
         }
@@ -433,71 +800,391 @@ void keyboard(unsigned char key, int x, int y)
         if(player[clientID].turn3 == 2 * M_PI){
             player[clientID].turn3= 0;
         }
-        break;
-    case 'j':
+        if(can_attack == true){
+            if(bullet_Num >= MAX_BULLET_NUM){bullet_Num = 0;}
+            create_bullet(bullet_Num);
+            glutTimerFunc(1000, add_lifetime, 0);
+            can_attack = false;
+            glutTimerFunc(1000, interval_attack, 0);
+        }
+    }
+    else if(key3 == true && key4 == true && key7 == true){
         if(player[clientID].turn1<0){
+            double a;
+            a = 2 * M_PI + player[clientID].turn1;
+            player[clientID].turn1 = a;
+        }
+        player[clientID].turn1 = player[clientID].turn1 + (M_PI / 180);
+        if(player[clientID].turn1 == 2 * M_PI){
+            player[clientID].turn1= 0;
+        }
+         if(player[clientID].turn2>0){
+            double a;
+            a = -2 * M_PI + player[clientID].turn2;
+            player[clientID].turn2 = a;
+        }
+        player[clientID].turn2 = player[clientID].turn2 - (M_PI / 180);
+        //turn = turn -1;
+        if(player[clientID].turn2 == -2 * M_PI){
+            player[clientID].turn2= 0;
+        }
+          player[clientID].turn3 = player[clientID].turn3 + (M_PI / 180);
+        if(player[clientID].turn3 == 2 * M_PI){
+            player[clientID].turn3= 0;
+        }
+        if(can_attack == true){
+            if(bullet_Num >= MAX_BULLET_NUM){bullet_Num = 0;}
+            create_bullet(bullet_Num);
+            glutTimerFunc(1000, add_lifetime, 0);
+            can_attack = false;
+            glutTimerFunc(1000, interval_attack, 0);
+        }
+    }
+    
+    else if(key1 == true && key2 == true){
+            if(player[clientID].turn1>0){
+            double a;
+            a = -2 * M_PI + player[clientID].turn1;
+            player[clientID].turn1 = a;
+        }
+        player[clientID].turn1 = player[clientID].turn1 - (M_PI / 180);
+
+        if(player[clientID].turn1 == -2 * M_PI){
+            player[clientID].turn1 = 0;
+        }
+        if(player[clientID].turn2<0){
             double a;
             a = 2 * M_PI + player[clientID].turn2;
             player[clientID].turn2 = a;
         }
         player[clientID].turn2 = player[clientID].turn2 + (M_PI / 180);
+        //turn = turn -1;
         if(player[clientID].turn2 == 2 * M_PI){
-            player[clientID].turn2 = 0;
+            player[clientID].turn2= 0;
         }
-        break;
+          player[clientID].turn3 = player[clientID].turn3 - (M_PI / 180);
+        if(player[clientID].turn3 == 2 * M_PI){
+            player[clientID].turn3= 0;
+        }
+        }
+    else if(key2 == true && key3 == true){
+        // flag = 2;
+        //player[clientID].turn2 = player[clientID].turn2-1;
+       // key2 = true;
+        if(player[clientID].turn2<0){
+            double a;
+            a = 2 * M_PI + player[clientID].turn2;
+            player[clientID].turn2 = a;
+        }
+        player[clientID].turn2 = player[clientID].turn2 + (M_PI / 180);
+        //turn = turn -1;
+        if(player[clientID].turn2 == 2 * M_PI){
+            player[clientID].turn2= 0;
+        }
+          player[clientID].turn3 = player[clientID].turn3 - (M_PI / 180);
+        if(player[clientID].turn3 == 2 * M_PI){
+            player[clientID].turn3= 0;
+        }
+
+        if(player[clientID].turn1<0){
+            double a;
+            a = 2 * M_PI + player[clientID].turn1;
+            player[clientID].turn1 = a;
+        }
+        player[clientID].turn1 = player[clientID].turn1 + (M_PI / 180);
+        if(player[clientID].turn1 == 2 * M_PI){
+            player[clientID].turn1 = 0;
+        }
     }
+    else if(key1 == true && key4 == true){
+         if(player[clientID].turn1>0){
+            double a;
+            a = -2 * M_PI + player[clientID].turn1;
+            player[clientID].turn1= a;
+        }
+        player[clientID].turn1= player[clientID].turn1 - (M_PI / 180);
+        if(player[clientID].turn1 == -2 * M_PI){
+            player[clientID].turn1 = 0;
+        }
+
+        if(player[clientID].turn2>0){
+            double a;
+            a = -2 * M_PI + player[clientID].turn2;
+            player[clientID].turn2 = a;
+        }
+        player[clientID].turn2 = player[clientID].turn2 - (M_PI / 180);
+        //turn = turn -1;
+        if(player[clientID].turn2 == -2 * M_PI){
+            player[clientID].turn2= 0;
+        }
+          player[clientID].turn3 = player[clientID].turn3 + (M_PI / 180);
+        if(player[clientID].turn3 == 2 * M_PI){
+            player[clientID].turn3= 0;
+        }
+    }
+    else if(key3 == true && key4 == true){
+        if(player[clientID].turn1<0){
+            double a;
+            a = 2 * M_PI + player[clientID].turn1;
+            player[clientID].turn1 = a;
+        }
+        player[clientID].turn1 = player[clientID].turn1 + (M_PI / 180);
+        if(player[clientID].turn1 == 2 * M_PI){
+            player[clientID].turn1= 0;
+        }
+         if(player[clientID].turn2>0){
+            double a;
+            a = -2 * M_PI + player[clientID].turn2;
+            player[clientID].turn2 = a;
+        }
+        player[clientID].turn2 = player[clientID].turn2 - (M_PI / 180);
+        //turn = turn -1;
+        if(player[clientID].turn2 == -2 * M_PI){
+            player[clientID].turn2= 0;
+        }
+          player[clientID].turn3 = player[clientID].turn3 + (M_PI / 180);
+        if(player[clientID].turn3 == 2 * M_PI){
+            player[clientID].turn3= 0;
+        }
+    }
+    else if(key1 == true && key7 == true){
+        flag = 0;
+        //key = true;
+        if(player[clientID].turn1>0){
+            double a;
+            a = -2 * M_PI + player[clientID].turn1;
+            player[clientID].turn1 = a;
+        }
+        player[clientID].turn1= player[clientID].turn1 - (M_PI / 180);
+        if(player[clientID].turn1 == -2 * M_PI){
+            player[clientID].turn1 = 0;
+        }
+         if(can_attack == true){
+            if(bullet_Num >= MAX_BULLET_NUM){bullet_Num = 0;}
+            create_bullet(bullet_Num);
+            glutTimerFunc(1000, add_lifetime, 0);
+            can_attack = false;
+            glutTimerFunc(1000, interval_attack, 0);
+        }
+       }
+
+
+   else if(key2 == true&&key7 == true){
+         flag = 2;
+        //player[clientID].turn2 = player[clientID].turn2-1;
+        key2 = true;
+        if(player[clientID].turn2<0){
+            double a;
+            a = 2 * M_PI + player[clientID].turn2;
+            player[clientID].turn2 = a;
+        }
+        player[clientID].turn2 = player[clientID].turn2 + (M_PI / 180);
+        //turn = turn -1;
+        if(player[clientID].turn2 == 2 * M_PI){
+            player[clientID].turn2= 0;
+        }
+          player[clientID].turn3 = player[clientID].turn3 - (M_PI / 180);
+        if(player[clientID].turn3 == 2 * M_PI){
+            player[clientID].turn3= 0;
+        }
+         if(can_attack == true){
+            if(bullet_Num >= MAX_BULLET_NUM){bullet_Num = 0;}
+            create_bullet(bullet_Num);
+            glutTimerFunc(1000, add_lifetime, 0);
+            can_attack = false;
+            glutTimerFunc(1000, interval_attack, 0);
+        }
+       }
     
+    else if(key3 == true&&key7 == true){
+        flag = 0;
+        key3 = true;
+        if(player[clientID].turn1<0){
+            double a;
+            a = 2 * M_PI + player[clientID].turn1;
+            player[clientID].turn1 = a;
+        }
+        player[clientID].turn1 = player[clientID].turn1 + (M_PI / 180);
+        if(player[clientID].turn1 == 2 * M_PI){
+            player[clientID].turn1 = 0;
+        }
+         if(can_attack == true){
+            if(bullet_Num >= MAX_BULLET_NUM){bullet_Num = 0;}
+            create_bullet(bullet_Num);
+            glutTimerFunc(1000, add_lifetime, 0);
+            can_attack = false;
+            glutTimerFunc(1000, interval_attack, 0);
+        }
+       }
 
 
-   // ç¾åœ¨ã®ãƒã‚¦ã‚¹ãƒã‚¤ãƒ³ã‚¿ã®åº§æ¨™ã‚’æ¬¡ã®å§‹ç‚¹ç”¨ã«è¨˜éŒ²ã™ã‚‹
-   xBegin = x;
-   yBegin = y;
-    /* æç”»è¦æ±‚ï¼ˆç›´å¾Œã« display() é–¢æ•°ãŒå‘¼ã°ã‚Œã‚‹ï¼‰ */
-    glutPostRedisplay();
+    else if(key4 == true&&key7==true){
+        flag = 2;
+        key4 = true;
+        //player[clientID].turn2 = player[clientID].turn2-1;
+        
+        if(player[clientID].turn2>0){
+            double a;
+            a = -2 * M_PI + player[clientID].turn2;
+            player[clientID].turn2 = a;
+        }
+        player[clientID].turn2 = player[clientID].turn2 - (M_PI / 180);
+        //turn = turn -1;
+        if(player[clientID].turn2 == -2 * M_PI){
+            player[clientID].turn2= 0;
+        }
+          player[clientID].turn3 = player[clientID].turn3 + (M_PI / 180);
+        if(player[clientID].turn3 == 2 * M_PI){
+            player[clientID].turn3= 0;
+        }
+         if(can_attack == true){
+            if(bullet_Num >= MAX_BULLET_NUM){bullet_Num = 0;}
+            create_bullet(bullet_Num);
+            glutTimerFunc(1000, add_lifetime, 0);
+            can_attack = false;
+            glutTimerFunc(1000, interval_attack, 0);
+        }
+       }
 
-    /* ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«æ™‚ã®è­¦å‘Šå¯¾ç­–ï¼ˆå®šç¾©ã•ã‚ŒãŸå¤‰æ•°ã‚’ä½¿ã‚ãªã„ã¨è­¦å‘Šã«ãªã‚‹ã®ã§ï¼‰ */
-    x = y = 0;
+
+
+
+    else if(key1 == true){
+        flag = 0;
+        //key = true;
+        if(player[clientID].turn1>0){
+            double a;
+            a = -2 * M_PI + player[clientID].turn1;
+            player[clientID].turn1 = a;
+        }
+        player[clientID].turn1= player[clientID].turn1 - (M_PI / 180);
+        if(player[clientID].turn1 == -2 * M_PI){
+            player[clientID].turn1 = 0;
+        }
+       }
+
+
+   else if(key2 == true){
+         flag = 2;
+        //player[clientID].turn2 = player[clientID].turn2-1;
+        key2 = true;
+        if(player[clientID].turn2<0){
+            double a;
+            a = 2 * M_PI + player[clientID].turn2;
+            player[clientID].turn2 = a;
+        }
+        player[clientID].turn2 = player[clientID].turn2 + (M_PI / 180);
+        //turn = turn -1;
+        if(player[clientID].turn2 == 2 * M_PI){
+            player[clientID].turn2= 0;
+        }
+          player[clientID].turn3 = player[clientID].turn3 - (M_PI / 180);
+        if(player[clientID].turn3 == 2 * M_PI){
+            player[clientID].turn3= 0;
+        }
+       }
+    
+    else if(key3 == true){
+        flag = 0;
+        key3 = true;
+        if(player[clientID].turn1<0){
+            double a;
+            a = 2 * M_PI + player[clientID].turn1;
+            player[clientID].turn1 = a;
+        }
+        player[clientID].turn1 = player[clientID].turn1 + (M_PI / 180);
+        if(player[clientID].turn1 == 2 * M_PI){
+            player[clientID].turn1 = 0;
+        }
+       }
+
+
+    else if(key4 == true){
+        flag = 2;
+        key4 = true;
+        //player[clientID].turn2 = player[clientID].turn2-1;
+        
+        if(player[clientID].turn2>0){
+            double a;
+            a = -2 * M_PI + player[clientID].turn2;
+            player[clientID].turn2 = a;
+        }
+        player[clientID].turn2 = player[clientID].turn2 - (M_PI / 180);
+        //turn = turn -1;
+        if(player[clientID].turn2 == -2 * M_PI){
+            player[clientID].turn2= 0;
+        }
+          player[clientID].turn3 = player[clientID].turn3 + (M_PI / 180);
+        if(player[clientID].turn3 == 2 * M_PI){
+            player[clientID].turn3= 0;
+        }
+        
+       }
+    else if(key7 == true){
+        if(can_attack == true){
+            if(bullet_Num >= MAX_BULLET_NUM){bullet_Num = 0;}
+            create_bullet(bullet_Num);
+            glutTimerFunc(1000, add_lifetime, 0);
+            can_attack = false;
+            glutTimerFunc(1000, interval_attack, 0);
+        }
+    }
+       
+       if(key6==false){
+         key1 = false;
+         key2 = false;
+         key3 = false;
+         key4 = false;
+         key5 = false;
+         key6 = false;
+         key7 = false;
+       }
+        if(key6 == true){
+       // key6 = false;
+       
+       }
+       
 }
 
-
 /***********************************************************
-|  é–¢æ•°ï¼šmyInit()
-|  èª¬æ˜ï¼šã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦è¡¨ç¤ºã¨æç”»è¨­å®šã®åˆæœŸåŒ–
-|  å¼•æ•°ï¼šchar *windowTitle      ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ã®ã‚¿ã‚¤ãƒˆãƒ«ãƒãƒ¼ã«è¡¨ç¤ºã™ã‚‹æ–‡å­—åˆ—
-|  æˆ»å€¤ï¼šãªã—
+|  ´Ø¿ô¡§myInit()
+|  ÀâÌÀ¡§¥¦¥¤¥ó¥É¥¦É½¼¨¤ÈÉÁ²èÀßÄê¤Î½é´ü²½
+|  °ú¿ô¡§char *windowTitle      ¥¦¥¤¥ó¥É¥¦¤Î¥¿¥¤¥È¥ë¥Ğ¡¼¤ËÉ½¼¨¤¹¤ëÊ¸»úÎó
+|  ÌáÃÍ¡§¤Ê¤·
 ***********************************************************/
 void myInit(char *windowTitle)
 {
-    /* ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ã®ã‚µã‚¤ã‚º */
+    /* ¥¦¥¤¥ó¥É¥¦¤Î¥µ¥¤¥º */
     int winWidth  = WINDOW_WIDTH;
     int winHeight = WINDOW_HEIGHT;
-    /* ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ã®ç¸¦æ¨ªã®æ¯”ã‚’è¨ˆç®— */
+    /* ¥¦¥¤¥ó¥É¥¦¤Î½Ä²£¤ÎÈæ¤ò·×»» */
     float aspect = (float)winWidth / (float)winHeight;
     // window = SDL_CreateWindow(windowTitle, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, 0);
 
-    /*ä»¥ä¸‹ãŒï½‡ï½Œï½“ï¼ï¼“ã®main*/
+    /*°Ê²¼¤¬£ç£ì£ó£°£³¤Îmain*/
 
-    /* OpenGLã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ä½œæˆã¾ã§ã®åˆæœŸåŒ– */
-    glutInitWindowPosition(0, 0);            /* ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦è¡¨ç¤ºä½ç½® */
-    glutInitWindowSize(winWidth, winHeight); /* ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ã‚µã‚¤ã‚º */
-    // glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);   /* æç”»ãƒ¢ãƒ¼ãƒ‰ */
+    /* OpenGL¥¦¥¤¥ó¥É¥¦ºîÀ®¤Ş¤Ç¤Î½é´ü²½ */
+    glutInitWindowPosition(0, 0);            /* ¥¦¥¤¥ó¥É¥¦É½¼¨°ÌÃÖ */
+    glutInitWindowSize(winWidth, winHeight); /* ¥¦¥¤¥ó¥É¥¦¥µ¥¤¥º */
+    // glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);   /* ÉÁ²è¥â¡¼¥É */
 
-    glutCreateWindow(windowTitle);                      /* ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ã®è¡¨ç¤º */
-    glClearColor(0.0, 0.0, 0.0, 1.0);                   /* ç”»é¢æ¶ˆå»è‰²ã®è¨­å®š */
+    glutCreateWindow(windowTitle);                      /* ¥¦¥¤¥ó¥É¥¦¤ÎÉ½¼¨ */
+    glClearColor(0.0, 0.0, 0.0, 1.0);                   /* ²èÌÌ¾Ãµî¿§¤ÎÀßÄê */
     
 
-    /* ã‚¤ãƒ™ãƒ³ãƒˆç™ºç”Ÿæ™‚ã«å‘¼ã³å‡ºã™é–¢æ•°ã®ç™»éŒ² */
-    glutKeyboardFunc(keyboard);  /* ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ã‚’æŠ¼ã—ãŸæ™‚ */
+    /* ¥¤¥Ù¥ó¥ÈÈ¯À¸»ş¤Ë¸Æ¤Ó½Ğ¤¹´Ø¿ô¤ÎÅĞÏ¿ */
+    glutKeyboardUpFunc(keyboard2);
+    glutKeyboardFunc(keyboard);  /* ¥­¡¼¥Ü¡¼¥É¤ò²¡¤·¤¿»ş */
     glutReshapeFunc(resize);
-    glutDisplayFunc(display);    /* ç”»é¢è¡¨ç¤º */
-    glutTimerFunc(15, timer, 0); /* ã‚¿ã‚¤ãƒãƒ¼ã‚’15ãƒŸãƒªç§’å¾Œã«è¨­å®š */
+    glutDisplayFunc(display);    /* ²èÌÌÉ½¼¨ */
+    glutTimerFunc(15, timer, 0); /* ¥¿¥¤¥Ş¡¼¤ò15¥ß¥êÉÃ¸å¤ËÀßÄê */
 
-    /* CGæç”»è¨­å®š */
-    glMatrixMode(GL_PROJECTION);             /* é€è¦–æŠ•å½±(é è¿‘æŠ•å½±æ³•)è¨­å®šãƒ¢ãƒ¼ãƒ‰ã«åˆ‡ã‚Šæ›¿ãˆ */
-    glLoadIdentity();                        /* é€è¦–æŠ•å½±è¡Œåˆ—ã‚’åˆæœŸåŒ– */
-    gluPerspective(45.0, aspect, 1.0, 20.0); /* é€è¦–æŠ•å½±è¡Œåˆ—ã®è¨­å®š */
-                                             /* è¦–é‡è§’45åº¦, ç¸¦æ¨ªæ¯” aspectï¼Œæç”»å‰é¢ã¾ã§ã®å¥¥è¡Œ 1.0ï¼Œæç”»èƒŒé¢ã¾ã§ã®å¥¥è¡Œ 20.0 */
-    glEnable(GL_DEPTH_TEST);                 /* éš é¢æ¶ˆå»ã‚’æœ‰åŠ¹ã«ã™ã‚‹ */
+    /* CGÉÁ²èÀßÄê */
+    glMatrixMode(GL_PROJECTION);             /* Æ©»ëÅê±Æ(±ó¶áÅê±ÆË¡)ÀßÄê¥â¡¼¥É¤ËÀÚ¤êÂØ¤¨ */
+    glLoadIdentity();                        /* Æ©»ëÅê±Æ¹ÔÎó¤ò½é´ü²½ */
+    gluPerspective(45.0, aspect, 1.0, 100.0); /* Æ©»ëÅê±Æ¹ÔÎó¤ÎÀßÄê */
+                                             /* »ëÌî³Ñ45ÅÙ, ½Ä²£Èæ aspect¡¤ÉÁ²èÁ°ÌÌ¤Ş¤Ç¤Î±ü¹Ô 1.0¡¤ÉÁ²èÇØÌÌ¤Ş¤Ç¤Î±ü¹Ô 20.0 */
+    glEnable(GL_DEPTH_TEST);                 /* ±£ÌÌ¾Ãµî¤òÍ­¸ú¤Ë¤¹¤ë */
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glDepthFunc(GL_LEQUAL);
     glEnable(GL_DEPTH_TEST);
@@ -510,17 +1197,15 @@ void myInit(char *windowTitle)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEX_WIDTH, TEX_HEIGHT,
         0, GL_RGBA, GL_UNSIGNED_BYTE, image);
 
-    /* ç®±ã®åº§æ¨™ã¨é€Ÿåº¦ã®åˆæœŸå€¤è¨­å®š */
+    /* È¢¤ÎºÂÉ¸¤ÈÂ®ÅÙ¤Î½é´üÃÍÀßÄê */
 
     
 }
 
-
-
 void create_bullet(int num){
     BULLET b;
     b.pos = player[clientID].pos;
-    b.dir = {(- sin(player[clientID].turn1)), 0/*- sin(player[clientID].turn2)*/, - cos(player[clientID].turn1)};
+    b.dir = {(- sin(player[clientID].turn1)), - sin(player[clientID].turn2), - cos(player[clientID].turn1)};
     b.lifetime = 0;
     array_bullet.push_back(BULLET(b));
     printf("send:%f, %f, %f\n", array_bullet[bullet_Num].pos.x, array_bullet[bullet_Num].pos.y, array_bullet[bullet_Num].pos.z);
@@ -545,12 +1230,10 @@ void move_bullet(int num){
 }
 
 void del_bullet(){
-    for(int i = 0; i < bullet_Num; i++){
-        if(array_bullet[i].lifetime >= 5){
-            array_bullet.erase(array_bullet.begin() + i);       //  iç•ªç›®ã®è¦ç´ ã‚’å‰Šé™¤
+        if(array_bullet[0].lifetime >= 5){
+            array_bullet.erase(array_bullet.begin() + 0);       //  iÈÖÌÜ¤ÎÍ×ÁÇ¤òºï½ü
             bullet_Num--;
         }
-    } 
 }
 
 void interval_attack(int interval_attackID){
@@ -561,6 +1244,6 @@ void add_lifetime(int add_lifetimeID){
     for(int i = 0; i < bullet_Num; i++){
         array_bullet[i].lifetime++;
     }  
-    del_bullet();               // å¼¾ã®å‰Šé™¤
+    del_bullet();               // ÃÆ¤Îºï½ü
     printf("bullet_Num:%d\n", bullet_Num);
 }
