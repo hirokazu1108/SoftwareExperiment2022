@@ -31,8 +31,8 @@ int ExecuteCommand(char command)
             }
             free(p);
         }
-        break;
-
+            break;
+		
         case BULLETDATA_COMMAND:{
             BULLET b;
             RecvData(&b, sizeof(BULLET));
@@ -41,8 +41,8 @@ int ExecuteCommand(char command)
             bullet_Num++;   
         }
         break;
-
-		case END_COMMAND:
+        
+        case END_COMMAND:
 			endFlag = 0;
 			break;
         default:
@@ -74,10 +74,14 @@ void SendEndCommand(void)
 
 void SendPlayerDataCommand(void){
 
-    char com = PLAYERDATA_COMMAND;
+    unsigned char	data[MAX_DATA];
+    int			dataSize;
 
+    dataSize = 0;
+    /* コマンドのセット */
+    SetCharData2DataBlock(data,PLAYERDATA_COMMAND,&dataSize);
     /* データの送信 */
-    SendData(&com,sizeof(char));
+    SendData(data,dataSize);
 
     //playerDataの送信
 
