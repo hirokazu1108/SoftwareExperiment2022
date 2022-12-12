@@ -140,41 +140,8 @@ void display(void)
 {
 
     /*最初の部分はタイトル画面のUIを表示している*/
-    if(startflag == true){
-     
-        glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);   /* 画面を消去 */
-    glMatrixMode(GL_MODELVIEW);             /* 幾何（描画位置など設定する）モード */
-    glLoadIdentity();                       /* 幾何を初期化する */
-
-    /* 視点の設定 */
-    gluLookAt(  CameraX, CameraY, CameraZ,  /* カメラの位置 */
-                0.0, 0.0, 0.0,  /* 注視点の位置 */
-                0.0, 1.0, 0.0); /* カメラ上方向のベクトル */
+   
     
-    /* 立方体の描画 */
-    glPushMatrix ();                /* 描画位置を保存 */
-    glColor3f(1.0, 1.0, 1.0);
-    glutWireCube (0.5);             /* ワイヤーの立方体を描画 */
-    glPopMatrix ();                 /* 描画位置を戻す */
-
-    /* 文字列を表示 */
-    glPushMatrix ();                        /* 視点位置を保存 */
-    glColor3f( 1.0, 1.0, 0 );             /* 描画色を白(1.0,1.0,1.0)にする */
-    glRotatef(BoxRotate, 0.0, 1.0, 0.0);   /* Y軸中心にBoxRotate(度)回転 */
-    glTranslatef(1.0, 0.0, 0);                /* 文字表示座標 */
-    drawString3D("Test!", 3.0, 3.0);        /* 文字列を表示する */
-    glPopMatrix ();                         /* 視点位置に戻す */
-
-    /* 上記で描画されたCGをモニターに出力 */
-    glutSwapBuffers();
-    
-        if(j == 3){
-            startflag = false;
-        }
-        
-    }
-
-    else{
     int i;
 
         move();
@@ -211,6 +178,19 @@ void display(void)
         0, 0.5*cos(turn2), 0);
    
     /* Ω���Τ����� */
+        
+        if(startflag == true){
+        glPushMatrix();
+        glColor3f(1.0, 0.0, 0);
+        glTranslatef(-1.0, 1.0, BoxX[0]);
+        drawString3D("Space Battle", 3.0, 2.0);
+        glPushMatrix();
+        if(j == 3){
+            printf("kokowohairanaitohanasininaranaidesuyo");
+            startflag = false;
+        }
+        }
+    else{
     for (i = 0; i < 100; i++) {
         glPushMatrix();           /* ������֤���¸ */
         glColor3f(1.0, 1.0, 1.0); /* ���迧����ˤ��� */
@@ -382,16 +362,16 @@ void display(void)
         glColor3f(1.0, 1.0, 1.0);
     }
     glPopMatrix();
-
+    }
     glFlush();
     /* �嵭�����褵�줿CG���˥����˽��� */
     glutSwapBuffers();
-    }
+    
 }
 
 
 
-void 
+/*void 
 text(GLuint x, GLuint y, GLfloat scale, char* format, ...)
 {
   va_list args;
@@ -428,7 +408,7 @@ text(GLuint x, GLuint y, GLfloat scale, char* format, ...)
   glMatrixMode(GL_PROJECTION);
   glPopMatrix();
   glMatrixMode(GL_MODELVIEW);
-}
+}*/
 
 
 void
@@ -887,6 +867,7 @@ void keyboard(unsigned char key, int x, int y)
        }
     if(key == 'l'){
         j++;
+        printf("adifjadofja;erghpadghaidjgf;paiff;adhg;ai");
     }
 
     if(key == 'd'){
@@ -997,6 +978,42 @@ void keyboard(unsigned char key, int x, int y)
 }
 */
 
+/***********************************************************
+|  関数：mouseButton()
+|  説明：マウスのボタン操作時のイベント処理
+|  引数：int button     操作したマウスボタンの番号
+|  引数：int state      操作の種類 GLUT_DOWN（押す）かGLUT_UP（離す）
+|  引数：int x          キーが押されたときのマウスポインタのX座標
+|  引数：int y          キーが押されたときのマウスポインタのY座標
+|  戻値：なし
+***********************************************************/
+void mouseButton(int button, int state, int x, int y )
+{
+    /* マウスが押された時 */
+    if (state == GLUT_DOWN)
+    {
+        switch(button)
+        {
+        case GLUT_LEFT_BUTTON:  /* マウス左ボタンを押した時の処理 */
+            PressButton = button;
+            break;
+
+        case GLUT_MIDDLE_BUTTON:/* マウス中ボタンを押した時の処理 */
+            break;
+
+        case GLUT_RIGHT_BUTTON: /* マウス右ボタンを押した時の処理 */
+            PressButton = button;
+            break;
+        }
+
+        /* マウスボタンを押した瞬間の始点座標を記録する */
+        xBegin = x;
+        yBegin = y;
+        j=3;
+    }
+    
+}
+
 void keyboard2(unsigned char key, int x, int y)
 {
     key6 = false;
@@ -1062,6 +1079,7 @@ void myInit(char *windowTitle)
     
 
     /* ���٥��ȯ�����˸ƤӽФ��ؿ�����Ͽ */
+     glutMouseFunc   (mouseButton);  /* マウスボタンを押した時*/
     glutKeyboardUpFunc(keyboard2);
     glutKeyboardFunc(keyboard);  /* �����ܡ��ɤ򲡤����� */
     //glutKeyboardUpFunc(keyboard2);
