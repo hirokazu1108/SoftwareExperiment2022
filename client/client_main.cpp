@@ -1166,7 +1166,7 @@ void move(){
          player[clientID].pos.y = player[clientID].pos.y - sin(player[clientID].turn2)*0.1;
          player[clientID].collider.pos = player[clientID].pos;
       
-        printf("%f\n",player[clientID].pos.x);
+        //printf("%f\n",player[clientID].pos.x);
         
        if(key6==false){
          key1 = false;
@@ -1244,7 +1244,7 @@ void myInit(char *windowTitle)
 
 void create_bullet(int num){
     BULLET b;
-    b.dir = {(- sin(player[clientID].turn1)), - sin(player[clientID].turn2), - cos(player[clientID].turn1)};
+    b.dir = {-sin(player[clientID].turn1)*cos(player[clientID].turn2), - sin(player[clientID].turn2), -cos(player[clientID].turn1)*cos(player[clientID].turn2)};
     b.pos = player[clientID].pos + b.dir * 1.5f;
     b.lifetime = 0;
     array_bullet.push_back(BULLET(b));
