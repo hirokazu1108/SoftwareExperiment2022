@@ -3,7 +3,7 @@
 static void SetIntData2DataBlock(void *data,int intData,int *dataSize);
 static void SetCharData2DataBlock(void *data,char charData,int *dataSize);
 
-int readNum = 0; //�ɤ߹�������?��
+int readNum = 0; //鐃宿み刻申鐃緒申鐃緒申鐃銃?鐃緒申
 /*****************************************************************
 ????	: ExecuteCommand
 ???	: ??????????????????????????????
@@ -25,15 +25,15 @@ int ExecuteCommand(char command,int pos)
         case PLAYERDATA_COMMAND:{
             dataSize = 0;
             Player *p = (Player*)malloc(sizeof(Player));
-            RecvData(pos, p, sizeof(Player)); //Player�ξ����������?
-            player[pos] = *p; //Player�ξ�����Ǽ
+            RecvData(pos, p, sizeof(Player)); //Player鐃塾常申鐃緒申鐃緒申鐃緒申鐃緒申鐃?
+            player[pos] = *p; //Player鐃塾常申鐃緒申鐃緒申納
             free(p);
         }
             
-            readNum |= (1 << pos); //���ޤä����饤������ֹ��Ƚ�� 1101��client[2]�ʳ����ޤäƤ���
+            readNum |= (1 << pos); //鐃緒申鐃殉っわ申鐃緒申鐃初イ鐃緒申鐃緒申鐃緒申峭鐃緒申判鐃緒申 1101鐃緒申client[2]鐃淑鰹申鐃緒申鐃殉ってわ申鐃緒申
             if(readNum == (15>>(4-gClientNum))){
 			    SendData(ALL_CLIENTS,&command,sizeof(char));
-                SendData(ALL_CLIENTS,player,sizeof(Player)*gClientNum); //Player���������������?
+                SendData(ALL_CLIENTS,player,sizeof(Player)*gClientNum); //Player鐃緒申鐃緒申鐃緒申鐃緒申鐃緒申鐃緒申鐃緒申鐃?
 
                 readNum = 0;
             }

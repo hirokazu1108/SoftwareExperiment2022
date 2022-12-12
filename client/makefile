@@ -11,7 +11,7 @@ LOADLIBES =
 LDLIBS = -lm -lSDL2 -lSDL2_image -lSDL2_ttf -lglut -lGLU -lGL -ljoyconlib -lhidapi-hidraw -lSDL2_gfx -ljoyconlib -lhidapi-hidraw -lXext -lX11 -lXmu -DWIN32
 
 TARGET = SB_client
-SRCS = client_main.cpp client_command.cpp client_net.cpp client_win.cpp glm.cpp gltx.cpp trackball.cpp
+SRCS = client_main.cpp client_command.cpp client_net.cpp client_win.cpp client_func.cpp glm.cpp gltx.cpp trackball.cpp
 HEADS = client.h glm.h gltx.h trackball.h
 
 # 課題に取り組むにはこのターゲットで

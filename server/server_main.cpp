@@ -1,6 +1,6 @@
 #include "server.h"
 
-int	gClientNum; //¥¯¥é¥¤¥¢¥ó¥È¿ô
+int	gClientNum; //ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆæ•°
 Player *player;
 
 int main(int argc,char *argv[])
@@ -9,7 +9,7 @@ int main(int argc,char *argv[])
 	int	endFlag = 1;
   	u_short port = PORT;
 
-	/* °ú¤­¿ô¥Á¥§¥Ã¥¯ */
+	/* å¼•ãæ•°ãƒã‚§ãƒƒã‚¯ */
   switch (argc) {
   case 1:
 	fprintf(stderr,"Usage: number of clients\n");
@@ -32,7 +32,7 @@ int main(int argc,char *argv[])
     fprintf(stderr, "Usage: %s [number of clients] [port number]\n", argv[0]);
     return 1;
   }
-	/* ¥¯¥é¥¤¥¢¥ó¥È¤È¤ÎÀÜÂ³ */
+	/* ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã¨ã®æ¥ç¶š */
 	if(SetUpServer(gClientNum,port) == -1){
 		fprintf(stderr,"Cannot setup server\n");
 		exit(-1);
@@ -58,17 +58,17 @@ int main(int argc,char *argv[])
         player[i].mp = 0;
         player[i].hp = 0;
         player[i].reloadTime= 0;
-        //player[i].collider.radius = 1.0;
-        //player[i].collider.pos = player[i].pos;
+        player[i].collider.radius = 1.0;
+        player[i].collider.pos = player[i].pos;
     }
 
 
-	/* ¥á¥¤¥ó¥¤¥Ù¥ó¥È¥ë¡¼¥× */
+	/* ãƒ¡ã‚¤ãƒ³ã‚¤ãƒ™ãƒ³ãƒˆãƒ«ãƒ¼ãƒ— */
 	while(endFlag){
 		endFlag = SendRecvManager();
 	};
 
-	/* ½ªÎ»½èÍı */
+	/* çµ‚äº†å‡¦ç† */
 	Ending();
 
 	return 0;
