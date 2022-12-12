@@ -498,6 +498,7 @@ void drawString3D(const char *str, float charSize, float lineWidth)
     glPopAttrib();
     glPopMatrix();
 }
+
 /*
 |  �����������ޡ���������ַв�˥��٥�Ƚ���
 |  ������int timerID    ���٥�Ȥ�ȯ�����������ޡ��μ���ID
