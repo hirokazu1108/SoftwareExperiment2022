@@ -109,13 +109,6 @@ int main(int argc, char **argv)
     
     sprintf(serverName, "localhost");
 
-    model_file = modelname;
-    if (!model_file) {
-    fprintf(stderr, "usage: smooth model_file.obj\n");
-    exit(1);
-    }
-    init();
-
     /* 引き数チェック */
   switch (argc) {
   case 1:
@@ -168,6 +161,14 @@ int main(int argc, char **argv)
     glutInit(&argc, argv); /* OpenGL の初期化 */
     myInit(argv[0]);       /* ウインドウ表示と描画設定の初期化 */
     
+
+    model_file = modelname;
+    if (!model_file) {
+    fprintf(stderr, "usage: smooth model_file.obj\n");
+    exit(1);
+    }
+    init();
+
     glutMainLoop();
 
     // glutReshapeFunc(reshape);
@@ -231,29 +232,27 @@ void display(void)
         glColor3f(1.0, 1.0, 1.0); /* ???????????? */
         glScalef(1.0, 1.0, 1.0);
          
-        if (i < 1) {
+        if (i < gClientNum) {
             /* ????????(BoxX, i, 0)???? */
             // glutWireCube (0.5);
-            if (i == 0) {
-                glTranslatef(player[clientID].pos.x, player[clientID].pos.y,player[clientID].pos.z);
-                if(flag == 2){
-                    //glRotatef(turn*5.75, 0, 0, 1);
+
+            glTranslatef(player[i].pos.x, player[i].pos.y,player[i].pos.z);
+           if(flag == 2){
+                //glRotatef(turn*5.75, 0, 0, 1);
                     //flag = 0;
-                }
+            }
                 //glRotatef(turn2*-1*57.5, 1, 0, 0); 
                // glRotatef(turn3*57.5, 0, 1, 0);
              
-               glRotatef(player[clientID].turn1*57.5, 0, 1, 0);
-               glRotatef(player[clientID].turn2*57.5*-1, 1, 0, 0);
+               glRotatef(player[i].turn1*57.5, 0, 1, 0);
+               glRotatef(player[i].turn2*57.5*-1, 1, 0, 0);
             
-               
-            }
-            
+
             glCallList(model_list);
              
             //glutSolidCube(1.0);
            // glutWireSphere(0.4, 20.0, 10.0);
-        } else if (i == 2) {
+        } else if (i == gClientNum) {
             glTranslatef(0, 0, -2);
             // glutWireCube (0.5);
             glRotatef(f, 0, 0, 1.0);

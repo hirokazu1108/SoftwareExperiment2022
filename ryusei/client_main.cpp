@@ -97,7 +97,7 @@ int joyconev();
 #define TEX_HEIGHT 32
 #define TEX_WIDTH 32
 static GLubyte image[TEX_HEIGHT][TEX_WIDTH][4];
-
+char *modelname = "sentouki.obj" ;
 
 /***********************************************************
 |  �ؿ���main()
@@ -113,8 +113,7 @@ int main(int argc, char **argv)
     glutInit(&argc, argv); /* OpenGL �ν���� */
     myInit(argv[0]);       /* ������ɥ�ɽ������������ν���� */
     
-   char* modelename = argv[1];
-    model_file = modelename;
+    model_file = modelname;
     if (!model_file) {
     fprintf(stderr, "usage: smooth model_file.obj\n");
     exit(1);
