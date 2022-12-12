@@ -1134,9 +1134,9 @@ void move(){
             glutTimerFunc(1000, interval_attack, 0);
         }
     }
-     player[clientID].pos.x = player[clientID].pos.x-sin(player[clientID].turn1)*cos(player[clientID].turn2)*0.5;
-         player[clientID].pos.z =player[clientID].pos.z-cos(player[clientID].turn1)*cos(player[clientID].turn2)*0.5;
-         player[clientID].pos.y = player[clientID].pos.y - sin(player[clientID].turn2)*0.5;
+     player[clientID].pos.x = player[clientID].pos.x-sin(player[clientID].turn1)*cos(player[clientID].turn2)*0.1;
+         player[clientID].pos.z =player[clientID].pos.z-cos(player[clientID].turn1)*cos(player[clientID].turn2)*0.1;
+         player[clientID].pos.y = player[clientID].pos.y - sin(player[clientID].turn2)*0.1;
          player[clientID].collider.pos = player[clientID].pos;
       
         printf("%f\n",player[clientID].pos.x);
@@ -1214,8 +1214,8 @@ void myInit(char *windowTitle)
 
 void create_bullet(int num){
     BULLET b;
-    b.pos = player[clientID].pos;
     b.dir = {(- sin(player[clientID].turn1)), - sin(player[clientID].turn2), - cos(player[clientID].turn1)};
+    b.pos = player[clientID].pos + b.dir * 1.5f;
     b.lifetime = 0;
     array_bullet.push_back(BULLET(b));
     printf("send:%f, %f, %f\n", array_bullet[bullet_Num].pos.x, array_bullet[bullet_Num].pos.y, array_bullet[bullet_Num].pos.z);
