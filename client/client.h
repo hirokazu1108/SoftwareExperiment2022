@@ -32,11 +32,12 @@ extern void SendBulletDataCommand(int num);
 /* client_func.cpp */
 extern bool OnColliderSphere(Sphere a, Sphere b);
 extern void drawPlayerCollider(void);
+extern void Collider(void);
 
 extern int		gClientNum;
 extern int		clientID;
 extern int bullet_Num;   // 発射された弾の個数
 extern Player *player;
-extern GameState gameState;
+extern Game game;
 extern std::vector<BULLET> array_bullet;
 #endif

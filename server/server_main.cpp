@@ -2,6 +2,7 @@
 
 int	gClientNum; //クライアント数
 Player *player;
+Game game;
 
 int main(int argc,char *argv[])
 {
@@ -38,9 +39,11 @@ int main(int argc,char *argv[])
 		exit(-1);
 	}
 
+    /* キャラ情報の初期化 */
 	player = (Player*)malloc(sizeof(Player)*gClientNum);
 	for(int i = 0; i< gClientNum;i++)
     {
+        player[i].enabled = true;
         player[i].spead = 0.0;
         player[i].dir.x = 0;
         player[i].dir.y = 0;
@@ -62,6 +65,8 @@ int main(int argc,char *argv[])
         player[i].collider.pos = player[i].pos;
     }
 
+  /* ゲーム情報の初期化 */
+  game.state = State_Play;
 
 	/* メインイベントループ */
 	while(endFlag){

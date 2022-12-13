@@ -4,13 +4,7 @@
 #include<netdb.h>
 
 
-/* クライアントを表す構造体 */
-typedef struct{
-	int		fd;
-	char	name[MAX_NAME_SIZE];
-}CLIENT;
-
-static CLIENT	gClients[MAX_CLIENTS];	/* クライアント */
+CLIENT	gClients[MAX_CLIENTS];	/* クライアント */
 
 static fd_set	gMask;					/* select()用のマスク */
 static int	gWidth;						/* gMask中のチェックすべきビット数 */
