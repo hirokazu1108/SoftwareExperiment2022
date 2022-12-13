@@ -1,5 +1,6 @@
 #include "client.h"
 
+
 /* 球同士の当たり判定 */
 bool OnColliderSphere(Sphere a, Sphere b){
   
@@ -20,5 +21,25 @@ void drawPlayerCollider(void){
         glTranslatef(player[i].collider.pos.x, player[i].collider.pos.y, player[i].collider.pos.z);
         glutSolidSphere(player[i].collider.radius, 200, 200);
         glPopMatrix();
+    }
+}
+
+/* 球の削除を行う */
+void deleteBullet(int index){
+    array_bullet.erase(array_bullet.begin() + index);       //  i??????????????????????????
+    bullet_Num--;
+}
+
+
+/* 機体の当たり判定を取る */
+void Collider(void){
+    for(int i=0; i<gClientNum; i++){
+        for(int j=0; j<bullet_Num;j++){
+            if(OnColliderSphere(Sphere(BULLET_RADIUS,array_bullet[j].pos),player[i].collider)){
+                player[i].hp--;
+                deleteBullet(j);
+                printf("hirokazu: hit client[%d]\n",i);
+            }
+        }
     }
 }

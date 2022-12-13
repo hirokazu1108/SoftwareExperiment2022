@@ -15,6 +15,7 @@
 #include<assert.h>
 #include "glm/glm.hpp"
 #include <vector>
+#include <algorithm>
 
 
 #define PORT			(u_short)88888	/* ?��????��?????��?ò?��????��????��?????��????��?????��????��?????��????��?????��?????��????��???? */
@@ -28,8 +29,15 @@
 #define PLAYERDATA_COMMAND 's'
 #define END_COMMAND 'e'
 #define BULLETDATA_COMMAND 'b'
+#define RANKING_DATA 'r'
 
 #define BULLET_RADIUS 0.3 //���Ⱦ��
+
+typedef enum {
+    State_Title,
+    State_Play,
+    State_Result,
+}GameState;
 
 /* ������Ƚ��ε�? */
 class Sphere{
@@ -41,6 +49,7 @@ class Sphere{
 
 class Player{
 public:
+    bool enabled;   //trueならみえる状態
     int type;
     float spead;
     glm::vec3 pos;
@@ -53,6 +62,12 @@ public:
     int hp;
     int reloadTime;
     Sphere collider;
+};
+
+class Game{
+    public:
+        GameState state;
+        std::vector<int> ranking; //indexにnを入れると第n位のクライアント番号を返す
 };
 
 /* 弾�??????????? */
@@ -71,10 +86,6 @@ class BULLET{
         }
 };
 
-typedef enum {
-    State_Title,
-    State_Play,
-    State_Result,
-}GameState;
+
 
 #endif 

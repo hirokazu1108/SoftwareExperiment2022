@@ -53,9 +53,42 @@ int ExecuteCommand(char command,int pos)
                 if(i != pos){
                     SendData(i, &b, sizeof(BULLET));
                 }
-            } 
+            }
         }
         break;
+
+        case RANKING_DATA:
+            game.ranking.push_back(pos); //ランキングにクライアント番号を追加
+            
+            /*ここにデータが集まったらリザルトへの移動をするように送る処理*/
+            if(game.ranking.size() == gClientNum-1){
+                
+                /* 1位のクライアントをここで追加 */
+                for(int cnum=0; cnum<gClientNum; cnum++){
+                    auto itr = std::find(game.ranking.begin(),game.ranking.end(), cnum);
+                    
+                    if(itr == game.ranking.end()){
+                        //cnumがみつからなかったら
+                        game.ranking.push_back(cnum);
+                        break;
+                    }
+                }
+                /* ランキング順になるように逆順にする */
+                std::reverse(game.ranking.begin(),game.ranking.end());
+
+               
+
+                int *p = (int*) malloc(sizeof(int)*gClientNum);
+                for(int i=0; i<gClientNum; i++){
+                    p[i] = game.ranking[i];
+                }
+                
+                SendData(ALL_CLIENTS,&command,sizeof(char));
+                SendData(ALL_CLIENTS,p,sizeof(int)*gClientNum);
+
+                free(p);
+            }
+            break;
 
 	    case END_COMMAND:
 			dataSize = 0;

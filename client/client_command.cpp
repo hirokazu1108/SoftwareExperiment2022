@@ -41,10 +41,22 @@ int ExecuteCommand(char command)
             bullet_Num++;   
         }
         break;
-        
+        case RANKING_DATA:{
+            int *p = (int*) malloc(sizeof(int)*gClientNum);
+            RecvData(p,sizeof(int)*gClientNum);
+            for(int i=0; i<gClientNum; i++){
+                game.ranking.push_back(p[i]);
+            }
+            free(p);
+            
+            for(int i=0;i<gClientNum;i++)
+                printf("e%d:%d\n",i+1,game.ranking[i]);
+            }
+
+            exit(0);
+            break;
         case END_COMMAND:
-			gameState = State_Result;
-            endFlag = 0;
+            endFlag = 1;
 			break;
         default:
             break;

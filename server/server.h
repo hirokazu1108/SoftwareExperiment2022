@@ -5,6 +5,12 @@
 
 #define ALL_CLIENTS	-1   /* ??????????????????????????????? */
 
+/* クライアントを表す構造体 */
+typedef struct{
+	int		fd;
+	char	name[MAX_NAME_SIZE];
+}CLIENT;
+
 /* server_net.c */
 extern int SetUpServer(int num, u_short port);
 extern void Ending(void);
@@ -18,4 +24,7 @@ extern int ExecuteCommand(char command,int pos);
 
 extern int	gClientNum; //クライアント数
 extern Player *player;
+extern Game game;
+
+extern CLIENT gClients[MAX_CLIENTS];	
 #endif
