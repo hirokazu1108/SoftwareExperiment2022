@@ -928,24 +928,6 @@ void keyboard(unsigned char key, int x, int y)
     if(key == 'w'){
         flag = 2;
         key4 = true;
-        //turn2 = turn2-1;
-        
-        /*if(turn2>0){
-            double a;
-            a = -2 * M_PI + turn2;
-            turn2 = a;
-        }
-        turn2 = turn2 - (M_PI / 180);
-        //turn = turn -1;
-        printf("zahyouhane~%lf\n",turn2);
-        if(turn2 == -2 * M_PI){
-            turn2= 0;
-        }
-          turn3 = turn3 + (M_PI / 180);
-        if(turn3 == 2 * M_PI){
-            turn3= 0;
-        }*/
-        
        }
         if(key == 'b'){
           //  key5 = true;
