@@ -261,13 +261,7 @@ void display(void)
     /* ???????????????????? */
      move();
 
-   glPushMatrix ();                /* 描画位置を保存 */
-    glColor3f(1.0, 1.0, 1.0);       /* 描画色を白にする */
-    glTranslatef(player[clientID].pos.x, player[clientID].pos.y+0.5,player[clientID].pos.z);
-   glRotatef(player[clientID].turn1*-1, 0, 1, 0);
-    glRotatef(player[clientID].turn2, 1, 0, 0);
-    glutWireCube (0.5);             /* ワイヤーの立方体を描画 */
-    glPopMatrix (); 
+   
 
     for (i = 0; i < 100; i++) {
         glPushMatrix();           /* ??????????�? */
@@ -314,14 +308,14 @@ void display(void)
     }
     
     //???????
-    for(i = 1; i< 50 ;i++){
+    
     glPushMatrix();
     glColor3f(1.0, 0.0, 0.0);
-    glTranslatef(0.0, -0.8, i*i);
+    glTranslatef(0.0, -0.8, 0);
     glScalef(1000.0, 0.1, 1.1);
     glutSolidCube(1.0);
     glPopMatrix();
-    }
+    
     //???????
     for(i = 1; i< 50 ;i++){
      glColor3f(1.0, 1.0, 1.0); /* ???????????? */
@@ -1261,7 +1255,6 @@ void create_bullet(int num){
     b.pos = player[clientID].pos + b.dir * 1.5f;
     b.lifetime = 0;
     array_bullet.push_back(BULLET(b));
-    printf("send:%f, %f, %f\n", array_bullet[bullet_Num].pos.x, array_bullet[bullet_Num].pos.y, array_bullet[bullet_Num].pos.z);
     bullet_Num++;
     SendBulletDataCommand(num);
 }
@@ -1301,5 +1294,8 @@ void add_lifetime(int add_lifetimeID){
         array_bullet[i].lifetime++;
     }  
     del_bullet();               // 綣�??????????
-    glutTimerFunc(1000, add_lifetime, 0);
+    if(bullet_Num > 0){
+        glutTimerFunc(1000, add_lifetime, 0);
+    }
+    printf("bullet_Num:%d\n", bullet_Num);
 }
