@@ -141,7 +141,7 @@ void display(void)
 
     /*最初の部分はタイトル画面のUIを表示している*/
    
-    
+    float color[4] = {1.0};
     int i;
 
         move();
