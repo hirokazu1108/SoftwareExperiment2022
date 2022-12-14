@@ -1301,5 +1301,5 @@ void add_lifetime(int add_lifetimeID){
         array_bullet[i].lifetime++;
     }  
     del_bullet();               // 綣�??????????
-    printf("bullet_Num:%d\n", bullet_Num);
+    glutTimerFunc(1000, add_lifetime, 0);
 }
