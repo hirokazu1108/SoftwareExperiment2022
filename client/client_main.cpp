@@ -309,7 +309,7 @@ void display(void)
     
     //???????
     
-    glPushMatrix();
+    /*glPushMatrix();
     glColor3f(1.0, 0.0, 0.0);
     glTranslatef(0.0, -0.8, 0);
     glScalef(1000.0, 0.1, 1.1);
@@ -318,7 +318,7 @@ void display(void)
     
     //???????
     
-     glColor3f(1.0, 1.0, 1.0); /* ???????????? */
+     glColor3f(1.0, 1.0, 1.0); 
     glPushMatrix();
     glColor3f(0.0, 1.0, 0.0);
     glTranslatef(0.0, -0.8, 1000);
@@ -332,7 +332,7 @@ void display(void)
     glTranslatef(0.0, -0.8, -1.5*i);
     glScalef(1000.0, 0.1, 1000);
     glutSolidCube(1.0);
-    glPopMatrix();
+    glPopMatrix();*/
     
     //?????????
    
