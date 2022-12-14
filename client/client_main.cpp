@@ -213,7 +213,7 @@ void display(void)
     }
 
     int i;
-
+    float color[4] = {1.0};
     //move();
     if(flag ==0){
         CameraX = CameraX;
@@ -260,6 +260,15 @@ void display(void)
     
     /* ???????????????????? */
      move();
+
+   glPushMatrix ();                /* 描画位置を保存 */
+    glColor3f(1.0, 1.0, 1.0);       /* 描画色を白にする */
+    glTranslatef(player[clientID].pos.x, player[clientID].pos.y+0.5,player[clientID].pos.z);
+   glRotatef(player[clientID].turn1*-1, 0, 1, 0);
+    glRotatef(player[clientID].turn2, 1, 0, 0);
+    glutWireCube (0.5);             /* ワイヤーの立方体を描画 */
+    glPopMatrix (); 
+
     for (i = 0; i < 100; i++) {
         glPushMatrix();           /* ??????????�? */
         glColor3f(1.0, 1.0, 1.0); /* ???????????? */
@@ -303,7 +312,7 @@ void display(void)
             glPopMatrix(); /* ?????????? */
         }
     }
-
+    
     //???????
     for(i = 1; i< 50 ;i++){
     glPushMatrix();
