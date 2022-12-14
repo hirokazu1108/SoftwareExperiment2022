@@ -305,18 +305,20 @@ void display(void)
     }
 
     //???????
+    for(i = 1; i< 50 ;i++){
     glPushMatrix();
     glColor3f(1.0, 0.0, 0.0);
-    glTranslatef(0.0, -0.8, 0.0);
+    glTranslatef(0.0, -0.8, i*i);
     glScalef(1000.0, 0.1, 1.1);
     glutSolidCube(1.0);
     glPopMatrix();
-
+    }
     //???????
-        glColor3f(1.0, 1.0, 1.0); /* ???????????? */
+    for(i = 1; i< 50 ;i++){
+     glColor3f(1.0, 1.0, 1.0); /* ???????????? */
     glPushMatrix();
     glColor3f(0.0, 1.0, 0.0);
-    glTranslatef(0.0, -0.8, 1.5);
+    glTranslatef(0.0, -0.8, 1.5*i);
     glScalef(1000.0, 0.1, 1.8);
     glutSolidCube(1.0);
     glPopMatrix();
@@ -324,11 +326,11 @@ void display(void)
     //???????
     glPushMatrix();
     glColor3f(0.0, 0.0, 1.0);
-    glTranslatef(0.0, -0.8, -1.5);
+    glTranslatef(0.0, -0.8, -1.5*i);
     glScalef(1000.0, 0.1, 1.8);
     glutSolidCube(1.0);
     glPopMatrix();
-
+    }
     //?????????
    
 
