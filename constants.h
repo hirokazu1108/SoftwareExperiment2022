@@ -66,6 +66,7 @@ public:
 
 class Game{
     public:
+        char	clientName[MAX_CLIENTS][MAX_NAME_SIZE];
         GameState state;
         std::vector<int> ranking; //indexにnを入れると第n位のクライアント番号を返す
 };
