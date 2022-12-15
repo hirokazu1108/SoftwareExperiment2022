@@ -9,6 +9,8 @@
 #define WINDOW_WIDTH 2000
 #define WINDOW_HEIGHT 2000
 
+#define Model_Num 2
+
 /* client_net.cpp */
 extern int SetUpClient(char *hostName,u_short port,int *clientID,int *num,char clientNames[][MAX_NAME_SIZE]);
 extern void CloseSoc(void);

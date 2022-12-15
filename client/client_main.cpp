@@ -70,12 +70,12 @@ int rb;
 int af;
 joyconlib_t jc;
 
-GLuint     model_list = 0;		/* display list for object */
-char*      model_file = NULL;		/* name of the obect file */
+GLuint     model_list[Model_Num] = {0};		/* display list for object */
+char*      model_file[Model_Num] = {NULL};		/* name of the obect file */
 GLboolean  facet_normal = GL_FALSE;	/* draw with facet normal? */
-GLMmodel*  model;
-GLfloat    smoothing_angle = 90.0;	/* smoothing angle */
-GLfloat    scale;			/* scaling factor */
+GLMmodel*  model[Model_Num];
+GLfloat    smoothing_angle[Model_Num] = {90.0};	/* smoothing angle */
+GLfloat    scale[Model_Num];			/* scaling factor */
 GLboolean  bounding_box = GL_FALSE;
 GLboolean  performance = GL_FALSE;
 GLboolean  stats = GL_FALSE;
@@ -89,9 +89,9 @@ void keyboard(unsigned char key, int x, int y);
 void resize(int w, int h);
 void myInit(char *windowTitle);
 void drawString3D(const char *str, float charSize, float lineWidth);
+void init(int CModel);
 void text(GLuint x, GLuint y, GLfloat scale, char* format, ...);
-void lists(void);
-void init(void);
+void lists(int CModel);
 int joyconev();
 void move(void);
 void create_bullet(int num);    // 綣�??????????
@@ -105,7 +105,7 @@ void interval_attack(int interval_attackID);    // 綣�???????????????????????
 #define TEX_HEIGHT 32
 #define TEX_WIDTH 32
 static GLubyte image[TEX_HEIGHT][TEX_WIDTH][4];
-char *modelname = "sentouki.obj" ;
+char *modelname[] = {"sentouki.obj","data/castle.obj"} ;
 
 /***********************************************************
 |  ???????????main()
@@ -181,12 +181,14 @@ int main(int argc, char **argv)
     myInit(clientName[clientID]);       /* ?????????�?????????????????????????��??�?????????????? */
     
 
-    model_file = modelname;
-    if (!model_file) {
-    fprintf(stderr, "usage: smooth model_file.obj\n");
-    exit(1);
+    for (int i = 0; i < Model_Num; i++){
+        model_file[i] = modelname[i];
+        if (!model_file[i]) {
+        fprintf(stderr, "usage: smooth model_file.obj\n");
+        exit(1);
+        }
+        init(i);
     }
-    init();
 
     glutMainLoop();
 
@@ -280,7 +282,9 @@ void display(void)
             glRotatef(player[i].turn1*57.5, 0, 1, 0);
             glRotatef(player[i].turn2*57.5*-1, 1, 0, 0);
 
-            glCallList(model_list);
+            for (int j = 0; j < Model_Num; j++){
+                glCallList(model_list[j]);
+            }
              
             //glutSolidCube(1.0);
            // glutWireSphere(0.4, 20.0, 10.0);
@@ -466,21 +470,21 @@ void display(void)
 */
 
 void
-init(void)
+init(int CModel)
 {
   tbInit(GLUT_MIDDLE_BUTTON);
   
   /* read in the model */
-  model = glmReadOBJ(model_file);
-  scale = glmUnitize(model);
-  glmFacetNormals(model);
-  glmVertexNormals(model, smoothing_angle);
+  model[CModel] = glmReadOBJ(model_file[CModel]);
+  scale[CModel] = glmUnitize(model[CModel]);
+  glmFacetNormals(model[CModel]);
+  glmVertexNormals(model[CModel], smoothing_angle[CModel]);
 
   /* create new display lists */
-  lists();
+  lists(CModel);
 
-  //glEnable(GL_LIGHTING);
-  //glEnable(GL_LIGHT0);
+  glEnable(GL_LIGHTING);
+  glEnable(GL_LIGHT0);
   glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 
   glEnable(GL_DEPTH_TEST);
@@ -489,15 +493,15 @@ init(void)
 }
 
 
-void lists(void)
+void lists(int CModel)
 {
   GLfloat ambient[] = { 0.2, 0.2, 0.2, 1.0 };
   GLfloat diffuse[] = { 0.8, 0.8, 0.8, 1.0 };
   GLfloat specular[] = { 0.0, 0.0, 0.0, 1.0 };
   GLfloat shininess = 65.0;
 
-  if (model_list)
-    glDeleteLists(model_list, 1);
+  if (model_list[CModel])
+    glDeleteLists(model_list[CModel], 1);
 
   glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
@@ -507,19 +511,19 @@ void lists(void)
  
   if (material_mode == 0) { 
     if (facet_normal)
-      model_list = glmList(model, GLM_FLAT);
+      model_list[CModel] = glmList(model[CModel], GLM_FLAT);
     else
-      model_list = glmList(model, GLM_SMOOTH);
+      model_list[CModel] = glmList(model[CModel], GLM_SMOOTH);
   } else if (material_mode == 1) {
     if (facet_normal)
-      model_list = glmList(model, GLM_FLAT | GLM_COLOR);
+      model_list[CModel] = glmList(model[CModel], GLM_FLAT | GLM_COLOR);
     else
-      model_list = glmList(model, GLM_SMOOTH | GLM_COLOR);
+      model_list[CModel] = glmList(model[CModel], GLM_SMOOTH | GLM_COLOR);
   } else if (material_mode == 2) {
     if (facet_normal)
-      model_list = glmList(model, GLM_FLAT | GLM_MATERIAL);
+      model_list[CModel] = glmList(model[CModel], GLM_FLAT | GLM_MATERIAL);
     else
-      model_list = glmList(model, GLM_SMOOTH | GLM_MATERIAL);
+      model_list[CModel] = glmList(model[CModel], GLM_SMOOTH | GLM_MATERIAL);
   }
 }
 
