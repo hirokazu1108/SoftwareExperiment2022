@@ -431,9 +431,11 @@ void display(void)
 
     /* Draw ui */
     glPushMatrix();
+    glDisable(GL_LIGHTING);
+    glDisable(GL_LIGHT0);
     uiSetting();
     glColor3f( 1.0f, 1.0f, 1.0f );
-    glRectf(0.5f,1.7f,2.0f,2.0f);
+    glRectf(2-(1.5f)/3*player[clientID].hp,1.7f,2.0f,2.0f);
     glColor3f( 1.0f, 0.0f, 0.0f );
     glRectf( 0.5f, 1.7f, 2-(1.5f)/3*player[clientID].hp, 2);
     glPopMatrix();
