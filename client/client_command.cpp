@@ -50,7 +50,7 @@ int ExecuteCommand(char command)
             free(p);
             
             for(int i=0;i<gClientNum;i++)
-                printf("e%d:%d\n",i+1,game.ranking[i]);
+                printf("No.%d:%s\n",i+1,game.clientName[game.ranking[i]]);
             }
 
             exit(0);
