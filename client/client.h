@@ -24,6 +24,7 @@ extern int RecvData(void *data,int dataSize);
 extern int InitWindows(int clientID,int num,char name[][MAX_NAME_SIZE]);
 extern void DestroyWindow(void);
 extern void WindowEvent(int num);
+extern void uiSetting(void);
 
 /* client_command.cpp */
 extern int ExecuteCommand(char command);
