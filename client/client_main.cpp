@@ -334,7 +334,7 @@ void display(void)
     
     //?????????
 
-     for (i = 0; i < 200; i++) {
+     for (i = 0; i < 50; i++) {
         glPushMatrix();
         glColor3f(1.0, 1.0, 0.0);
         glTranslatef(-15 - 10, -1.5, -4*i);
@@ -342,7 +342,7 @@ void display(void)
         glutSolidCone(0.5, 3.6, 10, 2);
         glPopMatrix();
     }
-    for (i = 0; i < 200; i++) {
+    for (i = 0; i < 50; i++) {
         glPushMatrix();
         glColor3f(1.0, 1.0, 0.0);
         glTranslatef(-15 - 10, 1.5, 4*i);
