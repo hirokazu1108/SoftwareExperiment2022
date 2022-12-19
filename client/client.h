@@ -6,8 +6,8 @@
 
 #define WINDOW_PosX 0
 #define WINDOW_PosY 0
-#define WINDOW_WIDTH 2000
-#define WINDOW_HEIGHT 2000
+#define WINDOW_WIDTH 1000
+#define WINDOW_HEIGHT 1000
 
 #define Model_Num 1
 
