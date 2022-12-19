@@ -431,13 +431,15 @@ void display(void)
 
     /* Draw ui */
     glPushMatrix();
-    glDisable(GL_LIGHTING);
-    glDisable(GL_LIGHT0);
+    //glDisable(GL_LIGHTING);
+    //glDisable(GL_LIGHT0);
     uiSetting();
     glColor3f( 1.0f, 1.0f, 1.0f );
     glRectf(2-(1.5f)/3*player[clientID].hp,1.7f,2.0f,2.0f);
     glColor3f( 1.0f, 0.0f, 0.0f );
     glRectf( 0.5f, 1.7f, 2-(1.5f)/3*player[clientID].hp, 2);
+    //glEnable(GL_LIGHTING);
+    //glEnable(GL_LIGHT0);
     glPopMatrix();
 
 
@@ -1184,7 +1186,6 @@ void move(){
          player[clientID].pos.z =player[clientID].pos.z-cos(player[clientID].turn1)*cos(player[clientID].turn2)*0.1;
          player[clientID].pos.y = player[clientID].pos.y - sin(player[clientID].turn2)*0.1;
          player[clientID].collider.pos = player[clientID].pos;
-         
       
         //printf("%f\n",player[clientID].pos.x);
         
