@@ -102,7 +102,7 @@ void count_time(int count_timeID);      // ??????????????�????????????????????
 void del_bullet(void);  // 綣�????�???????
 void deleteBullet(int index);
 void interval_attack(int interval_attackID);    // 綣�??????????????????????????????????????
-void Circle2D(float radius,int x,int y);
+void Circle2D(float radius,float x,float y);
 void Oval2D(float radius,int x,int y,float ovalx,float ovaly);
 #define TEX_HEIGHT 32
 #define TEX_WIDTH 32
@@ -461,11 +461,13 @@ void display(void)
     //glDisable(GL_LIGHTING);
     //glDisable(GL_LIGHT0);
     uiSetting();
-    glColor3f( 1.0f, 1.0f, 1.0f );
-    Circle2D(0.5,player[i].pos.x-1,player[i].pos.z+1);
+    glColor3f( 0.0f, 0.0f, 0.0f );
+    Circle2D(0.5,-1.8f,1.6f);
     //Oval2D(50.0f,150,80,100.0f,80.0f);
     //glRectf( -0.5f, -1.7f, 0, 2);
     glPopMatrix();
+
+
 
     //drawPlayerCollider();
 
@@ -493,7 +495,7 @@ void display(void)
 }
 
 
-void Circle2D(float radius,int x,int y)
+void Circle2D(float radius,float x,float y)
 {
  for (float th1 = 0.0;  th1 <= 720.0;  th1 = th1 + 1.0)
  {
