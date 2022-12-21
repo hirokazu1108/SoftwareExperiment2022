@@ -104,6 +104,7 @@ void deleteBullet(int index);
 void interval_attack(int interval_attackID);    // 綣�??????????????????????????????????????
 void Circle2D(float radius,float x,float y);
 void Oval2D(float radius,int x,int y,float ovalx,float ovaly);
+float calmini(int f,float pp, float ep);
 #define TEX_HEIGHT 32
 #define TEX_WIDTH 32
 static GLubyte image[TEX_HEIGHT][TEX_WIDTH][4];
@@ -151,7 +152,7 @@ int main(int argc, char **argv)
     for(int i = 0; i< gClientNum;i++)
     {
         player[i].enabled = true;
-        player[i].speed = 0.0;
+        player[i].spead = 0.0;
         player[i].dir.x = 0;
         player[i].dir.y = 0;
         player[i].dir.z = 0;
@@ -161,17 +162,15 @@ int main(int argc, char **argv)
         player[i].upVec.x = 0;
         player[i].upVec.y = 0;
         player[i].upVec.z = 0;
-        player[i].rate_attack = 1.0;
         player[i].turn1 = 0;
         player[i].turn2 = 0;
         player[i].turn3 = 0;
         player[i].type = 0;
         player[i].mp = 0;
-        player[i].hp = 3.0;
+        player[i].hp = 3;
         player[i].reloadTime= 0;
         player[i].collider.radius = 1.0;
         player[i].collider.pos = player[i].pos;
-        player[i].ability = UP_SPEED;
     }
     
     /* ????????? */
@@ -457,7 +456,7 @@ void display(void)
     //glEnable(GL_LIGHT0);
     glPopMatrix();
 
-
+ 
 
     glPushMatrix();
     //glDisable(GL_LIGHTING);
@@ -469,10 +468,30 @@ void display(void)
     //glRectf( -0.5f, -1.7f, 0, 2);
     glPopMatrix();
 
+    //ここでじぶんをひょうじします
+    glPushMatrix();
+    uiSetting();
+    glColor3f( 1.0f, 0.0f, 0.0f );
+    Circle2D(0.03,-1.8f,1.6f);
+    glPopMatrix();
 
+    //ここで敵をひょうじします
+    int num;
+    for(num = 0; num < gClientNum ; num++){
+        if(num == clientID){
 
-    //drawPlayerCollider();
+        }
+        else{
+            glPushMatrix();
+            glTranslatef(0,0,0.1 );
+            uiSetting();
+            glColor3f( 0.0f, 1.0f, 0.0f );
+            Circle2D(0.03,calmini(1,player[clientID].pos.x,player[num].pos.x),calmini(2,player[clientID].pos.z,player[num].pos.z));
+            glPopMatrix();
+        }
+    }
 
+    
     glFlush();
     /* ?�??????????????CG???????????? */
     glutSwapBuffers();
@@ -481,7 +500,7 @@ void display(void)
     if(player[clientID].enabled){
         Collider();
     }
-    if(player[clientID].enabled && player[clientID].hp <= 0.0){
+    if(player[clientID].enabled && player[clientID].hp <= 0){
         player[clientID].enabled = false;
         /* ??????????????????? */
         char com=RANKING_DATA;
@@ -496,6 +515,53 @@ void display(void)
     
 }
 
+/****************************
+ fが１ならｘ。２ならｙ。
+******************************/
+float calmini(int f,float pp, float ep){
+    float point;
+
+    point = ep - pp;
+    printf("%d:%lf\n",f,point);
+    if(point/200 > 1 || point/200 < -1){
+        if(f == 1){
+            if(point > 0){
+                point = -1.33;
+            }
+            else{
+                point = -2.27;
+            }
+        }
+        else{
+            if(point > 0){
+                point = 2.07;
+            }
+            else{
+                point = 1.13;
+            }
+        }
+    }
+    else{
+        if(f == 1){
+            if(point > 0){
+                point = -1.765 + point/200;
+            }
+            else{
+                point = -1.765 + point/200;
+            }
+        }
+        else{
+            if(point > 0){
+                point = 1.58 -  point/200;
+            }
+            else{
+                point = 1.58 +  -1*point/200;
+            }
+        }
+    }
+   
+    return point;
+}
 
 void Circle2D(float radius,float x,float y)
 {
@@ -772,9 +838,9 @@ void keyboard(unsigned char key, int x, int y)
        }
         if(key == 'b'){
           //  key5 = true;
-         player[clientID].pos.x = player[clientID].pos.x-sin(player[clientID].turn1)*cos(player[clientID].turn2)*player[clientID].speed;
-         player[clientID].pos.z =player[clientID].pos.z-cos(player[clientID].turn1)*cos(player[clientID].turn2)*player[clientID].speed;
-         player[clientID].pos.y = player[clientID].pos.y - sin(player[clientID].turn2)*player[clientID].speed;
+         player[clientID].pos.x = player[clientID].pos.x-sin(player[clientID].turn1)*cos(player[clientID].turn2);
+         player[clientID].pos.z =player[clientID].pos.z-cos(player[clientID].turn1)*cos(player[clientID].turn2);
+         player[clientID].pos.y = player[clientID].pos.y - sin(player[clientID].turn2);
          player[clientID].collider.pos = player[clientID].pos;
       
         printf("%f\n",player[clientID].pos.x);
@@ -1341,7 +1407,6 @@ void create_bullet(int num){
     b.dir = {-sin(player[clientID].turn1)*cos(player[clientID].turn2), - sin(player[clientID].turn2), -cos(player[clientID].turn1)*cos(player[clientID].turn2)};
     b.pos = player[clientID].pos + b.dir * 1.5f;
     b.lifetime = 0;
-    b.shooter_id = clientID;
     array_bullet.push_back(BULLET(b));
     bullet_Num++;
     SendBulletDataCommand(num);
