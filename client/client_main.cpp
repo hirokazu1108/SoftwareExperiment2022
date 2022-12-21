@@ -151,7 +151,7 @@ int main(int argc, char **argv)
     for(int i = 0; i< gClientNum;i++)
     {
         player[i].enabled = true;
-        player[i].spead = 0.0;
+        player[i].speed = 0.0;
         player[i].dir.x = 0;
         player[i].dir.y = 0;
         player[i].dir.z = 0;
@@ -161,15 +161,17 @@ int main(int argc, char **argv)
         player[i].upVec.x = 0;
         player[i].upVec.y = 0;
         player[i].upVec.z = 0;
+        player[i].rate_attack = 1.0;
         player[i].turn1 = 0;
         player[i].turn2 = 0;
         player[i].turn3 = 0;
         player[i].type = 0;
         player[i].mp = 0;
-        player[i].hp = 3;
+        player[i].hp = 3.0;
         player[i].reloadTime= 0;
         player[i].collider.radius = 1.0;
         player[i].collider.pos = player[i].pos;
+        player[i].ability = UP_SPEED;
     }
     
     /* ????????? */
@@ -479,7 +481,7 @@ void display(void)
     if(player[clientID].enabled){
         Collider();
     }
-    if(player[clientID].enabled && player[clientID].hp <= 0){
+    if(player[clientID].enabled && player[clientID].hp <= 0.0){
         player[clientID].enabled = false;
         /* ??????????????????? */
         char com=RANKING_DATA;
@@ -770,9 +772,9 @@ void keyboard(unsigned char key, int x, int y)
        }
         if(key == 'b'){
           //  key5 = true;
-         player[clientID].pos.x = player[clientID].pos.x-sin(player[clientID].turn1)*cos(player[clientID].turn2);
-         player[clientID].pos.z =player[clientID].pos.z-cos(player[clientID].turn1)*cos(player[clientID].turn2);
-         player[clientID].pos.y = player[clientID].pos.y - sin(player[clientID].turn2);
+         player[clientID].pos.x = player[clientID].pos.x-sin(player[clientID].turn1)*cos(player[clientID].turn2)*player[clientID].speed;
+         player[clientID].pos.z =player[clientID].pos.z-cos(player[clientID].turn1)*cos(player[clientID].turn2)*player[clientID].speed;
+         player[clientID].pos.y = player[clientID].pos.y - sin(player[clientID].turn2)*player[clientID].speed;
          player[clientID].collider.pos = player[clientID].pos;
       
         printf("%f\n",player[clientID].pos.x);
@@ -1339,6 +1341,7 @@ void create_bullet(int num){
     b.dir = {-sin(player[clientID].turn1)*cos(player[clientID].turn2), - sin(player[clientID].turn2), -cos(player[clientID].turn1)*cos(player[clientID].turn2)};
     b.pos = player[clientID].pos + b.dir * 1.5f;
     b.lifetime = 0;
+    b.shooter_id = clientID;
     array_bullet.push_back(BULLET(b));
     bullet_Num++;
     SendBulletDataCommand(num);

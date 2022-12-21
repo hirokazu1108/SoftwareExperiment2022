@@ -1,7 +1,8 @@
 {
     "files.associations": {
         "cmath": "cpp",
-        "complex": "cpp"
+        "complex": "cpp",
+        "ratio": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }

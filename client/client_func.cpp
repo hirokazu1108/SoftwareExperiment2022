@@ -36,10 +36,32 @@ void Collider(void){
     for(int i=0; i<gClientNum; i++){
         for(int j=0; j<bullet_Num;j++){
             if(OnColliderSphere(Sphere(BULLET_RADIUS,array_bullet[j].pos),player[i].collider)){
-                player[i].hp--;
+                Ability(array_bullet[j].shooter_id);
+                printf("speed:%f\n" ,player[array_bullet[j].shooter_id].speed);
+                player[i].hp -= DAMAGE * player[array_bullet[j].shooter_id].rate_attack;
                 deleteBullet(j);
                 printf("hirokazu: hit client[%d]\n",i);
             }
         }
+    }
+}
+
+void Ability(int id){
+    switch(player[id].ability){
+        
+        case UP_ATTACK:
+        player[id].rate_attack += 0.1;
+        break;
+
+        case HEAL:
+        player[id].hp += 1.0;
+        break;
+
+        case UP_SPEED:
+        player[id].speed += 0.5;
+        break;
+
+        default:
+        break;
     }
 }

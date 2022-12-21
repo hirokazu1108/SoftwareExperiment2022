@@ -44,7 +44,7 @@ int main(int argc,char *argv[])
 	for(int i = 0; i< gClientNum;i++)
     {
         player[i].enabled = true;
-        player[i].spead = 0.0;
+        player[i].speed = 0.0;
         player[i].dir.x = 0;
         player[i].dir.y = 0;
         player[i].dir.z = 0;
@@ -59,10 +59,12 @@ int main(int argc,char *argv[])
         player[i].turn3 = 0;
         player[i].type = 0;
         player[i].mp = 0;
-        player[i].hp = 3;
+        player[i].hp = 3.0;
+        player[i].rate_attack = 1.0;
         player[i].reloadTime= 0;
         player[i].collider.radius = 1.0;
         player[i].collider.pos = player[i].pos;
+        player[i].ability = UP_SPEED;
     }
 
   /* ゲーム情報の初期化 */

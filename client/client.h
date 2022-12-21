@@ -36,6 +36,8 @@ extern void SendBulletDataCommand(int num);
 extern bool OnColliderSphere(Sphere a, Sphere b);
 extern void drawPlayerCollider(void);
 extern void Collider(void);
+extern void Ability(int id);
+
 
 extern int		gClientNum;
 extern int		clientID;
