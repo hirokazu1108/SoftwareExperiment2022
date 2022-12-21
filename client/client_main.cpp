@@ -104,6 +104,7 @@ void deleteBullet(int index);
 void interval_attack(int interval_attackID);    // 綣�??????????????????????????????????????
 void Circle2D(float radius,float x,float y);
 void Oval2D(float radius,int x,int y,float ovalx,float ovaly);
+float calmini(int f,float pp, float ep);
 #define TEX_HEIGHT 32
 #define TEX_WIDTH 32
 static GLubyte image[TEX_HEIGHT][TEX_WIDTH][4];
@@ -455,7 +456,7 @@ void display(void)
     //glEnable(GL_LIGHT0);
     glPopMatrix();
 
-
+ 
 
     glPushMatrix();
     //glDisable(GL_LIGHTING);
@@ -467,10 +468,30 @@ void display(void)
     //glRectf( -0.5f, -1.7f, 0, 2);
     glPopMatrix();
 
+    //ここでじぶんをひょうじします
+    glPushMatrix();
+    uiSetting();
+    glColor3f( 1.0f, 0.0f, 0.0f );
+    Circle2D(0.03,-1.8f,1.6f);
+    glPopMatrix();
 
+    //ここで敵をひょうじします
+    int num;
+    for(num = 0; num < gClientNum ; num++){
+        if(num == clientID){
 
-    //drawPlayerCollider();
+        }
+        else{
+            glPushMatrix();
+            glTranslatef(0,0,0.1 );
+            uiSetting();
+            glColor3f( 0.0f, 1.0f, 0.0f );
+            Circle2D(0.03,calmini(1,player[clientID].pos.x,player[num].pos.x),calmini(2,player[clientID].pos.z,player[num].pos.z));
+            glPopMatrix();
+        }
+    }
 
+    
     glFlush();
     /* ?�??????????????CG???????????? */
     glutSwapBuffers();
@@ -494,6 +515,53 @@ void display(void)
     
 }
 
+/****************************
+ fが１ならｘ。２ならｙ。
+******************************/
+float calmini(int f,float pp, float ep){
+    float point;
+
+    point = ep - pp;
+    printf("%d:%lf\n",f,point);
+    if(point/200 > 1 || point/200 < -1){
+        if(f == 1){
+            if(point > 0){
+                point = -1.33;
+            }
+            else{
+                point = -2.27;
+            }
+        }
+        else{
+            if(point > 0){
+                point = 2.07;
+            }
+            else{
+                point = 1.13;
+            }
+        }
+    }
+    else{
+        if(f == 1){
+            if(point > 0){
+                point = -1.765 + point/200;
+            }
+            else{
+                point = -1.765 + point/200;
+            }
+        }
+        else{
+            if(point > 0){
+                point = 1.58 -  point/200;
+            }
+            else{
+                point = 1.58 +  -1*point/200;
+            }
+        }
+    }
+   
+    return point;
+}
 
 void Circle2D(float radius,float x,float y)
 {
