@@ -43,7 +43,6 @@ int ExecuteCommand(char command,int pos)
         case BULLETDATA_COMMAND:{
             BULLET b;
             RecvData(pos, &b, sizeof(BULLET));
-            printf("%f, %f, %f\n", b.pos.x, b.pos.y, b.pos.z);
 			for(int i = 0; i < gClientNum; i++){
                 if(i != pos){
                     SendData(i,&command,sizeof(char));

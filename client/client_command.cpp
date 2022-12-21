@@ -37,7 +37,6 @@ int ExecuteCommand(char command)
             BULLET b;
             RecvData(&b, sizeof(BULLET));
             array_bullet.push_back(BULLET(b));
-            printf("rec:%f, %f, %f\n", array_bullet[bullet_Num].pos.x, array_bullet[bullet_Num].pos.y, array_bullet[bullet_Num].pos.z);
             bullet_Num++;   
         }
         break;
