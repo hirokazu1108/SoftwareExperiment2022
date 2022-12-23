@@ -104,7 +104,7 @@ void deleteBullet(int index);
 void interval_attack(int interval_attackID);    // 綣�??????????????????????????????????????
 void Circle2D(float radius,float x,float y);
 void Oval2D(float radius,int x,int y,float ovalx,float ovaly);
-float calmini(int f,float pp, float ep);
+float calmini(int f,int pnum,float ppx, float epx,float ppy, float epy);
 #define TEX_HEIGHT 32
 #define TEX_WIDTH 32
 static GLubyte image[TEX_HEIGHT][TEX_WIDTH][4];
@@ -152,7 +152,7 @@ int main(int argc, char **argv)
     for(int i = 0; i< gClientNum;i++)
     {
         player[i].enabled = true;
-        player[i].spead = 0.0;
+        player[i].speed = 0.0;
         player[i].dir.x = 0;
         player[i].dir.y = 0;
         player[i].dir.z = 0;
@@ -486,7 +486,7 @@ void display(void)
             glTranslatef(0,0,0.1 );
             uiSetting();
             glColor3f( 0.0f, 1.0f, 0.0f );
-            Circle2D(0.03,calmini(1,player[clientID].pos.x,player[num].pos.x),calmini(2,player[clientID].pos.z,player[num].pos.z));
+            Circle2D(0.03,calmini(1,clientID,player[clientID].pos.x,player[num].pos.x,player[clientID].pos.z,player[num].pos.z),calmini(2,clientID,player[clientID].pos.x,player[num].pos.x,player[clientID].pos.z,player[num].pos.z));
             glPopMatrix();
         }
     }
@@ -518,10 +518,17 @@ void display(void)
 /****************************
  fが１ならｘ。２ならｙ。
 ******************************/
-float calmini(int f,float pp, float ep){
+float calmini(int f,int pnum,float ppx, float epx,float ppy, float epy){
     float point;
+    float pointx;
+    float pointy;
+    float cosin;
+    float sin;
+    float numtiten;
 
-    point = ep - pp;
+    pointx = epx - ppx;
+    pointy = epy - ppy;
+    point = sqrt(pointx*pointx + pointy*pointy);
     printf("%d:%lf\n",f,point);
     if(point/200 > 1 || point/200 < -1){
         if(f == 1){
@@ -543,24 +550,32 @@ float calmini(int f,float pp, float ep){
     }
     else{
         if(f == 1){
+            cosin = pointx/point;
             if(point > 0){
-                point = -1.765 + point/200;
+                //point = -1.765 + point/200;
+                //numtiten =-1.765 + point*sin(player[pnum].turn1)/200;
+                numtiten =-1.765 + point*cosin/200;
             }
             else{
-                point = -1.765 + point/200;
+                //point = -1.765 + point/200;
+                //numtiten =-1.765 - point*sin(player[pnum].turn1)/200;
             }
         }
         else{
+            sin = pointy/point;
             if(point > 0){
-                point = 1.58 -  point/200;
+                //point = 1.58 -  point/200;
+                //numtiten =1.58 - point*cos(player[pnum].turn1)/200;
+                numtiten =1.58 - point*sin/200;
             }
             else{
-                point = 1.58 +  -1*point/200;
+                //point = 1.58 +  -1*point/200;
+                //numtiten =1.58 + point*cos(player[pnum].turn1)/200;
             }
         }
     }
    
-    return point;
+    return numtiten /* cos(player[clientID].turn1)*/;
 }
 
 void Circle2D(float radius,float x,float y)
