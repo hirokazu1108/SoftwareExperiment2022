@@ -50,15 +50,21 @@ void Ability(int id){
     switch(player[id].ability){
         
         case UP_ATTACK:
-        player[id].rate_attack += 0.1;
+        if(player[id].rate_attack <= MAX_ATTACK){
+            player[id].rate_attack += 0.1;
+        }
         break;
 
         case HEAL:
-        player[id].hp += 1.0;
+        if(player[id].hp <= MAX_HP){
+            player[id].hp += 1.0;
+        }
         break;
 
         case UP_SPEED:
-        player[id].speed += 0.5;
+        if(player[id].speed <= MAX_SPEED){
+            player[id].speed += 0.5;
+        }
         break;
 
         default:
