@@ -8,7 +8,7 @@ void PlayerInit(void){
     for(int i = 0; i< gClientNum;i++)
     {
         player[i].enabled = true;
-        player[i].speed = 0.0;
+        player[i].speed = 1.0;
         player[i].dir.x = 0;
         player[i].dir.y = 0;
         player[i].dir.z = 0;
@@ -18,12 +18,14 @@ void PlayerInit(void){
         player[i].upVec.x = 0;
         player[i].upVec.y = 0;
         player[i].upVec.z = 0;
+	player[i].rate_attack = 1.0;
         player[i].turn1 = 0;
         player[i].turn2 = 0;
         player[i].turn3 = 0;
         player[i].type = 0;
         player[i].mp = 0;
-        player[i].hp = 3;
+        player[i].hp = 3.0;
+	player[i].ability = UP_ATTACK;
         player[i].skill = SKILL_ATTACK;
         player[i].special = SPECIAL_BIGBULLET;
         for(int j=0; j<PARAMATER_NUM; j++)
