@@ -8,7 +8,7 @@ static int	gSocket;	/* ソケット */
 static fd_set	gMask;	/* select()用のマスク */
 static int	gWidth;		/* gMask中ののチェックすべきビット数 */
 
-static void GetAllName(int *clientID,int *num,char clientNames[][MAX_NAME_SIZE]);
+static void GetAllName(int *clientID,int *num,char clientNames[][NAME_MAX_LENGTH+1]);
 static void SetMask(void);
 
 
@@ -22,12 +22,12 @@ static void SetMask(void);
 		  char	clientNames[][]		: 全クライアントのユーザー名
 出力	: コネクションに失敗した時-1,成功した時0
 *****************************************************************/
-int SetUpClient(char *hostName,u_short port,int *clientID,int *num,char clientNames[][MAX_NAME_SIZE])
+int SetUpClient(char *hostName,u_short port,int *clientID,int *num,char clientNames[][NAME_MAX_LENGTH+1])
 {
     struct hostent	*servHost;
     struct sockaddr_in	server;
     int			len;
-    char		str[BUF_SIZE];
+    SaveData data;
 
     /* ホスト名からホスト情報を得る */
     if((servHost = gethostbyname(hostName))==NULL){
@@ -54,23 +54,19 @@ int SetUpClient(char *hostName,u_short port,int *clientID,int *num,char clientNa
     }
     fprintf(stderr,"connected\n");
 
-    /* 名前を読み込みサーバーに送る */
-    do{
-		printf("Enter Your Name\n");
-		fgets(str,BUF_SIZE,stdin);
-		len = strlen(str)-1;
-		str[len]='\0';
-    }while(len>MAX_NAME_SIZE-1 || len==0);
-    SendData(str,MAX_NAME_SIZE);
+    /* ゲームデータを読み込んで名前を読み取る */
+    ReadDataFile(&data);
+    SendData(data.clientName,sizeof(char)*(NAME_MAX_LENGTH+1));
 
     printf("Please Wait\n");
 
     /* 全クライアントのユーザー名を得る */
     GetAllName(clientID,num,clientNames);
 
+
     /* select()のためのマスク値を設定する */
     SetMask();
-    
+
     return 0;
 }
 
@@ -163,7 +159,7 @@ static
 		  char		clientNames[][]	: 全クライアントのユーザー名
 出力	: なし
 *****************************************************************/
-static void GetAllName(int *clientID,int *num,char clientNames[][MAX_NAME_SIZE])
+static void GetAllName(int *clientID,int *num,char clientNames[][NAME_MAX_LENGTH+1])
 {
     int	i;
 
@@ -174,7 +170,7 @@ static void GetAllName(int *clientID,int *num,char clientNames[][MAX_NAME_SIZE])
 
     /* 全クライアントのユーザー名を読み込む */
     for(i=0;i<(*num);i++){
-		RecvData(clientNames[i],MAX_NAME_SIZE);
+		  RecvData(clientNames[i],sizeof(char)*(NAME_MAX_LENGTH+1));
     }
 #ifndef NDEBUG
     printf("#####\n");
