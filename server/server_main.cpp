@@ -4,11 +4,14 @@ int	gClientNum; //クライアント数
 Player *player;
 Game game;
 
+uiInfo gUi;
+static Uint32 PlayTimer(Uint32 interval, void* param);
+
 int main(int argc,char *argv[])
 {
 
 	int	endFlag = 1;
-  	u_short port = PORT;
+  u_short port = PORT;
 
 	/* 引き数チェック */
   switch (argc) {
@@ -28,44 +31,42 @@ int main(int argc,char *argv[])
 		exit(-1);
 	}
     port = atoi(argv[2]);
+    strcpy(gUi.port,argv[2]);
     break;
   default:
     fprintf(stderr, "Usage: %s [number of clients] [port number]\n", argv[0]);
     return 1;
   }
+
+
+  /** 初期化処理 **/
+    /* SDL */
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0) {
+        return PrintError(SDL_GetError());
+    }
+    /** UI初期化 **/
+    if (InitWindow() < 0) {
+        PrintError("failed to initialize Windows");
+        EndWindow();
+        return 0;
+    }
+
+  //タイマー起動
+  SDL_TimerID ptimer = SDL_AddTimer(1000, PlayTimer, NULL);
+  if (ptimer == 0) {
+    PrintError(SDL_GetError());
+    EndWindow();
+    return 0;
+  }
+
 	/* クライアントとの接続 */
 	if(SetUpServer(gClientNum,port) == -1){
 		fprintf(stderr,"Cannot setup server\n");
 		exit(-1);
 	}
+  EndWindow();
 
-    /* キャラ情報の初期化 */
-	player = (Player*)malloc(sizeof(Player)*gClientNum);
-	for(int i = 0; i< gClientNum;i++)
-    {
-        player[i].enabled = true;
-        player[i].speed = 1.0f;
-        player[i].dir.x = 0;
-        player[i].dir.y = 0;
-        player[i].dir.z = 0;
-        player[i].pos.x = 0;
-        player[i].pos.y = 0;
-        player[i].pos.z = 0;
-        player[i].upVec.x = 0;
-        player[i].upVec.y = 0;
-        player[i].upVec.z = 0;
-        player[i].turn1 = 0;
-        player[i].turn2 = 0;
-        player[i].turn3 = 0;
-        player[i].type = 0;
-        player[i].mp = 0;
-        player[i].hp = 3.0f;
-        player[i].rate_attack = 1.0f;
-        player[i].reloadTime= 0;
-        player[i].collider.radius = 1.0;
-        player[i].collider.pos = player[i].pos;
-        player[i].ability = UP_SPEED;
-    }
+  PlayerInit();
 
   /* ゲーム情報の初期化 */
   game.state = State_Play;
@@ -74,6 +75,40 @@ int main(int argc,char *argv[])
 	while(endFlag){
 		endFlag = SendRecvManager();
 	};
+
+	/* 終了処理 */
+	Ending();
+
+	return 0;
+}
+
+int PrintError(const char* str)
+{
+    fprintf(stderr, "%s\n", str);
+    return -1;
+}
+
+void EndWindow(void){
+    /** 終了処理 **/
+
+    //SDL_RemoveTimer(atimer);
+    DestroyWindow();
+    SDL_Quit();
+
+}
+
+
+//タイマー処理(アニメーションの更新)
+Uint32 PlayTimer(Uint32 interval, void* param)
+{
+  gUi.time_sec ++;
+  if(gUi.time_sec >= 1000){
+    gUi.time_sec = 999;
+  }
+  return interval;
+}
+
+
 
 	/* 終了処理 */
 	Ending();
