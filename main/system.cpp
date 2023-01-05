@@ -1,8 +1,8 @@
 #include "header.h"
 
-int maxButtonNum[SCENE_NUM]={3,3,12,13,12,9};    //¥·¡¼¥ó¤´¤È¤Î¥Ü¥¿¥ó¤ÎºÇÂç¿ô,index¤ÏSceneÎóµóÂÎ¤ËÂĞ±ş
+int maxButtonNum[SCENE_NUM]={3,3,12,13,12,9};    //ã‚·ãƒ¼ãƒ³ã”ã¨ã®ãƒœã‚¿ãƒ³ã®æœ€å¤§æ•°,indexã¯Sceneåˆ—æŒ™ä½“ã«å¯¾å¿œ
 
-bool buttonEnabled = false; //³ÎÄê¥Ü¥¿¥ó¤¬¸«¤¨¤ë¤«Èİ¤«
+bool buttonEnabled = false; //ç¢ºå®šãƒœã‚¿ãƒ³ãŒè¦‹ãˆã‚‹ã‹å¦ã‹
 
 int scrollValue = 0;
 
@@ -24,7 +24,7 @@ void InitSystem(void){
         game.parm[i] = 0;
     
     if(retExists(FILENAME_GAMEDATA)){
-        //¥²¡¼¥à¥Ç¡¼¥¿¤¬Â¸ºß¤¹¤ë¤Ê¤é
+        //ã‚²ãƒ¼ãƒ ãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã™ã‚‹ãªã‚‰
         ReadDataFile(&data);
         sprintf(game.clientName,"%s",data.clientName);
         sprintf(tempName,"%s",game.clientName);
@@ -33,9 +33,17 @@ void InitSystem(void){
         for(int i=0; i<PARAMATER_NUM; i++)
             game.parm[i] = data.parm[i];
     }
+    else{
+        sprintf(data.clientName,"%s",game.clientName);
+        data.skill = game.skill;
+        data.special = game.special;
+        for(int i=0; i<PARAMATER_NUM; i++)
+            data.parm[i] = game.parm[i];
+        WriteDataFile(&data);
+    }
 }
 
-/* ÁªÂò¤·¤Æ¤¤¤ë¥Ü¥¿¥ó¤ÎÈÖ¹æ¤ò¤º¤é¤¹.°ú¿ô¤Ë+1¤Ç¼¡,-1¤ÇÁ°¤Î¥Ü¥¿¥ó¤Ø target¤Ë¤º¤é¤¹ËÜÂÎ¤ò»ØÄê*/
+/* é¸æŠã—ã¦ã„ã‚‹ãƒœã‚¿ãƒ³ã®ç•ªå·ã‚’ãšã‚‰ã™.å¼•æ•°ã«+1ã§æ¬¡,-1ã§å‰ã®ãƒœã‚¿ãƒ³ã¸ targetã«ãšã‚‰ã™æœ¬ä½“ã‚’æŒ‡å®š*/
 void shiftSelect(int shift, int max, int *target){
 
     *target += (shift>=0) ? shift%max : -(-shift)%max;
@@ -47,7 +55,7 @@ void shiftSelect(int shift, int max, int *target){
     }
 }
 
-/* ÁªÂò¤·¤Æ¤¤¤ë¥¹¥Æ¡¼¥¿¥¹¥Ñ¥é¥á¡¼¥¿¤ÎÈÖ¹æ¤ò¤º¤é¤¹.shift ¤¤¤¯¤Ä¤º¤é¤¹¤«,parmIndex ¤º¤é¤·¤¿¤¤¥Ñ¥é¥á¡¼¥¿¤Î¼ïÎà*/
+/* é¸æŠã—ã¦ã„ã‚‹ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®ç•ªå·ã‚’ãšã‚‰ã™.shift ã„ãã¤ãšã‚‰ã™ã‹,parmIndex ãšã‚‰ã—ãŸã„ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®ç¨®é¡*/
 void shiftParmSelect(int shift,PARAMATER index){
     game.parm[index] += shift;
     if(game.parm[index] < -PARAMATER_MAX){
@@ -58,7 +66,7 @@ void shiftParmSelect(int shift,PARAMATER index){
     }
 }
 
-/* ¥¹¥Æ¡¼¥¿¥¹¥Ñ¥é¥á¡¼¥¿¡Êgame.parm¡Ë¤Î¹ç·×ÃÍ¤òÊÖ¤¹ */
+/* ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ï¼ˆgame.parmï¼‰ã®åˆè¨ˆå€¤ã‚’è¿”ã™ */
 int retSumParamater(void){
     int sum=0;
     for(int i=0; i<PARAMATER_NUM; i++){
@@ -67,20 +75,20 @@ int retSumParamater(void){
     return sum;
 }
 
-/* Enter¤Ç¥Ü¥¿¥ó¤¬²¡¤µ¤ì¤¿¤È¤­¤Î½èÍı */
+/* Enterã§ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸã¨ãã®å‡¦ç† */
 void PushedButton(void){
     switch(game.scene){
         case SCENE_Title:
             switch(game.selectButton){
-                case 0://server¥Ü¥¿¥ó
+                case 0://serverãƒœã‚¿ãƒ³
                     game.scene = SCENE_SERVER_0;
                     game.selectButton = 0;
                     break;
-                case 1://client¥Ü¥¿¥ó
+                case 1://clientãƒœã‚¿ãƒ³
                     game.scene = SCENE_CLIENT_0;
                     game.selectButton = 11;
                     break;
-                case 2://customize¥Ü¥¿¥ó
+                case 2://customizeãƒœã‚¿ãƒ³
                     game.scene = SCENE_CUSTOMIZE;
                     game.selectButton = 1;
                     break;
@@ -88,19 +96,19 @@ void PushedButton(void){
             break;
         case SCENE_SERVER_0:
             switch(game.selectButton){
-                case -1://1¿ÍÍÑ¡Ê¥Ç¥Ğ¥Ã¥°¤Î¤ß¼ÂÁõÍ½Äê¡Ë
+                case -1://1äººç”¨ï¼ˆãƒ‡ãƒãƒƒã‚°ã®ã¿å®Ÿè£…äºˆå®šï¼‰
                     game.clientNum = 1;
                     game.scene = SCENE_SERVER_1;
                     break;
-                case 0://2¥Ü¥¿¥ó
+                case 0://2ãƒœã‚¿ãƒ³
                     game.clientNum = 2;
                     game.scene = SCENE_SERVER_1;
                     break;
-                case 1://3¥Ü¥¿¥ó
+                case 1://3ãƒœã‚¿ãƒ³
                     game.clientNum = 3;
                     game.scene = SCENE_SERVER_1;
                     break;
-                case 2://4¥Ü¥¿¥ó
+                case 2://4ãƒœã‚¿ãƒ³
                     game.clientNum = 4;
                     game.scene = SCENE_SERVER_1;
                     break;
@@ -109,11 +117,11 @@ void PushedButton(void){
             break;
         case SCENE_SERVER_1:
             switch(game.selectButton){
-                case 10://ºï½ü¥Ü¥¿¥ó
+                case 10://å‰Šé™¤ãƒœã‚¿ãƒ³
                     if(strlen(game.port)>0)
                         game.port[strlen(game.port)-1] = '\0';
                     break;
-                case 11://³ÎÄê¥Ü¥¿¥ó
+                case 11://ç¢ºå®šãƒœã‚¿ãƒ³
                     if(strlen(game.port) != 4){
                         break;
                     }
@@ -125,9 +133,9 @@ void PushedButton(void){
                 default:
                     if(strlen(game.port) < 4){
                         const char ch = '0'+game.selectButton;
-                        sprintf(game.port,"%s%c",game.port,ch);   // Ê¸»úÎó¤ÎÏ¢·ë ²¡¤·¤¿ÈÖ¹æ2,¤â¤È¤ÎÆşÎÏÃÍ19¤Ê¤é¡¡192¤Ë¤¹¤ë
+                        sprintf(game.port,"%s%c",game.port,ch);   // æ–‡å­—åˆ—ã®é€£çµ æŠ¼ã—ãŸç•ªå·2,ã‚‚ã¨ã®å…¥åŠ›å€¤19ãªã‚‰ã€€192ã«ã™ã‚‹
                         if(strlen(game.port)==4){
-                            game.selectButton = 11;//4Ê¸»ú¤Ë¤Ê¤Ã¤¿¤Ê¤é³ÎÄê¥Ü¥¿¥ó¤Ë¤º¤é¤¹
+                            game.selectButton = 11;//4æ–‡å­—ã«ãªã£ãŸãªã‚‰ç¢ºå®šãƒœã‚¿ãƒ³ã«ãšã‚‰ã™
                         }
                     }
                     break;
@@ -135,16 +143,16 @@ void PushedButton(void){
             break;
         case SCENE_CLIENT_0:
             switch(game.selectButton){
-                case 10://ºï½ü¥Ü¥¿¥ó
+                case 10://å‰Šé™¤ãƒœã‚¿ãƒ³
                     if(strlen(game.deviceNum)>0)
                         game.deviceNum[strlen(game.deviceNum)-1] = '\0';
                     break;
-                case 11://localHost¥Ü¥¿¥ó
+                case 11://localHostãƒœã‚¿ãƒ³
                     game.deviceNum[0] = 'L';
                     printf("LocalHost\n");
                     game.scene = SCENE_CLIENT_1;
                     game.selectButton = 0;
-                case 12://³ÎÄê¥Ü¥¿¥ó
+                case 12://ç¢ºå®šãƒœã‚¿ãƒ³
                     if(strlen(game.deviceNum) != 3){
                         break;
                     }
@@ -155,9 +163,9 @@ void PushedButton(void){
                 default:
                     if(strlen(game.deviceNum) < 3){
                         const char ch = '0'+game.selectButton;
-                        sprintf(game.deviceNum,"%s%c",game.deviceNum,ch);   // Ê¸»úÎó¤ÎÏ¢·ë ²¡¤·¤¿ÈÖ¹æ2,¤â¤È¤ÎÆşÎÏÃÍ19¤Ê¤é¡¡192¤Ë¤¹¤ë
+                        sprintf(game.deviceNum,"%s%c",game.deviceNum,ch);   // æ–‡å­—åˆ—ã®é€£çµ æŠ¼ã—ãŸç•ªå·2,ã‚‚ã¨ã®å…¥åŠ›å€¤19ãªã‚‰ã€€192ã«ã™ã‚‹
                         if(strlen(game.deviceNum)==3){
-                            game.selectButton = 12;//3Ê¸»ú¤Ë¤Ê¤Ã¤¿¤Ê¤é³ÎÄê¥Ü¥¿¥ó¤Ë¤º¤é¤¹
+                            game.selectButton = 12;//3æ–‡å­—ã«ãªã£ãŸãªã‚‰ç¢ºå®šãƒœã‚¿ãƒ³ã«ãšã‚‰ã™
                         }
                     }
                     break;
@@ -165,11 +173,11 @@ void PushedButton(void){
             break;
         case SCENE_CLIENT_1:
             switch(game.selectButton){
-                case 10://ºï½ü¥Ü¥¿¥ó
+                case 10://å‰Šé™¤ãƒœã‚¿ãƒ³
                     if(strlen(game.port)>0)
                         game.port[strlen(game.port)-1] = '\0';
                     break;
-                case 11://³ÎÄê¥Ü¥¿¥ó
+                case 11://ç¢ºå®šãƒœã‚¿ãƒ³
                     if(strlen(game.port) != 4){
                         break;
                     }
@@ -181,9 +189,9 @@ void PushedButton(void){
                 default:
                     if(strlen(game.port) < 4){
                         const char ch = '0'+game.selectButton;
-                        sprintf(game.port,"%s%c",game.port,ch);   // Ê¸»úÎó¤ÎÏ¢·ë ²¡¤·¤¿ÈÖ¹æ2,¤â¤È¤ÎÆşÎÏÃÍ19¤Ê¤é¡¡192¤Ë¤¹¤ë
+                        sprintf(game.port,"%s%c",game.port,ch);   // æ–‡å­—åˆ—ã®é€£çµ æŠ¼ã—ãŸç•ªå·2,ã‚‚ã¨ã®å…¥åŠ›å€¤19ãªã‚‰ã€€192ã«ã™ã‚‹
                         if(strlen(game.port)==4){
-                            game.selectButton = 11;//4Ê¸»ú¤Ë¤Ê¤Ã¤¿¤Ê¤é³ÎÄê¥Ü¥¿¥ó¤Ë¤º¤é¤¹
+                            game.selectButton = 11;//4æ–‡å­—ã«ãªã£ãŸãªã‚‰ç¢ºå®šãƒœã‚¿ãƒ³ã«ãšã‚‰ã™
                         }
                     }
                     break;
@@ -198,7 +206,7 @@ void PushedButton(void){
                         break; 
                     default:
                         game.skill = static_cast<SKILL>(game.selectButton_sub-1);
-                        SaveGameData(); //¥²¡¼¥à¥Ç¡¼¥¿¤òÊİÂ¸
+                        SaveGameData(); //ã‚²ãƒ¼ãƒ ãƒ‡ãƒ¼ã‚¿ã‚’ä¿å­˜
                         game.popScene = PopUp_None;
                         break;
                 }
@@ -211,7 +219,7 @@ void PushedButton(void){
                         break; 
                     default:
                         game.special = static_cast<SPECIAL>(game.selectButton_sub-1);
-                        SaveGameData(); //¥²¡¼¥à¥Ç¡¼¥¿¤òÊİÂ¸
+                        SaveGameData(); //ã‚²ãƒ¼ãƒ ãƒ‡ãƒ¼ã‚¿ã‚’ä¿å­˜
                         game.popScene = PopUp_None;
                         break;
                 }
@@ -260,22 +268,22 @@ void LaunchClient(void){
     system(game.command);
 }
 
-/* ¥Õ¥¡¥¤¥ë¤¬Â¸ºß¤¹¤ë¤«¤òÊÖ¤¹ */
+/* ãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã™ã‚‹ã‹ã‚’è¿”ã™ */
 bool retExists(const char *f){
     bool isExist;
     FILE *fp;
     if ( (fp = fopen(f,"r")) != NULL ){
-        // ¥Õ¥¡¥¤¥ë¤¬Â¸ºß¤¹¤ë
+        // ãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã™ã‚‹
         isExist = true;
         fclose(fp);
     }
     else{
-        // ¥Õ¥¡¥¤¥ë¤ÏÂ¸ºß¤·¤Ê¤¤
+        // ãƒ•ã‚¡ã‚¤ãƒ«ã¯å­˜åœ¨ã—ãªã„
         isExist = false;
     }
     return isExist;
 }
-/* ¥²¡¼¥à¥Ç¡¼¥¿¥Õ¥¡¥¤¥ë¤ò½ñ¤­¹ş¤à */
+/* ã‚²ãƒ¼ãƒ ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ›¸ãè¾¼ã‚€ */
 void WriteDataFile(SaveData *data){
     FILE *fp;
     if ( (fp = fopen(FILENAME_GAMEDATA,"wb")) != NULL ){
@@ -287,7 +295,7 @@ void WriteDataFile(SaveData *data){
         exit(1);
     }
 }
-/* ¥²¡¼¥à¥Ç¡¼¥¿¥Õ¥¡¥¤¥ë¤òÆÉ¤ß¹ş¤à */
+/* ã‚²ãƒ¼ãƒ ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚€ */
 void ReadDataFile(SaveData *data){
     FILE *fp;
     if ( (fp = fopen(FILENAME_GAMEDATA,"rb")) != NULL ){
@@ -300,7 +308,7 @@ void ReadDataFile(SaveData *data){
     }
 }
 
-/* ¥²¡¼¥à¤Î¥Ç¡¼¥¿¤ò¥Õ¥¡¥¤¥ë¤Ë½ñ¤­¹ş¤à */
+/* ã‚²ãƒ¼ãƒ ã®ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã«æ›¸ãè¾¼ã‚€ */
 void SaveGameData(void){
     SaveData data;
     sprintf(data.clientName,"%s",game.clientName);
