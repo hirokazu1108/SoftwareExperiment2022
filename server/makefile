@@ -1,58 +1,58 @@
-# ����ѥ���ʤɤ����ܤ���Ƥ��ޤ��󤬡�
-# make�Υǥե����ư��(���ۤΥ롼��)��ȤäƤ��ޤ���
-# make���ɤ�����ư��򤹤�Τ���-n���ץ����ǳ�ǧ�Ǥ��ޤ���
-# �㡧 make -n �������å�
+# コンパイルなどが記載されていませんが，
+# makeのデフォルト動作(暗黙のルール)を使っています．
+# makeがどういう動作をするのかは-nオプションで確認できます．
+# 例： make -n ターゲット
 #
 CC = g++
 TEX = platex
 CFLAGS = -Wall $(COPTIONS)
 LDFLAGS = 
 LOADLIBES = 
-LDLIBS = -lm -lSDL2 -lSDL2_image -lSDL2_ttf -lglut -lGLU -lGL -ljoyconlib -lhidapi-hidraw -lSDL2_gfx
+LDLIBS = -lm -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_gfx -lglut -lGLU -lGL -ljoyconlib -lhidapi-hidraw 
 
 TARGET = SB_server
-SRCS = server_main.cpp server_command.cpp server_net.cpp 
+SRCS = server_main.cpp server_command.cpp server_net.cpp server_win.cpp server_func.cpp
 HEADS = server.h 
 
-# ����˼���Ȥ�ˤϤ��Υ������åȤ�
-#   -g3 �ϥǥХå�����������४�ץ����
+# 課題に取り組むにはこのターゲットで
+#   -g3 はデバッグ情報を埋め込むオプション
 #
-# �������åȻ��ꤷ�ʤ��ȡ��ǽ�Υ������åȤǤ��뤳�줬���Ф��
+# ターゲット指定しないと，最初のターゲットであるこれが選ばれる
 #
 debug: CPPFLAGS = 
 debug: COPTIONS = -g3
 debug: $(TARGET)
 
-# �ǥХå�����������ޤʤ��������å�
-#   -O3 �Ϻ�Ŭ�����ץ����
+# デバッグ情報を埋め込まないターゲット
+#   -O3 は最適化オプション
 #
-# ������θĿͳ�ȯ�ʤɤǡ������ʤ�make����ݤʤɤ˻Ȥ��Ȥ褤
+# ゲームの個人開発などで，完成品をmakeする際などに使うとよい
 #
 release: CPPFLAGS = -DNDEBUG
 release: COPTIONS = -O3 
 release: $(TARGET)
 
-# ���ۤΥ롼��Ǥ�ư��ϰʲ����̤�
-# c���������饪�֥�������
+# 暗黙のルールでの動作は以下の通り
+# cソースからオブジェクト
 #   $(CC) $(CFLAGS) $(CPPFLAGS) -c n.c -o n.o
-# ���֥������Ȥ���¹ԥե�����
+# オブジェクトから実行ファイル
 #   $(CC) $(LDFLAGS) n.o $(LOADLIBES) $(LDLIBS) -o n
 #
 $(TARGET): $(SRCS)
 	$(CC) $(SRCS) $(LDFLAGS) $(LOADLIBES) $(LDLIBS) -o $(TARGET)
 
-# ��ݡ��Ⱥ����ѥ������å�
-# �㤨�� repo.tex ������Ȥ���
-#  make repo.pdf ��pdf�ޤ���������
+# レポート作成用ターゲット
+# 例えば repo.tex があるとき，
+#  make repo.pdf でpdfまで生成する
 #
-# tex����dvi�ؤϰ��ۤΥ롼�� $(TEX) n.tex ���Ȥ���
+# texからdviへは暗黙のルール $(TEX) n.tex が使われる
 #
 %.pdf:%.dvi
 	dvipdfmx $<
 
-# ����ѥ������ľ���������ʤɤˡ�
-# ��֥ե�����ʤɤ������륿�����å�
-#   �����㡧 make clean
+# コンパイルをやり直したい時などに，
+# 中間ファイルなどを削除するターゲット
+#   使用例： make clean
 #
 .PHONY: clean
 clean:
