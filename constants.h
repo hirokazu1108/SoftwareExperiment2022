@@ -1,43 +1,51 @@
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
-/* \ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ */
+/* ヘッダのインクルード */
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
-#include <math.h>
+#include "glm/glm.hpp"
 #include <iostream>
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
 #include<unistd.h>
-#include<sys/types.h>
+#include <math.h>
 #include<assert.h>
-#include "glm/glm.hpp"
+#include <cassert>
 #include <vector>
 #include <algorithm>
+#include <fstream>
+#include<sys/types.h>
 
 
-#define PORT			(u_short)88888	/* ?��????��?????��?ò?��????��????��?????��????��?????��????��?????��????��?????��?????��????��???? */
-#define MAX_CLIENTS		4				/* ?��????��?????��????��?????��????��?????��?±\?��?ð?��????��?????��????��?????��????��?????��????��?????��?²?��????��????��?????��????��?????��????��?ë?��????��?????��????��?????��????��?????��????��?????��????��???? */
-#define MAX_NAME_SIZE	10 				/* ?��????��?????��????��?????��????��?????��????��?????��????��?????��????��?????��?????��????��?????��????��?ë?��????��?????��????��?????��????��?????��????��?????��????��????*/
-#define MAX_BULLET_NUM   25    // 弾�?????大�??
-#define BULLET_SPEED   0.5f     // 弾�?????�??
-#define DAMAGE         1.0f
-#define MAX_DATA		200				/* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½???��?¿½ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½???��?¿½ë?��?ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½? */
+#define PORT			(u_short)88888	/* デフォルトポート番号 */
+#define MAX_CLIENTS		4				/* 最大プレイ人数 */
+#define MAX_DATA		200
+#define MAX_BULLET_NUM   25    // 最大弾数
+#define BULLET_SPEED   0.5f     // 弾の速度
+#define DAMAGE         1.0f				
 #define MAX_HP 3.0f
 #define MAX_SPEED 2.0f
 #define MAX_ATTACK 2.0f
+#define BULLET_RADIUS 0.3       //radius of bullet collider
 
 #define PLAYERDATA_COMMAND 's'
 #define END_COMMAND 'e'
 #define BULLETDATA_COMMAND 'b'
 #define RANKING_DATA 'r'
 
-#define BULLET_RADIUS 0.3 //���Ⱦ��
+#define PARAMATER_MAX 5         //max value of status paramaters
+#define PARAMATER_NUM 5         //num of status paramaters
+#define PARAMATER_SUM_MAX 10    //max of sum of status paramaters
+#define NAME_MAX_LENGTH 20      //max length of client name
+#define SKILL_NUM 3             //num of skills
+#define SPECIAL_NUM 3           //num of specials
+#define FILENAME_GAMEDATA "../data/gamedata.bin"
 
 typedef enum {
-    State_Title,
+    State_Wait,
     State_Play,
     State_Result,
 }GameState;
@@ -48,7 +56,27 @@ typedef enum{
     UP_SPEED,
 }Ability_Type;
 
-/* ������Ƚ��ε�? */
+typedef enum{
+    PARM_ATTACK,
+    PARM_HP,
+    PARM_SPEED,
+    PARM_SIZE,
+    PARM_MP,
+}PARAMATER;
+
+typedef enum{
+    SKILL_ATTACK,
+    SKILL_HP,
+    SKILL_SPEED,
+}SKILL;
+
+typedef enum{
+    SPECIAL_LASER,
+    SPECIAL_BIGBULLET,
+    SPECIAL_POWERUP,
+}SPECIAL;
+
+/* 球の当たり判定 */
 class Sphere{
     public:
     float radius;
@@ -73,6 +101,12 @@ public:
     int reloadTime;
     Sphere collider;
     Ability_Type ability;
+    SKILL skill;
+    SPECIAL special;
+    int parm[PARAMATER_NUM];
+    SKILL skill;
+    SPECIAL special;
+    int parm[PARAMATER_NUM];
 };
 
 class Game{
@@ -82,7 +116,7 @@ class Game{
         std::vector<int> ranking; //indexにnを入れると第n位のクライアント番号を返す
 };
 
-/* 弾�??????????? */
+/* 弾のクラス */
 class BULLET{
     public:
         int shooter_id;
@@ -100,6 +134,13 @@ class BULLET{
         }
 };
 
-
+/* the class to save game data */
+typedef class{
+    public:
+    char clientName[NAME_MAX_LENGTH+1];
+    SKILL skill;
+    SPECIAL special;
+    int parm[PARAMATER_NUM];
+}SaveData;
 
 #endif 
