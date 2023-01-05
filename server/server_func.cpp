@@ -1,14 +1,14 @@
 #include "server.h"
 
-int maxButtonNum[SCENE_NUM]={};    //¥·¡¼¥ó¤´¤È¤Î¥Ü¥¿¥ó¤ÎºÇÂç¿ô,index¤ÏSceneÎóµóÂÎ¤ËÂĞ±ş
+int maxButtonNum[SCENE_NUM]={};    //ã‚·ãƒ¼ãƒ³ã”ã¨ã®ãƒœã‚¿ãƒ³ã®æœ€å¤§æ•°,indexã¯Sceneåˆ—æŒ™ä½“ã«å¯¾å¿œ
 
 void PlayerInit(void){
-    /* ¥­¥ã¥é¾ğÊó¤Î½é´ü²½ */
+    /* ã‚­ãƒ£ãƒ©æƒ…å ±ã®åˆæœŸåŒ– */
 	player = (Player*)malloc(sizeof(Player)*gClientNum);
 	for(int i = 0; i< gClientNum;i++)
     {
         player[i].enabled = true;
-        player[i].spead = 0.0;
+        player[i].speed = 0.0;
         player[i].dir.x = 0;
         player[i].dir.y = 0;
         player[i].dir.z = 0;
@@ -34,7 +34,7 @@ void PlayerInit(void){
     }
 }
 
-/* ÁªÂò¤·¤Æ¤¤¤ë¥Ü¥¿¥ó¤ÎÈÖ¹æ¤ò¤º¤é¤¹.°ú¿ô¤Ë+1¤Ç¼¡,-1¤ÇÁ°¤Î¥Ü¥¿¥ó¤Ø */
+/* é¸æŠã—ã¦ã„ã‚‹ãƒœã‚¿ãƒ³ã®ç•ªå·ã‚’ãšã‚‰ã™.å¼•æ•°ã«+1ã§æ¬¡,-1ã§å‰ã®ãƒœã‚¿ãƒ³ã¸ */
 void shiftButtonSelect(int shift, int max){
 
     gUi.selectButton += (shift>=0) ? shift%max : -(-shift)%max;
