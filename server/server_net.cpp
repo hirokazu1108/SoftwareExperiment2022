@@ -13,6 +13,7 @@ static int MultiAccept(int request_soc,int num);
 static void Enter(int pos, int fd);
 static void SetMask(int maxfd);
 static void SendAllName(void);
+bool InputEvent(void);
 
 
 /*****************************************************************
@@ -210,16 +211,49 @@ static int MultiAccept(int request_soc,int num)
 {
     int	i,j;
     int	fd;
+    int c_num = 0;
+    fd_set	readOK;
+    int ret_select;
+    struct timeval	timeout;
+
+    /* select()の待ち時間を設定する */
+    timeout.tv_sec = 0;
+    timeout.tv_usec = 10;
     
-    for(i=0;i<num;i++){
-		if((fd = accept(request_soc,NULL,NULL)) == -1){
-			fprintf(stderr,"Accept error\n");
-			for(j=i-1;j>=0;j--)close(gClients[j].fd);
-			return -1;
-		}
-		Enter(i,fd);
+    while(1){
+
+      FD_ZERO(&readOK);
+      FD_SET(request_soc,&readOK);
+      /* サーバーからデータが届いているか調べる */
+      ret_select = select(request_soc+1,&readOK,NULL,NULL,&timeout);
+      if(ret_select == -1)
+      {
+        fprintf(stderr,"select error\n");
+        return -1;
+      }
+      else if(ret_select == 0){
+        //fprintf(stderr,"timeout\n");
+      }
+      else{
+        if((fd = accept(request_soc,NULL,NULL)) == -1){
+          fprintf(stderr,"Accept error\n");
+          for(j=c_num-1;j>=0;j--)close(gClients[j].fd);
+          return -1;
+        }
+        Enter(c_num,fd);
+        c_num++;
+        gUi.currentNum = c_num;
+      }
+      RenderWaitClientWindow();
+
+      if(!InputEvent()){
+        exit(0);
+      }
+      if(c_num == num){
+        return fd;
+      }
     }
-    return fd;
+    
 }
 
 /*****************************************************************
@@ -232,7 +266,7 @@ static int MultiAccept(int request_soc,int num)
 static void Enter(int pos, int fd)
 {
 	/* クライアントのユーザー名を受信する */
-	read(fd,gClients[pos].name,MAX_NAME_SIZE);
+	read(fd,gClients[pos].name,sizeof(char)*(NAME_MAX_LENGTH+1));
 #ifndef NDEBUG
 	printf("%s is accepted\n",gClients[pos].name);
 #endif
@@ -271,10 +305,35 @@ static void SendAllName(void)
 		SendData(i,&tmp1,sizeof(int));
 		SendData(i,&tmp2,sizeof(int));
 		for(j=0;j<gClientNum;j++){
-			SendData(i,gClients[j].name,MAX_NAME_SIZE);
+			SendData(i,gClients[j].name,sizeof(char)*(NAME_MAX_LENGTH+1));
+
 		}
 	}
 }
 
-
-
+/* 入力イベントの読み取り */
+bool InputEvent(void)
+{
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+        switch (event.type) {
+        case SDL_QUIT:
+            /** 終了指示 **/
+            return false;
+        case SDL_KEYDOWN:
+            if (event.key.repeat)
+                break;
+            /** キーが押された方向を設定 **/
+            switch (event.key.keysym.sym) {
+            case SDLK_ESCAPE:
+                /** 終了指示 **/
+                return false;
+            default:
+                break;
+            }
+            break;
+        
+        }
+    }
+    return true;
+}

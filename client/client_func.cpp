@@ -1,5 +1,49 @@
 #include "client.h"
 
+void PlayerInit(void){
+     /* Playerの初期化 */
+    SaveData data;
+
+	player = (Player*)malloc(sizeof(Player)*gClientNum);
+    for(int i = 0; i< gClientNum;i++)
+    {
+        player[i].enabled = true;
+        player[i].speed = 1.0;
+        player[i].dir.x = 0;
+        player[i].dir.y = 0;
+        player[i].dir.z = 0;
+        player[i].pos.x = 0;
+        player[i].pos.y = 0;
+        player[i].pos.z = 0;
+        player[i].upVec.x = 0;
+        player[i].upVec.y = 0;
+        player[i].upVec.z = 0;
+	player[i].rate_attack = 1.0;
+        player[i].turn1 = 0;
+        player[i].turn2 = 0;
+        player[i].turn3 = 0;
+        player[i].type = 0;
+        player[i].mp = 0;
+        player[i].hp = 3.0;
+	player[i].ability = UP_ATTACK;
+        player[i].skill = SKILL_ATTACK;
+        player[i].special = SPECIAL_BIGBULLET;
+        for(int j=0; j<PARAMATER_NUM; j++)
+            player[i].parm[j] = 0;
+        player[i].reloadTime= 0;
+        player[i].collider.radius = 1.0;
+        player[i].collider.pos = player[i].pos;
+    }
+
+    /* 自分のゲームデータファイルを読み込んでデータを反映させる */
+    ReadDataFile(&data);
+    player[clientID].skill = data.skill;
+    player[clientID].special = data.special;
+    for(int i=0; i<PARAMATER_NUM; i++){
+        player[clientID].parm[i] = data.parm[i];
+    }
+
+}
 
 /* 球同士の当たり判定 */
 bool OnColliderSphere(Sphere a, Sphere b){
@@ -69,5 +113,45 @@ void Ability(int id){
 
         default:
         break;
+    }
+}
+
+/* ファイルが存在するかを返す */
+bool retExists(const char *f){
+    bool isExist;
+    FILE *fp;
+    if ( (fp = fopen(f,"r")) != NULL ){
+        // ファイルが存在する
+        isExist = true;
+        fclose(fp);
+    }
+    else{
+        // ファイルは存在しない
+        isExist = false;
+    }
+    return isExist;
+}
+/* ゲームデータファイルを書き込む */
+void WriteDataFile(SaveData *data){
+    FILE *fp;
+    if ( (fp = fopen(FILENAME_GAMEDATA,"wb")) != NULL ){
+        fwrite(data,sizeof(SaveData),1,fp);
+        fclose(fp);
+    }
+    else{
+        printf("failed to open writefile.\n");
+        exit(1);
+    }
+}
+/* ゲームデータファイルを読み込む */
+void ReadDataFile(SaveData *data){
+    FILE *fp;
+    if ( (fp = fopen(FILENAME_GAMEDATA,"rb")) != NULL ){
+        fread(data,sizeof(SaveData),1,fp);
+        fclose(fp);
+    }
+    else{
+        printf("failed to open readfile.\n");
+        exit(1);
     }
 }
