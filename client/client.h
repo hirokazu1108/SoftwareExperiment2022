@@ -12,7 +12,7 @@
 #define Model_Num 1
 
 /* client_net.cpp */
-extern int SetUpClient(char *hostName,u_short port,int *clientID,int *num,char clientNames[][MAX_NAME_SIZE]);
+extern int SetUpClient(char *hostName,u_short port,int *clientID,int *num,char clientNames[][NAME_MAX_LENGTH+1]);
 extern void CloseSoc(void);
 extern int RecvIntData(int *intData);
 extern void SendData(void *data,int dataSize);
@@ -21,7 +21,7 @@ extern int RecvData(void *data,int dataSize);
 
 
 /* client_win.cpp */
-extern int InitWindows(int clientID,int num,char name[][MAX_NAME_SIZE]);
+extern int InitWindows(int clientID,int num,char name[][NAME_MAX_LENGTH+1]);
 extern void DestroyWindow(void);
 extern void WindowEvent(int num);
 extern void uiSetting(void);
