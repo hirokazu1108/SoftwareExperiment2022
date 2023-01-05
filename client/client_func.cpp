@@ -8,7 +8,7 @@ void PlayerInit(void){
     for(int i = 0; i< gClientNum;i++)
     {
         player[i].enabled = true;
-        player[i].spead = 0.0;
+        player[i].speed = 0.0;
         player[i].dir.x = 0;
         player[i].dir.y = 0;
         player[i].dir.z = 0;
