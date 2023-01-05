@@ -104,14 +104,11 @@ public:
     SKILL skill;
     SPECIAL special;
     int parm[PARAMATER_NUM];
-    SKILL skill;
-    SPECIAL special;
-    int parm[PARAMATER_NUM];
 };
 
 class Game{
     public:
-        char	clientName[MAX_CLIENTS][MAX_NAME_SIZE];
+        char	clientName[MAX_CLIENTS][NAME_MAX_LENGTH+1];
         GameState state;
         std::vector<int> ranking; //indexにnを入れると第n位のクライアント番号を返す
 };
