@@ -107,11 +107,3 @@ Uint32 PlayTimer(Uint32 interval, void* param)
   }
   return interval;
 }
-
-
-
-	/* 終了処理 */
-	Ending();
-
-	return 0;
-}
