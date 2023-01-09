@@ -1,6 +1,6 @@
 #include "client.h"
 
-/*UI¤Î¿Ş·Á¤ò¤³¤Á¤é¤Ë¸ş¤±¤ë*/
+/*UIã®å›³å½¢ã‚’ã“ã¡ã‚‰ã«å‘ã‘ã‚‹ã€‚*/
 void uiSetting(void){
     /*
         glPushMatrix();
@@ -32,7 +32,7 @@ void uiSetting(void){
     m[6] = m[8] * m[1] - m[9] * m[0];
     glLoadMatrixd(m);
     /* 
-        ¤³¤Î´Ø¿ô¤Î¸å¤Ë 
+        ã“ã®é–¢æ•°ã®å¾Œã« 
         glRectf( 1, 1, 2,2);
         glPopMatrix();
     */
