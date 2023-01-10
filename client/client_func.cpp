@@ -161,3 +161,22 @@ void ReadDataFile(SaveData *data){
         exit(1);
     }
 }
+
+/* マッチングに使用する */
+// 0:マッチング中
+// 1:マッチング完了
+// -1:マッチング終了
+void WriteMatchFile(int value){
+    FILE *fp; // FILE型構造体
+	char fname[] = "../data/judgeMatch.txt";
+ 
+	fp = fopen(fname, "w"); // ファイルを開く。失敗するとNULLを返す。
+	if(fp == NULL) {
+		printf("%s file not open!\n", fname);
+		exit (-1);
+	} else {
+		fprintf(fp,"%d",value);
+	}
+ 
+	fclose(fp); // ファイルを閉じる
+}

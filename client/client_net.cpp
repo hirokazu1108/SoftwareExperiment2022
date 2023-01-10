@@ -66,6 +66,8 @@ int SetUpClient(char *hostName,u_short port,int *clientID,int *num,char clientNa
 
     /* select()のためのマスク値を設定する */
     SetMask();
+	
+    WriteMatchFile(1);//1を書き込む　マッチ完了
 
     return 0;
 }

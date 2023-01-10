@@ -1,6 +1,6 @@
 #include "header.h"
 
-int maxButtonNum[SCENE_NUM]={3,3,12,13,12,9};    //シーンごとのボタンの最大数,indexはScene列挙体に対応
+int maxButtonNum[SCENE_NUM]={3,3,12,13,12,0,9};    //シーンごとのボタンの最大数,indexはScene列挙体に対応
 
 bool buttonEnabled = false; //確定ボタンが見えるか否か
 
@@ -41,6 +41,7 @@ void InitSystem(void){
             data.parm[i] = game.parm[i];
         WriteDataFile(&data);
     }
+    WriteMatchFile(0);   //0を書き込む
 }
 
 /* 選択しているボタンの番号をずらす.引数に+1で次,-1で前のボタンへ targetにずらす本体を指定*/
@@ -184,7 +185,7 @@ void PushedButton(void){
                     printf("port:%s\n",game.port);
                     game.selectButton = 0;
                     LaunchClient();
-                    game.scene = SCENE_None;
+                    game.scene = SCENE_CLIENT_WAIT;
                     break;
                 default:
                     if(strlen(game.port) < 4){
@@ -264,8 +265,10 @@ void LaunchClient(void){
     }
     
     std::cout << game.command << '\n';
-    EndProgram();
+    DestroyWindow();
     system(game.command);
+    
+    InitWindow();
 }
 
 /* ファイルが存在するかを返す */
@@ -317,4 +320,50 @@ void SaveGameData(void){
     for(int i=0; i<PARAMATER_NUM; i++)
         data.parm[i] = game.parm[i];
     WriteDataFile(&data);    
+}
+
+// 0:マッチング中
+// 1:マッチング完了
+// -1:マッチング終了
+void ReadMatchFile(void){
+    FILE *fp; // FILE型構造体
+	char fname[] = "../data/judgeMatch.txt";
+ 
+	fp = fopen(fname, "r"); // ファイルを開く。失敗するとNULLを返す。
+	if(fp == NULL) {
+		printf("%s file not open!\n", fname);
+		exit (-1);
+	} else {
+        int ch = 0;
+		fscanf(fp,"%d",&ch);
+        if(ch == 1){
+            printf("complete to match.\n");
+            EndProgram();
+            game.scene = SCENE_None;
+        }
+        else if(ch == -1){
+            printf("failed to match.\n");
+            EndProgram();
+            game.scene = SCENE_None;
+        }
+	}
+	fclose(fp); // ファイルを閉じる
+}
+
+// 0:マッチング中
+// 1:マッチング完了
+// -1:マッチング終了
+void WriteMatchFile(int value){
+    FILE *fp; // FILE型構造体
+	char fname[] = "../data/judgeMatch.txt";
+ 
+	fp = fopen(fname, "w"); // ファイルを開く。失敗するとNULLを返す。
+	if(fp == NULL) {
+		printf("%s file not open!\n", fname);
+		exit (-1);
+	} else {
+		fprintf(fp,"%d",value);
+	}
+ 
+	fclose(fp); // ファイルを閉じる
 }
