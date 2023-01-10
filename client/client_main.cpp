@@ -63,6 +63,7 @@ bool key4 = false;
 bool key5 = false;
 bool key6 = false;
 bool key7 = false;
+bool key8 = false;
 bool startflag = true;
 int bullet_Num = 0;   // ????????????????綣�??????????
 bool can_attack = true;     // 綣�???????????????????�????????true
@@ -430,39 +431,63 @@ void display(void)
     glPopMatrix();
 
  
-
-    glPushMatrix();
-    //glDisable(GL_LIGHTING);
-    //glDisable(GL_LIGHT0);
-    uiSetting();
-    glColor3f( 0.0f, 0.0f, 0.0f );
-    Circle2D(0.5,-1.8f,1.6f);
-    //Oval2D(50.0f,150,80,100.0f,80.0f);
-    //glRectf( -0.5f, -1.7f, 0, 2);
-    glPopMatrix();
-
-    //????????��????��???????��?????????????��??
-    glPushMatrix();
-    uiSetting();
-    glColor3f( 1.0f, 0.0f, 0.0f );
-    Circle2D(0.03,-1.8f,1.6f);
-    glPopMatrix();
-
-    //????????��?��????��?????????????��??
-    int num;
-    for(num = 0; num < gClientNum ; num++){
-        if(num == clientID){
-
+    //ここから上マップ
+    if(key8){
+        glPushMatrix();
+        glDisable(GL_LIGHTING);
+        glDisable(GL_DEPTH_TEST);
+        uiSetting();
+        glColor3f(1.0f,1.0f,1.0f);
+        glRectf(-1,-1,1,1);
+        glColor3f(0.0f,0.0f,0.0f);
+        Circle2D(0.03,0,0);
+        for(int i = 0; i<gClientNum; i++){
+            if(i == clientID){
+                glColor3f(1.0f,0.0f,0.0f);
+            }
+            else{
+                glColor3f(0.0f,1.0f,0.0f);
+            }
+            Circle2D(0.03,player[i].pos.x*-1/1000,player[i].pos.z*-1/1000);
         }
-        else{
-            glPushMatrix();
-            glTranslatef(0,0,0.1 );
-            uiSetting();
-            glColor3f( 0.0f, 1.0f, 0.0f );
-            Circle2D(0.03,calmini(1,clientID,player[clientID].pos.x,player[num].pos.x,player[clientID].pos.z,player[num].pos.z),calmini(2,clientID,player[clientID].pos.x,player[num].pos.x,player[clientID].pos.z,player[num].pos.z));
-            glPopMatrix();
-        }
+
+        glEnable(GL_LIGHTING);
+        glEnable(GL_DEPTH_TEST);
+        glPopMatrix();
     }
+
+      glPushMatrix();
+        glDisable(GL_LIGHTING);
+        glDisable(GL_DEPTH_TEST);
+        uiSetting();
+        glColor3f(1.0f,1.0f,1.0f);
+        glRectf(-2.3,1.0,-1.3,2.0);
+        glColor3f(1.0f,0.0f,0.0f);
+        Circle2D(0.03,-1.8f,1.5f);
+        glColor3f(0.0f,0.0f,0.0f);
+        glRectf(-1.805,1.5,-1.795,2.0);
+        for(int i = 0; i<gClientNum; i++){
+            if(i == clientID){
+               
+            }
+            else{
+                if(player[clientID].pos.y<player[i].pos.y){
+                    glColor3f(0.0f,1.0f,0.0f);
+                }
+                else{
+                glColor3f(0.0f,1.0f,0.0f);
+                }
+            }
+            Circle2D(0.03,calmini(1,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z),calmini(2,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z));
+        }
+
+        glEnable(GL_LIGHTING);
+        glEnable(GL_DEPTH_TEST);
+        glPopMatrix();
+
+
+
+    
 
     
     glFlush();
@@ -503,35 +528,27 @@ float calmini(int f,int pnum,float ppx, float epx,float ppy, float epy){
     pointy = epy - ppy;
     point = sqrt(pointx*pointx + pointy*pointy);
     //printf("%d:%lf\n",f,point);
-    if(point/200 > 1 || point/200 < -1){
-        if(f == 1){
-            if(point > 0){
-                point = -1.33;
-            }
-            else{
-                point = -2.27;
-            }
-        }
-        else{
-            if(point > 0){
-                point = 2.07;
-            }
-            else{
-                point = 1.13;
-            }
-        }
-    }
-    else{
+   
+        
         if(f == 1){
             cosin = pointx/point;
             if(point > 0){
                 //point = -1.765 + point/200;
                 //numtiten =-1.765 + point*sin(player[pnum].turn1)/200;
-                numtiten =-1.765 + point*cosin/200;
+                numtiten =-1.8 + point*cosin/200;
             }
             else{
                 //point = -1.765 + point/200;
                 //numtiten =-1.765 - point*sin(player[pnum].turn1)/200;
+                numtiten =-1.8 + point*cosin/200;
+            }
+            if(numtiten<-2.35||numtiten>-1.28){
+                if(numtiten<-2.35){
+                    numtiten = -2.3;
+                }
+                else if(numtiten>-1.28){
+                    numtiten = -1.3;
+                }
             }
         }
         else{
@@ -539,14 +556,23 @@ float calmini(int f,int pnum,float ppx, float epx,float ppy, float epy){
             if(point > 0){
                 //point = 1.58 -  point/200;
                 //numtiten =1.58 - point*cos(player[pnum].turn1)/200;
-                numtiten =1.58 - point*sin/200;
+                numtiten =1.5 - point*sin/200;
             }
             else{
                 //point = 1.58 +  -1*point/200;
                 //numtiten =1.58 + point*cos(player[pnum].turn1)/200;
+                numtiten =1.5 + point*sin/200;
             }
+            if(numtiten>2.0||numtiten<1.0){
+                if(numtiten>2.0){
+                    numtiten = 2.0;
+                }
+                else if(numtiten<1.0){
+                    numtiten = 1.0;
+                }
         }
-    }
+        }
+    
    
     return numtiten /* cos(player[clientID].turn1)*/;
 }
@@ -836,7 +862,15 @@ void keyboard(unsigned char key, int x, int y)
 
        if(key == ' '){
         key7 = true;
-    }   
+    } 
+    if(key == 'l'){
+        if(key8){
+            key8 = false;
+        }
+        else{
+            key8 = true;
+        }
+    }  
       
     glutPostRedisplay();
     x = y = 0;
