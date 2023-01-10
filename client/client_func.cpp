@@ -25,7 +25,7 @@ void PlayerInit(void){
         player[i].type = 0;
         player[i].attack = DAMAGE;
         player[i].size = 0.0f;
-        player[i].mp = 0;
+        player[i].mp = 0.0f;
         player[i].hp = 3.0;
 	    player[i].ability = UP_ATTACK;
         player[i].skill = SKILL_ATTACK;
@@ -47,7 +47,6 @@ void PlayerInit(void){
     player[clientID].attack += (float)player[clientID].parm[PARM_ATTACK];
     player[clientID].hp += (float)player[clientID].parm[PARM_HP];
     player[clientID].speed += (float)player[clientID].parm[PARM_SPEED];
-    player[clientID].mp += player[clientID].parm[PARM_MP];
     player[clientID].size -= player[clientID].parm[PARM_SIZE];
 
 }

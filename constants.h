@@ -30,6 +30,7 @@
 #define MAX_SPEED 2.0f
 #define MAX_ATTACK 2.0f
 #define BULLET_RADIUS 0.3       //radius of bullet collider
+#define MAX_MP 100.0f
 
 #define PLAYERDATA_COMMAND 's'
 #define END_COMMAND 'e'
@@ -97,7 +98,7 @@ public:
     float turn2;
     float turn3;
     float attack;
-    int mp;
+    float mp;
     float hp;
     float size;
     int reloadTime;
