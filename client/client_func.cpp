@@ -89,7 +89,7 @@ void Collider(void){
             if(OnColliderSphere(Sphere(BULLET_RADIUS,array_bullet[j].pos),player[i].collider)){
                 Ability(array_bullet[j].shooter_id);
                 printf("speed:%f\n" ,player[array_bullet[j].shooter_id].speed);
-                player[i].hp -= (DAMAGE + (float)player[array_bullet[j].shooter_id].parm[PARM_ATTACK]) * player[array_bullet[j].shooter_id].rate_attack;
+                player[i].hp -= player[array_bullet[j].shooter_id].attack * player[array_bullet[j].shooter_id].rate_attack;
                 deleteBullet(j);
                 printf("hirokazu: hit client[%d]\n",i);
             }
@@ -102,7 +102,7 @@ void Ability(int id){
         
         case UP_ATTACK:
         if(player[id].rate_attack <= MAX_ATTACK){
-            player[id].rate_attack += 0.1;
+            player[id].rate_attack += 0.5;
         }
         break;
 
