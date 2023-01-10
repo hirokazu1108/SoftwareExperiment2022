@@ -493,7 +493,7 @@ void display(void)
                     glColor3f(0.0f,1.0f,0.0f);
                 }
                 else{
-                glColor3f(0.0f,1.0f,0.0f);
+                glColor3f(0.0f,0.0f,1.0f);
                 }
             }
             Circle2D(0.03,calmini(1,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z),calmini(2,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z));
