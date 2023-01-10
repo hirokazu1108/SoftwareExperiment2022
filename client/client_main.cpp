@@ -67,6 +67,8 @@ bool key8 = false;
 bool startflag = true;
 int bullet_Num = 0;   // ????????????????綣�??????????
 bool can_attack = true;     // 綣�???????????????????�????????true
+bool can_special = false;
+int cnt_special = 0;
 
 int bf;
 int jnk; //?????????????�????�??????????????�???????�?????
@@ -910,6 +912,10 @@ void keyboard2(unsigned char key, int x, int y)
     case ' ':
         key7 = false;
         break;
+
+    case 'z':
+        can_special = true;
+        break;
     default:
         break;
         
@@ -1379,6 +1385,21 @@ void move(){
        // key6 = false;
        
        }
+       if( player[clientID].pos.x >1000|| player[clientID].pos.x<-1000){
+         player[clientID].pos.x = 0;
+          player[clientID].pos.z = 0;
+           player[clientID].pos.y = 0;
+       }
+        if( player[clientID].pos.z >1000|| player[clientID].pos.z<-1000){
+         player[clientID].pos.x = 0;
+          player[clientID].pos.z = 0;
+           player[clientID].pos.y = 0;
+       }
+        if( player[clientID].pos.y >500|| player[clientID].pos.y<-500){
+         player[clientID].pos.x = 0;
+          player[clientID].pos.z = 0;
+           player[clientID].pos.y = 0;
+       }
 
 
        
@@ -1442,12 +1463,21 @@ void myInit(char *windowTitle)
 }
 
 void create_bullet(int num){
+
     BULLET b;
     b.dir = {-sin(player[clientID].turn1)*cos(player[clientID].turn2), - sin(player[clientID].turn2), -cos(player[clientID].turn1)*cos(player[clientID].turn2)};
-    b.pos = player[clientID].pos + b.dir * 1.5f;
+    b.pos = player[clientID].pos + b.dir * 1.5f; 
+    if(player[clientID].skill == SPECIAL_BIGBULLET && can_special){
+        b.pos = player[clientID].pos + b.dir * 1.5f * 5.0f;
+    }
     b.shooter_id = clientID;
     b.lifetime = 0;
     array_bullet.push_back(BULLET(b));
+    if(can_special){cnt_special++;}
+    if(cnt_special >= 4){
+        can_special = false;
+        cnt_special = 0;
+    }
     bullet_Num++;
     SendBulletDataCommand(num);
 }
@@ -1462,6 +1492,9 @@ void draw_bullet(int num){
         }
         glTranslatef(array_bullet[i].pos.x, array_bullet[i].pos.y, array_bullet[i].pos.z);
         glutSolidSphere(BULLET_RADIUS, 200, 200);
+        if(can_special){
+            glutSolidSphere(BULLET_RADIUS * 5, 200, 200);
+        }
         glPopMatrix();
     }
 }
