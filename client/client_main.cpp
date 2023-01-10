@@ -1348,6 +1348,22 @@ void move(){
          player[clientID].pos.y = player[clientID].pos.y - sin(player[clientID].turn2)*0.1*player[clientID].speed;
          player[clientID].collider.pos = player[clientID].pos;
       
+
+      if(player[clientID].pos.z>1000||player[clientID].pos.z<-1000){
+        player[clientID].pos.x =0;
+        player[clientID].pos.y = 0;
+        player[clientID].pos.z = 0;
+      }
+      if(player[clientID].pos.x>1000||player[clientID].pos.x<-1000){
+        player[clientID].pos.x =0;
+        player[clientID].pos.y = 0;
+        player[clientID].pos.z = 0;
+      }
+      if(player[clientID].pos.y>500||player[clientID].pos.y<-500){
+        player[clientID].pos.x =0;
+        player[clientID].pos.y = 0;
+        player[clientID].pos.z = 0;
+      }
         //printf("%f\n",player[clientID].pos.x);
         
        if(key6==false){
@@ -1363,6 +1379,7 @@ void move(){
        // key6 = false;
        
        }
+
 
        
        
