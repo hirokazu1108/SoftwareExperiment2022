@@ -41,6 +41,7 @@ extern void Ability(int id);
 extern bool retExists(const char *file);
 extern void WriteDataFile(SaveData *data);
 extern void ReadDataFile(SaveData *data);
+extern void WriteMatchFile(int value);
 
 
 extern int		gClientNum;
