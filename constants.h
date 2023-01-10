@@ -96,8 +96,10 @@ public:
     float turn1;
     float turn2;
     float turn3;
+    float attack;
     int mp;
     float hp;
+    float size;
     int reloadTime;
     Sphere collider;
     Ability_Type ability;
