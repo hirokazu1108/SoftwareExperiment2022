@@ -189,6 +189,10 @@ void display(void)
         glutTimerFunc(15, timer, 0); /* add timer to call display func */
         PlayerInit(); //機体の初期化
     }
+
+    if(player[clientID].mp <= MAX_MP){
+        player[clientID].mp += 0.01f +player[clientID].parm[PARM_MP]*0.001;
+    }
 	
     int i;
     float color[4] = {1.0};
@@ -1479,6 +1483,7 @@ void create_bullet(int num){
         cnt_special = 0;
     }
     bullet_Num++;
+    printf("%f\n", player[clientID].mp);
     SendBulletDataCommand(num);
 }
 
