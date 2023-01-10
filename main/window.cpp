@@ -1,17 +1,17 @@
 #include "header.h"
 
-/* ²èÁü¥Ñ¥¹ */
+/* ç”»åƒãƒ‘ã‚¹ */
 static const char *imgFile[IMG_NUM] = { "name.png", "skill.png","special.png","status.png", "explain_skill.png","nowSelectButton.png", "changeButton.png","backButton.png",  "skill_attack.png", "skill_hp.png","skill_speed.png", "pin.png", "back.png","nameChange.png","skillChange.png","selectHikouki.png"};
-static const char *textStr[TEXT_NUM] = {"Space Battle","SERVER","CLIENT","CUSTOMIZE","input client num.","input passcode.","del","Enter","self","input device num.","clpc","0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"," ", "-"};
-/* ¥Õ¥©¥ó¥È¥Ñ¥¹ */
+static const char *textStr[TEXT_NUM] = {"Space Battle","SERVER","CLIENT","CUSTOMIZE","input client num.","input passcode.","del","Enter","self","input device num.","clpc","nowLoading...","0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"," ", "-"};
+/* ãƒ•ã‚©ãƒ³ãƒˆãƒ‘ã‚¹ */
 static char gFontFile[] = "../fonts/Yomogi-Regular.ttf";
 
-/* ¥Ü¥¿¥ó¤Î°ÌÃÖ */
+/* ãƒœã‚¿ãƒ³ã®ä½ç½® */
 std::vector<SDL_Rect> buttonPos[SCENE_NUM];
 
-/* ¥Ñ¥é¥á¡¼¥¿¤Î¾ì½ê */
-static int parm_x[11] = {380,425,475,520,567,618,664,710,756,802,850};//¥Ô¥ó¤ÎxºÂÉ¸
-static int parmText_y[PARAMATER_NUM] ={1025,1160,1297,1435,1565};//¿ôÃÍ¤ÎyºÂÉ¸
+/* ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®å ´æ‰€ */
+static int parm_x[11] = {380,425,475,520,567,618,664,710,756,802,850};//ãƒ”ãƒ³ã®xåº§æ¨™
+static int parmText_y[PARAMATER_NUM] ={1025,1160,1297,1435,1565};//æ•°å€¤ã®yåº§æ¨™
 
 static const SDL_Color gWhite = { 255, 255, 255, 255 };
 static const SDL_Color gBlue  = { 0, 0, 255, 255 };
@@ -19,21 +19,21 @@ static const SDL_Color gBlue  = { 0, 0, 255, 255 };
 ImgInfo uiImg[IMG_NUM];
 ImgInfo textImg[TEXT_NUM];
 
-/* ´Ø¿ô */
+/* é–¢æ•° */
 static int MakeMessage(void);
 static int rectangleColorRect(SDL_Renderer *render, SDL_Rect *rect, Uint32 color);
 static int boxColorRect(SDL_Renderer *render, SDL_Rect *rect, Uint32 color);
 static textName retTextNameFromChar(char ch);
 
-// ¥á¥¤¥ó¥¦¥¤¥ó¥É¥¦¤ÎÉ½¼¨¡¤ÀßÄê
+// ãƒ¡ã‚¤ãƒ³ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ã®è¡¨ç¤ºï¼Œè¨­å®š
 int InitWindow(void)
 {
-    /* SDL_image½é´ü²½ */
+    /* SDL_imageåˆæœŸåŒ– */
     if (IMG_INIT_PNG != IMG_Init(IMG_INIT_PNG)) {
         return PrintError("failed to initialize SDL_image");
     }
 
-    /** ¥á¥¤¥ó¤Î¥¦¥¤¥ó¥É¥¦(É½¼¨²èÌÌ)¤È¥ì¥ó¥À¥é¡¼¤ÎºîÀ® **/
+    /** ãƒ¡ã‚¤ãƒ³ã®ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦(è¡¨ç¤ºç”»é¢)ã¨ãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼ã®ä½œæˆ **/
     game.window = SDL_CreateWindow("main", 0, 0, WD_Width, WD_Height, 0);
     if (game.window == NULL)
         return PrintError(SDL_GetError());
@@ -42,11 +42,11 @@ int InitWindow(void)
     if (game.render == NULL)
         return PrintError(SDL_GetError());
 
-    /** ¥­¥ã¥é²èÁü¤ÎÆÉ¤ß¹ş¤ß **/
-    /* ²èÁü¤Ï¡¤
-     *  ²£Êı¸ş¤Ë¥¢¥Ë¥á¡¼¥·¥ç¥ó¥Ñ¥¿¡¼¥ó
-     *  ½ÄÊı¸ş¤Ë¸ş¤­¥Ñ¥¿¡¼¥ó¡Ê»ş·×²ó¤ê¡¤ºÇ½é¤¬¢¬¡Ë
-     *  ¤¬¤¢¤ë¤ÈÁÛÄê
+    /** ã‚­ãƒ£ãƒ©ç”»åƒã®èª­ã¿è¾¼ã¿ **/
+    /* ç”»åƒã¯ï¼Œ
+     *  æ¨ªæ–¹å‘ã«ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ã‚¿ãƒ¼ãƒ³
+     *  ç¸¦æ–¹å‘ã«å‘ããƒ‘ã‚¿ãƒ¼ãƒ³ï¼ˆæ™‚è¨ˆå›ã‚Šï¼Œæœ€åˆãŒâ†‘ï¼‰
+     *  ãŒã‚ã‚‹ã¨æƒ³å®š
      */
     for (int i = 0; i < IMG_NUM; i++) {
         char pass[128];
@@ -66,11 +66,11 @@ int InitWindow(void)
         }
     }
 
-    /** ¥á¥Ã¥»¡¼¥¸ºîÀ® **/
+    /** ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ä½œæˆ **/
     if (MakeMessage())
         return -1;
 
-    /* ¥Ü¥¿¥ó¤ÎºÂÉ¸¤Î³ÊÇ¼ */
+    /* ãƒœã‚¿ãƒ³ã®åº§æ¨™ã®æ ¼ç´ */
     buttonPos[SCENE_Title].push_back({200,300,600,100}); //server
     buttonPos[SCENE_Title].push_back({200,500,600,100}); //client
     buttonPos[SCENE_Title].push_back({200,700,600,100}); //customize
@@ -88,7 +88,7 @@ int InitWindow(void)
     buttonPos[SCENE_SERVER_1].push_back({420,520,80,80}); //8
     buttonPos[SCENE_SERVER_1].push_back({520,520,80,80}); //9
     buttonPos[SCENE_SERVER_1].push_back({620,460,80,80}); //?
-    buttonPos[SCENE_SERVER_1].push_back({200,600,400,100}); //³ÎÄê
+    buttonPos[SCENE_SERVER_1].push_back({200,600,400,100}); //ç¢ºå®š
     buttonPos[SCENE_CLIENT_0].push_back({120,400,80,80});  //0
     buttonPos[SCENE_CLIENT_0].push_back({220,400,80,80}); //1
     buttonPos[SCENE_CLIENT_0].push_back({320,400,80,80}); //2
@@ -101,7 +101,7 @@ int InitWindow(void)
     buttonPos[SCENE_CLIENT_0].push_back({520,520,80,80}); //9
     buttonPos[SCENE_CLIENT_0].push_back({620,460,80,80}); //?
     buttonPos[SCENE_CLIENT_0].push_back({80,650,100,100}); //localHost
-    buttonPos[SCENE_CLIENT_0].push_back({200,650,400,100}); //³ÎÄê
+    buttonPos[SCENE_CLIENT_0].push_back({200,650,400,100}); //ç¢ºå®š
     buttonPos[SCENE_CLIENT_1].push_back({120,400,80,80});  //0
     buttonPos[SCENE_CLIENT_1].push_back({220,400,80,80}); //1
     buttonPos[SCENE_CLIENT_1].push_back({320,400,80,80}); //2
@@ -113,27 +113,29 @@ int InitWindow(void)
     buttonPos[SCENE_CLIENT_1].push_back({420,520,80,80}); //8
     buttonPos[SCENE_CLIENT_1].push_back({520,520,80,80}); //9
     buttonPos[SCENE_CLIENT_1].push_back({620,460,80,80}); //?
-    buttonPos[SCENE_CLIENT_1].push_back({200,600,400,100}); //³ÎÄê
-    buttonPos[SCENE_CUSTOMIZE].push_back({36,57-scrollValue,236,120}); //Ìá¤ë¥Ü¥¿¥ó
-    buttonPos[SCENE_CUSTOMIZE].push_back({930,130-scrollValue,0,0}); //Ì¾Á°ÊÑ¹¹(´İ¥Ü¥¿¥ó)
-    buttonPos[SCENE_CUSTOMIZE].push_back({900,370-scrollValue,0,0}); //¥¹¥­¥ëÊÑ¹¹(´İ¥Ü¥¿¥ó)
-    buttonPos[SCENE_CUSTOMIZE].push_back({900,700-scrollValue,0,0}); //¥¹¥Ú¥·¥ã¥ëÊÑ¹¹(´İ¥Ü¥¿¥ó)
+    buttonPos[SCENE_CLIENT_1].push_back({200,600,400,100}); //ç¢ºå®š
+    buttonPos[SCENE_CUSTOMIZE].push_back({36,57-scrollValue,236,120}); //æˆ»ã‚‹ãƒœã‚¿ãƒ³
+    buttonPos[SCENE_CUSTOMIZE].push_back({930,130-scrollValue,0,0}); //åå‰å¤‰æ›´(ä¸¸ãƒœã‚¿ãƒ³)
+    buttonPos[SCENE_CUSTOMIZE].push_back({900,370-scrollValue,0,0}); //ã‚¹ã‚­ãƒ«å¤‰æ›´(ä¸¸ãƒœã‚¿ãƒ³)
+    buttonPos[SCENE_CUSTOMIZE].push_back({900,700-scrollValue,0,0}); //ã‚¹ãƒšã‚·ãƒ£ãƒ«å¤‰æ›´(ä¸¸ãƒœã‚¿ãƒ³)
 
 
 
-    /** ¥¦¥¤¥ó¥É¥¦¤Ø¤ÎÉÁ²è **/
-    RenderTitleWindow();
+    if(game.scene == SCENE_Title)
+        RenderTitleWindow();
+    else if(game.scene == SCENE_CLIENT_WAIT)
+        RenderClientWaitWindow();
 
-    /* imageÍøÍÑ½ªÎ»(¥Æ¥¯¥¹¥Á¥ã¤ËÅ¾Á÷¸å¤Ï¥²¡¼¥àÃæ¤Ë»È¤ï¤Ê¤¤¤Î¤Ç) */
+    /* imageåˆ©ç”¨çµ‚äº†(ãƒ†ã‚¯ã‚¹ãƒãƒ£ã«è»¢é€å¾Œã¯ã‚²ãƒ¼ãƒ ä¸­ã«ä½¿ã‚ãªã„ã®ã§) */
     IMG_Quit();
 
     return 0;
 }
 
-/* ¥¦¥¤¥ó¥É¥¦¤Î½ªÎ»½èÍı */
+/* ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ã®çµ‚äº†å‡¦ç† */
 void DestroyWindow(void)
 {
-    /* ¥Æ¥¯¥¹¥Á¥ã¤Ê¤É */
+    /* ãƒ†ã‚¯ã‚¹ãƒãƒ£ãªã© */
     for (int i = 0; i < IMG_NUM; i++)
         SDL_DestroyTexture(uiImg[i].texture);
     for (int i = 0; i < TEXT_NUM; i++)
@@ -143,35 +145,35 @@ void DestroyWindow(void)
     SDL_DestroyWindow(game.window);
 }
 
-/* ¥á¥Ã¥»¡¼¥¸ºîÀ®
+/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ä½œæˆ
  *
- * ÊÖÃÍ
- *   Àµ¾ï½ªÎ»: 0
- *   ¥¨¥é¡¼  : Éé¿ô
+ * è¿”å€¤
+ *   æ­£å¸¸çµ‚äº†: 0
+ *   ã‚¨ãƒ©ãƒ¼  : è² æ•°
  */
 static int MakeMessage(void)
 {
     int ret = 0;
-    /* ¥Õ¥©¥ó¥È¤«¤é¥á¥Ã¥»¡¼¥¸¥Æ¥¯¥¹¥Á¥ãºîÀ® */
-    /* ½é´ü²½ */
+    /* ãƒ•ã‚©ãƒ³ãƒˆã‹ã‚‰ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒ†ã‚¯ã‚¹ãƒãƒ£ä½œæˆ */
+    /* åˆæœŸåŒ– */
     if (TTF_Init() < 0) {
         return PrintError(TTF_GetError());
     }
-    /* ¥Õ¥©¥ó¥È¤ò³«¤¯ */
+    /* ãƒ•ã‚©ãƒ³ãƒˆã‚’é–‹ã */
     TTF_Font *ttf = TTF_OpenFont(gFontFile, 90);
     if (NULL == ttf) {
         ret = PrintError(TTF_GetError());
     }
-    /* ¥á¥Ã¥»¡¼¥¸ºîÀ® */
+    /* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ä½œæˆ */
     SDL_Color cols[TEXT_NUM] = { gBlue };
     for (int i = 0; i < TEXT_NUM && ttf; i++) {
         SDL_Surface *sf;
-        /* ¥Õ¥©¥ó¥È¤ÈÊ¸»úÎó¡¤¿§¤«¤é¥µ¡¼¥Õ¥§¥¤¥¹ºîÀ® */
+        /* ãƒ•ã‚©ãƒ³ãƒˆã¨æ–‡å­—åˆ—ï¼Œè‰²ã‹ã‚‰ã‚µãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ä½œæˆ */
         sf = TTF_RenderUTF8_Blended(ttf, textStr[i], cols[i]);
         if (NULL == sf) {
             ret = PrintError(TTF_GetError());
         } else {
-            /* ¥Æ¥¯¥¹¥Á¥ã¤Ø */
+            /* ãƒ†ã‚¯ã‚¹ãƒãƒ£ã¸ */
             textImg[i].texture = SDL_CreateTextureFromSurface(game.render, sf);
             if (NULL == textImg[i].texture) {
                 ret = PrintError(SDL_GetError());
@@ -179,163 +181,163 @@ static int MakeMessage(void)
             if (0 > SDL_QueryTexture(textImg[i].texture, NULL, NULL, &textImg[i].w, &textImg[i].h)) {
                 PrintError(SDL_GetError());
             }
-            /* ¥µ¡¼¥Õ¥§¥¤¥¹²òÊü(¥Æ¥¯¥¹¥Á¥ã¤ËÅ¾Á÷¸å¤Ï¥²¡¼¥àÃæ¤Ë»È¤ï¤Ê¤¤¤Î¤Ç) */
+            /* ã‚µãƒ¼ãƒ•ã‚§ã‚¤ã‚¹è§£æ”¾(ãƒ†ã‚¯ã‚¹ãƒãƒ£ã«è»¢é€å¾Œã¯ã‚²ãƒ¼ãƒ ä¸­ã«ä½¿ã‚ãªã„ã®ã§) */
             SDL_FreeSurface(sf);
         }
     }
 
-    /* ¥Õ¥©¥ó¥È¤òÊÄ¤¸¤ë */
+    /* ãƒ•ã‚©ãƒ³ãƒˆã‚’é–‰ã˜ã‚‹ */
     TTF_CloseFont(ttf);
-    /* ¥Õ¥©¥ó¥ÈÍøÍÑ½ªÎ»(¥Æ¥¯¥¹¥Á¥ã¤ËÅ¾Á÷¸å¤Ï¥²¡¼¥àÃæ¤Ë»È¤ï¤Ê¤¤¤Î¤Ç) */
+    /* ãƒ•ã‚©ãƒ³ãƒˆåˆ©ç”¨çµ‚äº†(ãƒ†ã‚¯ã‚¹ãƒãƒ£ã«è»¢é€å¾Œã¯ã‚²ãƒ¼ãƒ ä¸­ã«ä½¿ã‚ãªã„ã®ã§) */
     TTF_Quit();
 
     return ret;
 }
 
-/* ¥¦¥¤¥ó¥É¥¦ÉÁ²è
- *  ¥á¥¤¥ó¥¦¥¤¥ó¥É¥¦¤ËÇØ·Ê¡¤¥­¥ã¥é¡¤¥á¥Ã¥»¡¼¥¸¤Ê¤É¤òÅ¾Á÷¤¹¤ë
+/* ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦æç”»
+ *  ãƒ¡ã‚¤ãƒ³ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ã«èƒŒæ™¯ï¼Œã‚­ãƒ£ãƒ©ï¼Œãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãªã©ã‚’è»¢é€ã™ã‚‹
  */
 void RenderTitleWindow(void)
 {
-    //ÇØ·Ê¿§¡ÊÇò¡Ë
+    //èƒŒæ™¯è‰²ï¼ˆç™½ï¼‰
     SDL_SetRenderDrawColor(game.render,255,255,255,255);
     SDL_RenderClear(game.render);
     
-    // Ê¸»ú¤ÎÉ½¼¨¡¡¡ÖGame Title¡×
+    // æ–‡å­—ã®è¡¨ç¤ºã€€ã€ŒGame Titleã€
     textImg[tname_title].drawTexture(300,80);
 
-    //¥Ü¥¿¥ó¤ÎÉ½¼¨¡¡¡Ö¥µ¡¼¥Ğ¡¼¡×
+    //ãƒœã‚¿ãƒ³ã®è¡¨ç¤ºã€€ã€Œã‚µãƒ¼ãƒãƒ¼ã€
     rectangleColorRect(game.render,&buttonPos[SCENE_Title][0],0xff000000);
     textImg[tname_server].drawTexture(350,280);
     
-    //¥Ü¥¿¥ó¤ÎÉ½¼¨¡¡¡Ö¥¯¥é¥¤¥¢¥ó¥È¡×
+    //ãƒœã‚¿ãƒ³ã®è¡¨ç¤ºã€€ã€Œã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã€
     rectangleColorRect(game.render,&buttonPos[SCENE_Title][1],0xff000000);
     textImg[tname_client].drawTexture(350,480);
 
-    //¥Ü¥¿¥ó¤ÎÉ½¼¨¡¡¡Ö¥«¥¹¥¿¥Ş¥¤¥º¡×
+    //ãƒœã‚¿ãƒ³ã®è¡¨ç¤ºã€€ã€Œã‚«ã‚¹ã‚¿ãƒã‚¤ã‚ºã€
     rectangleColorRect(game.render,&buttonPos[SCENE_Title][2],0xff000000);
     textImg[tname_customize].drawTexture(300,680);
 
-    //ÁªÂò¾õ¶·¤ÎÉ½¼¨
+    //é¸æŠçŠ¶æ³ã®è¡¨ç¤º
     boxColorRect(game.render,&buttonPos[SCENE_Title][game.selectButton],0x77777777);
 
     SDL_RenderPresent(game.render);
 }
 
-/* ¥µ¡¼¥Ğ¡¼¤Î¿Í¿ôÆşÎÏ¤Î²èÌÌ */
+/* ã‚µãƒ¼ãƒãƒ¼ã®äººæ•°å…¥åŠ›ã®ç”»é¢ */
 void RenderServerWindow_0(void){
-    //ÇØ·Ê¿§¡ÊÇò¡Ë
+    //èƒŒæ™¯è‰²ï¼ˆç™½ï¼‰
     SDL_SetRenderDrawColor(game.render,255,255,255,255);
     SDL_RenderClear(game.render);
     
-    // Ê¸»ú¤ÎÉ½¼¨¡¡¡Ö¥¯¥é¥¤¥¢¥ó¥È¿Í¿ô¡×
+    // æ–‡å­—ã®è¡¨ç¤ºã€€ã€Œã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆäººæ•°ã€
     textImg[tname_inputNum].drawTexture(300,100);
 
-    //¥Ü¥¿¥ó¤ÎÉ½¼¨¡¡¡Ö2¡×
+    //ãƒœã‚¿ãƒ³ã®è¡¨ç¤ºã€€ã€Œ2ã€
     rectangleColorRect(game.render,&buttonPos[SCENE_SERVER_0][0],0xff000000);
     textImg[tname_2].drawTexture(buttonPos[SCENE_SERVER_0][0].x +10,buttonPos[SCENE_SERVER_0][0].y-10);
     
-    //¥Ü¥¿¥ó¤ÎÉ½¼¨¡¡¡Ö3¡×
+    //ãƒœã‚¿ãƒ³ã®è¡¨ç¤ºã€€ã€Œ3ã€
     rectangleColorRect(game.render,&buttonPos[SCENE_SERVER_0][1],0xff000000);
     textImg[tname_3].drawTexture(buttonPos[SCENE_SERVER_0][1].x+10,buttonPos[SCENE_SERVER_0][1].y-10);
 
-    //¥Ü¥¿¥ó¤ÎÉ½¼¨¡¡¡Ö4¡×
+    //ãƒœã‚¿ãƒ³ã®è¡¨ç¤ºã€€ã€Œ4ã€
     rectangleColorRect(game.render,&buttonPos[SCENE_SERVER_0][2],0xff000000);
     textImg[tname_4].drawTexture(buttonPos[SCENE_SERVER_0][2].x+10,buttonPos[SCENE_SERVER_0][2].y-10);
 
-    //ÁªÂò¾õ¶·¤ÎÉ½¼¨
+    //é¸æŠçŠ¶æ³ã®è¡¨ç¤º
     boxColorRect(game.render,&buttonPos[SCENE_SERVER_0][game.selectButton],0x77777777);
 
     SDL_RenderPresent(game.render);
 }
 
-/* ¥Ñ¥¹¥³¡¼¥ÉÆşÎÏ¤Î²èÌÌ */
+/* ãƒ‘ã‚¹ã‚³ãƒ¼ãƒ‰å…¥åŠ›ã®ç”»é¢ */
 void RenderPasscodeWindow(){
-    //ÇØ·Ê¿§¡ÊÇò¡Ë
+    //èƒŒæ™¯è‰²ï¼ˆç™½ï¼‰
     SDL_SetRenderDrawColor(game.render,255,255,255,255);
     SDL_RenderClear(game.render);
     
-    // Ê¸»ú¤ÎÉ½¼¨¡¡¡Ö¥Ñ¥¹¥³¡¼¥É¡×
+    // æ–‡å­—ã®è¡¨ç¤ºã€€ã€Œãƒ‘ã‚¹ã‚³ãƒ¼ãƒ‰ã€
     textImg[tname_inputPasscode].drawTexture(300,100);
 
-    //ÆşÎÏ¤·¤¿¥İ¡¼¥ÈÈÖ¹æ¤ÎÉ½¼¨
+    //å…¥åŠ›ã—ãŸãƒãƒ¼ãƒˆç•ªå·ã®è¡¨ç¤º
     for(int i=0; game.port[i] != '\0'; i++)
     {
         textImg[tname_0+game.port[i]-'0'].drawTexture(300+i*80,180);
     }
 
-    //¥Ü¥¿¥ó¤ÎÉ½¼¨¡¡¡Ö0¡×~¡Ö9¡×
+    //ãƒœã‚¿ãƒ³ã®è¡¨ç¤ºã€€ã€Œ0ã€~ã€Œ9ã€
     for(int i=0; i<=9; i++){
         rectangleColorRect(game.render,&buttonPos[game.scene][i],0xff000000);
         textImg[tname_0+i].drawTexture(buttonPos[game.scene][i].x +10,buttonPos[game.scene][i].y-20);
     }
 
-    //¥Ü¥¿¥ó¤ÎÉ½¼¨¡¡¡ÖX¡×
+    //ãƒœã‚¿ãƒ³ã®è¡¨ç¤ºã€€ã€ŒXã€
     rectangleColorRect(game.render,&buttonPos[game.scene][10],0xff000000);
     textImg[tname_del].drawTexture(buttonPos[game.scene][10].x +10,buttonPos[game.scene][10].y-20);
     
-    /* ¥İ¡¼¥ÈÈÖ¹æ¤¬5·åÆşÎÏ¤µ¤ì¤¿¤é */
+    /* ãƒãƒ¼ãƒˆç•ªå·ãŒ5æ¡å…¥åŠ›ã•ã‚ŒãŸã‚‰ */
     if(strlen(game.port)>=4){
-        //¥Ü¥¿¥ó¤ÎÉ½¼¨¡¡¡Ö³ÎÄê¡×
+        //ãƒœã‚¿ãƒ³ã®è¡¨ç¤ºã€€ã€Œç¢ºå®šã€
         rectangleColorRect(game.render,&buttonPos[game.scene][11],0xff000000);
         textImg[tname_enter].drawTexture(buttonPos[game.scene][11].x +10,buttonPos[game.scene][11].y-20);
     }
 
-    //ÁªÂò¾õ¶·¤ÎÉ½¼¨
+    //é¸æŠçŠ¶æ³ã®è¡¨ç¤º
     boxColorRect(game.render,&buttonPos[game.scene][game.selectButton],0x77777777);
 
     SDL_RenderPresent(game.render);
 }
 
-/* ¥Ç¥Ğ¥¤¥¹ÈÖ¹æÆşÎÏ¤Î²èÌÌ */
+/* ãƒ‡ãƒã‚¤ã‚¹ç•ªå·å…¥åŠ›ã®ç”»é¢ */
 void RenderDeviceNumWindow(void){
-    //ÇØ·Ê¿§¡ÊÇò¡Ë
+    //èƒŒæ™¯è‰²ï¼ˆç™½ï¼‰
     SDL_SetRenderDrawColor(game.render,255,255,255,255);
     SDL_RenderClear(game.render);
     
-    // Ê¸»ú¤ÎÉ½¼¨¡¡¡Ö¥Ç¥Ğ¥¤¥¹Ì¾¤òÆşÎÏ¤·¤Æ¤¯¤À¤µ¤¤¡×
+    // æ–‡å­—ã®è¡¨ç¤ºã€€ã€Œãƒ‡ãƒã‚¤ã‚¹åã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€
     textImg[tname_inputDevice].drawTexture(300,100);
 
-    // Ê¸»ú¤ÎÉ½¼¨¡¡¡Öclpc¡×
+    // æ–‡å­—ã®è¡¨ç¤ºã€€ã€Œclpcã€
     textImg[tname_clpc].drawTexture(300,250);
 
-    //ÆşÎÏ¤·¤¿¥Ç¥Ğ¥¤¥¹ÈÖ¹æ¤ÎÉ½¼¨
+    //å…¥åŠ›ã—ãŸãƒ‡ãƒã‚¤ã‚¹ç•ªå·ã®è¡¨ç¤º
     for(int i=0; game.deviceNum[i] != '\0'; i++)
     {
         textImg[tname_0+game.deviceNum[i]-'0'].drawTexture(500+i*80,250);
     }
 
-    //¥Ü¥¿¥ó¤ÎÉ½¼¨¡¡¡Ö0¡×~¡Ö9¡×
+    //ãƒœã‚¿ãƒ³ã®è¡¨ç¤ºã€€ã€Œ0ã€~ã€Œ9ã€
     for(int i=0; i<=9; i++){
         rectangleColorRect(game.render,&buttonPos[SCENE_CLIENT_0][i],0xff000000);
         textImg[tname_0+i].drawTexture(buttonPos[SCENE_CLIENT_0][i].x +10,buttonPos[SCENE_CLIENT_0][i].y-20);
     }
 
-    //¥Ü¥¿¥ó¤ÎÉ½¼¨¡¡¡ÖX¡×
+    //ãƒœã‚¿ãƒ³ã®è¡¨ç¤ºã€€ã€ŒXã€
     rectangleColorRect(game.render,&buttonPos[SCENE_CLIENT_0][10],0xff000000);
     textImg[tname_del].drawTexture(buttonPos[SCENE_CLIENT_0][10].x +10,buttonPos[SCENE_CLIENT_0][10].y-20);
     
-    //localHost¥Ü¥¿¥ó¤ÎÉ½¼¨
+    //localHostãƒœã‚¿ãƒ³ã®è¡¨ç¤º
     rectangleColorRect(game.render,&buttonPos[SCENE_CLIENT_0][11],0xff000000);
     textImg[tname_self].drawTexture(buttonPos[SCENE_CLIENT_0][11].x +10,buttonPos[SCENE_CLIENT_0][11].y-20,textImg[tname_self].w/2,textImg[tname_self].h/2);
 
-    /* ¥Ç¥Ğ¥¤¥¹ÈÖ¹æ¤¬3·åÆşÎÏ¤µ¤ì¤¿¤é */
+    /* ãƒ‡ãƒã‚¤ã‚¹ç•ªå·ãŒ3æ¡å…¥åŠ›ã•ã‚ŒãŸã‚‰ */
     if(strlen(game.deviceNum)>=3){
-        //¥Ü¥¿¥ó¤ÎÉ½¼¨¡¡¡Ö³ÎÄê¡×
+        //ãƒœã‚¿ãƒ³ã®è¡¨ç¤ºã€€ã€Œç¢ºå®šã€
         rectangleColorRect(game.render,&buttonPos[SCENE_CLIENT_0][12],0xff000000);
         textImg[tname_enter].drawTexture(buttonPos[SCENE_CLIENT_0][12].x +10,buttonPos[SCENE_CLIENT_0][12].y-20);
     }
 
-    //ÁªÂò¾õ¶·¤ÎÉ½¼¨
+    //é¸æŠçŠ¶æ³ã®è¡¨ç¤º
     boxColorRect(game.render,&buttonPos[SCENE_CLIENT_0][game.selectButton],0x77777777);
 
     SDL_RenderPresent(game.render);
 }
 
-/* ¥«¥¹¥¿¥Ş¥¤¥º²èÌÌ¤ÎÉÁ²è */
+/* ã‚«ã‚¹ã‚¿ãƒã‚¤ã‚ºç”»é¢ã®æç”» */
 void RenderCustomizeWindow(void){
     
-    //¥Ü¥¿¥ó¤Î¾ì½ê¹¹¿·
+    //ãƒœã‚¿ãƒ³ã®å ´æ‰€æ›´æ–°
     buttonPos[SCENE_CUSTOMIZE][1].y = 57-scrollValue;
     buttonPos[SCENE_CUSTOMIZE][1].y = 130-scrollValue;
     buttonPos[SCENE_CUSTOMIZE][2].y = 370-scrollValue;
@@ -345,50 +347,50 @@ void RenderCustomizeWindow(void){
         buttonSize[i] = (i==game.selectButton) ? 1 : 0;
     }
 
-    //ÇØ·Ê¿§¡Ê²«ÅÚ¿§¡Ë
+    //èƒŒæ™¯è‰²ï¼ˆé»„åœŸè‰²ï¼‰
     SDL_SetRenderDrawColor(game.render,253,245,230,255);
     SDL_RenderClear(game.render);
 
-    // Ê¸»ú¤ÎÉ½¼¨¡¡¡ÖCUSTOMIZE¡×
+    // æ–‡å­—ã®è¡¨ç¤ºã€€ã€ŒCUSTOMIZEã€
     textImg[tname_customize].drawTexture(350,25-scrollValue);
-    uiImg[uname_explain_skill].drawTexture(790,25-scrollValue,uiImg[uname_explain_skill].w/1.5,uiImg[uname_explain_skill].h/1.5);//ÀâÌÀ
+    uiImg[uname_explain_skill].drawTexture(790,25-scrollValue,uiImg[uname_explain_skill].w/1.5,uiImg[uname_explain_skill].h/1.5);//èª¬æ˜
 
-    // Ìá¤ë¥Ü¥¿¥ó
+    // æˆ»ã‚‹ãƒœã‚¿ãƒ³
     uiImg[uname_backButton].drawTexture(30-buttonSize[0]*20,45-buttonSize[0]*20-scrollValue,uiImg[uname_backButton].w/1.2+buttonSize[0]*40,uiImg[uname_backButton].h/1.2+buttonSize[0]*40);
 
-    // ²èÁü¤ÎÉ½¼¨¡¡¡ÖÌ¾Á°ÆşÎÏÍó¡×
+    // ç”»åƒã®è¡¨ç¤ºã€€ã€Œåå‰å…¥åŠ›æ¬„ã€
     uiImg[uname_name].drawTexture(50,10-scrollValue,uiImg[uname_name].w/1.2,uiImg[uname_name].h/1.2);
-    // Ê¸»ú¤ÎÉ½¼¨¡¡¡ÖÌ¾Á°¡×
+    // æ–‡å­—ã®è¡¨ç¤ºã€€ã€Œåå‰ã€
     for(int i=0; game.clientName[i]!='\0'; i++){
             textName tn = retTextNameFromChar( game.clientName[i]);
             textImg[tn].drawTexture(370+ i*27,160-scrollValue,textImg[tn].w/1.8,textImg[tn].h/1.8);
     }
-    // ²èÁü¤ÎÉ½¼¨¡¡¡ÖÊÑ¹¹¥Ü¥¿¥ó¡×
+    // ç”»åƒã®è¡¨ç¤ºã€€ã€Œå¤‰æ›´ãƒœã‚¿ãƒ³ã€
     uiImg[uname_change].drawTexture(buttonPos[SCENE_CUSTOMIZE][1].x-(buttonSize[1]*25),buttonPos[SCENE_CUSTOMIZE][1].y-(buttonSize[1]*25),(buttonSize[1]*50)+uiImg[uname_change].w/4,(buttonSize[1]*50)+uiImg[uname_change].h/4);
 
-    // ²èÁü¤ÎÉ½¼¨¡¡¡Ö¥¹¥­¥ëÍó¡×
+    // ç”»åƒã®è¡¨ç¤ºã€€ã€Œã‚¹ã‚­ãƒ«æ¬„ã€
     uiImg[uname_skill].drawTexture(50,120-scrollValue,uiImg[uname_skill].w/1.2,uiImg[uname_skill].h/1.2);
-    // ²èÁü¤ÎÉ½¼¨¡¡¡ÖÁªÂò¤·¤Æ¤¤¤ë¥¹¥­¥ë¡×
+    // ç”»åƒã®è¡¨ç¤ºã€€ã€Œé¸æŠã—ã¦ã„ã‚‹ã‚¹ã‚­ãƒ«ã€
     uiImg[uname_skill_attack+(int)game.skill].drawTexture(150,360-scrollValue,uiImg[uname_skill_attack+(int)game.skill].w/1.4,uiImg[uname_skill_attack+(int)game.skill].h/1.4);
-    // ²èÁü¤ÎÉ½¼¨¡¡¡ÖÁªÂòÃæ¡×
+    // ç”»åƒã®è¡¨ç¤ºã€€ã€Œé¸æŠä¸­ã€
     uiImg[uname_nowselect].drawTexture(80,340-scrollValue,uiImg[uname_nowselect].w/4,uiImg[uname_nowselect].h/4);
-    // ²èÁü¤ÎÉ½¼¨¡¡¡ÖÊÑ¹¹¥Ü¥¿¥ó¡×
+    // ç”»åƒã®è¡¨ç¤ºã€€ã€Œå¤‰æ›´ãƒœã‚¿ãƒ³ã€
     uiImg[uname_change].drawTexture(buttonPos[SCENE_CUSTOMIZE][2].x-(buttonSize[2]*25),buttonPos[SCENE_CUSTOMIZE][2].y-(buttonSize[2]*25),(buttonSize[2]*50)+uiImg[uname_change].w/4,(buttonSize[2]*50)+uiImg[uname_change].h/4);
 
-    // ²èÁü¤ÎÉ½¼¨¡¡¡Ö¥¹¥Ú¥·¥ã¥ëÍó¡×
+    // ç”»åƒã®è¡¨ç¤ºã€€ã€Œã‚¹ãƒšã‚·ãƒ£ãƒ«æ¬„ã€
     uiImg[uname_special].drawTexture(50,410-scrollValue,uiImg[uname_special].w/1.2,uiImg[uname_special].h/1.2);
-    // ²èÁü¤ÎÉ½¼¨¡¡¡ÖÊÑ¹¹¥Ü¥¿¥ó¡×
+    // ç”»åƒã®è¡¨ç¤ºã€€ã€Œå¤‰æ›´ãƒœã‚¿ãƒ³ã€
     uiImg[uname_change].drawTexture(buttonPos[SCENE_CUSTOMIZE][3].x-(buttonSize[3]*25),buttonPos[SCENE_CUSTOMIZE][3].y-(buttonSize[3]*25),(buttonSize[3]*50)+uiImg[uname_change].w/4,(buttonSize[3]*50)+uiImg[uname_change].h/4);
 
-    // ²èÁü¤ÎÉ½¼¨¡¡¡Ö¥¹¥Æ¡¼¥¿¥¹Íó¡×
+    // ç”»åƒã®è¡¨ç¤ºã€€ã€Œã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹æ¬„ã€
     uiImg[uname_status].drawTexture(50,760-scrollValue,uiImg[uname_status].w/1.2,uiImg[uname_status].h/1.2);
-    // ²èÁü¤ÎÉ½¼¨¡¡¡Ö¥Ô¥ó¤ÎÉ½¼¨¡×
+    // ç”»åƒã®è¡¨ç¤ºã€€ã€Œãƒ”ãƒ³ã®è¡¨ç¤ºã€
     uiImg[uname_pin].drawTexture(parm_x[game.parm[0]+5]-(buttonSize[4]*10) ,1005-scrollValue-(buttonSize[4]*10),uiImg[uname_pin].w/5+(buttonSize[4]*20),uiImg[uname_pin].h/5+(buttonSize[4]*20));
     uiImg[uname_pin].drawTexture(parm_x[game.parm[1]+5]-(buttonSize[5]*10) ,1140-scrollValue-(buttonSize[5]*10),uiImg[uname_pin].w/5+(buttonSize[5]*20),uiImg[uname_pin].h/5+(buttonSize[5]*20));
     uiImg[uname_pin].drawTexture(parm_x[game.parm[2]+5]-(buttonSize[6]*10) ,1277-scrollValue-(buttonSize[6]*10),uiImg[uname_pin].w/5+(buttonSize[6]*20),uiImg[uname_pin].h/5+(buttonSize[6]*20));
     uiImg[uname_pin].drawTexture(parm_x[game.parm[3]+5]-(buttonSize[7]*10) ,1415-scrollValue-(buttonSize[7]*10),uiImg[uname_pin].w/5+(buttonSize[7]*20),uiImg[uname_pin].h/5+(buttonSize[7]*20));
     uiImg[uname_pin].drawTexture(parm_x[game.parm[4]+5]-(buttonSize[8]*10) ,1545-scrollValue-(buttonSize[8]*10),uiImg[uname_pin].w/5+(buttonSize[8]*20),uiImg[uname_pin].h/5+(buttonSize[8]*20));
-    // ¿ôÃÍ¤ÎÉ½¼¨
+    // æ•°å€¤ã®è¡¨ç¤º
     for(int i=0; i<PARAMATER_NUM; i++)
     {
         if(game.parm[i]<0){
@@ -399,52 +401,52 @@ void RenderCustomizeWindow(void){
             textImg[tname_0+game.parm[i]].drawTexture(955,parmText_y[i]-scrollValue,textImg[tname_0+game.parm[i]].w/1.5,textImg[tname_0+game.parm[i]].h/1.5);
         }
     }
-    // ¥¹¥Æ¡¼¥¿¥¹¥Ñ¥é¥á¡¼¥¿¤Î¹ç·×¿ôÃÍ¤ÎÉ½¼¨
+    // ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®åˆè¨ˆæ•°å€¤ã®è¡¨ç¤º
     int rest = PARAMATER_SUM_MAX - retSumParamater();
     textImg[tname_0+rest/10].drawTexture(830,1675-scrollValue,textImg[tname_0+rest/10].w/1.2,textImg[tname_0+rest/10].h/1.2);
     textImg[tname_0+rest%10].drawTexture(875,1675-scrollValue,textImg[tname_0+rest%10].w/1.2,textImg[tname_0+rest%10].h/1.2);
 
-    //Ì¾Á°¤ÎÆşÎÏ²èÌÌ
+    //åå‰ã®å…¥åŠ›ç”»é¢
     if(game.popScene == PopUp_Name){
-        uiImg[uname_back].drawTexture(0,0); //¸å¤í¤ò°Å¤¯¤¹¤ë
+        uiImg[uname_back].drawTexture(0,0); //å¾Œã‚ã‚’æš—ãã™ã‚‹
         uiImg[uname_nameChange].drawTexture(0,0);
         for(int i=0; tempName[i]!='\0'; i++){
             textName tn = retTextNameFromChar(tempName[i]);
             textImg[tn].drawTexture(150+ i*45,210);
         }
     }
-    //¥¹¥­¥ëÊÑ¹¹²èÌÌ
+    //ã‚¹ã‚­ãƒ«å¤‰æ›´ç”»é¢
     else if(game.popScene == PopUp_Skill){
-        uiImg[uname_back].drawTexture(0,0); //¸å¤í¤ò°Å¤¯¤¹¤ë
-        uiImg[uname_skillChange].drawTexture(300,50);//¥¿¥¤¥È¥ë
+        uiImg[uname_back].drawTexture(0,0); //å¾Œã‚ã‚’æš—ãã™ã‚‹
+        uiImg[uname_skillChange].drawTexture(300,50);//ã‚¿ã‚¤ãƒˆãƒ«
         boxColor(game.render,860,10,1190,110,0xffe6f5fd);
-        uiImg[uname_explain_skill].drawTexture(860,10,uiImg[uname_explain_skill].w/1.6,uiImg[uname_explain_skill].h/1.6);//ÀâÌÀ
-        uiImg[uname_skill_attack+(int)game.skill].drawTexture(200,200,uiImg[uname_skill_attack+(int)game.skill].w/1.2,uiImg[uname_skill_attack+(int)game.skill].h/1.2);//ÁªÂòÃæ¤Î¥¹¥­¥ë
-        uiImg[uname_nowselect].drawTexture(170,170,uiImg[uname_nowselect].w/4,uiImg[uname_nowselect].h/4);//ÁªÂòÃæ
-        boxColor(game.render,150,370,1100,890,0xffe6f5fd);//²«ÅÚ¿§¤ÎÏÈÁÈ¤ß
+        uiImg[uname_explain_skill].drawTexture(860,10,uiImg[uname_explain_skill].w/1.6,uiImg[uname_explain_skill].h/1.6);//èª¬æ˜
+        uiImg[uname_skill_attack+(int)game.skill].drawTexture(200,200,uiImg[uname_skill_attack+(int)game.skill].w/1.2,uiImg[uname_skill_attack+(int)game.skill].h/1.2);//é¸æŠä¸­ã®ã‚¹ã‚­ãƒ«
+        uiImg[uname_nowselect].drawTexture(170,170,uiImg[uname_nowselect].w/4,uiImg[uname_nowselect].h/4);//é¸æŠä¸­
+        boxColor(game.render,150,370,1100,890,0xffe6f5fd);//é»„åœŸè‰²ã®æ çµ„ã¿
         for(int i=0; i<SKILL_NUM; i++){
             uiImg[uname_skill_attack+i].drawTexture(300,400+i*150,uiImg[uname_skill_attack+i].w/1.4,uiImg[uname_skill_attack+i].h/1.4);
         }
         if(game.selectButton_sub != 0){
-            uiImg[uname_backButton].drawTexture(30,65,uiImg[uname_backButton].w/1.1,uiImg[uname_backButton].h/1.1);//Ìá¤ë¥Ü¥¿¥ó
-            uiImg[uname_selectHikouki].drawTexture(170,380+(game.selectButton_sub-1)*150,uiImg[uname_selectHikouki].w/1.3,uiImg[uname_selectHikouki].h/1.3);//ÁªÂò¤·¤Æ¤¤¤ë¤³¤È¤ò¼¨¤¹Èô¹Ôµ¡
+            uiImg[uname_backButton].drawTexture(30,65,uiImg[uname_backButton].w/1.1,uiImg[uname_backButton].h/1.1);//æˆ»ã‚‹ãƒœã‚¿ãƒ³
+            uiImg[uname_selectHikouki].drawTexture(170,380+(game.selectButton_sub-1)*150,uiImg[uname_selectHikouki].w/1.3,uiImg[uname_selectHikouki].h/1.3);//é¸æŠã—ã¦ã„ã‚‹ã“ã¨ã‚’ç¤ºã™é£›è¡Œæ©Ÿ
         }
         else{
-            uiImg[uname_backButton].drawTexture(23,58,uiImg[uname_backButton].w,uiImg[uname_backButton].h);//Ìá¤ë¥Ü¥¿¥ó
+            uiImg[uname_backButton].drawTexture(23,58,uiImg[uname_backButton].w,uiImg[uname_backButton].h);//æˆ»ã‚‹ãƒœã‚¿ãƒ³
             boxColor(game.render,30,73,270,150,0x77777777);
         }
     }
-    //¥¹¥Ú¥·¥ã¥ëÊÑ¹¹¤Î²èÌÌ
+    //ã‚¹ãƒšã‚·ãƒ£ãƒ«å¤‰æ›´ã®ç”»é¢
     else if(game.popScene == PopUp_Special){
-        uiImg[uname_back].drawTexture(0,0); //¸å¤í¤ò°Å¤¯¤¹¤ë
-        uiImg[uname_skillChange].drawTexture(300,50);//¥¿¥¤¥È¥ë
+        uiImg[uname_back].drawTexture(0,0); //å¾Œã‚ã‚’æš—ãã™ã‚‹
+        uiImg[uname_skillChange].drawTexture(300,50);//ã‚¿ã‚¤ãƒˆãƒ«
         boxColor(game.render,860,10,1190,110,0xffe6f5fd);
-        uiImg[uname_explain_skill].drawTexture(860,10,uiImg[uname_explain_skill].w/1.6,uiImg[uname_explain_skill].h/1.6);//ÀâÌÀ
+        uiImg[uname_explain_skill].drawTexture(860,10,uiImg[uname_explain_skill].w/1.6,uiImg[uname_explain_skill].h/1.6);//èª¬æ˜
         if(game.selectButton_sub != 0){
-            uiImg[uname_backButton].drawTexture(30,65,uiImg[uname_backButton].w/1.1,uiImg[uname_backButton].h/1.1);//Ìá¤ë¥Ü¥¿¥ó
+            uiImg[uname_backButton].drawTexture(30,65,uiImg[uname_backButton].w/1.1,uiImg[uname_backButton].h/1.1);//æˆ»ã‚‹ãƒœã‚¿ãƒ³
         }
         else{
-            uiImg[uname_backButton].drawTexture(23,58,uiImg[uname_backButton].w,uiImg[uname_backButton].h);//Ìá¤ë¥Ü¥¿¥ó
+            uiImg[uname_backButton].drawTexture(23,58,uiImg[uname_backButton].w,uiImg[uname_backButton].h);//æˆ»ã‚‹ãƒœã‚¿ãƒ³
             boxColor(game.render,30,73,270,150,0x77777777);
         }
     }
@@ -452,17 +454,27 @@ void RenderCustomizeWindow(void){
     SDL_RenderPresent(game.render);
 }
 
-/* ¥Æ¥¯¥¹¥Á¥ã¤ÎÉÁ²è */
+void RenderClientWaitWindow(void){
+    //èƒŒæ™¯è‰²ï¼ˆç™½è‰²ï¼‰
+    SDL_SetRenderDrawColor(game.render,255,255,255,255);
+    SDL_RenderClear(game.render);
+
+   textImg[tname_nowloading].drawTexture(100,100,textImg[tname_nowloading].w/1.2,textImg[tname_nowloading].h/1.2);
+
+    SDL_RenderPresent(game.render);
+}
+
+/* ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®æç”» */
 void ImgInfo::drawTexture(int x, int y, int width, int height){
     if(width == 0 || height == 0){
         width=w;
         height=h;
     }
-    // Å¾Á÷¸µÀßÄê
+    // è»¢é€å…ƒè¨­å®š
     SDL_Rect src = {0,0,w,h};
-    // Å¾Á÷ÀèÀßÄê
+    // è»¢é€å…ˆè¨­å®š
     SDL_Rect dst = {x, y, width, height};
-    // Å¾Á÷
+    // è»¢é€
     if (0 > SDL_RenderCopy(game.render, texture, &src, &dst)) {
         PrintError(SDL_GetError());
     }
@@ -497,12 +509,12 @@ textName retTextNameFromChar(char ch){
 
 
 /*
-    //²èÁü¤ÎÉÁ²è
-    // Å¾Á÷¸µÀßÄê
+    //ç”»åƒã®æç”»
+    // è»¢é€å…ƒè¨­å®š
     src = {0,0,uiImg[0].w, uiImg[0].h};
-    // Å¾Á÷ÀèÀßÄê
+    // è»¢é€å…ˆè¨­å®š
     dst = {0,0,uiImg[0].w, uiImg[0].h};
-    // Å¾Á÷
+    // è»¢é€
     if (0 > SDL_RenderCopy(game.render, uiImg[0].texture, &src, &dst)) {
         PrintError(SDL_GetError());
     }
@@ -510,7 +522,7 @@ textName retTextNameFromChar(char ch){
 */
 
 /*
-    // Ê¸»ú¤ÎÉ½¼¨¡¡¡Ö¡×
+    // æ–‡å­—ã®è¡¨ç¤ºã€€ã€Œã€
     src = {0,0,textImg[0].w,textImg[0].h};
     dst = {0,0,textImg[0].w,textImg[0].h};
     if (0 > SDL_RenderCopy(game.render, textImg[0].texture, &src, &dst)) {
