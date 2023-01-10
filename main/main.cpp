@@ -1,6 +1,6 @@
 #include "header.h"
 
-/* ´Ø¿ô */
+/* é–¢æ•° */
 static Uint32 AniTimer(Uint32 interval, void* param);
 static Scene InputEvent(void);
 static Scene InputNameEvent(void);
@@ -12,14 +12,14 @@ char tempName[NAME_MAX_LENGTH+1];
 /* main */
 int main(int argc, char* argv[])
 {
-    /** ½é´ü²½½èÍı **/
-    /* ¥·¥¹¥Æ¥à¤Î½é´ü²½ */
+    /** åˆæœŸåŒ–å‡¦ç† **/
+    /* ã‚·ã‚¹ãƒ†ãƒ ã®åˆæœŸåŒ– */
     InitSystem();
     /* SDL */
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0) {
         return PrintError(SDL_GetError());
     }
-    /** UI½é´ü²½ **/
+    /** UIåˆæœŸåŒ– **/
     if (InitWindow() < 0) {
         PrintError("failed to initialize Windows");
         EndProgram();
@@ -27,12 +27,12 @@ int main(int argc, char* argv[])
     }
 
 
-    /* ´Ê°×¥Õ¥ì¡¼¥à¥«¥¦¥ó¥¿
-     *  ¥á¥¤¥ó½èÍı¤Î¥ë¡¼¥×²ó¿ô¤ò¥«¥¦¥ó¥È¤·¡¤
-     *  ¥¿¥¤¥Ş¡¼½èÍı¤Ë¤Æ1¥Õ¥ì¡¼¥à»ş´Ö¤ò´Ê°×·×»»¤¹¤ë
+    /* ç°¡æ˜“ãƒ•ãƒ¬ãƒ¼ãƒ ã‚«ã‚¦ãƒ³ã‚¿
+     *  ãƒ¡ã‚¤ãƒ³å‡¦ç†ã®ãƒ«ãƒ¼ãƒ—å›æ•°ã‚’ã‚«ã‚¦ãƒ³ãƒˆã—ï¼Œ
+     *  ã‚¿ã‚¤ãƒãƒ¼å‡¦ç†ã«ã¦1ãƒ•ãƒ¬ãƒ¼ãƒ æ™‚é–“ã‚’ç°¡æ˜“è¨ˆç®—ã™ã‚‹
      */
     int framecnt = 0;
-    /* //¥¿¥¤¥Ş¡¼µ¯Æ°
+    /* //ã‚¿ã‚¤ãƒãƒ¼èµ·å‹•
     SDL_TimerID atimer = SDL_AddTimer(100, AniTimer, &framecnt);
     if (atimer == 0) {
         PrintError(SDL_GetError());
@@ -40,58 +40,58 @@ int main(int argc, char* argv[])
     }*/
 
 
-    /* ¥á¥¤¥ó¥ë¡¼¥× */
+    /* ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒ— */
     while (game.scene != SCENE_None) {
 
-        /* ¥¿¥¤¥È¥ë²èÌÌ */
+        /* ã‚¿ã‚¤ãƒˆãƒ«ç”»é¢ */
         while(game.scene == SCENE_Title){
             game.scene = InputEvent();
             ExcuteInput();
-            /** ÉÁ²è½èÍı **/
+            /** æç”»å‡¦ç† **/
             RenderTitleWindow();
 
-            /* ¾¯¤·ÂÔ¤Ä
-            *  PC´Ä¶­¤Ë¤è¤Ã¤ÆÃÙ¤¯(Â®¤¯)¤Ê¤ë»ş¤ËÄ´À°¤·¤Æ¤¯¤À¤µ¤¤
-            *  ºï½ü¤·¤Æ¤·¤Ş¤¦¤È¡¤¥Ç¥Ğ¥Ã¥°»ş¤Ê¤É¤ÇÆ°ºî¤¬½Å¤¯¤Ê¤ë¤Î¤Ç
-            *  ¾Ã¤µ¤Ê¤¤Êı¤¬¤è¤¤¤È»×¤¤¤Ş¤¹
+            /* å°‘ã—å¾…ã¤
+            *  PCç’°å¢ƒã«ã‚ˆã£ã¦é…ã(é€Ÿã)ãªã‚‹æ™‚ã«èª¿æ•´ã—ã¦ãã ã•ã„
+            *  å‰Šé™¤ã—ã¦ã—ã¾ã†ã¨ï¼Œãƒ‡ãƒãƒƒã‚°æ™‚ãªã©ã§å‹•ä½œãŒé‡ããªã‚‹ã®ã§
+            *  æ¶ˆã•ãªã„æ–¹ãŒã‚ˆã„ã¨æ€ã„ã¾ã™
             */
             SDL_Delay(10);
-            /* ¥Õ¥ì¡¼¥à¥«¥¦¥ó¥È */
+            /* ãƒ•ãƒ¬ãƒ¼ãƒ ã‚«ã‚¦ãƒ³ãƒˆ */
             framecnt++;
         }
 
-        /* ¥µ¡¼¥Ğ¡¼0 */
+        /* ã‚µãƒ¼ãƒãƒ¼0 */
         while(game.scene == SCENE_SERVER_0){
             game.scene = InputEvent();
             ExcuteInput();
-            /** ÉÁ²è½èÍı **/
+            /** æç”»å‡¦ç† **/
             RenderServerWindow_0();
             SDL_Delay(10);
             framecnt++;
         }     
 
-        /* ¥µ¡¼¥Ğ¡¼1 ¥¯¥é¥¤¥¢¥ó¥È1 ¥Ñ¥¹¥³¡¼¥É */
+        /* ã‚µãƒ¼ãƒãƒ¼1 ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆ1 ãƒ‘ã‚¹ã‚³ãƒ¼ãƒ‰ */
         while(game.scene == SCENE_SERVER_1 || game.scene == SCENE_CLIENT_1){
             game.scene = InputEvent();
             ExcuteInput();
-            /** ÉÁ²è½èÍı **/
+            /** æç”»å‡¦ç† **/
             if(game.scene == SCENE_SERVER_1 || game.scene == SCENE_CLIENT_1 )
                 RenderPasscodeWindow();
             SDL_Delay(10);
             framecnt++;
         }       
 
-        /*¥¯¥é¥¤¥¢¥ó¥È0 */
+        /*ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆ0 */
         while(game.scene == SCENE_CLIENT_0){
             game.scene = InputEvent();
             ExcuteInput();
-            /** ÉÁ²è½èÍı **/
+            /** æç”»å‡¦ç† **/
             RenderDeviceNumWindow();
             SDL_Delay(10);
             framecnt++;
         }
 
-        /* ¥¯¥é¥¤¥¢¥ó¥È ¥«¥¹¥¿¥Ş¥¤¥º²èÌÌ */
+        /* ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆ ã‚«ã‚¹ã‚¿ãƒã‚¤ã‚ºç”»é¢ */
         while(game.scene == SCENE_CUSTOMIZE){
             if(game.popScene != PopUp_Name)
             {
@@ -102,8 +102,18 @@ int main(int argc, char* argv[])
                 game.scene = InputNameEvent();
             }
                 
-            /** ÉÁ²è½èÍı **/            
+            /** æç”»å‡¦ç† **/            
             RenderCustomizeWindow();
+            SDL_Delay(10);
+            framecnt++;
+        }
+        /*ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆå¾…æ©Ÿç”»é¢ */
+        while(game.scene == SCENE_CLIENT_WAIT){
+            game.scene = InputEvent();
+            ExcuteInput();
+            ReadMatchFile();
+            /** æç”»å‡¦ç† **/
+            RenderClientWaitWindow();
             SDL_Delay(10);
             framecnt++;
         }
@@ -114,12 +124,12 @@ int main(int argc, char* argv[])
     return 0;
 }
 
-/* ¥¨¥é¡¼¥á¥Ã¥»¡¼¥¸É½¼¨
+/* ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¡¨ç¤º
  *
- * °ú¿ô
- *   str: ¥¨¥é¡¼¥á¥Ã¥»¡¼¥¸
+ * å¼•æ•°
+ *   str: ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
  *
- * ÊÖÃÍ: -1
+ * è¿”å€¤: -1
  */
 int PrintError(const char* str)
 {
@@ -128,44 +138,44 @@ int PrintError(const char* str)
 }
 
 void EndProgram(void){
-    /** ½ªÎ»½èÍı **/
+    /** çµ‚äº†å‡¦ç† **/
     //SDL_RemoveTimer(atimer);
     DestroyWindow();
     SDL_Quit();
 
 }
 
-/* //¥¿¥¤¥Ş¡¼½èÍı(¥¢¥Ë¥á¡¼¥·¥ç¥ó¤Î¹¹¿·)
+/* //ã‚¿ã‚¤ãƒãƒ¼å‡¦ç†(ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®æ›´æ–°)
 Uint32 AniTimer(Uint32 interval, void* param)
-{¤·¤¿
-     //»ş´ÖÁıÊ¬¤Î¹¹¿·
-      //1¥Õ¥ì¡¼¥à¤Î»ş´Ö¤ò´Ê°×·×»»¤¹¤ë
+{ã—ãŸ
+     //æ™‚é–“å¢—åˆ†ã®æ›´æ–°
+      //1ãƒ•ãƒ¬ãƒ¼ãƒ ã®æ™‚é–“ã‚’ç°¡æ˜“è¨ˆç®—ã™ã‚‹
     if (*(int*)param > 0) {
         gGame.timeStep = 0.1 / *(int*)param;
         printf("FPS: %d\r", *(int*)param * 10);
         *(int*)param = 1;
     }
 
-    //Å¾Á÷¸µÈÏ°Ï¤Î¹¹¿·(¥¢¥Ë¥á¡¼¥·¥ç¥ó) 
+    //è»¢é€å…ƒç¯„å›²ã®æ›´æ–°(ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³) 
     for (int i = 0; i < gCharaNum; i++) {
-        /* ¥¢¥Ë¥á¡¼¥·¥ç¥ó¥Ñ¥¿¡¼¥ó¤Î¹¹¿· 
+        /* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ã‚¿ãƒ¼ãƒ³ã®æ›´æ–° 
         gChara[i].anipat = (gChara[i].anipat + 1) % (gChara[i].img->anipatnum);
     }
 
     return interval;
 }*/
 
-/* ÆşÎÏ¥¤¥Ù¥ó¥È¤ÎÆÉ¤ß¼è¤ê */
+/* å…¥åŠ›ã‚¤ãƒ™ãƒ³ãƒˆã®èª­ã¿å–ã‚Š */
 Scene InputEvent(void)
 {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
         case SDL_QUIT:
-            /** ½ªÎ»»Ø¼¨ **/
+            /** çµ‚äº†æŒ‡ç¤º **/
             return SCENE_None;
         case SDL_KEYDOWN:
-            /** ¥­¡¼¤¬²¡¤µ¤ì¤¿Êı¸ş¤òÀßÄê **/
+            /** ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸæ–¹å‘ã‚’è¨­å®š **/
             switch (event.key.keysym.sym) {
             case SDLK_ESCAPE:
                 game.input = INPUT_ESCAPE;
@@ -193,7 +203,7 @@ Scene InputEvent(void)
                 game.input = INPUT_BACKSPACE;
                 break;
             default:
-                //¿ô»ú¥­¡¼
+                //æ•°å­—ã‚­ãƒ¼
                 if(SDLK_0 <= event.key.keysym.sym && event.key.keysym.sym <= SDLK_9){
                     game.input = static_cast<INPUT>(event.key.keysym.sym - SDLK_0 + INPUT_0);
                     std::cout << game.input<<'\n';
@@ -202,7 +212,7 @@ Scene InputEvent(void)
             }
             break;
         case SDL_KEYUP:
-            /** ¥­¡¼¤¬²¡¤µ¤ì¤¿Êı¸ş¤òÀßÄê **/
+            /** ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸæ–¹å‘ã‚’è¨­å®š **/
             switch (event.key.keysym.sym) {
             case SDLK_ESCAPE:
                 game.input = INPUT_NONE;
@@ -227,7 +237,7 @@ Scene InputEvent(void)
                 game.input =INPUT_NONE;
                 break;
             default:
-                //¿ô»ú¥­¡¼
+                //æ•°å­—ã‚­ãƒ¼
                 if(SDLK_0 <= event.key.keysym.sym && event.key.keysym.sym <= SDLK_9){
                     game.input = INPUT_NONE;
                 }
@@ -239,22 +249,22 @@ Scene InputEvent(void)
     return game.scene;
 }
 
-/* ÆşÎÏ¥¤¥Ù¥ó¥È¤ÎÆÉ¤ß¼è¤ê */
+/* å…¥åŠ›ã‚¤ãƒ™ãƒ³ãƒˆã®èª­ã¿å–ã‚Š */
 Scene InputNameEvent(void)
 {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
         case SDL_QUIT:
-            /** ½ªÎ»»Ø¼¨ **/
+            /** çµ‚äº†æŒ‡ç¤º **/
             return SCENE_None;
         case SDL_KEYDOWN:
             if (event.key.repeat)
                 break;
-            /** ¥­¡¼¤¬²¡¤µ¤ì¤¿Êı¸ş¤òÀßÄê **/
+            /** ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸæ–¹å‘ã‚’è¨­å®š **/
             switch (event.key.keysym.sym) {
             case SDLK_ESCAPE:
-                sprintf(tempName,"%s",game.clientName);//ÊÑ¹¹Á°¤ÎÌ¾Á°¤òÊİÂ¸
+                sprintf(tempName,"%s",game.clientName);//å¤‰æ›´å‰ã®åå‰ã‚’ä¿å­˜
                 game.popScene = PopUp_None;
                 break;
             case SDLK_BACKSPACE:
@@ -263,8 +273,8 @@ Scene InputNameEvent(void)
                 }
                 break;
             case SDLK_RETURN:
-                sprintf(game.clientName,"%s",tempName);//ÊÑ¹¹¤·¤¿Ì¾Á°¤òÊİÂ¸
-                SaveGameData(); //¥²¡¼¥à¥Ç¡¼¥¿¤òÊİÂ¸
+                sprintf(game.clientName,"%s",tempName);//å¤‰æ›´ã—ãŸåå‰ã‚’ä¿å­˜
+                SaveGameData(); //ã‚²ãƒ¼ãƒ ãƒ‡ãƒ¼ã‚¿ã‚’ä¿å­˜
                 game.popScene = PopUp_None;
                 break;
             case SDLK_RSHIFT:
@@ -349,7 +359,7 @@ void ExcuteInput(void){
             break;
         case SCENE_SERVER_1: 
         case SCENE_CLIENT_1:{
-            int adjust = -1;//Enter¥­¡¼¤¬¸å¤«¤é½Ğ¤ë¤Î¤Ç¤½¤ÎÄ´À°
+            int adjust = -1;//Enterã‚­ãƒ¼ãŒå¾Œã‹ã‚‰å‡ºã‚‹ã®ã§ãã®èª¿æ•´
             if(strlen(game.port)>=4)
                 adjust = 0;
             switch(game.input){
@@ -382,7 +392,7 @@ void ExcuteInput(void){
                     game.scene = SCENE_None;
                     break;
                 case INPUT_BACKSPACE:
-                    game.selectButton = 10;//ºï½ü¥Ü¥¿¥ó
+                    game.selectButton = 10;//å‰Šé™¤ãƒœã‚¿ãƒ³
                     PushedButton();
                     break;
                 default:
@@ -428,7 +438,7 @@ void ExcuteInput(void){
                     game.scene = SCENE_None;
                     break;
                 case INPUT_BACKSPACE:
-                    game.selectButton = 10;//ºï½ü¥Ü¥¿¥ó
+                    game.selectButton = 10;//å‰Šé™¤ãƒœã‚¿ãƒ³
                     PushedButton();
                     break;
                 default:
@@ -485,16 +495,16 @@ void ExcuteInput(void){
                                 shiftSelect(-1,maxButtonNum[game.scene],&game.selectButton);
                                 break;
                             case INPUT_LEFT:
-                                //game.selectButton-4¤¬1¤ÄÌÜ¤Î¥¹¥¯¥í¡¼¥ë¥Ğ¡¼¤Ë¤¢¤¿¤ë
+                                //game.selectButton-4ãŒ1ã¤ç›®ã®ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã«ã‚ãŸã‚‹
                                 if(game.selectButton >=4)
                                     shiftParmSelect(-1,static_cast<PARAMATER>(game.selectButton-4));
-                                    SaveGameData(); //¥²¡¼¥à¥Ç¡¼¥¿¤òÊİÂ¸
+                                    SaveGameData(); //ã‚²ãƒ¼ãƒ ãƒ‡ãƒ¼ã‚¿ã‚’ä¿å­˜
                                 break;
                             case INPUT_RIGHT:
                                 if(game.selectButton >=4)
                                     if(retSumParamater() < PARAMATER_SUM_MAX)
                                         shiftParmSelect(+1,static_cast<PARAMATER>(game.selectButton-4));
-                                        SaveGameData(); //¥²¡¼¥à¥Ç¡¼¥¿¤òÊİÂ¸
+                                        SaveGameData(); //ã‚²ãƒ¼ãƒ ãƒ‡ãƒ¼ã‚¿ã‚’ä¿å­˜
                                 break;
                             case INPUT_RETURN:
                                 PushedButton();
