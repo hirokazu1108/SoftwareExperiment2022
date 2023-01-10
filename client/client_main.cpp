@@ -448,7 +448,7 @@ void display(void)
             else{
                 glColor3f(0.0f,1.0f,0.0f);
             }
-            Circle2D(0.03,player[i].pos.x*-1/1000,player[i].pos.z*-1/1000);
+            Circle2D(0.03,player[i].pos.x/1000,player[i].pos.z*-1/1000);
         }
 
         glEnable(GL_LIGHTING);
