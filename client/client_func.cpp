@@ -18,14 +18,16 @@ void PlayerInit(void){
         player[i].upVec.x = 0;
         player[i].upVec.y = 0;
         player[i].upVec.z = 0;
-	player[i].rate_attack = 1.0;
+	    player[i].rate_attack = 1.0;
         player[i].turn1 = 0;
         player[i].turn2 = 0;
         player[i].turn3 = 0;
         player[i].type = 0;
+        player[i].attack = DAMAGE;
+        player[i].size = 0.0f;
         player[i].mp = 0;
         player[i].hp = 3.0;
-	player[i].ability = UP_ATTACK;
+	    player[i].ability = UP_ATTACK;
         player[i].skill = SKILL_ATTACK;
         player[i].special = SPECIAL_BIGBULLET;
         for(int j=0; j<PARAMATER_NUM; j++)
@@ -42,6 +44,11 @@ void PlayerInit(void){
     for(int i=0; i<PARAMATER_NUM; i++){
         player[clientID].parm[i] = data.parm[i];
     }
+    player[clientID].attack += (float)player[clientID].parm[PARM_ATTACK];
+    player[clientID].hp += (float)player[clientID].parm[PARM_HP];
+    player[clientID].speed += (float)player[clientID].parm[PARM_SPEED];
+    player[clientID].mp += player[clientID].parm[PARM_MP];
+    player[clientID].size -= player[clientID].parm[PARM_SIZE];
 
 }
 
@@ -82,7 +89,7 @@ void Collider(void){
             if(OnColliderSphere(Sphere(BULLET_RADIUS,array_bullet[j].pos),player[i].collider)){
                 Ability(array_bullet[j].shooter_id);
                 printf("speed:%f\n" ,player[array_bullet[j].shooter_id].speed);
-                player[i].hp -= (float)player[array_bullet[j].shooter_id].parm[PARM_ATTACK] * player[array_bullet[j].shooter_id].rate_attack;
+                player[i].hp -= (DAMAGE + (float)player[array_bullet[j].shooter_id].parm[PARM_ATTACK]) * player[array_bullet[j].shooter_id].rate_attack;
                 deleteBullet(j);
                 printf("hirokazu: hit client[%d]\n",i);
             }
