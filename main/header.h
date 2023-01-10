@@ -7,8 +7,8 @@
 #define WD_Height 1000
 #define WD_Width 1200
 #define IMG_NUM 16
-#define TEXT_NUM 75
-#define SCENE_NUM 6
+#define TEXT_NUM 76
+#define SCENE_NUM 7
 
 
 typedef enum{
@@ -17,11 +17,12 @@ typedef enum{
     SCENE_SERVER_1,
     SCENE_CLIENT_0,
     SCENE_CLIENT_1,
+    SCENE_CLIENT_WAIT,
     SCENE_CUSTOMIZE,
-    SCENE_None,//½ªÎ»¤ò¼¨¤¹
+    SCENE_None,//çµ‚äº†ã‚’ç¤ºã™
 }Scene;
 
-// imgFile¤ÈÆ±¤¸¤è¤¦¤Ë¤Ä¤±¤ë
+// imgFileã¨åŒã˜ã‚ˆã†ã«ã¤ã‘ã‚‹
 typedef enum{
     uname_name,
     uname_skill,
@@ -41,7 +42,7 @@ typedef enum{
     uname_selectHikouki,
 }uiName;
 
-// textStr¤ÈÆ±¤¸¤è¤¦¤Ë¤Ä¤±¤ë
+// textStrã¨åŒã˜ã‚ˆã†ã«ã¤ã‘ã‚‹
 typedef enum{
     tname_title,
     tname_server,
@@ -54,6 +55,7 @@ typedef enum{
     tname_self,
     tname_inputDevice,
     tname_clpc,
+    tname_nowloading,
     tname_0,
     tname_1,
     tname_2,
@@ -155,7 +157,7 @@ class settingGame{
     Scene scene;
     PopUpScne popScene;
     int selectButton;
-    int selectButton_sub;//popup²èÌÌ¤Ë»ÈÍÑ
+    int selectButton_sub;//popupç”»é¢ã«ä½¿ç”¨
     int clientNum;
     char port[5];
     char deviceNum[4];
@@ -165,11 +167,11 @@ class settingGame{
     char command[256];
     SKILL skill;
     SPECIAL special;
-    int parm[5];   //¥¹¥Æ¡¼¥¿¥¹¤ÎÃÍ(5¼ïÎà)¡¡index¤ÏPARAMATERÎóµóÂÎ»²¾È
+    int parm[5];   //ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã®å€¤(5ç¨®é¡)ã€€indexã¯PARAMATERåˆ—æŒ™ä½“å‚ç…§
     
 };
 
-/* ²èÁü¤Î¾ğÊó */
+/* ç”»åƒã®æƒ…å ± */
 typedef struct {
     public:
     int w;
@@ -193,7 +195,9 @@ extern void RenderServerWindow_0(void);
 extern void RenderPasscodeWindow();
 extern void RenderDeviceNumWindow(void);
 extern void RenderCustomizeWindow(void);
+extern void RenderClientWaitWindow(void);
 extern std::vector<SDL_Rect> buttonPos[SCENE_NUM];
+
 
 /* system.cpp */
 extern void InitSystem(void);
@@ -207,3 +211,5 @@ extern bool retExists(const char *file);
 extern void WriteDataFile(SaveData *data);
 extern void ReadDataFile(SaveData *data);
 extern void SaveGameData(void);
+extern void ReadMatchFile(void);
+extern void WriteMatchFile(int value);
