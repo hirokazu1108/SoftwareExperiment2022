@@ -102,7 +102,7 @@ void Ability(int id){
         
         case UP_ATTACK:
         if(player[id].rate_attack <= MAX_ATTACK){
-            player[id].rate_attack += 0.5;
+            player[id].rate_attack += 0.3;
         }
         break;
 
