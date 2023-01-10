@@ -112,6 +112,7 @@ void interval_attack(int interval_attackID);    // 綣�???????????????????????
 void Circle2D(float radius,float x,float y);
 void Oval2D(float radius,int x,int y,float ovalx,float ovaly);
 float calmini(int f,int pnum,float ppx, float epx,float ppy, float epy);
+float calmap(int i);
 #define TEX_HEIGHT 32
 #define TEX_WIDTH 32
 static GLubyte image[TEX_HEIGHT][TEX_WIDTH][4];
@@ -467,7 +468,18 @@ void display(void)
         glColor3f(1.0f,0.0f,0.0f);
         Circle2D(0.03,-1.8f,1.5f);
         glColor3f(0.0f,0.0f,0.0f);
-        glRectf(-1.805,1.5,-1.795,2.0);
+
+        //glLineWidth(10);
+        glBegin(GL_LINES);
+		glVertex2f(-1.8,1.5);
+		//glVertex2f(-1.8*sin(player[clientID].turn1),2.0);
+        
+        glVertex2f(-1.8 - sin(player[clientID].turn1)/2,1.5 + cos(player[clientID].turn1)/2);
+        
+		//glVertex2f(0.9 , 0.9);
+	    glEnd();
+
+       // glRectf(-1.805,1.5,-1.795,2.0);
         for(int i = 0; i<gClientNum; i++){
             if(i == clientID){
                
@@ -518,6 +530,61 @@ void display(void)
 /****************************
  f???�???????�????�???????�????
 ******************************/
+
+float calmap(int i){
+    float map;
+    if(i == 1){
+        map = -1.8;
+        if(player[clientID].turn1>45&&player[clientID].turn1<135){
+            map = -2.3;
+        }
+        else if(player[clientID].turn1>225&&player[clientID].turn1<315){
+            map = -2.3;
+        }
+        else if(player[clientID].turn1<-45&&player[clientID].turn1>-135){
+            map = -2.3;
+        }
+        else if(player[clientID].turn1<-225&&player[clientID].turn1>-315){
+            map = -2.3;
+        }
+        else{
+            if(key3){
+                map = map - 0.0111;
+            }
+            else if(key1){
+                map = map + 0.0111;
+            }
+        }
+    }
+    else{
+        map = 1.5;
+        if(player[clientID].turn1>0&&player[clientID].turn1<45){
+            map = 2.0;
+        }
+        else if(player[clientID].turn1>135&&player[clientID].turn1<180){
+            map = 1.0;
+        }
+        else if(player[clientID].turn1<0&&player[clientID].turn1>-45){
+            map = 2.0;
+        }
+        else if(player[clientID].turn1<-135&&player[clientID].turn1>-180){
+            map = 1.0;
+        }
+        else{
+            if(key3){
+                map = map - 0.0111;
+            }
+            else if(key1){
+                map = map + 0.0111;
+            }
+        }
+    }
+    return map;
+}
+
+
+
+
 float calmini(int f,int pnum,float ppx, float epx,float ppy, float epy){
     float point;
     float pointx;
@@ -531,7 +598,7 @@ float calmini(int f,int pnum,float ppx, float epx,float ppy, float epy){
     point = sqrt(pointx*pointx + pointy*pointy);
     //printf("%d:%lf\n",f,point);
    
-        
+
         if(f == 1){
             cosin = pointx/point;
             if(point > 0){
