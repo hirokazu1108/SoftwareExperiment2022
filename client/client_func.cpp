@@ -44,7 +44,7 @@ void PlayerInit(void){
     for(int i=0; i<PARAMATER_NUM; i++){
         player[clientID].parm[i] = data.parm[i];
     }
-    player[clientID].attack += (float)player[clientID].parm[PARM_ATTACK];
+    player[clientID].attack += (float)player[clientID].parm[PARM_ATTACK] / 5.0f;
     player[clientID].hp += (float)player[clientID].parm[PARM_HP];
     player[clientID].speed += (float)player[clientID].parm[PARM_SPEED];
     player[clientID].size -= player[clientID].parm[PARM_SIZE];
@@ -101,7 +101,7 @@ void Ability(int id){
         
         case UP_ATTACK:
         if(player[id].rate_attack <= MAX_ATTACK){
-            player[id].rate_attack += 0.3;
+            player[id].rate_attack += 0.25;
         }
         break;
 

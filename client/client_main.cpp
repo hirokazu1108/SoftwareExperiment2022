@@ -1560,9 +1560,11 @@ void draw_bullet(int num){
     for(int i = 0; i < num; i++){
         
         glPushMatrix();
-        glColor3f(1.0, 1.0, 1.0);
         if(player[array_bullet[i].shooter_id].rate_attack > 1.0){
-            glColor3f(1.0, 0.0, 0.0);
+            glColor3f(1.0, 2.0 - player[array_bullet[i].shooter_id].rate_attack, 2.0 - player[array_bullet[i].shooter_id].rate_attack);
+        }
+        else{
+            glColor3f(1.0, 1.0, 1.0);
         }
         glTranslatef(array_bullet[i].pos.x, array_bullet[i].pos.y, array_bullet[i].pos.z);
         glutSolidSphere(BULLET_RADIUS, 200, 200);
