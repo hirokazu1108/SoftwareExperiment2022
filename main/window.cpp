@@ -2,7 +2,7 @@
 
 /* 画像パス */
 static const char *imgFile[IMG_NUM] = { "name.png", "skill.png","special.png","status.png", "explain_skill.png","nowSelectButton.png", "changeButton.png","backButton.png",  "skill_attack.png", "skill_hp.png","skill_speed.png", "pin.png", "back.png","nameChange.png","skillChange.png","selectHikouki.png"};
-static const char *textStr[TEXT_NUM] = {"Space Battle","SERVER","CLIENT","CUSTOMIZE","input client num.","input passcode.","del","Enter","self","input device num.","clpc","nowLoading...","0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"," ", "-"};
+static const char *textStr[TEXT_NUM] = {"Space Battle","SERVER","CLIENT","CUSTOMIZE","input client num.","input passcode.","del","Enter","self","input device num.","clpc","nowLoading...","Result","Exit", "toTitle","0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"," ", "-"};
 /* フォントパス */
 static char gFontFile[] = "../fonts/Yomogi-Regular.ttf";
 
@@ -118,6 +118,8 @@ int InitWindow(void)
     buttonPos[SCENE_CUSTOMIZE].push_back({930,130-scrollValue,0,0}); //名前変更(丸ボタン)
     buttonPos[SCENE_CUSTOMIZE].push_back({900,370-scrollValue,0,0}); //スキル変更(丸ボタン)
     buttonPos[SCENE_CUSTOMIZE].push_back({900,700-scrollValue,0,0}); //スペシャル変更(丸ボタン)
+    buttonPos[SCENE_Result].push_back({200,820,200,80}); //exit
+    buttonPos[SCENE_Result].push_back({500,820,200,80}); //totitle
 
 
 
@@ -460,6 +462,37 @@ void RenderClientWaitWindow(void){
     SDL_RenderClear(game.render);
 
    textImg[tname_nowloading].drawTexture(100,100,textImg[tname_nowloading].w/1.2,textImg[tname_nowloading].h/1.2);
+
+    SDL_RenderPresent(game.render);
+}
+
+void RenderResultWindow(void){
+    SDL_SetRenderDrawColor(game.render,255,255,255,255);
+    SDL_RenderClear(game.render);
+
+    textImg[tname_result].drawTexture(100,100,textImg[tname_result].w/1.2,textImg[tname_result].h/1.2);
+
+    int cnum = sizeof(game.rankingName)/sizeof(game.rankingName[0]);
+    printf("num:%d\n",cnum);
+    for(int i=0; i<cnum; i++){
+        textImg[tname_1 + i].drawTexture(200 ,300 +i*100);
+        for(int j=0; game.rankingName[i][j]!='\0'; j++){
+            printf("name:%c\n",game.rankingName[i][j]);
+            textName tn = retTextNameFromChar(game.rankingName[i][j]);
+            textImg[tn].drawTexture(350+ j*45, 300+i*100);
+        }
+    }
+
+
+    rectangleColorRect(game.render,&buttonPos[SCENE_Result][0],0xff000000);
+    textImg[tname_exit].drawTexture(buttonPos[SCENE_Result][0].x,buttonPos[SCENE_Result][0].y, textImg[tname_exit].w/1.6, textImg[tname_exit].h/1.6);
+
+
+    rectangleColorRect(game.render,&buttonPos[SCENE_Result][1],0xff000000);
+    textImg[tname_totitle].drawTexture(buttonPos[SCENE_Result][1].x,buttonPos[SCENE_Result][1].y, textImg[tname_totitle].w/1.6, textImg[tname_totitle].h/1.6);
+
+
+    boxColorRect(game.render,&buttonPos[SCENE_Result][game.selectButton],0x77777777);
 
     SDL_RenderPresent(game.render);
 }
