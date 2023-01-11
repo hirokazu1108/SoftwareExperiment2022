@@ -9,7 +9,7 @@
 #define WINDOW_WIDTH 1000
 #define WINDOW_HEIGHT 1000
 
-#define Model_Num 1
+#define Model_Num 3
 
 /* client_net.cpp */
 extern int SetUpClient(char *hostName,u_short port,int *clientID,int *num,char clientNames[][NAME_MAX_LENGTH+1]);
