@@ -7,8 +7,8 @@
 #define WD_Height 1000
 #define WD_Width 1200
 #define IMG_NUM 16
-#define TEXT_NUM 76
-#define SCENE_NUM 7
+#define TEXT_NUM 79
+#define SCENE_NUM 8
 
 
 typedef enum{
@@ -19,6 +19,7 @@ typedef enum{
     SCENE_CLIENT_1,
     SCENE_CLIENT_WAIT,
     SCENE_CUSTOMIZE,
+    SCENE_Result,
     SCENE_None,//終了を示す
 }Scene;
 
@@ -56,6 +57,9 @@ typedef enum{
     tname_inputDevice,
     tname_clpc,
     tname_nowloading,
+    tname_result,
+    tname_exit,
+    tname_totitle,
     tname_0,
     tname_1,
     tname_2,
@@ -168,7 +172,7 @@ class settingGame{
     SKILL skill;
     SPECIAL special;
     int parm[5];   //ステータスの値(5種類)　indexはPARAMATER列挙体参照
-    
+    char rankingName[MAX_CLIENTS][NAME_MAX_LENGTH+1];
 };
 
 /* 画像の情報 */
@@ -196,6 +200,7 @@ extern void RenderPasscodeWindow();
 extern void RenderDeviceNumWindow(void);
 extern void RenderCustomizeWindow(void);
 extern void RenderClientWaitWindow(void);
+extern void RenderResultWindow(void);
 extern std::vector<SDL_Rect> buttonPos[SCENE_NUM];
 
 
@@ -213,3 +218,4 @@ extern void ReadDataFile(SaveData *data);
 extern void SaveGameData(void);
 extern void ReadMatchFile(void);
 extern void WriteMatchFile(int value);
+extern void ReadRankingFile(void);

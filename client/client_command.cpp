@@ -51,8 +51,9 @@ int ExecuteCommand(char command)
             for(int i=0;i<gClientNum;i++)
                 printf("No.%d:%s\n",i+1,game.clientName[game.ranking[i]]);
             }
-
-            exit(0);
+	    //ゲームをリザルトに切り替える
+            WriteRankingFile();
+            ExitClientProgram();
             break;
         case END_COMMAND:
             endFlag = 1;

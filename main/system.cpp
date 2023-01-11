@@ -1,6 +1,6 @@
 #include "header.h"
 
-int maxButtonNum[SCENE_NUM]={3,3,12,13,12,0,9};    //シーンごとのボタンの最大数,indexはScene列挙体に対応
+int maxButtonNum[SCENE_NUM]={3,3,12,13,12,0,9,2};    //シーンごとのボタンの最大数,indexはScene列挙体に対応
 
 bool buttonEnabled = false; //確定ボタンが見えるか否か
 
@@ -12,7 +12,7 @@ void LaunchClient(void);
 void InitSystem(void){
     SaveData data;
     srand(time(NULL));
-    game.scene = SCENE_Title;
+    //game.scene = SCENE_Title;
     game.popScene = PopUp_None;
     game.selectButton = 0;
     game.selectButton_sub = 1;
@@ -244,6 +244,18 @@ void PushedButton(void){
                 }
             }
             break;
+	case SCENE_Result:
+            switch(game.selectButton){
+                case 0://exit
+                    game.scene = SCENE_None;
+                    game.selectButton = 0;
+                    break;
+                case 1://toTitle
+                    game.scene = SCENE_Title;
+                    game.selectButton = 0;
+                    break;
+            }
+            break;
         default:
             break;   
     }
@@ -365,5 +377,47 @@ void WriteMatchFile(int value){
 		fprintf(fp,"%d",value);
 	}
  
+	fclose(fp); // ファイルを閉じる
+}
+
+/* ランキングを読み込む関数 */
+void ReadRankingFile(void){
+    FILE *fp; // FILE型構造体
+	char fname[] = "../data/ranking.txt";
+ 
+	fp = fopen(fname, "r"); // ファイルを開く。失敗するとNULLを返す。
+	if(fp == NULL) {
+		printf("%s file not open!\n", fname);
+		exit (-1);
+	} else {
+
+        bool loopflg = true;
+        int i=0;
+        while(loopflg){
+            int j=0;
+            do{
+                char ch = fgetc(fp);
+                if(ch == '\n'){
+                    break;
+                }
+                else if(ch == EOF)
+                {
+                    loopflg = false;
+                    break;
+                }
+                else{
+                    game.rankingName[i][j] = ch;
+                    j++;
+                }
+            }while(1);
+            i++;
+        }
+        for(int k=0; k<i-1; k++)
+        {
+            game.rankingName[k][strlen(game.rankingName[k]) + 1] = '\0';
+            std::cout << k << ':' << game.rankingName[k] << '\n';
+        }
+        
+	}
 	fclose(fp); // ファイルを閉じる
 }
