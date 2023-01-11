@@ -144,7 +144,7 @@ int main(int argc, char **argv)
 
   // 提供されている"hello world"の音声バッファを作成
   buffer = alutCreateBufferHelloWorld ();
-  buffer2 = alutCreateBufferFromFile( "musicbox.wav" );
+  buffer2 = alutCreateBufferFromFile( "BGM.wav" );
 
   alSourcei( source, AL_BUFFER, buffer );
   alSourcei( source2, AL_BUFFER, buffer2 );
@@ -1597,7 +1597,7 @@ void draw_bullet(int num){
 
 void move_bullet(int num){
     for(int i = 0; i < num; i++){
-        array_bullet[i].pos += array_bullet[i].dir * 0.5f;
+        array_bullet[i].pos += array_bullet[i].dir * player[array_bullet[i].shooter_id].speed;
     }
 }
 
