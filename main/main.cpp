@@ -6,12 +6,30 @@ static Scene InputEvent(void);
 static Scene InputNameEvent(void);
 void ExcuteInput(void);
 
+bool isReadRankingflg = false;//isread rannkinng
 settingGame game;
 char tempName[NAME_MAX_LENGTH+1];
 
 /* main */
 int main(int argc, char* argv[])
 {
+    char ch[16];
+    switch (argc) {
+    case 1:
+        break;
+    case 2:
+        sprintf(ch, "%s", argv[1]);
+        if(strcmp(ch,"title") == 0)
+        {
+            game.scene = SCENE_Title;
+        }
+        else if(strcmp(ch,"result") == 0){
+            game.scene = SCENE_Result;
+        }
+        break;
+    default:
+        return 1;
+    }
     /** 初期化処理 **/
     /* システムの初期化 */
     InitSystem();
@@ -114,6 +132,20 @@ int main(int argc, char* argv[])
             ReadMatchFile();
             /** 描画処理 **/
             RenderClientWaitWindow();
+            SDL_Delay(10);
+            framecnt++;
+        }
+        
+        /*Result */
+        while(game.scene == SCENE_Result){
+            if(!isReadRankingflg){
+                ReadRankingFile();
+                isReadRankingflg = true;
+            }
+            game.scene = InputEvent();
+            ExcuteInput();
+            /** �����糸����� **/
+            RenderResultWindow();
             SDL_Delay(10);
             framecnt++;
         }
@@ -549,6 +581,24 @@ void ExcuteInput(void){
                             game.selectButton_sub = 1;
                             break;
                     }
+                    break;
+                default:
+                    break;
+            }
+            break;
+            case SCENE_Result:
+            switch(game.input){
+                case INPUT_RIGHT:
+                    shiftSelect(+1,maxButtonNum[game.scene],&game.selectButton);
+                    break;
+                case INPUT_LEFT:
+                    shiftSelect(-1,maxButtonNum[game.scene],&game.selectButton);
+                    break;
+                case INPUT_RETURN:
+                    PushedButton();
+                    break;
+                case INPUT_ESCAPE:
+                    game.scene = SCENE_None;
                     break;
                 default:
                     break;
