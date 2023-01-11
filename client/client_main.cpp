@@ -5,6 +5,7 @@
 
 /* ??????????????�????????? */
 #include <stdarg.h>
+#include <AL/alut.h>
 #include "client.h"
 #include "trackball.h"
 #include "glm.h"
@@ -69,6 +70,8 @@ int bullet_Num = 0;   // ????????????????綣�??????????
 bool can_attack = true;     // 綣�???????????????????�????????true
 bool can_special = false;
 int cnt_special = 0;
+ALuint buffer, source;
+ALuint buffer2, source2;
 
 int bf;
 int jnk; //?????????????�????�??????????????�???????�?????
@@ -131,7 +134,22 @@ int main(int argc, char **argv)
     int		endFlag=1;
 	
     sprintf(serverName, "localhost");
+    alutInit(&argc,argv);
+    // 有効なバッファとソース番号を取得
+  alGenBuffers( 1, &buffer );
+  alGenSources( 1, &source );
 
+  alGenBuffers( 2, &buffer2 );
+  alGenSources( 2, &source2 );
+
+  // 提供されている"hello world"の音声バッファを作成
+  buffer = alutCreateBufferHelloWorld ();
+  buffer2 = alutCreateBufferFromFile( "musicbox.wav" );
+
+  alSourcei( source, AL_BUFFER, buffer );
+  alSourcei( source2, AL_BUFFER, buffer2 );
+  alSourcei(source2, AL_LOOPING, AL_TRUE );
+  alSourcePlay( source2 );
     /* コマンドライン引数の代入 */
   switch (argc) {
   case 1:
@@ -171,6 +189,7 @@ int main(int argc, char **argv)
     }
 
     glutMainLoop();
+    alutExit();
 
     return (0);
 }
@@ -937,6 +956,7 @@ void keyboard(unsigned char key, int x, int y)
 
        if(key == ' '){
         key7 = true;
+        alSourcePlay( source );
     } 
     if(key == 'l'){
         if(key8){
