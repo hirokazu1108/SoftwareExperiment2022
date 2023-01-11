@@ -116,7 +116,8 @@ float calmap(int i);
 #define TEX_HEIGHT 32
 #define TEX_WIDTH 32
 static GLubyte image[TEX_HEIGHT][TEX_WIDTH][4];
-char *modelname[] = {"sentouki.obj","data/castle.obj"} ;
+char *modelname[] = {"sentouki.obj","cloud.obj" ,"data/castle.obj"} ;
+int cloud_flag = 0;
 
 /***********************************************************
 |  ???????????main()
@@ -243,7 +244,15 @@ void display(void)
         glPushMatrix();           /* ??????????�??? */
         glColor3f(1.0, 1.0, 1.0); /* ???????????? */
         glScalef(1.0, 1.0, 1.0);
-         
+	    
+         if (cloud_flag == 0){
+                glmScale(model[1], 300.00);
+                lists(1);
+                glmScale(model[2], 36.00);
+                lists(2);
+                cloud_flag = 1;
+            }
+	    
         if (i < gClientNum) {
             /* ????????(BoxX, i, 0)???? */
             // glutWireCube (0.5);
@@ -256,9 +265,9 @@ void display(void)
             glRotatef(player[i].turn1*57.5, 0, 1, 0);
             glRotatef(player[i].turn2*57.5*-1, 1, 0, 0);
 
-            for (int j = 0; j < Model_Num; j++){
-                glCallList(model_list[j]);
-            }
+            glCallList(model_list[0]);
+            glCallList(model_list[1]);
+            glCallList(model_list[2]);
              
             //glutSolidCube(1.0);
            // glutWireSphere(0.4, 20.0, 10.0);
