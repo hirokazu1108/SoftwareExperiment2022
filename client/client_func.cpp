@@ -179,3 +179,33 @@ void WriteMatchFile(int value){
  
 	fclose(fp); // ファイルを閉じる
 }
+
+/* ランキング共有に使用する */
+// 上から並べる
+void WriteRankingFile(void){
+    FILE *fp; // FILE型構造体
+	char fname[] = "../data/ranking.txt";
+ 
+	fp = fopen(fname, "w"); // ファイルを開く。失敗するとNULLを返す。
+	if(fp == NULL) {
+		printf("%s file not open!\n", fname);
+		exit (-1);
+	} else {
+        for(int i=0; i<gClientNum; i++)
+		    fprintf(fp,"%s\n",game.clientName[game.ranking[i]]);
+	}
+ 
+	fclose(fp); // ファイルを閉じる
+}
+
+/* クライアントプログラムを終了してランキング画面を立ち上げる */
+void ExitClientProgram(void){
+    char command[256];
+    sprintf(command,"gnome-terminal -- bash -c \"echo 'main'; cd ../main; ./main result; bash\"");
+    std::cout << command << '\n';
+    system(command);
+
+    system("../data/exit.sh");
+    
+    exit(0);
+}
