@@ -42,7 +42,8 @@ extern bool retExists(const char *file);
 extern void WriteDataFile(SaveData *data);
 extern void ReadDataFile(SaveData *data);
 extern void WriteMatchFile(int value);
-
+extern void WriteRankingFile(void);
+extern void ExitClientProgram(void);
 
 extern int		gClientNum;
 extern int		clientID;
