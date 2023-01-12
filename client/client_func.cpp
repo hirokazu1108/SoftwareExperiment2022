@@ -26,7 +26,7 @@ void PlayerInit(void){
         player[i].attack = DAMAGE;
         player[i].size = 0.0f;
         player[i].mp = 0.0f;
-        player[i].hp = 3.0;
+        player[i].hp = (float)MAX_HP;
 	    player[i].ability = UP_ATTACK;
         player[i].skill = SKILL_ATTACK;
         player[i].special = SPECIAL_BIGBULLET;
@@ -118,19 +118,19 @@ void Ability(int id){
     switch(player[id].ability){
         
         case UP_ATTACK:
-        if(player[id].rate_attack <= MAX_ATTACK){
+        if(player[id].rate_attack < MAX_ATTACK){
             player[id].rate_attack += 0.25;
         }
         break;
 
         case HEAL:
-        if(player[id].hp <= MAX_HP){
+        if(player[id].hp < MAX_HP){
             player[id].hp += 0.5;
         }
         break;
 
         case UP_SPEED:
-        if(player[id].speed <= MAX_SPEED){
+        if(player[id].speed < MAX_SPEED){
             player[id].speed += 0.5;
         }
         break;

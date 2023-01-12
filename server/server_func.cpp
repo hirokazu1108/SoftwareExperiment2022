@@ -26,7 +26,7 @@ void PlayerInit(void){
         player[i].attack = DAMAGE;
         player[i].size = 0.0f;
         player[i].mp = 0.0f;
-        player[i].hp = 3.0;
+        player[i].hp = (float)MAX_HP;
 	    player[i].ability = UP_ATTACK;
         player[i].skill = SKILL_ATTACK;
         player[i].special = SPECIAL_BIGBULLET;

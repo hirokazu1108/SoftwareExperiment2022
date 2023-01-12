@@ -12,6 +12,17 @@
 
 #define Model_Num 6
 
+/* bar struct */
+class Bar{
+    public:
+    float x1;
+    float y1;
+    float x2;
+    float y2;
+    float w;
+    Bar(float a,float b, float c, float d){x1=a;y1=b;x2=c;y2=d;w=c-a;}
+};
+
 /* client_net.cpp */
 extern int SetUpClient(char *hostName,u_short port,int *clientID,int *num,char clientNames[][NAME_MAX_LENGTH+1]);
 extern void CloseSoc(void);
