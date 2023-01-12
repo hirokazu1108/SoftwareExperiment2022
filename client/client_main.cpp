@@ -263,13 +263,10 @@ void display(void)
             lists(4);
             glmScale(model[5], 36.00);
             lists(5);
-            glCallList(model_list[4]);
-            glCallList(model_list[5]);
             cloud_flag = 1;
         }
         
-        glCallList(model_list[4]);
-        glCallList(model_list[5]);
+        
 
         glTranslatef(player[i].pos.x, player[i].pos.y,player[i].pos.z);
 
@@ -300,131 +297,9 @@ void display(void)
             glPopMatrix();
         }
     }
-
-    //???????
-    
-    
-    //???????
-    
-    /*glColor3f(1.0, 1.0, 1.0); 
-    glPushMatrix();
-    glColor3f(0.0, 1.0, 0.0);
-    glTranslatef(0.0, -0.8, 1000);
-    glScalef(1000.0, 0.1, 1.8);
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-    //???????
-    glPushMatrix();
-    glColor3f(0.0, 0.0, 1.0);
-    glTranslatef(0.0, -0.8, -1.5*i);
-    glScalef(1000.0, 0.1, 1000);
-    glutSolidCube(1.0);
-    glPopMatrix();*/
-    
-    //?????????
-
-     for (i = 0; i < 50; i++) {
-        glPushMatrix();
-        glColor3f(1.0, 1.0, 0.0);
-        glTranslatef(-15 - 10, -1.5, -4*i);
-        glRotatef(-90, 1.0, 0.0, 0.0);
-        glutSolidCone(0.5, 3.6, 10, 2);
-        glPopMatrix();
-    }
-    for (i = 0; i < 50; i++) {
-        glPushMatrix();
-        glColor3f(1.0, 1.0, 0.0);
-        glTranslatef(-15 - 10, 1.5, 4*i);
-        glRotatef(-90, 1.0, 0.0, 0.0);
-        glutSolidCone(0.5, 3.6, 10, 2);
-        glPopMatrix();
-    }
-
-    for (i = 0; i < 20; i++) {
-        glPushMatrix();
-        glColor3f(1.0, 0.0, 1.0);
-        glTranslatef(i * -15 - 10, -1.5, 4);
-        glRotatef(-90, 1.0, 0.0, 0.0);
-        glutSolidCone(0.5, 3.6, 10, 2);
-        glPopMatrix();
-    }
-    for (i = 0; i < 20; i++) {
-        glPushMatrix();
-        glColor3f(1.0, 0.0, 0.0);
-        glTranslatef(i * -15 - 10, -1.5, -4);
-        glRotatef(-90, 1.0, 0.0, 0.0);
-        glutSolidCone(0.5, 3.6, 10, 2);
-        glPopMatrix();
-    }
-
-    for (i = 0; i < 50; i++) {
-        glPushMatrix();
-
-        if (i % 2) {
-            glColor3f(1.0, 0.0, 0.0);
-            glTranslatef(i * -15 - 10, -1.5, i % 4);
-        } else {
-            glColor3f(0.0, 1.0, 0.0);
-            glTranslatef(i * -15 - 10, 2, (i * -1) % 4 * -1);
-        }
-        glRotatef(-90, 1.0, 0.0, 0.0);
-        glutSolidCube(0.1);
-        glPopMatrix();
-    }
-
-    for (i = 0; i < 50; i++) {
-        glPushMatrix();
-        glColor3f(1.0, 0.0, 1.0);
-
-        glTranslatef(i * -15 - 10, -1.5, 3);
-
-        glRotatef(-90, 1.0, 0.0, 0.0);
-        glutSolidCube(0.1);
-        glPopMatrix();
-    }
-
-    // ???
-    for (i = 0; i < 5; i++) {
-        glPushMatrix();
-        glColor3f(0.0, 0.0, 1.0);
-        glTranslatef(i * -100 - 10, -0.4, 0);
-        glRotatef(-90, 1.0, 0.0, 0.0);
-        glutSolidCone(0.2, 0.6, 10, 2);
-        glPopMatrix();
-    }
-    for (i = 0; i < 5; i++) {
-        glPushMatrix();
-        glColor3f(0.0, 1.0, 0.0);
-        glTranslatef(i * -100 - 70, -0.4, -1.4);
-        glRotatef(-90, 1.0, 0.0, 0.0);
-        glutSolidCone(0.2, 0.6, 10, 2);
-        glPopMatrix();
-    }
-    for (i = 0; i < 5; i++) {
-        glPushMatrix();
-        glColor3f(1.0, 0.0, 0.0);
-        glTranslatef(i * -100 - 50, -0.4, 1.4);
-        glRotatef(-90, 1.0, 0.0, 0.0);
-        glutSolidCone(0.2, 0.6, 10, 2);
-        glPopMatrix();
-    }
-
-    if (flag < 100) {
-      //  Goal();
-    }
-
-    glPushMatrix();                    /* ???????????é???? */
-    glColor3f(1.0, 1.0, 0);            /* ????????(1.0,1.0,1.0)????? */
-    glRotatef(90, 0, 1.0, 0);          /* Y??????BoxRotate(??)??é???? */
-    glTranslatef(-0.18, 0.5, player[clientID].pos.x); /* ????????? */
-    glPopMatrix();
-   
-
-    glPushMatrix();
-    glTranslatef(-2.0, 0.0, -20.0);
-    glRotatef(90, 0.0, 1.0, 0.0);
-    glColor3f(1.0, 1.0, 1.0);
+    glPushMatrix();  
+    glCallList(model_list[4]);
+    glCallList(model_list[5]);
     glPopMatrix();
 
     move_bullet(bullet_Num);    // čď˝çł??????éé č??
