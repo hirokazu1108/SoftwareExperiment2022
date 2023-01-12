@@ -1,7 +1,7 @@
 #include "header.h"
 
 /* 画像パス */
-static const char *imgFile[IMG_NUM] = { "name.png", "skill.png","special.png","status.png", "explain_skill.png","nowSelectButton.png", "changeButton.png","backButton.png",  "skill_attack.png", "skill_hp.png","skill_speed.png", "pin.png", "back.png","nameChange.png","skillChange.png","selectHikouki.png"};
+static const char *imgFile[IMG_NUM] = { "name.png", "skill.png","special.png","status.png", "explain_skill.png","nowSelectButton.png", "changeButton.png","backButton.png",  "skill_attack.png", "skill_hp.png","skill_speed.png", "pin.png", "back.png","nameChange.png","skillChange.png","selectHikouki.png","title_sky.png","title_sky2.png"};
 static const char *textStr[TEXT_NUM] = {"Space Battle","SERVER","CLIENT","CUSTOMIZE","input client num.","input passcode.","del","Enter","self","input device num.","clpc","nowLoading...","Result","Exit", "toTitle","0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"," ", "-"};
 /* フォントパス */
 static char gFontFile[] = "../fonts/Yomogi-Regular.ttf";
