@@ -27,10 +27,12 @@
 #define BULLET_SPEED   0.5f     // 弾の速度
 #define DAMAGE         1.0f				
 #define MAX_HP 3.0f
+#define MAX_BARRIER 3.0f
 #define MAX_SPEED 2.0f
 #define MAX_ATTACK 2.0f
 #define BULLET_RADIUS 0.3       //radius of bullet collider
 #define MAX_MP 100.0f
+
 
 #define PLAYERDATA_COMMAND 's'
 #define END_COMMAND 'e'
@@ -42,7 +44,7 @@
 #define PARAMATER_SUM_MAX 10    //max of sum of status paramaters
 #define NAME_MAX_LENGTH 20      //max length of client name
 #define SKILL_NUM 3             //num of skills
-#define SPECIAL_NUM 3           //num of specials
+#define SPECIAL_NUM 4           //num of specials
 #define FILENAME_GAMEDATA "../data/gamedata.bin"
 
 typedef enum {
@@ -72,6 +74,7 @@ typedef enum{
 }SKILL;
 
 typedef enum{
+    SPECIAL_BARRIER,
     SPECIAL_LASER,
     SPECIAL_BIGBULLET,
     SPECIAL_POWERUP,
@@ -102,6 +105,7 @@ public:
     float hp;
     float size;
     int reloadTime;
+    float isBarrier; //true : barrier mode
     Sphere collider;
     Ability_Type ability;
     SKILL skill;
@@ -144,3 +148,4 @@ typedef class{
 }SaveData;
 
 #endif 
+

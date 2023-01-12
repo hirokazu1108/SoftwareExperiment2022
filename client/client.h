@@ -51,6 +51,7 @@ extern bool OnColliderSphere(Sphere a, Sphere b);
 extern void drawPlayerCollider(void);
 extern void Collider(void);
 extern void Ability(int id);
+extern void useSpecial(void);
 extern bool retExists(const char *file);
 extern void WriteDataFile(SaveData *data);
 extern void ReadDataFile(SaveData *data);
@@ -70,3 +71,4 @@ extern ALuint source;
 extern ALuint buffer2;
 extern ALuint source2;
 #endif
+
