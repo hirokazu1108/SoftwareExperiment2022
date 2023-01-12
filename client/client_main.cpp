@@ -12,6 +12,7 @@ int		gClientNum;
 int		clientID;
 Player *player;
 Game game; //?????????
+int endFlag = 1; //1:続ける　-1:エスケープ  0:ランキング終了
 
 ALuint buffer;
 ALuint source;
@@ -533,7 +534,10 @@ void display(void)
     
     
     /* ???????????????????????????? */
-    SendRecvManager();
+    if((endFlag = SendRecvManager()) != 1)
+    {
+        ExitClientProgram(endFlag);
+    }
     SendPlayerDataCommand(); //PlayerData??????鐃?????
     
     
@@ -850,7 +854,7 @@ void keyboard(unsigned char key, int x, int y)
    
     //esc
     if(key == '\033'){
-        ExitClientProgram(0);
+        SendEndCommand();
     }
     if(key == 'l'){
         j++;
