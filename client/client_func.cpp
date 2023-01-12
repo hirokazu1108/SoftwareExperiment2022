@@ -50,6 +50,25 @@ void PlayerInit(void){
 
 }
 
+void AudioInit(int *argc, char **argv){
+    alutInit(argc,argv);
+
+    alGenBuffers( 1, &buffer );
+    alGenSources( 1, &source );
+
+    alGenBuffers( 2, &buffer2 );
+    alGenSources( 2, &source2 );
+
+    // ���箴����������������"hello world"�����喝０�����������＜��篏����
+    buffer = alutCreateBufferHelloWorld ();
+    buffer2 = alutCreateBufferFromFile( "BGM.wav" );
+
+    alSourcei( source, AL_BUFFER, buffer );
+    alSourcei( source2, AL_BUFFER, buffer2 );
+    alSourcei(source2, AL_LOOPING, AL_TRUE );
+    alSourcePlay( source2 );
+}
+
 /* 球同士の当たり判定 */
 bool OnColliderSphere(Sphere a, Sphere b){
   
@@ -199,13 +218,21 @@ void WriteRankingFile(void){
 }
 
 /* クライアントプログラムを終了してランキング画面を立ち上げる */
-void ExitClientProgram(void){
-    char command[256];
-    sprintf(command,"gnome-terminal -- bash -c \"echo 'main'; cd ../main; ./main result; bash\"");
-    std::cout << command << '\n';
-    system(command);
+//mode 0:only exit  1:exit and start result program
+void ExitClientProgram(int mode){
+    switch(mode)
+    {
+        case 1:
+            char command[256];
+            sprintf(command,"gnome-terminal -- bash -c \"echo 'main'; cd ../main; ./main result; bash\"");
+            std::cout << command << '\n';
+            system(command);
+            break;
+    }
 
-    system("../data/exit.sh");
-    
+    printf("here;\n");
+    alutExit();
+
+    system("exit");
     exit(0);
 }

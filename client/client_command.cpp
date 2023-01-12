@@ -53,7 +53,7 @@ int ExecuteCommand(char command)
             }
 	    //ゲームをリザルトに切り替える
             WriteRankingFile();
-            ExitClientProgram();
+            ExitClientProgram(1);
             break;
         case END_COMMAND:
             endFlag = 1;

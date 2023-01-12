@@ -2,6 +2,7 @@
 #define _CLIENT_FUNC_H_
 
 #include"../constants.h"
+#include <AL/alut.h>
 #include <joyconlib.h>
 
 #define WINDOW_PosX 0
@@ -34,6 +35,7 @@ extern void SendBulletDataCommand(int num);
 
 /* client_func.cpp */
 extern void PlayerInit(void);
+extern void AudioInit(int *argc, char **argv);
 extern bool OnColliderSphere(Sphere a, Sphere b);
 extern void drawPlayerCollider(void);
 extern void Collider(void);
@@ -43,7 +45,7 @@ extern void WriteDataFile(SaveData *data);
 extern void ReadDataFile(SaveData *data);
 extern void WriteMatchFile(int value);
 extern void WriteRankingFile(void);
-extern void ExitClientProgram(void);
+extern void ExitClientProgram(int mode);
 
 extern int		gClientNum;
 extern int		clientID;
@@ -51,4 +53,9 @@ extern int bullet_Num;   // 発射された弾の個数
 extern Player *player;
 extern Game game;
 extern std::vector<BULLET> array_bullet;
+
+extern ALuint buffer;
+extern ALuint source;
+extern ALuint buffer2;
+extern ALuint source2;
 #endif
