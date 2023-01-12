@@ -28,6 +28,7 @@ void PlayerInit(void){
         player[i].mp = 0.0f;
         player[i].hp = (float)MAX_HP;
 	player[i].isBarrier = 0.0f;
+    player[i].isDisable = 0.0f;
 	player[i].ability = UP_ATTACK;
         player[i].skill = SKILL_ATTACK;
         player[i].special = SPECIAL_BIGBULLET;
