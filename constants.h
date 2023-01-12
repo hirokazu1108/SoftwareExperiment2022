@@ -44,7 +44,7 @@
 #define PARAMATER_SUM_MAX 10    //max of sum of status paramaters
 #define NAME_MAX_LENGTH 20      //max length of client name
 #define SKILL_NUM 3             //num of skills
-#define SPECIAL_NUM 4           //num of specials
+#define SPECIAL_NUM            //num of specials
 #define FILENAME_GAMEDATA "../data/gamedata.bin"
 
 typedef enum {
@@ -75,9 +75,10 @@ typedef enum{
 
 typedef enum{
     SPECIAL_BARRIER,
-    SPECIAL_LASER,
     SPECIAL_BIGBULLET,
+    SPECIAL_GAMBLE,
     SPECIAL_POWERUP,
+    SPECIAL_LASER,
 }SPECIAL;
 
 /* 球の当たり判定 */
