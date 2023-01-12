@@ -1326,17 +1326,17 @@ void move(){
          player[clientID].collider.pos = player[clientID].pos;
       
 
-      if(player[clientID].pos.z>1000||player[clientID].pos.z<-1000){
+      if(player[clientID].pos.z>WORLDSIZE_Z||player[clientID].pos.z<-WORLDSIZE_Z){
         player[clientID].pos.x =0;
         player[clientID].pos.y = 0;
         player[clientID].pos.z = 0;
       }
-      if(player[clientID].pos.x>1000||player[clientID].pos.x<-1000){
+      if(player[clientID].pos.x>WORLDSIZE_X||player[clientID].pos.x<-WORLDSIZE_X){
         player[clientID].pos.x =0;
         player[clientID].pos.y = 0;
         player[clientID].pos.z = 0;
       }
-      if(player[clientID].pos.y>500||player[clientID].pos.y<-500){
+      if(player[clientID].pos.y>WORLDSIZE_Y||player[clientID].pos.y<-WORLDSIZE_Y){
         player[clientID].pos.x =0;
         player[clientID].pos.y = 0;
         player[clientID].pos.z = 0;
