@@ -380,7 +380,8 @@ void ExcuteInput(void){
                     PushedButton();
                     break;
                 case INPUT_ESCAPE:
-                    game.scene = SCENE_None;
+                    game.scene = SCENE_Title;
+                    game.selectButton = 0;
                     break;
                 default:
                     if(INPUT_1 <= game.input && game.input <= INPUT_4){
@@ -467,7 +468,8 @@ void ExcuteInput(void){
                     PushedButton();
                     break;
                 case INPUT_ESCAPE:
-                    game.scene = SCENE_None;
+                    game.scene = SCENE_Title;
+                    game.selectButton = 0;
                     break;
                 case INPUT_BACKSPACE:
                     game.selectButton = 10;//削除ボタン
