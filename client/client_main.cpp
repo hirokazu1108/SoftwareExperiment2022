@@ -198,7 +198,9 @@ void display(void)
     if(player[clientID].isBarrier > 0.0f){
         player[clientID].isBarrier -= 0.01f;
     }
-    
+    if(player[clientID].isDisable > 0.0f){
+        player[clientID].isDisable -= 0.01f;
+    }
 	
     int i;
     float color[4] = {1.0};
@@ -207,7 +209,7 @@ void display(void)
         CameraX = CameraX;
         CameraY = CameraY;
         CameraZ = CameraZ;
-       //CameraX = BoxX[0] +sin(turn*0.1f)*5 ;
+        //CameraX = BoxX[0] +sin(turn*0.1f)*5 ;
         //CameraY = BoxY[0] + sin(turn2*0.1f)*5;
         //CameraZ = BoxZ[0]+cos(turn*0.1f)*5;
         CameraX = player[clientID].pos.x /*+sin(turn*0.1f)*5*/  +sin(player[clientID].turn1)*5 *cos(player[clientID].turn3);
@@ -265,7 +267,7 @@ void display(void)
             glCallList(model_list[5]);
             cloud_flag = 1;
         }
-            
+        
         glCallList(model_list[4]);
         glCallList(model_list[5]);
 
@@ -274,8 +276,17 @@ void display(void)
         glRotatef(player[i].turn1*57.5, 0, 1, 0);
         glRotatef(player[i].turn2*57.5*-1, 1, 0, 0);
 
-        glCallList(model_list[i]);
-            
+        if(player[i].isDisable > 0.0f)
+        {
+            glEnable(GL_BLEND);
+            glColor4f(1.0f,1.0f,1.0f,0.95f);
+            glCallList(model_list[1]);
+            glDisable(GL_BLEND);
+        }
+        else{
+            glCallList(model_list[i]);
+        }
+        
         glPopMatrix();
 
         if(player[i].isBarrier > 0.0f){
@@ -1614,4 +1625,3 @@ void add_lifetime(int add_lifetimeID){
         glutTimerFunc(1000, add_lifetime, 0);
     }
 }
-
