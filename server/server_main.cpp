@@ -1,6 +1,6 @@
 #include "server.h"
 
-int	gClientNum; //ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆæ•°
+int	gClientNum; //????????¤ã?¢ã?³ã?????
 Player *player;
 Game game;
 
@@ -13,7 +13,7 @@ int main(int argc,char *argv[])
 	int	endFlag = 1;
   u_short port = PORT;
 
-	/* å¼•ãæ•°ãƒã‚§ãƒƒã‚¯ */
+	/* å¼??????°ã????§ã????? */
   switch (argc) {
   case 1:
 	fprintf(stderr,"Usage: number of clients\n");
@@ -39,19 +39,19 @@ int main(int argc,char *argv[])
   }
 
 
-  /** åˆæœŸåŒ–å‡¦ç† **/
+  /** ??????????????? **/
     /* SDL */
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0) {
         return PrintError(SDL_GetError());
     }
-    /** UIåˆæœŸåŒ– **/
+    /** UI????????? **/
     if (InitWindow() < 0) {
         PrintError("failed to initialize Windows");
         EndWindow();
         return 0;
     }
 
-  //ã‚¿ã‚¤ãƒãƒ¼èµ·å‹•
+  //??¿ã?¤ã????¼èµ·???
   SDL_TimerID ptimer = SDL_AddTimer(1000, PlayTimer, NULL);
   if (ptimer == 0) {
     PrintError(SDL_GetError());
@@ -59,7 +59,7 @@ int main(int argc,char *argv[])
     return 0;
   }
 
-	/* ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã¨ã®æ¥ç¶š */
+	/* ????????¤ã?¢ã?³ã?????????¥ç¶? */
 	if(SetUpServer(gClientNum,port) == -1){
 		fprintf(stderr,"Cannot setup server\n");
 		exit(-1);
@@ -68,15 +68,16 @@ int main(int argc,char *argv[])
 
   PlayerInit();
 
-  /* ã‚²ãƒ¼ãƒ æƒ…å ±ã®åˆæœŸåŒ– */
+  /* ??²ã?¼ã???????±ã??????????? */
   game.state = State_Play;
 
-	/* ãƒ¡ã‚¤ãƒ³ã‚¤ãƒ™ãƒ³ãƒˆãƒ«ãƒ¼ãƒ— */
+	/* ??¡ã?¤ã?³ã?¤ã????³ã???????¼ã?? */
 	while(endFlag){
 		endFlag = SendRecvManager();
+    printf("ed:%d\n",endFlag);
 	};
 
-	/* çµ‚äº†å‡¦ç† */
+	/* çµ?äº??????? */
 	Ending();
 
 	return 0;
@@ -89,7 +90,7 @@ int PrintError(const char* str)
 }
 
 void EndWindow(void){
-    /** çµ‚äº†å‡¦ç† **/
+    /** çµ?äº??????? **/
 
     //SDL_RemoveTimer(atimer);
     DestroyWindow();
@@ -98,7 +99,7 @@ void EndWindow(void){
 }
 
 
-//ã‚¿ã‚¤ãƒãƒ¼å‡¦ç†(ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®æ›´æ–°)
+//??¿ã?¤ã????¼å?????(??¢ã????¡ã?¼ã?·ã?§ã?³ã????´æ??)
 Uint32 PlayTimer(Uint32 interval, void* param)
 {
   gUi.time_sec ++;

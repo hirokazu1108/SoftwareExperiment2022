@@ -53,10 +53,11 @@ int ExecuteCommand(char command)
             }
 	    //ゲームをリザルトに切り替える
             WriteRankingFile();
-            ExitClientProgram(1);
+            endFlag = 0;
             break;
         case END_COMMAND:
-            endFlag = 1;
+            endFlag = -1;
+            printf("END SELECTED.\n");
 			break;
         default:
             break;
