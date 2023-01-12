@@ -3,22 +3,22 @@
 void PlayerInit(void){
      /* Player???????????? */
     SaveData data;
-
-	player = (Player*)malloc(sizeof(Player)*gClientNum);
+    srand(time(NULL));
+    glm::vec3 spawnPos[gClientNum];
+    
+    for(int i=0; i<gClientNum; i++){
+        spawnPos[i] = glm::vec3(((rand()%2)==1 ? 1: -1)*rand()%(WORLDSIZE_X/5),((rand()%2)==1 ? 1: -1)*rand()%(WORLDSIZE_Y/5),((rand()%2)==1 ? 1: -1)*rand()%(WORLDSIZE_Z/5));
+    }
+    
+    player = (Player*)malloc(sizeof(Player)*gClientNum);
     for(int i = 0; i< gClientNum;i++)
     {
         player[i].enabled = true;
         player[i].speed = 1.0;
-        player[i].dir.x = 0;
-        player[i].dir.y = 0;
-        player[i].dir.z = 0;
-        player[i].pos.x = 0;
-        player[i].pos.y = 0;
-        player[i].pos.z = 0;
-        player[i].upVec.x = 0;
-        player[i].upVec.y = 0;
-        player[i].upVec.z = 0;
-	    player[i].rate_attack = 1.0;
+        player[i].dir = glm::vec3(0,0,0);
+        player[i].pos = spawnPos[i];
+        player[i].upVec = glm::vec3(0,0,0);
+	player[i].rate_attack = 1.0;
         player[i].turn1 = 0;
         player[i].turn2 = 0;
         player[i].turn3 = 0;
@@ -27,7 +27,7 @@ void PlayerInit(void){
         player[i].size = 0.0f;
         player[i].mp = 0.0f;
         player[i].hp = (float)MAX_HP;
-        player[i].isBarrier = 0.0f;
+        player[i].isBarrier = (float)MAX_BARRIER;
         player[i].isDisable = 0.0f;
 	    player[i].ability = UP_ATTACK;
         player[i].skill = SKILL_ATTACK;
