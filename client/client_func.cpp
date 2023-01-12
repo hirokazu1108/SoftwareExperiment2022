@@ -154,7 +154,12 @@ void useSpecial(void){
     {
         switch(player[clientID].special){
             case SPECIAL_BARRIER:
-                
+		printf("create barrier\n");
+             	player[clientID].isBarrier = (float)MAX_BARRIER;
+                break;
+	    case SPECIAL_GAMBLE:
+                break;
+            case SPECIAL_BIGBULLET:
                 break;
             default:
                 break;
@@ -163,7 +168,7 @@ void useSpecial(void){
     else{
         printf("can not use special.\n");
     }
-    player[clientID].isBarrier = (float)MAX_BARRIER;
+    
 }
 
 /* ?????¡ã?¤ã?????å­????????????????è¿???? */
