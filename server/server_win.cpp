@@ -46,7 +46,9 @@ int InitWindow(void)
      *  があると想定
      */
     for (int i = 0; i < IMG_NUM; i++) {
-        SDL_Surface *s = IMG_Load(imgFile[i]);
+        char pass[128];
+        sprintf(pass,"../images/%s",imgFile[i]);
+        SDL_Surface *s = IMG_Load(pass);
         if (NULL == s) {
             return PrintError("failed to open ui image.");
         }
