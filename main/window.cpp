@@ -50,7 +50,7 @@ int InitWindow(void)
      */
     for (int i = 0; i < IMG_NUM; i++) {
         char pass[128];
-        sprintf(pass,"images/%s",imgFile[i]);
+        sprintf(pass,"../images/%s",imgFile[i]);
         printf("%s\n",pass);
         SDL_Surface *s = IMG_Load(pass);
         if (NULL == s) {
