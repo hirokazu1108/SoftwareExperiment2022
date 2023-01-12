@@ -10,6 +10,10 @@
 #define WINDOW_WIDTH 1000
 #define WINDOW_HEIGHT 1000
 
+#define WORLDSIZE_X 1000
+#define WORLDSIZE_Y 500
+#define WORLDSIZE_Z 1000
+
 #define Model_Num 6
 
 /* bar struct */
