@@ -50,7 +50,7 @@ int InitWindow(void)
      */
     for (int i = 0; i < IMG_NUM; i++) {
         char pass[128];
-        sprintf(pass,"images/%s",imgFile[i]);
+        sprintf(pass,"../images/%s",imgFile[i]);
         printf("%s\n",pass);
         SDL_Surface *s = IMG_Load(pass);
         if (NULL == s) {
@@ -228,7 +228,7 @@ void RenderTitleWindow(void)
 /* サーバーの人数入力の画面 */
 void RenderServerWindow_0(void){
     //背景
-    uiImg[uname_title_sky].drawTexture(-50,0,uiImg[uname_title_sky].w/1.07,uiImg[uname_title_sky].h/1.07);
+    uiImg[uname_title_sky2].drawTexture(0,0,uiImg[uname_title_sky2].w,uiImg[uname_title_sky2].h);
     
     // 文字の表示　「クライアント人数」
     textImg[tname_inputNum].drawTexture(300,100);
@@ -254,7 +254,7 @@ void RenderServerWindow_0(void){
 /* パスコード入力の画面 */
 void RenderPasscodeWindow(){
     //背景
-    uiImg[uname_title_sky].drawTexture(-50,0,uiImg[uname_title_sky].w/1.07,uiImg[uname_title_sky].h/1.07);
+    uiImg[uname_title_sky2].drawTexture(0,0,uiImg[uname_title_sky2].w,uiImg[uname_title_sky2].h);
     
     // 文字の表示　「パスコード」
     textImg[tname_inputPasscode].drawTexture(300,100);
@@ -291,7 +291,7 @@ void RenderPasscodeWindow(){
 /* デバイス番号入力の画面 */
 void RenderDeviceNumWindow(void){
     //背景
-    uiImg[uname_title_sky].drawTexture(-50,0,uiImg[uname_title_sky].w/1.07,uiImg[uname_title_sky].h/1.07);
+    uiImg[uname_title_sky2].drawTexture(0,0,uiImg[uname_title_sky2].w,uiImg[uname_title_sky2].h);
     
     // 文字の表示　「デバイス名を入力してください」
     textImg[tname_inputDevice].drawTexture(300,100);
@@ -346,8 +346,11 @@ void RenderCustomizeWindow(void){
     }
 
     //背景色（黄土色）
+    /*
     SDL_SetRenderDrawColor(game.render,253,245,230,255);
-    SDL_RenderClear(game.render);
+    SDL_RenderClear(game.render);*/
+    //背景
+    uiImg[uname_title_sky2].drawTexture(0,0,uiImg[uname_title_sky2].w,uiImg[uname_title_sky2].h);
 
     // 文字の表示　「CUSTOMIZE」
     textImg[tname_customize].drawTexture(350,25-scrollValue);
@@ -358,6 +361,8 @@ void RenderCustomizeWindow(void){
 
     // 画像の表示　「名前入力欄」
     uiImg[uname_name].drawTexture(50,10-scrollValue,uiImg[uname_name].w/1.2,uiImg[uname_name].h/1.2);
+
+    
     // 文字の表示　「名前」
     for(int i=0; game.clientName[i]!='\0'; i++){
             textName tn = retTextNameFromChar( game.clientName[i]);
@@ -454,7 +459,7 @@ void RenderCustomizeWindow(void){
 
 void RenderClientWaitWindow(void){
     //背景
-    uiImg[uname_title_sky].drawTexture(-50,0,uiImg[uname_title_sky].w/1.07,uiImg[uname_title_sky].h/1.07);
+    uiImg[uname_title_sky2].drawTexture(0,0,uiImg[uname_title_sky2].w,uiImg[uname_title_sky2].h);
 
    textImg[tname_nowloading].drawTexture(100,100,textImg[tname_nowloading].w/1.2,textImg[tname_nowloading].h/1.2);
 
@@ -463,7 +468,7 @@ void RenderClientWaitWindow(void){
 
 void RenderResultWindow(void){
     //背景
-    uiImg[uname_title_sky].drawTexture(-50,0,uiImg[uname_title_sky].w/1.07,uiImg[uname_title_sky].h/1.07);
+    uiImg[uname_title_sky2].drawTexture(0,0,uiImg[uname_title_sky2].w,uiImg[uname_title_sky2].h);
 
     textImg[tname_result].drawTexture(100,100,textImg[tname_result].w/1.2,textImg[tname_result].h/1.2);
 

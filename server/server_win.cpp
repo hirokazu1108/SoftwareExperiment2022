@@ -1,12 +1,12 @@
 #include "server.h"
 
-/* ²èÁü¥Ñ¥¹ */
-static const char *imgFile[IMG_NUM] = {  };
+/* ç”»åƒãƒ‘ã‚¹ */
+static const char *imgFile[IMG_NUM] = { "title_sky.png","title_sky2.png" };
 static const char *textStr[TEXT_NUM] = {"Wait Client","PassCode:","0","1","2","3","4","5","6","7","8","9"};
-/* ¥Õ¥©¥ó¥È¥Ñ¥¹ */
+/* ãƒ•ã‚©ãƒ³ãƒˆãƒ‘ã‚¹ */
 static char gFontFile[] = "../fonts/FreeSerifBoldItalic.ttf";
 
-/* ¥Ü¥¿¥ó¤Î°ÌÃÖ */
+/* ãƒœã‚¿ãƒ³ã®ä½ç½® */
 std::vector<SDL_Rect> buttonPos[SCENE_NUM];
 
 
@@ -17,20 +17,20 @@ ImgInfo uiImg[IMG_NUM];
 ImgInfo textImg[TEXT_NUM];
 
 
-/* ´Ø¿ô */
+/* é–¢æ•° */
 static int MakeMessage(void);
 static int rectangleColorRect(SDL_Renderer *render, SDL_Rect *rect, Uint32 color);
 static int boxColorRect(SDL_Renderer *render, SDL_Rect *rect, Uint32 color);
 
-// ¥á¥¤¥ó¥¦¥¤¥ó¥É¥¦¤ÎÉ½¼¨¡¤ÀßÄê
+// ãƒ¡ã‚¤ãƒ³ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ã®è¡¨ç¤ºï¼Œè¨­å®š
 int InitWindow(void)
 {
-    /* SDL_image½é´ü²½ */
+    /* SDL_imageåˆæœŸåŒ– */
     if (IMG_INIT_PNG != IMG_Init(IMG_INIT_PNG)) {
         return PrintError("failed to initialize SDL_image");
     }
 
-    /** ¥á¥¤¥ó¤Î¥¦¥¤¥ó¥É¥¦(É½¼¨²èÌÌ)¤È¥ì¥ó¥À¥é¡¼¤ÎºîÀ® **/
+    /** ãƒ¡ã‚¤ãƒ³ã®ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦(è¡¨ç¤ºç”»é¢)ã¨ãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼ã®ä½œæˆ **/
     gUi.window = SDL_CreateWindow("main", 0, 0, WD_Width, WD_Height, 0);
     if (gUi.window == NULL)
         return PrintError(SDL_GetError());
@@ -39,14 +39,16 @@ int InitWindow(void)
     if (gUi.render == NULL)
         return PrintError(SDL_GetError());
 
-    /** ¥­¥ã¥é²èÁü¤ÎÆÉ¤ß¹ş¤ß **/
-    /* ²èÁü¤Ï¡¤
-     *  ²£Êı¸ş¤Ë¥¢¥Ë¥á¡¼¥·¥ç¥ó¥Ñ¥¿¡¼¥ó
-     *  ½ÄÊı¸ş¤Ë¸ş¤­¥Ñ¥¿¡¼¥ó¡Ê»ş·×²ó¤ê¡¤ºÇ½é¤¬¢¬¡Ë
-     *  ¤¬¤¢¤ë¤ÈÁÛÄê
+    /** ã‚­ãƒ£ãƒ©ç”»åƒã®èª­ã¿è¾¼ã¿ **/
+    /* ç”»åƒã¯ï¼Œ
+     *  æ¨ªæ–¹å‘ã«ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ã‚¿ãƒ¼ãƒ³
+     *  ç¸¦æ–¹å‘ã«å‘ããƒ‘ã‚¿ãƒ¼ãƒ³ï¼ˆæ™‚è¨ˆå›ã‚Šï¼Œæœ€åˆãŒâ†‘ï¼‰
+     *  ãŒã‚ã‚‹ã¨æƒ³å®š
      */
     for (int i = 0; i < IMG_NUM; i++) {
-        SDL_Surface *s = IMG_Load(imgFile[i]);
+        char pass[128];
+        sprintf(pass,"../images/%s",imgFile[i]);
+        SDL_Surface *s = IMG_Load(pass);
         if (NULL == s) {
             return PrintError("failed to open ui image.");
         }
@@ -60,23 +62,23 @@ int InitWindow(void)
         }
     }
 
-    /** ¥á¥Ã¥»¡¼¥¸ºîÀ® **/
+    /** ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ä½œæˆ **/
     if (MakeMessage())
         return -1;
 
-    /** ¥¦¥¤¥ó¥É¥¦¤Ø¤ÎÉÁ²è **/
+    /** ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ã¸ã®æç”» **/
     RenderWaitClientWindow();
 
-    /* imageÍøÍÑ½ªÎ»(¥Æ¥¯¥¹¥Á¥ã¤ËÅ¾Á÷¸å¤Ï¥²¡¼¥àÃæ¤Ë»È¤ï¤Ê¤¤¤Î¤Ç) */
+    /* imageåˆ©ç”¨çµ‚äº†(ãƒ†ã‚¯ã‚¹ãƒãƒ£ã«è»¢é€å¾Œã¯ã‚²ãƒ¼ãƒ ä¸­ã«ä½¿ã‚ãªã„ã®ã§) */
     IMG_Quit();
 
     return 0;
 }
 
-/* ¥¦¥¤¥ó¥É¥¦¤Î½ªÎ»½èÍı */
+/* ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ã®çµ‚äº†å‡¦ç† */
 void DestroyWindow(void)
 {
-    /* ¥Æ¥¯¥¹¥Á¥ã¤Ê¤É */
+    /* ãƒ†ã‚¯ã‚¹ãƒãƒ£ãªã© */
     for (int i = 0; i < IMG_NUM; i++)
         SDL_DestroyTexture(uiImg[i].texture);
     for (int i = 0; i < TEXT_NUM; i++)
@@ -86,35 +88,35 @@ void DestroyWindow(void)
     SDL_DestroyWindow(gUi.window);
 }
 
-/* ¥á¥Ã¥»¡¼¥¸ºîÀ®
+/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ä½œæˆ
  *
- * ÊÖÃÍ
- *   Àµ¾ï½ªÎ»: 0
- *   ¥¨¥é¡¼  : Éé¿ô
+ * è¿”å€¤
+ *   æ­£å¸¸çµ‚äº†: 0
+ *   ã‚¨ãƒ©ãƒ¼  : è² æ•°
  */
 static int MakeMessage(void)
 {
     int ret = 0;
-    /* ¥Õ¥©¥ó¥È¤«¤é¥á¥Ã¥»¡¼¥¸¥Æ¥¯¥¹¥Á¥ãºîÀ® */
-    /* ½é´ü²½ */
+    /* ãƒ•ã‚©ãƒ³ãƒˆã‹ã‚‰ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒ†ã‚¯ã‚¹ãƒãƒ£ä½œæˆ */
+    /* åˆæœŸåŒ– */
     if (TTF_Init() < 0) {
         return PrintError(TTF_GetError());
     }
-    /* ¥Õ¥©¥ó¥È¤ò³«¤¯ */
+    /* ãƒ•ã‚©ãƒ³ãƒˆã‚’é–‹ã */
     TTF_Font *ttf = TTF_OpenFont(gFontFile, 90);
     if (NULL == ttf) {
         ret = PrintError(TTF_GetError());
     }
-    /* ¥á¥Ã¥»¡¼¥¸ºîÀ® */
+    /* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ä½œæˆ */
     SDL_Color cols[TEXT_NUM] = { gBlue };
     for (int i = 0; i < TEXT_NUM && ttf; i++) {
         SDL_Surface *sf;
-        /* ¥Õ¥©¥ó¥È¤ÈÊ¸»úÎó¡¤¿§¤«¤é¥µ¡¼¥Õ¥§¥¤¥¹ºîÀ® */
+        /* ãƒ•ã‚©ãƒ³ãƒˆã¨æ–‡å­—åˆ—ï¼Œè‰²ã‹ã‚‰ã‚µãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ä½œæˆ */
         sf = TTF_RenderUTF8_Blended(ttf, textStr[i], cols[i]);
         if (NULL == sf) {
             ret = PrintError(TTF_GetError());
         } else {
-            /* ¥Æ¥¯¥¹¥Á¥ã¤Ø */
+            /* ãƒ†ã‚¯ã‚¹ãƒãƒ£ã¸ */
             textImg[i].texture = SDL_CreateTextureFromSurface(gUi.render, sf);
             if (NULL == textImg[i].texture) {
                 ret = PrintError(SDL_GetError());
@@ -122,30 +124,30 @@ static int MakeMessage(void)
             if (0 > SDL_QueryTexture(textImg[i].texture, NULL, NULL, &textImg[i].w, &textImg[i].h)) {
                 PrintError(SDL_GetError());
             }
-            /* ¥µ¡¼¥Õ¥§¥¤¥¹²òÊü(¥Æ¥¯¥¹¥Á¥ã¤ËÅ¾Á÷¸å¤Ï¥²¡¼¥àÃæ¤Ë»È¤ï¤Ê¤¤¤Î¤Ç) */
+            /* ã‚µãƒ¼ãƒ•ã‚§ã‚¤ã‚¹è§£æ”¾(ãƒ†ã‚¯ã‚¹ãƒãƒ£ã«è»¢é€å¾Œã¯ã‚²ãƒ¼ãƒ ä¸­ã«ä½¿ã‚ãªã„ã®ã§) */
             SDL_FreeSurface(sf);
         }
     }
 
-    /* ¥Õ¥©¥ó¥È¤òÊÄ¤¸¤ë */
+    /* ãƒ•ã‚©ãƒ³ãƒˆã‚’é–‰ã˜ã‚‹ */
     TTF_CloseFont(ttf);
-    /* ¥Õ¥©¥ó¥ÈÍøÍÑ½ªÎ»(¥Æ¥¯¥¹¥Á¥ã¤ËÅ¾Á÷¸å¤Ï¥²¡¼¥àÃæ¤Ë»È¤ï¤Ê¤¤¤Î¤Ç) */
+    /* ãƒ•ã‚©ãƒ³ãƒˆåˆ©ç”¨çµ‚äº†(ãƒ†ã‚¯ã‚¹ãƒãƒ£ã«è»¢é€å¾Œã¯ã‚²ãƒ¼ãƒ ä¸­ã«ä½¿ã‚ãªã„ã®ã§) */
     TTF_Quit();
 
     return ret;
 }
 
-/* ¥Æ¥¯¥¹¥Á¥ã¤ÎÉÁ²è */
+/* ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®æç”» */
 void ImgInfo::drawTexture(int x, int y, int width, int height){
     if(width == 0 || height == 0){
         width=w;
         height=h;
     }
-    // Å¾Á÷¸µÀßÄê
+    // è»¢é€å…ƒè¨­å®š
     SDL_Rect src = {0,0,w,h};
-    // Å¾Á÷ÀèÀßÄê
+    // è»¢é€å…ˆè¨­å®š
     SDL_Rect dst = {x, y, width, height};
-    // Å¾Á÷
+    // è»¢é€
     if (0 > SDL_RenderCopy(gUi.render, texture, &src, &dst)) {
         PrintError(SDL_GetError());
     }
@@ -158,26 +160,25 @@ static int boxColorRect(SDL_Renderer *render, SDL_Rect *rect, Uint32 color){
 }
 
 void RenderWaitClientWindow(void){
-    //ÇØ·Ê¿§¡ÊÇò¡Ë
-    SDL_SetRenderDrawColor(gUi.render,255,255,255,255);
-    SDL_RenderClear(gUi.render);
+    //èƒŒæ™¯
+    uiImg[uname_title_sky2].drawTexture(0,0,uiImg[uname_title_sky2].w,uiImg[uname_title_sky2].h);
 
-    // Ê¸»ú¤ÎÉ½¼¨¡¡¡Ö¥¯¥é¥¤¥¢¥ó¥È¤òÂÔ¤Ã¤Æ¤¤¤Ş¤¹¡×
+    // æ–‡å­—ã®è¡¨ç¤ºã€€ã€Œã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã‚’å¾…ã£ã¦ã„ã¾ã™ã€
     textImg[tname_WaitClient].drawTexture(300,100);
 
-    // Ê¸»ú¤ÎÉ½¼¨ ¡Ö¥Ñ¥¹¥³¡¼¥É¡×
+    // æ–‡å­—ã®è¡¨ç¤º ã€Œãƒ‘ã‚¹ã‚³ãƒ¼ãƒ‰ã€
     textImg[tname_Passcode].drawTexture(150,200);
     for(int i=1; i<5; i++){
         textImg[tname_0+gUi.port[i]-'0'].drawTexture(550+i*50,200);
     }
 
-    // Ê¸»ú¤ÎÉ½¼¨¡¡¡Ö¸½ºß¤Î»²²Ã¿Í¿ô¡×
+    // æ–‡å­—ã®è¡¨ç¤ºã€€ã€Œç¾åœ¨ã®å‚åŠ äººæ•°ã€
     textImg[tname_0+gUi.currentNum].drawTexture(300,500);
 
-    //Ê¸»ú¤ÎÉ½¼¨¡¡¡¡¡ÖÁí¿ô¡×
+    //æ–‡å­—ã®è¡¨ç¤ºã€€ã€€ã€Œç·æ•°ã€
     textImg[tname_0+gClientNum].drawTexture(450,600);
     
-    // Ê¸»ú¤ÎÉ½¼¨  ¡Ö»ş´Ö¡×
+    // æ–‡å­—ã®è¡¨ç¤º  ã€Œæ™‚é–“ã€
     int timeText[3];
     timeText[0] = gUi.time_sec/100;
     timeText[1] = (gUi.time_sec%100)/10;

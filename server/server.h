@@ -10,7 +10,7 @@
 #define ALL_CLIENTS	-1   /* ??????????????????????????????? */
 #define WD_Height 1000
 #define WD_Width 1000
-#define IMG_NUM 0
+#define IMG_NUM 2
 #define TEXT_NUM 12
 #define SCENE_NUM 1
 
@@ -21,7 +21,8 @@ typedef enum{
 
 // imgFileと同じようにつける
 typedef enum{
-    
+    uname_title_sky,
+    uname_title_sky2,
 }uiName;
 
 // textStrと同じようにつける
