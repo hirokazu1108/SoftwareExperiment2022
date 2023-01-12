@@ -28,6 +28,7 @@ void PlayerInit(void){
         player[i].mp = 0.0f;
         player[i].hp = (float)MAX_HP;
         player[i].isBarrier = 0.0f;
+        player[i].isDisable = 0.0f;
 	    player[i].ability = UP_ATTACK;
         player[i].skill = SKILL_ATTACK;
         player[i].special = SPECIAL_BIGBULLET;
@@ -154,10 +155,14 @@ void useSpecial(void){
     {
         switch(player[clientID].special){
             case SPECIAL_BARRIER:
-		printf("create barrier\n");
+		    printf("create barrier\n");
              	player[clientID].isBarrier = (float)MAX_BARRIER;
                 break;
+            case SPECIAL_DISABLE:
+                player[clientID].isDisable = (float)MAX_DISABLE_TIME;
+                break;
 	    case SPECIAL_GAMBLE:
+
                 break;
             case SPECIAL_BIGBULLET:
                 break;
