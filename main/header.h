@@ -6,7 +6,7 @@
 
 #define WD_Height 1000
 #define WD_Width 1200
-#define IMG_NUM 18
+#define IMG_NUM 22
 #define TEXT_NUM 79
 #define SCENE_NUM 8
 
@@ -43,6 +43,10 @@ typedef enum{
     uname_selectHikouki,
     uname_title_sky,
     uname_title_sky2,
+    uname_cloud,
+    uname_castle,
+    uname_masao,
+    uname_masao_face,
 }uiName;
 
 // textStrと同じようにつける
@@ -183,6 +187,7 @@ typedef struct {
     int w;
     int h;         
     SDL_Texture* texture;
+    void drawRotateTexture(int x, int y, int width=0,int height=0, int rad=0);
     void drawTexture(int x, int y, int width=0,int height=0);
     
 }ImgInfo;

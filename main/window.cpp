@@ -1,13 +1,20 @@
 #include "header.h"
 
 /* 画像パス */
-static const char *imgFile[IMG_NUM] = { "name.png", "skill.png","special.png","status.png", "explain_skill.png","nowSelectButton.png", "changeButton.png","backButton.png",  "skill_attack.png", "skill_hp.png","skill_speed.png", "pin.png", "back.png","nameChange.png","skillChange.png","selectHikouki.png","title_sky.png","title_sky2.png"};
+static const char *imgFile[IMG_NUM] = { "name.png", "skill.png","special.png","status.png", "explain_skill.png","nowSelectButton.png", "changeButton.png","backButton.png",  "skill_attack.png", "skill_hp.png","skill_speed.png", "pin.png", "back.png","nameChange.png","skillChange.png","selectHikouki.png","title_sky.png","title_sky2.png","cloud.png", "castle.png","masao.png","masao_face.png"};
 static const char *textStr[TEXT_NUM] = {"Space Battle","SERVER","CLIENT","CUSTOMIZE","input client num.","input passcode.","del","Enter","self","input device num.","clpc","nowLoading...","Result","Exit", "toTitle","0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"," ", "-"};
 /* フォントパス */
 static char gFontFile[] = "../fonts/Yomogi-Regular.ttf";
 
 /* ボタンの位置 */
 std::vector<SDL_Rect> buttonPos[SCENE_NUM];
+
+float scroll_back = -50.0; //背景のスクロール
+
+float masao_loop = 0;
+float masao_rotate = 0;
+float masao_x = 500;
+float masao_y = 500;
 
 /* パラメータの場所 */
 static int parm_x[11] = {380,425,475,520,567,618,664,710,756,802,850};//ピンのx座標
@@ -24,6 +31,7 @@ static int MakeMessage(void);
 static int rectangleColorRect(SDL_Renderer *render, SDL_Rect *rect, Uint32 color);
 static int boxColorRect(SDL_Renderer *render, SDL_Rect *rect, Uint32 color);
 static textName retTextNameFromChar(char ch);
+static void DrawBackGround(void);
 
 // メインウインドウの表示，設定
 int InitWindow(void)
@@ -222,13 +230,33 @@ void RenderTitleWindow(void)
     //選択状況の表示
     boxColorRect(game.render,&buttonPos[SCENE_Title][game.selectButton],0x77777777);
 
+    // masaloop
+    uiImg[uname_masao].drawTexture(600+400*sin(masao_loop),700,uiImg[uname_masao].w/2,uiImg[uname_masao].h/2);
+    uiImg[uname_masao_face].drawRotateTexture(masao_x,masao_y,uiImg[uname_masao_face].w,uiImg[uname_masao_face].h,masao_rotate);
+    masao_rotate +=8;
+    masao_x += (random()%2 == 1) ? 5: -5;
+    masao_y += (random()%2 == 1) ? 5: -5;
+    if(masao_x >= 1000)
+    {
+        masao_x -= 5;
+    }
+    else if(masao_x <=0){
+        masao_x += 5;
+    }
+    else if(masao_y >= 1000){
+        masao_y -= 5;
+    }
+    else if(masao_y <= -200){
+        masao_y += 5;
+    }
+
     SDL_RenderPresent(game.render);
 }
 
 /* サーバーの人数入力の画面 */
 void RenderServerWindow_0(void){
     //背景
-    uiImg[uname_title_sky2].drawTexture(0,0,uiImg[uname_title_sky2].w,uiImg[uname_title_sky2].h);
+    DrawBackGround();
     
     // 文字の表示　「クライアント人数」
     textImg[tname_inputNum].drawTexture(300,100);
@@ -254,7 +282,7 @@ void RenderServerWindow_0(void){
 /* パスコード入力の画面 */
 void RenderPasscodeWindow(){
     //背景
-    uiImg[uname_title_sky2].drawTexture(0,0,uiImg[uname_title_sky2].w,uiImg[uname_title_sky2].h);
+    DrawBackGround();
     
     // 文字の表示　「パスコード」
     textImg[tname_inputPasscode].drawTexture(300,100);
@@ -291,7 +319,7 @@ void RenderPasscodeWindow(){
 /* デバイス番号入力の画面 */
 void RenderDeviceNumWindow(void){
     //背景
-    uiImg[uname_title_sky2].drawTexture(0,0,uiImg[uname_title_sky2].w,uiImg[uname_title_sky2].h);
+    DrawBackGround();
     
     // 文字の表示　「デバイス名を入力してください」
     textImg[tname_inputDevice].drawTexture(300,100);
@@ -350,7 +378,7 @@ void RenderCustomizeWindow(void){
     SDL_SetRenderDrawColor(game.render,253,245,230,255);
     SDL_RenderClear(game.render);*/
     //背景
-    uiImg[uname_title_sky2].drawTexture(0,0,uiImg[uname_title_sky2].w,uiImg[uname_title_sky2].h);
+    DrawBackGround();
 
     // 文字の表示　「CUSTOMIZE」
     textImg[tname_customize].drawTexture(350,25-scrollValue);
@@ -459,16 +487,16 @@ void RenderCustomizeWindow(void){
 
 void RenderClientWaitWindow(void){
     //背景
-    uiImg[uname_title_sky2].drawTexture(0,0,uiImg[uname_title_sky2].w,uiImg[uname_title_sky2].h);
+    DrawBackGround();
 
-   textImg[tname_nowloading].drawTexture(100,100,textImg[tname_nowloading].w/1.2,textImg[tname_nowloading].h/1.2);
+    textImg[tname_nowloading].drawTexture(100,100,textImg[tname_nowloading].w/1.2,textImg[tname_nowloading].h/1.2);
 
     SDL_RenderPresent(game.render);
 }
 
 void RenderResultWindow(void){
     //背景
-    uiImg[uname_title_sky2].drawTexture(0,0,uiImg[uname_title_sky2].w,uiImg[uname_title_sky2].h);
+    DrawBackGround();
 
     textImg[tname_result].drawTexture(100,100,textImg[tname_result].w/1.2,textImg[tname_result].h/1.2);
 
@@ -512,6 +540,21 @@ void ImgInfo::drawTexture(int x, int y, int width, int height){
         PrintError(SDL_GetError());
     }
 }
+/* テクスチャの描画 */
+void ImgInfo::drawRotateTexture(int x, int y, int width, int height, int rad){
+    if(width == 0 || height == 0){
+        width=w;
+        height=h;
+    }
+    // 転送元設定
+    SDL_Rect src = {0,0,w,h};
+    // 転送先設定
+    SDL_Rect dst = {x, y, width, height};
+    // 転送
+    if (0 > SDL_RenderCopyEx(game.render, texture, &src, &dst,rad, NULL, SDL_FLIP_HORIZONTAL)) {
+        PrintError(SDL_GetError());
+    }
+}
 
 static int rectangleColorRect(SDL_Renderer *render, SDL_Rect *rect, Uint32 color){
     return rectangleColor(render,rect->x, rect->y, rect->x+rect->w, rect->y+rect->h, color);
@@ -539,7 +582,37 @@ textName retTextNameFromChar(char ch){
     }
 }
 
-
+void DrawBackGround(void){
+    scroll_back -= 0.3;
+    masao_loop += M_PI/180;
+    if(masao_loop >= 2*M_PI){
+        masao_loop = 0;
+    }
+    //背景
+    uiImg[uname_cloud].drawTexture((int)scroll_back,0,uiImg[uname_cloud].w,uiImg[uname_cloud].h);
+    if(scroll_back <= -uiImg[uname_cloud].w/2){
+        scroll_back = 0;
+    }
+    uiImg[uname_castle].drawTexture(0,0,uiImg[uname_castle].w,uiImg[uname_castle].h);
+    uiImg[uname_masao].drawTexture(600+400*sin(masao_loop),700,uiImg[uname_masao].w/2,uiImg[uname_masao].h/2);
+    uiImg[uname_masao_face].drawRotateTexture(masao_x,masao_y,uiImg[uname_masao_face].w,uiImg[uname_masao_face].h,masao_rotate);
+    masao_rotate +=8;
+    masao_x += (random()%2 == 1) ? 5: -5;
+    masao_y += (random()%2 == 1) ? 5: -5;
+    if(masao_x >= 1000)
+    {
+        masao_x -= 5;
+    }
+    else if(masao_x <=0){
+        masao_x += 5;
+    }
+    else if(masao_y >= 1000){
+        masao_y -= 5;
+    }
+    else if(masao_y <= -200){
+        masao_y += 5;
+    }
+}
 
 /*
     //画像の描画
