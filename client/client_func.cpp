@@ -1,9 +1,6 @@
 #include "client.h"
 
 void PlayerInit(void){
-   #include "client.h"
-
-void PlayerInit(void){
      /* Player???????????? */
     SaveData data;
 
@@ -265,4 +262,3 @@ void ExitClientProgram(int mode){
     system("exit");
     exit(0);
 }
-
