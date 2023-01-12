@@ -6,7 +6,7 @@
 
 #define WD_Height 1000
 #define WD_Width 1200
-#define IMG_NUM 16
+#define IMG_NUM 18
 #define TEXT_NUM 79
 #define SCENE_NUM 8
 
@@ -41,6 +41,8 @@ typedef enum{
     uname_nameChange,
     uname_skillChange,
     uname_selectHikouki,
+    uname_title_sky,
+    uname_title_sky2,
 }uiName;
 
 // textStrと同じようにつける

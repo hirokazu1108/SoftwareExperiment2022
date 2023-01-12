@@ -1,7 +1,7 @@
 #include "header.h"
 
 /* 画像パス */
-static const char *imgFile[IMG_NUM] = { "name.png", "skill.png","special.png","status.png", "explain_skill.png","nowSelectButton.png", "changeButton.png","backButton.png",  "skill_attack.png", "skill_hp.png","skill_speed.png", "pin.png", "back.png","nameChange.png","skillChange.png","selectHikouki.png"};
+static const char *imgFile[IMG_NUM] = { "name.png", "skill.png","special.png","status.png", "explain_skill.png","nowSelectButton.png", "changeButton.png","backButton.png",  "skill_attack.png", "skill_hp.png","skill_speed.png", "pin.png", "back.png","nameChange.png","skillChange.png","selectHikouki.png","title_sky.png","title_sky2.png"};
 static const char *textStr[TEXT_NUM] = {"Space Battle","SERVER","CLIENT","CUSTOMIZE","input client num.","input passcode.","del","Enter","self","input device num.","clpc","nowLoading...","Result","Exit", "toTitle","0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"," ", "-"};
 /* フォントパス */
 static char gFontFile[] = "../fonts/Yomogi-Regular.ttf";
@@ -201,9 +201,8 @@ static int MakeMessage(void)
  */
 void RenderTitleWindow(void)
 {
-    //背景色（白）
-    SDL_SetRenderDrawColor(game.render,255,255,255,255);
-    SDL_RenderClear(game.render);
+    //背景
+    uiImg[uname_title_sky].drawTexture(-50,0,uiImg[uname_title_sky].w/1.07,uiImg[uname_title_sky].h/1.07);
     
     // 文字の表示　「Game Title」
     textImg[tname_title].drawTexture(300,80);
@@ -228,9 +227,8 @@ void RenderTitleWindow(void)
 
 /* サーバーの人数入力の画面 */
 void RenderServerWindow_0(void){
-    //背景色（白）
-    SDL_SetRenderDrawColor(game.render,255,255,255,255);
-    SDL_RenderClear(game.render);
+    //背景
+    uiImg[uname_title_sky].drawTexture(-50,0,uiImg[uname_title_sky].w/1.07,uiImg[uname_title_sky].h/1.07);
     
     // 文字の表示　「クライアント人数」
     textImg[tname_inputNum].drawTexture(300,100);
@@ -255,9 +253,8 @@ void RenderServerWindow_0(void){
 
 /* パスコード入力の画面 */
 void RenderPasscodeWindow(){
-    //背景色（白）
-    SDL_SetRenderDrawColor(game.render,255,255,255,255);
-    SDL_RenderClear(game.render);
+    //背景
+    uiImg[uname_title_sky].drawTexture(-50,0,uiImg[uname_title_sky].w/1.07,uiImg[uname_title_sky].h/1.07);
     
     // 文字の表示　「パスコード」
     textImg[tname_inputPasscode].drawTexture(300,100);
@@ -293,9 +290,8 @@ void RenderPasscodeWindow(){
 
 /* デバイス番号入力の画面 */
 void RenderDeviceNumWindow(void){
-    //背景色（白）
-    SDL_SetRenderDrawColor(game.render,255,255,255,255);
-    SDL_RenderClear(game.render);
+    //背景
+    uiImg[uname_title_sky].drawTexture(-50,0,uiImg[uname_title_sky].w/1.07,uiImg[uname_title_sky].h/1.07);
     
     // 文字の表示　「デバイス名を入力してください」
     textImg[tname_inputDevice].drawTexture(300,100);
@@ -457,9 +453,8 @@ void RenderCustomizeWindow(void){
 }
 
 void RenderClientWaitWindow(void){
-    //背景色（白色）
-    SDL_SetRenderDrawColor(game.render,255,255,255,255);
-    SDL_RenderClear(game.render);
+    //背景
+    uiImg[uname_title_sky].drawTexture(-50,0,uiImg[uname_title_sky].w/1.07,uiImg[uname_title_sky].h/1.07);
 
    textImg[tname_nowloading].drawTexture(100,100,textImg[tname_nowloading].w/1.2,textImg[tname_nowloading].h/1.2);
 
@@ -467,8 +462,8 @@ void RenderClientWaitWindow(void){
 }
 
 void RenderResultWindow(void){
-    SDL_SetRenderDrawColor(game.render,255,255,255,255);
-    SDL_RenderClear(game.render);
+    //背景
+    uiImg[uname_title_sky].drawTexture(-50,0,uiImg[uname_title_sky].w/1.07,uiImg[uname_title_sky].h/1.07);
 
     textImg[tname_result].drawTexture(100,100,textImg[tname_result].w/1.2,textImg[tname_result].h/1.2);
 
