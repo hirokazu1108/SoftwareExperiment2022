@@ -16,7 +16,7 @@ void PlayerInit(void){
         player[i].enabled = true;
         player[i].speed = 1.0;
         player[i].dir = glm::vec3(0,0,0);
-        player[i].pos = spawnPos[i];
+        player[i].pos = glm::vec3(0,0,0);//spawnPos[i];
         player[i].upVec = glm::vec3(0,0,0);
 	player[i].rate_attack = 1.0;
         player[i].turn1 = 0;
@@ -38,6 +38,7 @@ void PlayerInit(void){
         player[i].reloadTime= 0;
         player[i].collider.radius = 1.0;
         player[i].collider.pos = player[i].pos;
+        player[i].anim = 0.0f;
     }
 
     /* ???????????²ã?¼ã???????¼ã?¿ã????¡ã?¤ã?????èª­ã?¿è¾¼?????§ã????¼ã?¿ã????????????????? */
@@ -340,6 +341,17 @@ void moveScoreBall(void){
                 break;
             default:
                 break;
+        }
+    }
+}
+
+void checkDeath(void){
+    for(int i=0; i<gClientNum; i++){
+        if(player[i].hp <= 0.0f){
+            player[i].enabled = false;
+            if(i==clientID){
+                player[i].anim = 200.0f;
+            }
         }
     }
 }

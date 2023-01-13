@@ -38,6 +38,7 @@ void PlayerInit(void){
         player[i].reloadTime= 0;
         player[i].collider.radius = 1.0;
         player[i].collider.pos = player[i].pos;
+        player[i].anim = 0.0f;
     }
 }
 

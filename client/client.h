@@ -68,6 +68,7 @@ extern void ExitClientProgram(int mode);
 extern void createScoreBall(void);
 extern void deleteScoreBall(int index);
 extern void moveScoreBall(void);
+extern void checkDeath(void);
 
 extern int		gClientNum;
 extern int		clientID;

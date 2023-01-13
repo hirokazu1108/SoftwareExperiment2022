@@ -204,6 +204,16 @@ void display(void)
     if(player[clientID].isDisable > 0.0f){
         player[clientID].isDisable -= 0.01f;
     }
+    // death
+    if(player[clientID].anim > 0.0f){
+        player[clientID].anim -= 1.0f;
+    }
+    else if(!player[clientID].enabled){
+        player[clientID].anim = 0.0f;
+        printf("hukkatu\n");
+        player[clientID].enabled = true;
+        player[clientID].hp = MAX_HP;
+    }
 	
     int i;
     float color[4] = {1.0};
@@ -255,52 +265,53 @@ void display(void)
      move();
 
    
-
+    
     for (i = 0; i < gClientNum; i++) {
-        glPushMatrix();           /* ??????????é???? */
-        glColor3f(1.0, 1.0, 1.0); /* ???????????? */
-        glScalef(1.0, 1.0, 1.0);
-	    
-        if (cloud_flag == 0){
-            glmScale(model[4], 100.00);
-            lists(4);
-            glmScale(model[5], 60.00);
-            lists(5);
-            glmScale(model[6], 36.00);
-            lists(6);
-            cloud_flag = 1;
-        }
-        
-        
-
-        glTranslatef(player[i].pos.x, player[i].pos.y,player[i].pos.z);
-
-        glRotatef(player[i].turn1*57.5, 0, 1, 0);
-        glRotatef(player[i].turn2*57.5*-1, 1, 0, 0);
-
-        if(player[i].isDisable > 0.0f)
-        {
-            glEnable(GL_BLEND);
-            glColor4f(1.0f,1.0f,1.0f,0.95f);
-            glCallList(model_list[1]);
-            glDisable(GL_BLEND);
-        }
-        else{
-            glCallList(model_list[i]);
-        }
-        
-        glPopMatrix();
-
-        if(player[i].isBarrier > 0.0f){
+        if(player[i].enabled){
             glPushMatrix();           /* ??????????é???? */
-            glEnable(GL_BLEND);
-            glColor4f(0.0, 1.0, 1.0, 0.95); /* ???????????? */
+            glColor3f(1.0, 1.0, 1.0); /* ???????????? */
             glScalef(1.0, 1.0, 1.0);
+            
+            if (cloud_flag == 0){
+                glmScale(model[4], 100.00);
+                lists(4);
+                glmScale(model[5], 60.00);
+                lists(5);
+                glmScale(model[6], 36.00);
+                lists(6);
+                cloud_flag = 1;
+            }
+            
             glTranslatef(player[i].pos.x, player[i].pos.y,player[i].pos.z);
-            glutSolidSphere(1.0,200,200);
-            glDisable(GL_BLEND);
+
+            glRotatef(player[i].turn1*57.5, 0, 1, 0);
+            glRotatef(player[i].turn2*57.5*-1, 1, 0, 0);
+
+            if(player[i].isDisable > 0.0f)
+            {
+                glEnable(GL_BLEND);
+                glColor4f(1.0f,1.0f,1.0f,0.95f);
+                glCallList(model_list[1]);
+                glDisable(GL_BLEND);
+            }
+            else{
+                glCallList(model_list[i]);
+            }
+            
             glPopMatrix();
+
+            if(player[i].isBarrier > 0.0f){
+                glPushMatrix();           /* ??????????é???? */
+                glEnable(GL_BLEND);
+                glColor4f(0.0, 1.0, 1.0, 0.95); /* ???????????? */
+                glScalef(1.0, 1.0, 1.0);
+                glTranslatef(player[i].pos.x, player[i].pos.y,player[i].pos.z);
+                glutSolidSphere(1.0,200,200);
+                glDisable(GL_BLEND);
+                glPopMatrix();
+            }
         }
+        
     }
     /*
     for (int i= -4 ; i < 5; i++){
@@ -338,6 +349,14 @@ void display(void)
     glDisable(GL_LIGHTING);
     glDisable(GL_DEPTH_TEST);
     uiSetting();
+    // annmaku
+    if(!player[clientID].enabled){
+        float r=(200-player[clientID].anim)/100*3.0f;
+        glPushMatrix();
+        glColor3f(0.0, 0.0, 0.0);
+        Circle2D(r,0,0);
+        glPopMatrix();
+    }
     glPushMatrix();
         glColor3f(nameColor[clientID][0],nameColor[clientID][1],nameColor[clientID][2]);
         glTranslatef(0.70,1.8,0);
@@ -414,7 +433,7 @@ void display(void)
         glTranslatef(1.8, -1.8, 0);
         DrawString(timeText, 0, 0);
     glPopMatrix();
-
+    
     glEnable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
     glPopMatrix();
@@ -500,13 +519,15 @@ void display(void)
     
     if(player[clientID].enabled){
         Collider();
+        checkDeath();
     }
+    /*
     if(player[clientID].enabled && player[clientID].hp <= 0.0f){
         player[clientID].enabled = false;
-        /* ??????????????????? */
+
         char com=RANKING_DATA;
         SendData(&com,sizeof(char));
-    } 
+    } */
     
     
     /* ???????????????????????????? */
