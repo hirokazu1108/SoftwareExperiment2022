@@ -13,6 +13,7 @@ int		clientID;
 Player *player;
 Game game; //?????????
 int endFlag = 1; //1:çśăăă-1:ă¨ăšăąăźă  0:ăŠăłă­ăłă°çľäş
+static float nameColor[MAX_CLIENTS][3] = {{1.0,0.0,0.0}, {0.0,0.0,1.0}, {1.0 , 0.8 , 0.0}, {0.0 , 0.4 , 0.0}};
 
 ALuint buffer;
 ALuint source;
