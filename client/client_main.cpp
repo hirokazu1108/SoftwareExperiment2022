@@ -323,6 +323,9 @@ void display(void)
 	
     move_bullet(bullet_Num);    // čď˝çł??????éé č??
     draw_bullet(bullet_Num);    // čď˝çł??????????
+	
+    moveScoreBall();
+    drawScoreBall();
 
     /* Draw ui(right up) */
     glPushMatrix();
