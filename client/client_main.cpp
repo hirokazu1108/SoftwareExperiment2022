@@ -917,7 +917,7 @@ void keyboard(unsigned char key, int x, int y)
             key8 = true;
         }
     }  
-　　　if(key == 'm'){
+    if(key == 'm'){
         createScoreBall();
     }
     if(key == 'n'){
