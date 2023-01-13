@@ -262,7 +262,7 @@ void display(void)
         if (cloud_flag == 0){
             glmScale(model[4], 100.00);
             lists(4);
-            glmScale(model[5], 300.00);
+            glmScale(model[5], 60.00);
             lists(5);
             glmScale(model[6], 36.00);
             lists(6);
@@ -311,7 +311,11 @@ void display(void)
         }
     }
     glPushMatrix(); 
+    glTranslatef(0, -35,0);
     glCallList(model_list[5]);
+    glPopMatrix();
+
+    glPushMatrix(); 
     glCallList(model_list[6]);
     glPopMatrix();
 	
