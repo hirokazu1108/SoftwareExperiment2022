@@ -1,188 +1,179 @@
-#include "client.h"
-#include <netinet/in.h>
-/*****************************************************************
-ファイル名	: client_command.c
-機能		: クライアントのコマンド処理
-*****************************************************************/
-static void SetIntData2DataBlock(void *data,int intData,int *dataSize);
-static void SetCharData2DataBlock(void *data,char charData,int *dataSize);
+#ifndef _COMMON_H_
+#define _COMMON_H_
 
-/*****************************************************************
-関数名	: ExecuteCommand
-機能	: サーバーから送られてきたコマンドを元に，
-		  引き数を受信し，実行する
-引数	: char	command		: コマンド
-出力	: プログラム終了コマンドがおくられてきた時には0を返す．
-		  それ以外は1を返す
-*****************************************************************/
-int ExecuteCommand(char command)
-{
-    int	endFlag = 1;
+/* ヘッダのインクルード */
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glut.h>
+#include "glm/glm.hpp"
+#include <iostream>
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<unistd.h>
+#include <math.h>
+#include<assert.h>
+#include <cassert>
+#include <vector>
+#include <algorithm>
+#include <fstream>
+#include<sys/types.h>
 
-    switch(command){
-        case PLAYERDATA_COMMAND:{
-            Player *p = (Player*)malloc(sizeof(Player)*gClientNum);
-            RecvData(p,sizeof(Player)*gClientNum);
-            //格納する処理
-            for(int i = 0; i <gClientNum;i++)
-            {
-                if(i != clientID)
-                    player[i] = p[i];
-            }
-            free(p);
+
+#define PORT			(u_short)88888	/* デフォルトポート番号 */
+#define MAX_CLIENTS		4				/* 最大プレイ人数 */
+#define MAX_DATA		200
+#define MAX_BULLET_NUM   25    // 最大弾数
+#define BULLET_SPEED   0.5f     // 弾の速度
+#define DAMAGE         1.0f				
+#define MAX_HP 3.0f
+#define MAX_BARRIER 3.0f
+#define MAX_DISABLE_TIME 3.0f
+#define MAX_SPEED 2.0f
+#define MAX_ATTACK 2.0f
+#define BULLET_RADIUS 0.3       //radius of bullet collider
+#define MAX_MP 100.0f
+
+
+#define PLAYERDATA_COMMAND 'p'
+#define END_COMMAND 'e'
+#define BULLETDATA_COMMAND 'b'
+#define RANKING_DATA 'r'
+#define SCOREBALL_COMMAND 's'
+#define TIMER_COMMAND 't'
+
+#define PARAMATER_MAX 5         //max value of status paramaters
+#define PARAMATER_NUM 5         //num of status paramaters
+#define PARAMATER_SUM_MAX 10    //max of sum of status paramaters
+#define NAME_MAX_LENGTH 20      //max length of client name
+#define SKILL_NUM 3             //num of skills
+#define SPECIAL_NUM 6           //num of specials
+#define FILENAME_GAMEDATA "../data/gamedata.bin"
+
+typedef enum {
+    State_Wait,
+    State_Play,
+    State_Result,
+}GameState;
+
+typedef enum{
+    UP_ATTACK,
+    HEAL,
+    UP_SPEED,
+}Ability_Type;
+
+typedef enum{
+    PARM_ATTACK,
+    PARM_HP,
+    PARM_SPEED,
+    PARM_SIZE,
+    PARM_MP,
+}PARAMATER;
+
+typedef enum{
+    SKILL_ATTACK,
+    SKILL_HP,
+    SKILL_SPEED,
+}SKILL;
+
+typedef enum{
+    SPECIAL_BARRIER,
+    SPECIAL_DISABLE,
+    SPECIAL_BIGBULLET,
+    SPECIAL_GAMBLE,
+    SPECIAL_POWERUP,
+    SPECIAL_LASER,
+}SPECIAL;
+
+typedef enum{
+    Move_Stop,
+
+}Move_Pattern;
+
+/* 球の当たり判定 */
+class Sphere{
+    public:
+    float radius;
+    glm::vec3 pos;
+    Sphere(float r = 1,glm::vec3 m = glm::vec3(0,0,0)){radius = r; pos = m;}
+};
+
+class Player{
+public:
+    bool enabled;   //trueならみえる状態
+    int type;
+    float speed;
+    glm::vec3 pos;
+    glm::vec3 dir;
+    glm::vec3 upVec;
+    float rate_attack;
+    float turn1;
+    float turn2;
+    float turn3;
+    float attack;
+    float mp;
+    float hp;
+    float score;
+    float size;
+    int reloadTime;
+    float isBarrier; //0< : barrier mode
+    float isDisable; //0< : toumei mode
+    Sphere collider;
+    Ability_Type ability;
+    SKILL skill;
+    SPECIAL special;
+    int parm[PARAMATER_NUM];
+};
+
+class Game{
+    public:
+        char	clientName[MAX_CLIENTS][NAME_MAX_LENGTH+1];
+        unsigned int time; //seconds
+        GameState state;
+        std::vector<int> ranking; //indexにnを入れると第n位のクライアント番号を返す
+};
+
+/* 弾のクラス */
+class BULLET{
+    public:
+        int shooter_id;
+        //int type;           // 弾�??�??�??
+        glm::vec3 pos;      // 弾�??座�??
+        //glm::vec3 speed;    // 弾�?????�??
+        glm::vec3 dir;      // 弾�????��??????????????
+        int lifetime;       // 弾�??�??示�?????
+        BULLET(){pos.x = pos.y = pos.z = dir.x = dir.y = dir.z = 0;};
+        BULLET(const BULLET& b){
+            pos = b.pos;
+            dir = b.dir;
+            lifetime = b.lifetime;
+            shooter_id = b.shooter_id;
         }
-            break;
-		
-        case BULLETDATA_COMMAND:{
-            BULLET b;
-            RecvData(&b, sizeof(BULLET));
-            array_bullet.push_back(BULLET(b));
-            bullet_Num++;   
+};
+
+/* the class of scoreBall */
+class ScoreBall{
+    public:
+        Move_Pattern howMove;
+        glm::vec3 pos;
+        float hp;
+        Sphere collider;
+        ScoreBall(){pos = glm::vec3(0,0,0); hp = 1; howMove = Move_Stop; collider = Sphere(1.0,glm::vec3(0,0,0));}
+        ScoreBall(const ScoreBall& s){
+            howMove = s.howMove;
+            pos = s.pos;
+            hp = s.hp;
+            collider = s.collider;
         }
-        break;
-        case RANKING_DATA:{
-            int *p = (int*) malloc(sizeof(int)*gClientNum);
-            RecvData(p,sizeof(int)*gClientNum);
-            for(int i=0; i<gClientNum; i++){
-                game.ranking.push_back(p[i]);
-            }
-            free(p);
-            
-            for(int i=0;i<gClientNum;i++)
-                printf("No.%d:%s\n",i+1,game.clientName[game.ranking[i]]);
-            }
-            printf("hp:%lf\n",player[clientID].hp);
-	    //ゲームをリザルトに切り替える
-            WriteRankingFile();
-            endFlag = 0;
-            break;
-        case SCOREBALL_COMMAND:
-            {
-                ScoreBall s;
-                RecvData(&s, sizeof(ScoreBall));
-                ary_scoreBall.push_back(ScoreBall(s));
-                scoreBallNum++;
-                printf("scoreBall Data was recieved.\n");
-            }
-            break;
-        case TIMER_COMMAND:
-            RecvData(&game.time, sizeof(unsigned int));
-            break;
-        case END_COMMAND:
-            endFlag = -1;
-            printf("END SELECTED.\n");
-			break;
-        default:
-            break;
-    }
+};
 
-    return endFlag;
-}
+/* the class to save game data */
+typedef class{
+    public:
+    char clientName[NAME_MAX_LENGTH+1];
+    SKILL skill;
+    SPECIAL special;
+    int parm[PARAMATER_NUM];
+}SaveData;
 
-/*****************************************************************
-関数名	: SendEndCommand
-機能	: プログラムの終了を知らせるために，
-		  サーバーにデータを送る
-引数	: なし
-出力	: なし
-*****************************************************************/
-void SendEndCommand(void)
-{
-    unsigned char	data[MAX_DATA];
-    int			dataSize;
-
-    dataSize = 0;
-    /* コマンドのセット */
-    SetCharData2DataBlock(data,END_COMMAND,&dataSize);
-
-    /* データの送信 */
-    SendData(data,dataSize);
-}
-
-void SendPlayerDataCommand(void){
-
-    unsigned char	data[MAX_DATA];
-    int			dataSize;
-
-    dataSize = 0;
-    /* コマンドのセット */
-    SetCharData2DataBlock(data,PLAYERDATA_COMMAND,&dataSize);
-    /* データの送信 */
-    SendData(data,dataSize);
-
-    //playerDataの送信
-
-    SendData(&(player[clientID]),sizeof(Player));
-
-}
-
-void SendBulletDataCommand(int num){
-
-    char com = BULLETDATA_COMMAND;
-
-    /* データの送信 */
-    SendData(&com,sizeof(char));
-
-    //clientDataの送信
-    SendData(&array_bullet[num],sizeof(BULLET));
-
-}
-
-void SendScoreBallDataCommand(void){
-    char com = SCOREBALL_COMMAND;
-
-    /* データの送信 */
-    SendData(&com,sizeof(char));
-
-    //ScoreBallDataの送信
-    
-    SendData(&ary_scoreBall[scoreBallNum-1],sizeof(ScoreBall));
-}
-
-/*****
-static
-*****/
-/*****************************************************************
-関数名	: SetIntData2DataBlock
-機能	: int 型のデータを送信用データの最後にセットする
-引数	: void		*data		: 送信用データ
-		  int		intData		: セットするデータ
-		  int		*dataSize	: 送信用データの現在のサイズ
-出力	: なし
-*****************************************************************/
-static void SetIntData2DataBlock(void *data,int intData,int *dataSize)
-{
-    int tmp;
-
-    /* 引き数チェック */
-    assert(data!=NULL);
-    assert(0<=(*dataSize));
-
-    tmp = htonl(intData);
-
-    /* int 型のデータを送信用データの最後にコピーする */
-    memcpy(data + (*dataSize),&tmp,sizeof(int));
-    /* データサイズを増やす */
-    (*dataSize) += sizeof(int);
-}
-
-/*****************************************************************
-関数名	: SetCharData2DataBlock
-機能	: char 型のデータを送信用データの最後にセットする
-引数	: void		*data		: 送信用データ
-		  int		intData		: セットするデータ
-		  int		*dataSize	: 送信用データの現在のサイズ
-出力	: なし
-*****************************************************************/
-static void SetCharData2DataBlock(void *data,char charData,int *dataSize)
-{
-    /* 引き数チェック */
-    assert(data!=NULL);
-    assert(0<=(*dataSize));
-
-    /* char 型のデータを送信用データの最後にコピーする */
-    *(char *)(data + (*dataSize)) = charData;
-    /* データサイズを増やす */
-    (*dataSize) += sizeof(char);
-}
-
+#endif 
