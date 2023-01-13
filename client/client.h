@@ -41,6 +41,7 @@ extern int InitWindows(int clientID,int num,char name[][NAME_MAX_LENGTH+1]);
 extern void DestroyWindow(void);
 extern void WindowEvent(int num);
 extern void uiSetting(void);
+extern void DrawString(std::string str,int x0, int y0, void *font=GLUT_BITMAP_TIMES_ROMAN_24);
 
 /* client_command.cpp */
 extern int ExecuteCommand(char command);
