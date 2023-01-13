@@ -305,29 +305,80 @@ void display(void)
     move_bullet(bullet_Num);    // čď˝çł??????éé č??
     draw_bullet(bullet_Num);    // čď˝çł??????????
 
-    /* Draw ui */
+    /* Draw ui(right up) */
     glPushMatrix();
     glDisable(GL_LIGHTING);
     glDisable(GL_DEPTH_TEST);
     uiSetting();
-    // HPĽĐĄź
-    Bar bar_hp(0.5f,1.85f,2.0f,1.95f);
+    glPushMatrix();
+        glColor3f(nameColor[clientID][0],nameColor[clientID][1],nameColor[clientID][2]);
+        glTranslatef(0.70,1.8,0);
+        DrawString(game.clientName[clientID], 0, 0);
+    glPopMatrix();
+    // HPbar
+    Bar bar_hp(0.7f,1.65f,2.0f,1.75f);
+    glPushMatrix();
+        glColor3f(0.0,0.0,0.0);
+        glTranslatef(0.50,1.68,0);
+        DrawString("HP",0,0);
+    glPopMatrix();
     glColor3f( 0.2f, 1.0f, 0.2f );
     glRectf( bar_hp.x1, bar_hp.y1, bar_hp.x1+bar_hp.w*player[clientID].hp/(float)MAX_HP, bar_hp.y2);
     glColor3f( 0.8f, 0.0f, 0.0f );
     glRectf(bar_hp.x1+bar_hp.w*player[clientID].hp/MAX_HP,bar_hp.y1,bar_hp.x2,bar_hp.y2);
-    // MPĽĐĄź
-    Bar bar_mp(0.5f,1.7f,2.0f,1.8f);
+    // MPbar
+    Bar bar_mp(0.7f,1.5f,2.0f,1.6f);
+    glPushMatrix();
+        glColor3f(0.0,0.0,0.0);
+        glTranslatef(0.50,1.53,0);
+        DrawString("MP",0,0);
+    glPopMatrix();
     glColor3f( 0.4f, 0.4f, 1.0f );
     glRectf( bar_mp.x1, bar_mp.y1, bar_mp.x1+bar_mp.w*player[clientID].mp/(float)MAX_MP, bar_mp.y2);
     glColor3f( 0.0f, 0.0f, 0.0f );
     glRectf(bar_mp.x1+bar_mp.w*player[clientID].mp/MAX_MP,bar_mp.y1,bar_mp.x2,bar_mp.y2);
     // barrier hp
-    Bar bar_barrier(0.5f,1.55f,2.0f,1.65f);
+    Bar bar_barrier(0.7f,1.35f,2.0f,1.45f);
     glColor3f( 0.4f, 0.4f, 1.0f );
     glRectf( bar_barrier.x1, bar_barrier.y1, bar_barrier.x1+bar_barrier.w*player[clientID].isBarrier/(float)MAX_BARRIER, bar_barrier.y2);
     glColor3f( 0.0f, 0.0f, 0.0f );
     glRectf(bar_barrier.x1+bar_barrier.w*player[clientID].isBarrier/(float)MAX_BARRIER,bar_barrier.y1,bar_barrier.x2,bar_barrier.y2);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_DEPTH_TEST);
+    glPopMatrix();
+
+    /* Draw ui(left down) */
+    glPushMatrix();
+    glDisable(GL_LIGHTING);
+    glDisable(GL_DEPTH_TEST);
+    uiSetting();
+    int draw_hpPos =0;
+    for(int i=0; i<gClientNum; i++){
+        if(i == clientID){
+            continue;
+        }
+        printf(";%d\n",i);
+        glPushMatrix();
+        glColor3f(nameColor[i][0],nameColor[i][1],nameColor[i][2]);
+        glTranslatef(-2.12, 0.75f-draw_hpPos*0.34,0);
+        DrawString(game.clientName[i], 0, 0);
+        glPopMatrix();
+        // HP bar
+        Bar bar_hp(-2.15f,0.60f-draw_hpPos*0.34f,-1.3f,0.70f-draw_hpPos*0.34f);
+        glPushMatrix();
+            glColor3f(0.0,0.0,0.0);
+            glTranslatef(-2.3,0.61f-draw_hpPos*0.34f,0);
+            glScalef(0.1f,0.1f,0.1f);
+            DrawString("HP",0,0);
+        glPopMatrix();
+        glPushMatrix();
+            glColor3f( 0.2f, 1.0f, 0.2f );
+            glRectf( bar_hp.x1, bar_hp.y1, bar_hp.x1+bar_hp.w*player[i].hp/(float)MAX_HP, bar_hp.y2);
+            glColor3f( 0.8f, 0.0f, 0.0f );
+            glRectf(bar_hp.x1+bar_hp.w*player[i].hp/MAX_HP,bar_hp.y1,bar_hp.x2,bar_hp.y2);
+        glPopMatrix();
+        draw_hpPos+=1;
+    }
     glEnable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
     glPopMatrix();
