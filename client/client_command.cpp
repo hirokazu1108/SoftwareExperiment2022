@@ -65,6 +65,9 @@ int ExecuteCommand(char command)
                 printf("scoreBall Data was recieved.\n");
             }
             break;
+        case TIMER_COMMAND:
+            RecvData(&game.time, sizeof(unsigned int));
+            break;
         case END_COMMAND:
             endFlag = -1;
             printf("END SELECTED.\n");
