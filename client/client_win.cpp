@@ -1,6 +1,6 @@
 #include "client.h"
 
-/*UI�ο޷��򤳤���˸�����*/
+/*UIの図形をこちらに向ける*/
 void uiSetting(void){
     /*
         glPushMatrix();
@@ -32,8 +32,23 @@ void uiSetting(void){
     m[6] = m[8] * m[1] - m[9] * m[0];
     glLoadMatrixd(m);
     /* 
-        ���δؿ��θ�� 
+        この関数の後に 
         glRectf( 1, 1, 2,2);
         glPopMatrix();
     */
+}
+
+
+/* 参考　http://gameprogrammingunit.web.fc2.com/gl/bitmap_character.htm */
+void DrawString(std::string str,int x0, int y0, void *font)
+{
+
+    // 画面上にテキスト描画
+    glRasterPos2f(x0, y0);
+    int size = (int)str.size();
+    for(int i = 0; i < size; ++i){
+        char ic = str[i];
+        glutBitmapCharacter(font, ic);
+    }
+
 }
