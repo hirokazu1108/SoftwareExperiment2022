@@ -298,11 +298,20 @@ void display(void)
             glPopMatrix();
         }
     }
-    glPushMatrix();  
-    glCallList(model_list[4]);
+    for (int i= -4 ; i < 5; i++){
+        for (int j= -1 ;j < 2; j++){
+            for (int k = -4; k < 5; k++){
+                glPushMatrix(); 
+                glTranslatef(i*250,j*250,k*250);
+                glCallList(model_list[4]);
+                glPopMatrix();
+            }
+        }
+    }
+    glPushMatrix(); 
     glCallList(model_list[5]);
     glPopMatrix();
-
+	
     move_bullet(bullet_Num);    // čď˝çł??????éé č??
     draw_bullet(bullet_Num);    // čď˝çł??????????
 
