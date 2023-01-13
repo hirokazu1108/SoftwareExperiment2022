@@ -42,12 +42,14 @@ extern void DestroyWindow(void);
 extern void WindowEvent(int num);
 extern void uiSetting(void);
 extern void DrawString(std::string str,int x0, int y0, void *font=GLUT_BITMAP_TIMES_ROMAN_24);
+extern void drawScoreBall(void);
 
 /* client_command.cpp */
 extern int ExecuteCommand(char command);
 extern void SendEndCommand(void);
 extern void SendPlayerDataCommand(void);
 extern void SendBulletDataCommand(int num);
+extern void SendScoreBallDataCommand(void);
 
 /* client_func.cpp */
 extern void PlayerInit(void);
@@ -63,13 +65,18 @@ extern void ReadDataFile(SaveData *data);
 extern void WriteMatchFile(int value);
 extern void WriteRankingFile(void);
 extern void ExitClientProgram(int mode);
+extern void createScoreBall(void);
+extern void deleteScoreBall(int index);
+extern void moveScoreBall(void);
 
 extern int		gClientNum;
 extern int		clientID;
-extern int bullet_Num;   // 発射された弾の個数
 extern Player *player;
 extern Game game;
+extern std::vector<ScoreBall> ary_scoreBall;
+extern int scoreBallNum;
 extern std::vector<BULLET> array_bullet;
+extern int bullet_Num;   // 発射された弾の個数
 
 extern ALuint buffer;
 extern ALuint source;
