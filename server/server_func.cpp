@@ -1,87 +1,55 @@
-#ifndef _CLIENT_FUNC_H_
-#define _CLIENT_FUNC_H_
+#include "server.h"
 
-#include"../constants.h"
-#include <AL/alut.h>
-#include <joyconlib.h>
+int maxButtonNum[SCENE_NUM]={};    //シーンごとのボタンの最大数,indexはScene列挙体に対応
 
-#define WINDOW_PosX 0
-#define WINDOW_PosY 0
-#define WINDOW_WIDTH 1000
-#define WINDOW_HEIGHT 1000
+void PlayerInit(void){
+    /* キャラ情報の初期化 */
+	player = (Player*)malloc(sizeof(Player)*gClientNum);
+	for(int i = 0; i< gClientNum;i++)
+    {
+        player[i].enabled = true;
+        player[i].speed = 1.0;
+        player[i].dir.x = 0;
+        player[i].dir.y = 0;
+        player[i].dir.z = 0;
+        player[i].pos.x = 0;
+        player[i].pos.y = 0;
+        player[i].pos.z = 0;
+        player[i].upVec.x = 0;
+        player[i].upVec.y = 0;
+        player[i].upVec.z = 0;
+	    player[i].rate_attack = 1.0;
+        player[i].turn1 = 0;
+        player[i].turn2 = 0;
+        player[i].turn3 = 0;
+        player[i].type = 0;
+        player[i].attack = DAMAGE;
+        player[i].size = 0.0f;
+        player[i].mp = 0.0f;
+        player[i].hp = (float)MAX_HP;
+        player[i].score = 0.0f;
+        player[i].isBarrier = 0.0f;
+        player[i].isDisable = 0.0f;
+        player[i].ability = UP_ATTACK;
+        player[i].skill = SKILL_ATTACK;
+        player[i].special = SPECIAL_BIGBULLET;
+        for(int j=0; j<PARAMATER_NUM; j++)
+            player[i].parm[j] = 0;
+        player[i].reloadTime= 0;
+        player[i].collider.radius = 1.0;
+        player[i].collider.pos = player[i].pos;
+        player[i].anim = 0.0f;
+    }
+}
 
-#define WORLDSIZE_X 1000
-#define WORLDSIZE_Y 500
-#define WORLDSIZE_Z 1000
+/* 選択しているボタンの番号をずらす.引数に+1で次,-1で前のボタンへ */
+void shiftButtonSelect(int shift, int max){
 
-#define Model_Num 7
-
-/* bar struct */
-class Bar{
-    public:
-    float x1;
-    float y1;
-    float x2;
-    float y2;
-    float w;
-    Bar(float a,float b, float c, float d){x1=a;y1=b;x2=c;y2=d;w=c-a;}
-};
-
-/* client_net.cpp */
-extern int SetUpClient(char *hostName,u_short port,int *clientID,int *num,char clientNames[][NAME_MAX_LENGTH+1]);
-extern void CloseSoc(void);
-extern int RecvIntData(int *intData);
-extern void SendData(void *data,int dataSize);
-extern int SendRecvManager(void);
-extern int RecvData(void *data,int dataSize);
-
-
-/* client_win.cpp */
-extern int InitWindows(int clientID,int num,char name[][NAME_MAX_LENGTH+1]);
-extern void DestroyWindow(void);
-extern void WindowEvent(int num);
-extern void uiSetting(void);
-extern void DrawString(std::string str,int x0, int y0, void *font=GLUT_BITMAP_TIMES_ROMAN_24);
-extern void drawScoreBall(void);
-
-/* client_command.cpp */
-extern int ExecuteCommand(char command);
-extern void SendEndCommand(void);
-extern void SendPlayerDataCommand(void);
-extern void SendBulletDataCommand(int num);
-extern void SendScoreBallDataCommand(void);
-
-/* client_func.cpp */
-extern void PlayerInit(void);
-extern void AudioInit(int *argc, char **argv);
-extern bool OnColliderSphere(Sphere a, Sphere b);
-extern void drawPlayerCollider(void);
-extern void Collider(void);
-extern void Ability(int id);
-extern void useSpecial(void);
-extern bool retExists(const char *file);
-extern void WriteDataFile(SaveData *data);
-extern void ReadDataFile(SaveData *data);
-extern void WriteMatchFile(int value);
-extern void WriteRankingFile(void);
-extern void ExitClientProgram(int mode);
-extern void createScoreBall(void);
-extern void deleteScoreBall(int index);
-extern void moveScoreBall(void);
-extern void checkDeath(void);
-
-extern int		gClientNum;
-extern int		clientID;
-extern Player *player;
-extern Game game;
-extern std::vector<ScoreBall> ary_scoreBall;
-extern int scoreBallNum;
-extern std::vector<BULLET> array_bullet;
-extern int bullet_Num;   // 発射された弾の個数
-
-extern ALuint buffer;
-extern ALuint source;
-extern ALuint buffer2;
-extern ALuint source2;
-#endif
-
+    gUi.selectButton += (shift>=0) ? shift%max : -(-shift)%max;
+    if(gUi.selectButton < 0){
+        gUi.selectButton += max;
+    }
+    else if(gUi.selectButton >= max){
+        gUi.selectButton -= max;
+    }
+}
