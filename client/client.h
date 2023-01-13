@@ -14,7 +14,7 @@
 #define WORLDSIZE_Y 500
 #define WORLDSIZE_Z 1000
 
-#define Model_Num 6
+#define Model_Num 7
 
 /* bar struct */
 class Bar{
