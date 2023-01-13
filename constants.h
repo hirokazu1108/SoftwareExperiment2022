@@ -123,6 +123,7 @@ public:
     SKILL skill;
     SPECIAL special;
     int parm[PARAMATER_NUM];
+    float anim; //animation of death
 };
 
 class Game{
