@@ -56,6 +56,15 @@ int ExecuteCommand(char command)
             WriteRankingFile();
             endFlag = 0;
             break;
+        case SCOREBALL_COMMAND:
+            {
+                ScoreBall s;
+                RecvData(&s, sizeof(ScoreBall));
+                ary_scoreBall.push_back(ScoreBall(s));
+                scoreBallNum++;
+                printf("scoreBall Data was recieved.\n");
+            }
+            break;
         case END_COMMAND:
             endFlag = -1;
             printf("END SELECTED.\n");
@@ -112,10 +121,19 @@ void SendBulletDataCommand(int num){
     SendData(&com,sizeof(char));
 
     //clientDataの送信
-
-    
     SendData(&array_bullet[num],sizeof(BULLET));
 
+}
+
+void SendScoreBallDataCommand(void){
+    char com = SCOREBALL_COMMAND;
+
+    /* データの送信 */
+    SendData(&com,sizeof(char));
+
+    //ScoreBallDataの送信
+    
+    SendData(&ary_scoreBall[scoreBallNum-1],sizeof(ScoreBall));
 }
 
 /*****

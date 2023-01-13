@@ -35,10 +35,11 @@
 #define MAX_MP 100.0f
 
 
-#define PLAYERDATA_COMMAND 's'
+#define PLAYERDATA_COMMAND 'p'
 #define END_COMMAND 'e'
 #define BULLETDATA_COMMAND 'b'
 #define RANKING_DATA 'r'
+#define SCOREBALL_COMMAND 's'
 
 #define PARAMATER_MAX 5         //max value of status paramaters
 #define PARAMATER_NUM 5         //num of status paramaters
@@ -83,6 +84,11 @@ typedef enum{
     SPECIAL_LASER,
 }SPECIAL;
 
+typedef enum{
+    Move_Stop,
+
+}Move_Pattern;
+
 /* 球の当たり判定 */
 class Sphere{
     public:
@@ -106,6 +112,7 @@ public:
     float attack;
     float mp;
     float hp;
+    float score;
     float size;
     int reloadTime;
     float isBarrier; //0< : barrier mode
@@ -139,6 +146,22 @@ class BULLET{
             dir = b.dir;
             lifetime = b.lifetime;
             shooter_id = b.shooter_id;
+        }
+};
+
+/* the class of scoreBall */
+class ScoreBall{
+    public:
+        Move_Pattern howMove;
+        glm::vec3 pos;
+        float hp;
+        Sphere collider;
+        ScoreBall(){pos = glm::vec3(0,0,0); hp = 1; howMove = Move_Stop; collider = Sphere(1.0,glm::vec3(0,0,0));}
+        ScoreBall(const ScoreBall& s){
+            howMove = s.howMove;
+            pos = s.pos;
+            hp = s.hp;
+            collider = s.collider;
         }
 };
 

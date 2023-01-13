@@ -27,6 +27,7 @@ void PlayerInit(void){
         player[i].size = 0.0f;
         player[i].mp = 0.0f;
         player[i].hp = (float)MAX_HP;
+        player[i].score = 0.0f;
         player[i].isBarrier = (float)MAX_BARRIER;
         player[i].isDisable = 0.0f;
 	    player[i].ability = UP_ATTACK;
@@ -103,9 +104,10 @@ void deleteBullet(int index){
 
 /* æ©?ä½????å½?????????¤å??????????? */
 void Collider(void){
+    // player loop (player->bullet)
     for(int i=0; i<gClientNum; i++){
         for(int j=0; j<bullet_Num;j++){
-            if(OnColliderSphere(Sphere(BULLET_RADIUS*((player[clientID].isBarrier>0.0f) ? 1.0f : 2.5f), array_bullet[j].pos),player[i].collider) ){
+            if(OnColliderSphere(Sphere(BULLET_RADIUS, array_bullet[j].pos),((player[i].isBarrier > 0.0f) ? Sphere(2.5f*BULLET_RADIUS,player[i].pos): player[i].collider))){
 
                 Ability(array_bullet[j].shooter_id);
                 printf("speed:%f\n" ,player[array_bullet[j].shooter_id].speed);
@@ -119,6 +121,36 @@ void Collider(void){
                 }
                 deleteBullet(j);
                 printf("hirokazu: hit client[%d]\n",i);
+            }
+        }
+    }
+
+    // scoreBall loop  (scoreBall -> player,bullet)
+    for(int i=0; i<scoreBallNum; i++){
+        //player
+        for(int j=0; j<gClientNum; j++){
+            if(OnColliderSphere(ary_scoreBall[i].collider,((player[j].isBarrier > 0.0f) ? Sphere(2.5f*BULLET_RADIUS,player[j].pos): player[j].collider))){
+                //damage
+                if(player[j].isBarrier > 0.0f){
+                    player[j].isBarrier -= 1.0f;
+                }
+                else{
+                    player[j].hp -= 0.01f;
+                    printf("dam\n");
+                }
+            }
+        }
+        //bullet
+        for(int j=0; j<bullet_Num; j++){
+            if(OnColliderSphere(ary_scoreBall[i].collider,Sphere(BULLET_RADIUS,glm::vec3(array_bullet[j].pos)))){
+                //score
+                player[array_bullet[j].shooter_id].score += 1.0f;
+
+                //delete
+                ary_scoreBall[i].hp -= 1.0f;
+                if(ary_scoreBall[i].hp <= 0.0){
+                    deleteScoreBall(i);
+                }
             }
         }
     }
@@ -271,4 +303,43 @@ void ExitClientProgram(int mode){
 
     system("exit");
     exit(0);
+}
+
+
+void createScoreBall(void){
+    
+    for(int i=0; i<5; i++){
+        ScoreBall s;
+        glm::vec3 spawnPos = glm::vec3(rand()%((int)(WORLDSIZE_X/5))*((rand()%2)==1 ? 1: -1),rand()%((int)(WORLDSIZE_Y/5))*((rand()%2)==1 ? 1: -1),rand()%((int)(WORLDSIZE_Z/5))*((rand()%2)==1 ? 1: -1));
+        s.pos = spawnPos;
+        s.collider = Sphere(1.5,s.pos);
+        s.hp = 1;
+        s.howMove = Move_Stop;
+        
+        ary_scoreBall.push_back(ScoreBall(s));
+        scoreBallNum ++;
+        printf("scoreBall was created.\n");
+        SendScoreBallDataCommand();
+        printf("scoreBall Data was sent.\n");
+    }
+    
+}
+
+void deleteScoreBall(int index){
+    ary_scoreBall.erase(ary_scoreBall.begin() + index);
+    scoreBallNum --;
+    printf("scoreBall was deleted.\n");
+}
+
+void moveScoreBall(void){
+    // move
+    for(int i=0; i<scoreBallNum; i++){
+        switch(ary_scoreBall[i].howMove)
+        {
+            case Move_Stop:
+                break;
+            default:
+                break;
+        }
+    }
 }

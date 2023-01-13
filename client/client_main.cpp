@@ -12,6 +12,8 @@ int		gClientNum;
 int		clientID;
 Player *player;
 Game game; //?????????
+std::vector<ScoreBall> ary_scoreBall;
+int scoreBallNum = 0;
 int endFlag = 1; //1:çśăăă-1:ă¨ăšăąăźă  0:ăŠăłă­ăłă°çľäş
 static float nameColor[MAX_CLIENTS][3] = {{1.0,0.0,0.0}, {0.0,0.0,1.0}, {1.0 , 0.8 , 0.0}, {0.0 , 0.4 , 0.0}};
 
@@ -420,7 +422,10 @@ void display(void)
             }
             Circle2D(0.03,player[i].pos.x/1000,player[i].pos.z*-1/1000);
         }
-
+	for(int i=0; i<scoreBallNum; i++){
+            glColor3f(0.6 , 0.0 , 1.0);
+            Circle2D(0.02,ary_scoreBall[i].pos.x/1000,ary_scoreBall[i].pos.z*-1/1000);
+        }
         glEnable(GL_LIGHTING);
         glEnable(GL_DEPTH_TEST);
         glPopMatrix();
@@ -912,6 +917,14 @@ void keyboard(unsigned char key, int x, int y)
             key8 = true;
         }
     }  
+    if(key == 'm'){
+        createScoreBall();
+    }
+    if(key == 'n'){
+        for(int i=0; i<gClientNum; i++)
+            printf("score:%lf\n",player[i].score);
+    }
+      
       
     glutPostRedisplay();
     x = y = 0;

@@ -52,3 +52,13 @@ void DrawString(std::string str,int x0, int y0, void *font)
     }
 
 }
+
+void drawScoreBall(void){
+    for(int i=0; i<scoreBallNum; i++){
+        glPushMatrix();
+        glColor3f(1.0, 0.0, 0.0);
+        glTranslatef(ary_scoreBall[i].pos.x, ary_scoreBall[i].pos.y, ary_scoreBall[i].pos.z);
+        glutSolidSphere(ary_scoreBall[i].collider.radius, 16, 16);
+        glPopMatrix();
+    }
+}
