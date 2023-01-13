@@ -302,6 +302,7 @@ void display(void)
             glPopMatrix();
         }
     }
+    /*
     for (int i= -4 ; i < 5; i++){
         for (int j= -1 ;j < 2; j++){
             for (int k = -4; k < 5; k++){
@@ -311,7 +312,12 @@ void display(void)
                 glPopMatrix();
             }
         }
-    }
+    }*/
+    glPushMatrix(); 
+    glTranslatef(0,0,0);
+    glCallList(model_list[4]);
+    glPopMatrix();
+
     glPushMatrix(); 
     glTranslatef(0, -35,0);
     glCallList(model_list[5]);
@@ -369,7 +375,7 @@ void display(void)
     glEnable(GL_DEPTH_TEST);
     glPopMatrix();
 
-    /* Draw ui(left down) */
+    /* Draw ui(down) */
     glPushMatrix();
     glDisable(GL_LIGHTING);
     glDisable(GL_DEPTH_TEST);
@@ -379,7 +385,6 @@ void display(void)
         if(i == clientID){
             continue;
         }
-        printf(";%d\n",i);
         glPushMatrix();
         glColor3f(nameColor[i][0],nameColor[i][1],nameColor[i][2]);
         glTranslatef(-2.12, 0.75f-draw_hpPos*0.34,0);
@@ -401,6 +406,15 @@ void display(void)
         glPopMatrix();
         draw_hpPos+=1;
     }
+    // time
+    char timeText[10];
+    sprintf(timeText,"%u",game.time);
+    glPushMatrix();
+        glColor3f(0.0, 0.0, 0.0);
+        glTranslatef(1.8, -1.8, 0);
+        DrawString(timeText, 0, 0);
+    glPopMatrix();
+
     glEnable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
     glPopMatrix();

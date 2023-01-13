@@ -123,6 +123,17 @@ int ExecuteCommand(char command,int pos)
     return endFlag;
 }
 
+void SendTimeCommand(void){
+    char com = TIMER_COMMAND;
+
+    /* データの送信 */
+    SendData(ALL_CLIENTS,&com,sizeof(char));
+
+    //ScoreBallDataの送信
+    
+    SendData(ALL_CLIENTS,&game.time,sizeof(unsigned int));
+}
+
 /*****
 static
 *****/
