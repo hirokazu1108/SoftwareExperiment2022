@@ -500,13 +500,10 @@ void RenderResultWindow(void){
 
     textImg[tname_result].drawTexture(100,100,textImg[tname_result].w/1.2,textImg[tname_result].h/1.2);
 
-    int cnum = sizeof(game.rankingName)/sizeof(game.rankingName[0]);
-    printf("num:%d\n",cnum);
-    for(int i=0; i<cnum; i++){
+    for(int i=0; i<game.clientNum; i++){
         textImg[tname_1 + i].drawTexture(200 ,300 +i*100);
-        for(int j=0; game.rankingName[i][j]!='\0'; j++){
-            printf("name:%c\n",game.rankingName[i][j]);
-            textName tn = retTextNameFromChar(game.rankingName[i][j]);
+        for(int j=0; game.rankingData.clientName[i][j]!='\0'; j++){
+            textName tn = retTextNameFromChar(game.rankingData.clientName[i][j]);
             textImg[tn].drawTexture(350+ j*45, 300+i*100);
         }
     }
