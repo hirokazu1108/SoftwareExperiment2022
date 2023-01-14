@@ -99,6 +99,7 @@ extern CLIENT gClients[MAX_CLIENTS];
 /* server_command.cpp */
 extern int ExecuteCommand(char command,int pos);
 extern void SendTimeCommand(void);
+extern void SendRankingDataCommand(void);
 
 /* server_func.cpp */
 extern void PlayerInit(void);
