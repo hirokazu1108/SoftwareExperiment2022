@@ -346,13 +346,15 @@ void deleteScoreBall(int index){
 
 void moveScoreBall(void){
     // move
+    int num;
     for(int i=0; i<scoreBallNum; i++){
          for(int j = 0; j < gClientNum; j++){
              if(ary_scoreBall[i].pos.x + 50 > player[j].pos.x && ary_scoreBall[i].pos.x - 50 < player[j].pos.x){
                 if(ary_scoreBall[i].pos.y + 50 > player[j].pos.y && ary_scoreBall[i].pos.y - 50 < player[j].pos.y){
                 if(ary_scoreBall[i].pos.z + 50 > player[j].pos.z && ary_scoreBall[i].pos.z - 50 < player[j].pos.z){
-                ary_scoreBall[i].howMove = Move_player;
+                ary_scoreBall[i].howMove = Move_atack;
                 printf("kokonihaitte");
+                num = j;
                 break;
              }
              }
@@ -368,11 +370,54 @@ void moveScoreBall(void){
                 ary_scoreBall[i].pos.z = rand()%500;
                 ary_scoreBall[i].howMove = Move_Stop;
                 break;
+            case Move_henntai:
+                if(ary_scoreBall[i].pos.x  > player[num].pos.x){
+                    ary_scoreBall[i].pos.x = (ary_scoreBall[i].pos.x + 1);
+                }
+                else{
+                    ary_scoreBall[i].pos.x = (ary_scoreBall[i].pos.x - 1);
+                }
+                if(ary_scoreBall[i].pos.y  > player[num].pos.y){
+                    ary_scoreBall[i].pos.y = (ary_scoreBall[i].pos.y + 1);
+                }
+                else{
+                    ary_scoreBall[i].pos.y = (ary_scoreBall[i].pos.y - 1);
+                }
+                if(ary_scoreBall[i].pos.z  > player[num].pos.z){
+                    ary_scoreBall[i].pos.z = (ary_scoreBall[i].pos.z + 1);
+                }
+                else{
+                    ary_scoreBall[i].pos.z = (ary_scoreBall[i].pos.z - 1);
+                }
+                ary_scoreBall[i].howMove = Move_Stop;
+                break;
+            case Move_atack:
+                if(ary_scoreBall[i].pos.x  > player[num].pos.x){
+                    ary_scoreBall[i].pos.x = (ary_scoreBall[i].pos.x - 0.1);
+                }
+                else{
+                    ary_scoreBall[i].pos.x = (ary_scoreBall[i].pos.x + 0.1);
+                }
+                if(ary_scoreBall[i].pos.y  > player[num].pos.y){
+                    ary_scoreBall[i].pos.y = (ary_scoreBall[i].pos.y - 0.1);
+                }
+                else{
+                    ary_scoreBall[i].pos.y = (ary_scoreBall[i].pos.y + 0.1);
+                }
+                if(ary_scoreBall[i].pos.z  > player[num].pos.z){
+                    ary_scoreBall[i].pos.z = (ary_scoreBall[i].pos.z - 0.1);
+                }
+                else{
+                    ary_scoreBall[i].pos.z = (ary_scoreBall[i].pos.z + 0.1);
+                }
+                ary_scoreBall[i].howMove = Move_Stop;
+                break;
             default:
-                ary_scoreBall[i].pos.x = ary_scoreBall[i].pos.x + 1;
+                //ary_scoreBall[i].pos.x = ary_scoreBall[i].pos.x + 1;
 
                 break;
         }
+        ary_scoreBall[i].collider.pos = ary_scoreBall[i].pos;
     }
 }
 
@@ -396,4 +441,7 @@ void Respawn(void){
     player[clientID].enabled = true;
     player[clientID].hp = MAX_HP;
     player[clientID].mp /= 5;
+    player[clientID].turn1 = 0;
+    player[clientID].turn2 = 0;
+    player[clientID].turn3 = 0;
 }
