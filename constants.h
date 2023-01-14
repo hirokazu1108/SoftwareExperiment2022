@@ -44,7 +44,7 @@
 #define PARAMATER_MAX 5         //max value of status paramaters
 #define PARAMATER_NUM 5         //num of status paramaters
 #define PARAMATER_SUM_MAX 10    //max of sum of status paramaters
-#define NAME_MAX_LENGTH 20      //max length of client name
+#define NAME_MAX_LENGTH 10      //max length of client name
 #define SKILL_NUM 3             //num of skills
 #define SPECIAL_NUM 6           //num of specials
 #define FILENAME_GAMEDATA "../data/gamedata.bin"
@@ -190,7 +190,7 @@ class SaveData{
 /* the class to ranking data */
 class RankingData{
     public:
-    char clientName[MAX_CLIENTS][NAME_MAX_LENGTH+1];
+    char clientName[MAX_CLIENTS][NAME_MAX_LENGTH+2];
     float score[MAX_CLIENTS];
     int kill_player[MAX_CLIENTS];
     int death[MAX_CLIENTS];
