@@ -91,6 +91,9 @@ typedef enum{
     Move_player,
     Move_henntai,
     Move_atack,
+    Move_aho,
+    Move_dami,
+    Move_tossinn,
 
 }Move_Pattern;
 
