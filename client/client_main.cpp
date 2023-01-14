@@ -896,6 +896,10 @@ void keyboard(unsigned char key, int x, int y)
     if(key == 'd'){
         //flag = 0;
         key1 = true;
+        if(cos(player[clientID].turn2)<0){
+            key1 = false;
+            key3 = true;
+        }
        /*if(turn>0){
             double a;
             a = -2 * M_PI + turn;
@@ -933,6 +937,10 @@ void keyboard(unsigned char key, int x, int y)
     if(key == 'a'){
         flag = 0;
         key3 = true;
+        if(cos(player[clientID].turn2)<0){
+            key1 = true;
+            key3 = false;
+        }
         /*if(turn<0){
             double a;
             a = 2 * M_PI + turn;
@@ -998,6 +1006,17 @@ void keyboard(unsigned char key, int x, int y)
             printf("score:%lf\n",player[i].score);
     }
       
+     /* if(cos(player[clientID].turn2)<0){
+          
+          if(key3){
+              key3 = false;
+              key1 = true;
+          }
+          else if(key1){
+             key3 = true;
+            key1 = false;
+          }
+      }*/
       
     glutPostRedisplay();
     x = y = 0;
