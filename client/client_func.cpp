@@ -344,16 +344,21 @@ void deleteScoreBall(int index){
     printf("scoreBall was deleted.\n");
 }
 
+double move1;
+bool hit = true;
+float x,y,z;
+
 void moveScoreBall(void){
-    // move
+    //int move;
     int num;
+    
     for(int i=0; i<scoreBallNum; i++){
          for(int j = 0; j < gClientNum; j++){
              if(ary_scoreBall[i].pos.x + 50 > player[j].pos.x && ary_scoreBall[i].pos.x - 50 < player[j].pos.x){
                 if(ary_scoreBall[i].pos.y + 50 > player[j].pos.y && ary_scoreBall[i].pos.y - 50 < player[j].pos.y){
                 if(ary_scoreBall[i].pos.z + 50 > player[j].pos.z && ary_scoreBall[i].pos.z - 50 < player[j].pos.z){
-                ary_scoreBall[i].howMove = Move_atack;
-                printf("kokonihaitte");
+                ary_scoreBall[i].howMove = Move_tossinn;
+                
                 num = j;
                 break;
              }
@@ -412,9 +417,51 @@ void moveScoreBall(void){
                 }
                 ary_scoreBall[i].howMove = Move_Stop;
                 break;
+            case Move_aho:
+                ary_scoreBall[i].pos.x = ary_scoreBall[i].pos.x+sin(move1)*5;
+                //ary_scoreBall[i].pos.y = ary_scoreBall[i].pos.y+cos(move);
+                
+                move1 = move1 + 0.5;
+                ary_scoreBall[i].howMove = Move_Stop;
+                break;
+            case Move_tossinn:
+                if(hit){
+                x = player[num].pos.x;
+                y = player[num].pos.y;
+                z = player[num].pos.z;
+                hit = false;
+                }
+                if(ary_scoreBall[i].pos.x  > x){
+                    ary_scoreBall[i].pos.x = ary_scoreBall[i].pos.x - 0.1;
+                }
+                else{
+                    ary_scoreBall[i].pos.x =ary_scoreBall[i].pos.x + 0.1;
+                }
+                if(ary_scoreBall[i].pos.y  > y){
+                    ary_scoreBall[i].pos.y =ary_scoreBall[i].pos.y - 0.1;
+                }
+                else{
+                    ary_scoreBall[i].pos.y =ary_scoreBall[i].pos.y + 0.1;
+                }
+                if(ary_scoreBall[i].pos.z  > z){
+                    ary_scoreBall[i].pos.z =ary_scoreBall[i].pos.z - 0.1;
+                }
+                else{
+                    ary_scoreBall[i].pos.z =ary_scoreBall[i].pos.z + 0.1;
+                }
+                /*if(ary_scoreBall[i].pos.z -2 <= z && ary_scoreBall[i].pos.z+2 >= z && ary_scoreBall[i].pos.y-2 <= y && ary_scoreBall[i].pos.y+2 >= y
+                && ary_scoreBall[i].pos.x - 2 <= x&& ary_scoreBall[i].pos.x+2 >= x){
+                    hit = true;
+                }*/
+                if(ary_scoreBall[i].pos.z ==z&& ary_scoreBall[i].pos.y == y&&ary_scoreBall[i].pos.x==x){
+                    hit = true;
+                }
+                ary_scoreBall[i].howMove = Move_Stop;
+                break;
             default:
                 //ary_scoreBall[i].pos.x = ary_scoreBall[i].pos.x + 1;
-
+                
+                ary_scoreBall[i].howMove = Move_Stop;
                 break;
         }
         ary_scoreBall[i].collider.pos = ary_scoreBall[i].pos;
