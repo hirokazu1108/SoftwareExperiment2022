@@ -7,6 +7,7 @@
 static void SetIntData2DataBlock(void *data,int intData,int *dataSize);
 static void SetCharData2DataBlock(void *data,char charData,int *dataSize);
 
+bool isRanking = false; //ランキングデータが生成されたらtrue
 /*****************************************************************
 関数名	: ExecuteCommand
 機能	: サーバーから送られてきたコマンドを元に，
@@ -40,21 +41,34 @@ int ExecuteCommand(char command)
             bullet_Num++;   
         }
         break;
-        case RANKING_DATA:{
-            int *p = (int*) malloc(sizeof(int)*gClientNum);
-            RecvData(p,sizeof(int)*gClientNum);
-            for(int i=0; i<gClientNum; i++){
-                game.ranking.push_back(p[i]);
+        case RANKING_DATA:
+            {
+                // プレイヤーの最新情報
+                Player *p = (Player*)malloc(sizeof(Player)*gClientNum);
+                RecvData(p,sizeof(Player)*gClientNum);
+                //格納する処理
+                for(int i = 0; i <gClientNum;i++)
+                {
+                    player[i] = p[i];
+                }
+                free(p);
+
+                RankingData data;
+                for(int i=0; i<gClientNum; i++){
+                    sprintf(data.clientName[i],"%s",game.clientName[i]);
+                    data.score[i] = player[i].score;
+                    data.kill_player[i] = player[i].kill_player;
+                    data.death[i] = player[i].death;
+                    data.kill_enemy[i] = player[i].kill_enemy;
+                    data.kill_boss[i] = player[i].kill_boss;
+                }
+
+                //ゲームをリザルトに切り替える
+                WriteRankingFile(gClientNum,&data);
+                isRanking = true;
+                SendEndCommand();
+                endFlag = 0;
             }
-            free(p);
-            
-            for(int i=0;i<gClientNum;i++)
-                printf("No.%d:%s\n",i+1,game.clientName[game.ranking[i]]);
-            }
-            printf("hp:%lf\n",player[clientID].hp);
-	    //ゲームをリザルトに切り替える
-            WriteRankingFile();
-            endFlag = 0;
             break;
         case SCOREBALL_COMMAND:
             {
@@ -69,8 +83,14 @@ int ExecuteCommand(char command)
             RecvData(&game.time, sizeof(unsigned int));
             break;
         case END_COMMAND:
-            endFlag = -1;
-            printf("END SELECTED.\n");
+            if(isRanking){
+                endFlag = 0;
+                printf("move ranking.\n");
+            }
+            else{
+                endFlag = -1;
+                printf("END selected.\n");
+            }
 			break;
         default:
             break;

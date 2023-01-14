@@ -34,7 +34,6 @@
 #define BULLET_RADIUS 0.3       //radius of bullet collider
 #define MAX_MP 100.0f
 
-
 #define PLAYERDATA_COMMAND 'p'
 #define END_COMMAND 'e'
 #define BULLETDATA_COMMAND 'b'
@@ -49,6 +48,8 @@
 #define SKILL_NUM 3             //num of skills
 #define SPECIAL_NUM 6           //num of specials
 #define FILENAME_GAMEDATA "../data/gamedata.bin"
+#define FILENAME_RANKINGDATA "../data/ranking.txt"
+#define GAMETIME 100
 
 typedef enum {
     State_Wait,
@@ -113,11 +114,15 @@ public:
     float attack;
     float mp;
     float hp;
-    float score;
     float size;
     int reloadTime;
     float isBarrier; //0< : barrier mode
     float isDisable; //0< : toumei mode
+    float score;
+    int kill_player;
+    int death;
+    int kill_enemy;
+    int kill_boss;
     Sphere collider;
     Ability_Type ability;
     SKILL skill;
@@ -131,7 +136,6 @@ class Game{
         char	clientName[MAX_CLIENTS][NAME_MAX_LENGTH+1];
         unsigned int time; //seconds
         GameState state;
-        std::vector<int> ranking; //indexにnを入れると第n位のクライアント番号を返す
 };
 
 /* 弾のクラス */
@@ -169,12 +173,23 @@ class ScoreBall{
 };
 
 /* the class to save game data */
-typedef class{
+class SaveData{
     public:
     char clientName[NAME_MAX_LENGTH+1];
     SKILL skill;
     SPECIAL special;
     int parm[PARAMATER_NUM];
-}SaveData;
+};
+
+/* the class to ranking data */
+class RankingData{
+    public:
+    char clientName[MAX_CLIENTS][NAME_MAX_LENGTH+1];
+    float score[MAX_CLIENTS];
+    int kill_player[MAX_CLIENTS];
+    int death[MAX_CLIENTS];
+    int kill_enemy[MAX_CLIENTS];
+    int kill_boss[MAX_CLIENTS];
+};
 
 #endif 

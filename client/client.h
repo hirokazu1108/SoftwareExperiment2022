@@ -63,12 +63,13 @@ extern bool retExists(const char *file);
 extern void WriteDataFile(SaveData *data);
 extern void ReadDataFile(SaveData *data);
 extern void WriteMatchFile(int value);
-extern void WriteRankingFile(void);
+extern void WriteRankingFile(int num, RankingData *data);
 extern void ExitClientProgram(int mode);
 extern void createScoreBall(void);
 extern void deleteScoreBall(int index);
 extern void moveScoreBall(void);
 extern void checkDeath(void);
+extern void Respawn(void);
 
 extern int		gClientNum;
 extern int		clientID;
