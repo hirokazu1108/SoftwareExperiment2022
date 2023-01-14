@@ -28,6 +28,10 @@ void PlayerInit(void){
         player[i].mp = 0.0f;
         player[i].hp = (float)MAX_HP;
         player[i].score = 0.0f;
+        player[i].kill_player = 0;
+        player[i].death = 0;
+        player[i].kill_enemy = 0;
+        player[i].kill_boss = 0;
         player[i].isBarrier = (float)MAX_BARRIER;
         player[i].isDisable = 0.0f;
 	    player[i].ability = UP_ATTACK;
@@ -121,7 +125,10 @@ void Collider(void){
                     player[i].hp -= player[array_bullet[j].shooter_id].attack * player[array_bullet[j].shooter_id].rate_attack / player[i].parm[PARM_HP];
                 }
                 deleteBullet(j);
-                printf("hirokazu: hit client[%d]\n",i);
+
+               if(player[i].hp <= 0.0f){
+                    player[array_bullet[j].shooter_id].kill_player += 1; // kill player
+                }
             }
         }
     }
@@ -150,6 +157,7 @@ void Collider(void){
                 //delete
                 ary_scoreBall[i].hp -= 1.0f;
                 if(ary_scoreBall[i].hp <= 0.0){
+                    player[array_bullet[j].shooter_id].kill_enemy += 1;
                     deleteScoreBall(i);
                 }
             }
@@ -268,19 +276,23 @@ void WriteMatchFile(int value){
 	fclose(fp); // ?????¡ã?¤ã??????????????
 }
 
-/* ?????³ã?­ã?³ã?°å?±æ?????ä½¿ç???????? */
-// ä¸???????ä¸???¹ã??
-void WriteRankingFile(void){
-    FILE *fp; // FILE???æ§????ä½?
-	char fname[] = "../data/ranking.txt";
+
+void WriteRankingFile(int num, RankingData *data){
+    FILE *fp; 
  
-	fp = fopen(fname, "w"); // ?????¡ã?¤ã??????????????å¤±æ???????????NULL???è¿???????
+	fp = fopen(FILENAME_RANKINGDATA, "w"); 
 	if(fp == NULL) {
-		printf("%s file not open!\n", fname);
+		printf("%s file not open!\n", FILENAME_RANKINGDATA);
 		exit (-1);
 	} else {
-        for(int i=0; i<gClientNum; i++)
-		    fprintf(fp,"%s\n",game.clientName[game.ranking[i]]);
+        fprintf(fp,"%d\n", num);
+        for(int i=0; i<num; i++){
+            fprintf(fp,"%s\n",data->clientName[i]);
+        }
+        
+        for(int i=0; i<num; i++){
+            fprintf(fp,"%f,%d,%d,%d,%d\n",data->score[i], data->kill_player[i], data->death[i], data->kill_enemy[i], data->kill_boss[i]);
+        }
 	}
  
 	fclose(fp); // ?????¡ã?¤ã??????????????
@@ -350,8 +362,19 @@ void checkDeath(void){
         if(player[i].hp <= 0.0f){
             player[i].enabled = false;
             if(i==clientID){
-                player[i].anim = 200.0f;
+                player[clientID].anim = 200.0f;
+                player[clientID].death += 1;
             }
         }
     }
+}
+
+
+void Respawn(void){
+    glm::vec3 respawnPos = glm::vec3(((rand()%2)==1 ? 1: -1)*rand()%(WORLDSIZE_X/5),((rand()%2)==1 ? 1: -1)*rand()%(WORLDSIZE_Y/5),((rand()%2)==1 ? 1: -1)*rand()%(WORLDSIZE_Z/5));
+    player[clientID].pos = respawnPos;
+    printf("hukkatu\n");
+    player[clientID].enabled = true;
+    player[clientID].hp = MAX_HP;
+    player[clientID].mp /= 5;
 }
