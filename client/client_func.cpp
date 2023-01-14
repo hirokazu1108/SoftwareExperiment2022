@@ -347,11 +347,30 @@ void deleteScoreBall(int index){
 void moveScoreBall(void){
     // move
     for(int i=0; i<scoreBallNum; i++){
+         for(int j = 0; j < gClientNum; j++){
+             if(ary_scoreBall[i].pos.x + 50 > player[j].pos.x && ary_scoreBall[i].pos.x - 50 < player[j].pos.x){
+                if(ary_scoreBall[i].pos.y + 50 > player[j].pos.y && ary_scoreBall[i].pos.y - 50 < player[j].pos.y){
+                if(ary_scoreBall[i].pos.z + 50 > player[j].pos.z && ary_scoreBall[i].pos.z - 50 < player[j].pos.z){
+                ary_scoreBall[i].howMove = Move_player;
+                printf("kokonihaitte");
+                break;
+             }
+             }
+             }
+         }
         switch(ary_scoreBall[i].howMove)
         {
             case Move_Stop:
                 break;
+            case Move_player:
+                ary_scoreBall[i].pos.x = rand()%500;
+                ary_scoreBall[i].pos.y = rand()%100;
+                ary_scoreBall[i].pos.z = rand()%500;
+                ary_scoreBall[i].howMove = Move_Stop;
+                break;
             default:
+                ary_scoreBall[i].pos.x = ary_scoreBall[i].pos.x + 1;
+
                 break;
         }
     }
