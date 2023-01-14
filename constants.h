@@ -88,6 +88,9 @@ typedef enum{
 
 typedef enum{
     Move_Stop,
+    Move_player,
+    Move_henntai,
+    Move_atack,
 
 }Move_Pattern;
 
