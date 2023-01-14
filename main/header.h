@@ -6,10 +6,9 @@
 
 #define WD_Height 1000
 #define WD_Width 1200
-#define IMG_NUM 22
-#define TEXT_NUM 79
+#define IMG_NUM 27
+#define TEXT_NUM 84
 #define SCENE_NUM 8
-
 
 typedef enum{
     SCENE_Title,
@@ -37,10 +36,15 @@ typedef enum{
     uname_skill_hp,
     uname_skill_speed,
     uname_pin,
+    uname_rightSelect,
+    uname_leftSelect,
     uname_back,
     uname_nameChange,
     uname_skillChange,
     uname_selectHikouki,
+    uname_logo,
+    uname_rankingBoard,
+    uname_rankingBack,
     uname_title_sky,
     uname_title_sky2,
     uname_cloud,
@@ -65,7 +69,12 @@ typedef enum{
     tname_nowloading,
     tname_result,
     tname_exit,
+    tname_detail,
     tname_totitle,
+    tname_score_rank,
+    tname_kill_rank,
+    tname_death_rank,
+    tname_killenemy_rank,
     tname_0,
     tname_1,
     tname_2,
@@ -187,7 +196,7 @@ typedef struct {
     int w;
     int h;         
     SDL_Texture* texture;
-    void drawRotateTexture(int x, int y, int width=0,int height=0, int rad=0);
+    void drawRotateTexture(int x, int y, int width=0,int height=0, int rad=0, SDL_RendererFlip mode=SDL_FLIP_HORIZONTAL);
     void drawTexture(int x, int y, int width=0,int height=0);
     
 }ImgInfo;
@@ -209,7 +218,7 @@ extern void RenderCustomizeWindow(void);
 extern void RenderClientWaitWindow(void);
 extern void RenderResultWindow(void);
 extern std::vector<SDL_Rect> buttonPos[SCENE_NUM];
-
+extern int rankingMode;
 
 /* system.cpp */
 extern void InitSystem(void);
@@ -226,3 +235,7 @@ extern void SaveGameData(void);
 extern void ReadMatchFile(void);
 extern void WriteMatchFile(int value);
 extern void ReadRankingFile(void);
+extern void SortRanking(int mode);
+extern int GetIndexFromName(char name[]);
+extern int *rankIndex;
+extern int *rankNumber;

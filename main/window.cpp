@@ -1,8 +1,8 @@
 #include "header.h"
 
 /* 画像パス */
-static const char *imgFile[IMG_NUM] = { "name.png", "skill.png","special.png","status.png", "explain_skill.png","nowSelectButton.png", "changeButton.png","backButton.png",  "skill_attack.png", "skill_hp.png","skill_speed.png", "pin.png", "back.png","nameChange.png","skillChange.png","selectHikouki.png","title_sky.png","title_sky2.png","cloud.png", "castle.png","masao.png","masao_face.png"};
-static const char *textStr[TEXT_NUM] = {"Space Battle","SERVER","CLIENT","CUSTOMIZE","input client num.","input passcode.","del","Enter","self","input device num.","clpc","nowLoading...","Result","Exit", "toTitle","0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"," ", "-"};
+static const char *imgFile[IMG_NUM] = { "name.png", "skill.png","special.png","status.png", "explain_skill.png","nowSelectButton.png", "changeButton.png","backButton.png",  "skill_attack.png", "skill_hp.png","skill_speed.png", "pin.png","rightSelect.png","leftSelect.png", "back.png","nameChange.png","skillChange.png","selectHikouki.png","logo.png", "rankingBoard.png", "rankingBack.png","title_sky.png","title_sky2.png","cloud.png", "castle.png","masao.png","masao_face.png"};
+static const char *textStr[TEXT_NUM] = {"Space Battle","SERVER","CLIENT","CUSTOMIZE","input client num.","input passcode.","del","Enter","self","input device num.","clpc","nowLoading...","Result","Exit","Detail","Title","スコア  ランキング","キル数  ランキング","デス数  ランキング", "キル数（敵) ランキング","0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"," ", "-"};
 /* フォントパス */
 static char gFontFile[] = "../fonts/Yomogi-Regular.ttf";
 
@@ -10,6 +10,8 @@ static char gFontFile[] = "../fonts/Yomogi-Regular.ttf";
 std::vector<SDL_Rect> buttonPos[SCENE_NUM];
 
 float scroll_back = -50.0; //背景のスクロール
+
+int rankingMode = 0; // 0:score  ,1:kill num of player  ,2:death  ,3:kill num of enemy and boss
 
 float masao_loop = 0;
 float masao_rotate = 0;
@@ -110,7 +112,7 @@ int InitWindow(void)
     buttonPos[SCENE_CLIENT_0].push_back({620,460,80,80}); //?
     buttonPos[SCENE_CLIENT_0].push_back({80,650,100,100}); //localHost
     buttonPos[SCENE_CLIENT_0].push_back({200,650,400,100}); //確定
-    buttonPos[SCENE_CLIENT_1].push_back({120,400,80,80});  //0
+    buttonPos[SCENE_CLIENT_1].push_back({120,400,80,80}); //0
     buttonPos[SCENE_CLIENT_1].push_back({220,400,80,80}); //1
     buttonPos[SCENE_CLIENT_1].push_back({320,400,80,80}); //2
     buttonPos[SCENE_CLIENT_1].push_back({420,400,80,80}); //3
@@ -126,10 +128,11 @@ int InitWindow(void)
     buttonPos[SCENE_CUSTOMIZE].push_back({930,130-scrollValue,0,0}); //名前変更(丸ボタン)
     buttonPos[SCENE_CUSTOMIZE].push_back({900,370-scrollValue,0,0}); //スキル変更(丸ボタン)
     buttonPos[SCENE_CUSTOMIZE].push_back({900,700-scrollValue,0,0}); //スペシャル変更(丸ボタン)
-    buttonPos[SCENE_Result].push_back({200,820,200,80}); //exit
-    buttonPos[SCENE_Result].push_back({500,820,200,80}); //totitle
-
-
+    buttonPos[SCENE_Result].push_back({590,850,200,90}); //left
+    buttonPos[SCENE_Result].push_back({830,850,200,90}); //right
+    buttonPos[SCENE_Result].push_back({350,850,200,90}); //exit
+    buttonPos[SCENE_Result].push_back({590,850,200,90}); //detail
+    buttonPos[SCENE_Result].push_back({830,850,200,90}); //totitle
 
     if(game.scene == SCENE_Title)
         RenderTitleWindow();
@@ -389,7 +392,7 @@ void RenderCustomizeWindow(void){
 
     // 画像の表示　「名前入力欄」
     uiImg[uname_name].drawTexture(50,10-scrollValue,uiImg[uname_name].w/1.2,uiImg[uname_name].h/1.2);
-
+    
     
     // 文字の表示　「名前」
     for(int i=0; game.clientName[i]!='\0'; i++){
@@ -498,26 +501,102 @@ void RenderResultWindow(void){
     //背景
     DrawBackGround();
 
-    textImg[tname_result].drawTexture(100,100,textImg[tname_result].w/1.2,textImg[tname_result].h/1.2);
-
+    textImg[tname_result].drawTexture(55,40,textImg[tname_result].w/1.2,textImg[tname_result].h/1.3);
+    //(game.selectButton==0?1:0)
+    uiImg[uname_rankingBoard].drawTexture(65, 160, uiImg[uname_rankingBoard].w*1.5, uiImg[uname_rankingBoard].h*1.25);
+    uiImg[uname_rightSelect].drawTexture(1095+(game.selectButton==1?5:1),430-(game.selectButton==1?20:1),uiImg[uname_rightSelect].w/8*(game.selectButton==1?1.4:1),uiImg[uname_rightSelect].h/8*(game.selectButton==1?1.4:1));
+    uiImg[uname_leftSelect].drawTexture(25-(game.selectButton==0?30:1),430-(game.selectButton==0?20:1),uiImg[uname_leftSelect].w/8*(game.selectButton==0?1.4:1),uiImg[uname_leftSelect].h/8*(game.selectButton==0?1.4:1));
+    textImg[tname_score_rank+rankingMode].drawTexture(285,170,textImg[tname_score_rank+rankingMode].w/1.3,textImg[tname_score_rank+rankingMode].h/1.3);
+    for(int i=0; i<game.clientNum; i++)
+    {
+        uiImg[uname_rankingBack].drawTexture(120, 270+i*130, uiImg[uname_rankingBack].w*1.45, uiImg[uname_rankingBack].h*1.1);
+    }
     for(int i=0; i<game.clientNum; i++){
-        textImg[tname_1 + i].drawTexture(200 ,300 +i*100);
-        for(int j=0; game.rankingData.clientName[i][j]!='\0'; j++){
-            textName tn = retTextNameFromChar(game.rankingData.clientName[i][j]);
-            textImg[tn].drawTexture(350+ j*45, 300+i*100);
+        switch(rankNumber[i]){
+            case 1:
+                textImg[tname_1].drawTexture(160 ,270 +i*130,textImg[tname_1].w/1.3, textImg[tname_1].h/1.3);
+                textImg[tname_s].drawTexture(195 ,270 +i*130,textImg[tname_s].w/1.3, textImg[tname_s].h/1.3);
+                textImg[tname_t].drawTexture(230 ,270 +i*130,textImg[tname_t].w/1.3, textImg[tname_t].h/1.3);
+                break;
+            case 2:
+                textImg[tname_2].drawTexture(160 ,270 +i*130,textImg[tname_2].w/1.3, textImg[tname_2].h/1.3);
+                textImg[tname_n].drawTexture(195 ,270 +i*130,textImg[tname_n].w/1.3, textImg[tname_n].h/1.3);
+                textImg[tname_d].drawTexture(230 ,270 +i*130,textImg[tname_d].w/1.3, textImg[tname_d].h/1.3);
+                break;
+            case 3:
+                textImg[tname_3].drawTexture(160 ,270 +i*130,textImg[tname_3].w/1.3, textImg[tname_3].h/1.3);
+                textImg[tname_r].drawTexture(195 ,270 +i*130,textImg[tname_r].w/1.3, textImg[tname_r].h/1.3);
+                textImg[tname_d].drawTexture(230 ,270 +i*130,textImg[tname_d].w/1.3, textImg[tname_d].h/1.3);
+                break;
+            case 4:
+                textImg[tname_4].drawTexture(160 ,270 +i*130,textImg[tname_4].w/1.3, textImg[tname_4].h/1.3);
+                textImg[tname_t].drawTexture(195 ,270 +i*130,textImg[tname_t].w/1.3, textImg[tname_t].h/1.3);
+                textImg[tname_h].drawTexture(230 ,270 +i*130,textImg[tname_h].w/1.3, textImg[tname_h].h/1.3);
+                break;
         }
+        for(int j=0; game.rankingData.clientName[rankIndex[i]][j]!='\0'; j++){
+            textName tn = retTextNameFromChar(game.rankingData.clientName[rankIndex[i]][j]);
+            textImg[tn].drawTexture(455+ j*30, 275+i*130,textImg[tn].w/1.4,textImg[tn].h/1.4);
+        }
+        switch(rankingMode){
+            case 0: // score
+                {
+                    char text[20];
+                    sprintf(text,"%05.0f",game.rankingData.score[rankIndex[i]]);
+                    for(int j=0; text[j] != '\0'; j++){
+                        textName tn = retTextNameFromChar(text[j]);
+                        textImg[tn].drawTexture(870+ j*30, 270+i*130,textImg[tn].w/1.3,textImg[tn].h/1.3);
+                    }
+                }
+                break;
+            case 1: // kill num of player
+                {
+                    char text[20];
+                    sprintf(text,"%02d",game.rankingData.kill_player[rankIndex[i]]);
+                    for(int j=0; text[j] != '\0'; j++){
+                        textName tn = retTextNameFromChar(text[j]);
+                        textImg[tn].drawTexture(960+ j*30, 270+i*130,textImg[tn].w/1.3,textImg[tn].h/1.3);
+                    }
+                }
+                break;
+            case 2: // death
+                {
+                    char text[20];
+                    sprintf(text,"%02d",game.rankingData.death[rankIndex[i]]);
+                    for(int j=0; text[j] != '\0'; j++){
+                        textName tn = retTextNameFromChar(text[j]);
+                        textImg[tn].drawTexture(960+ j*30, 270+i*130,textImg[tn].w/1.3,textImg[tn].h/1.3);
+                    }
+                }
+                break;
+            case 3: // kill num of enemy  and boss
+                {
+                    char text[20];
+                    sprintf(text,"%02d",game.rankingData.kill_enemy[rankIndex[i]]+game.rankingData.kill_boss[rankIndex[i]]);
+                    for(int j=0; text[j] != '\0'; j++){
+                        textName tn = retTextNameFromChar(text[j]);
+                        textImg[tn].drawTexture(960+ j*30, 270+i*130,textImg[tn].w/1.3,textImg[tn].h/1.3);
+                    }
+                }
+                break;
+        }
+        
     }
 
+    boxColorRect(game.render,&buttonPos[SCENE_Result][2],0xffffffff);
+    rectangleColorRect(game.render,&buttonPos[SCENE_Result][2],0xff000000);
+    textImg[tname_exit].drawTexture(buttonPos[SCENE_Result][2].x+20,buttonPos[SCENE_Result][2].y, textImg[tname_exit].w/1.6, textImg[tname_exit].h/1.6);
 
-    rectangleColorRect(game.render,&buttonPos[SCENE_Result][0],0xff000000);
-    textImg[tname_exit].drawTexture(buttonPos[SCENE_Result][0].x,buttonPos[SCENE_Result][0].y, textImg[tname_exit].w/1.6, textImg[tname_exit].h/1.6);
+    boxColorRect(game.render,&buttonPos[SCENE_Result][3],0xffffffff);
+    rectangleColorRect(game.render,&buttonPos[SCENE_Result][3],0xff000000);
+    textImg[tname_detail].drawTexture(buttonPos[SCENE_Result][3].x+20,buttonPos[SCENE_Result][3].y, textImg[tname_detail].w/1.6, textImg[tname_detail].h/1.6);
 
+    boxColorRect(game.render,&buttonPos[SCENE_Result][4],0xffffffff);
+    rectangleColorRect(game.render,&buttonPos[SCENE_Result][4],0xff000000);
+    textImg[tname_totitle].drawTexture(buttonPos[SCENE_Result][4].x+20,buttonPos[SCENE_Result][4].y, textImg[tname_totitle].w/1.6, textImg[tname_totitle].h/1.6);
 
-    rectangleColorRect(game.render,&buttonPos[SCENE_Result][1],0xff000000);
-    textImg[tname_totitle].drawTexture(buttonPos[SCENE_Result][1].x,buttonPos[SCENE_Result][1].y, textImg[tname_totitle].w/1.6, textImg[tname_totitle].h/1.6);
-
-
-    boxColorRect(game.render,&buttonPos[SCENE_Result][game.selectButton],0x77777777);
+    if(2 <= game.selectButton && game.selectButton <= 4)
+        boxColorRect(game.render,&buttonPos[SCENE_Result][game.selectButton],0x99555555);
 
     SDL_RenderPresent(game.render);
 }
@@ -538,7 +617,7 @@ void ImgInfo::drawTexture(int x, int y, int width, int height){
     }
 }
 /* テクスチャの描画 */
-void ImgInfo::drawRotateTexture(int x, int y, int width, int height, int rad){
+void ImgInfo::drawRotateTexture(int x, int y, int width, int height, int rad, SDL_RendererFlip mode){
     if(width == 0 || height == 0){
         width=w;
         height=h;
@@ -548,7 +627,7 @@ void ImgInfo::drawRotateTexture(int x, int y, int width, int height, int rad){
     // 転送先設定
     SDL_Rect dst = {x, y, width, height};
     // 転送
-    if (0 > SDL_RenderCopyEx(game.render, texture, &src, &dst,rad, NULL, SDL_FLIP_HORIZONTAL)) {
+    if (0 > SDL_RenderCopyEx(game.render, texture, &src, &dst,rad, NULL, mode)) {
         PrintError(SDL_GetError());
     }
 }

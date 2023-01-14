@@ -141,6 +141,10 @@ int main(int argc, char* argv[])
             if(!isReadRankingflg){
                 ReadRankingFile();
                 isReadRankingflg = true;
+                    /*ランキングに使用*/
+                rankIndex = (int*)malloc(sizeof(int)*game.clientNum);
+                rankNumber = (int*)malloc(sizeof(int)*game.clientNum);
+                SortRanking(rankingMode);
             }
             game.scene = InputEvent();
             ExcuteInput();
@@ -149,9 +153,7 @@ int main(int argc, char* argv[])
             SDL_Delay(10);
             framecnt++;
         }
-
     }
-    
     system("exit");
     return 0;
 }
@@ -591,10 +593,47 @@ void ExcuteInput(void){
             case SCENE_Result:
             switch(game.input){
                 case INPUT_RIGHT:
-                    shiftSelect(+1,maxButtonNum[game.scene],&game.selectButton);
+                    switch(game.selectButton){
+                        case 0:
+                            game.selectButton = 1;
+                            shiftSelect(+1,4,&rankingMode);
+                            break;
+                        case 1:
+                            shiftSelect(+1,4,&rankingMode);
+                            break;
+                        case 4:
+                            game.selectButton = 2;
+                            break;
+                        default:
+                            game.selectButton += 1;
+                            break;
+                    }                       
                     break;
                 case INPUT_LEFT:
-                    shiftSelect(-1,maxButtonNum[game.scene],&game.selectButton);
+                    switch(game.selectButton){
+                        case 1:
+                            game.selectButton = 0;
+                            shiftSelect(-1,4,&rankingMode);
+                            break;
+                        case 0:
+                            shiftSelect(-1,4,&rankingMode);
+                            break;
+                        case 2:
+                            game.selectButton = 4;
+                            break;
+                        default:
+                            game.selectButton -= 1;
+                            break;
+                    }    
+                    break;
+                case INPUT_UP:
+                case INPUT_DOWN:
+                    if(game.selectButton == 0 || game.selectButton == 1){
+                        game.selectButton = 2;
+                    }
+                    else{
+                        game.selectButton = 0;
+                    }
                     break;
                 case INPUT_RETURN:
                     PushedButton();
