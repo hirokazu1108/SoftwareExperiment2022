@@ -383,41 +383,27 @@ void WriteMatchFile(int value){
 /* ランキングを読み込む関数 */
 void ReadRankingFile(void){
     FILE *fp; // FILE型構造体
-	char fname[] = "../data/ranking.txt";
  
-	fp = fopen(fname, "r"); // ファイルを開く。失敗するとNULLを返す。
+	fp = fopen(FILENAME_RANKINGDATA, "r"); // ファイルを開く。失敗するとNULLを返す。
 	if(fp == NULL) {
-		printf("%s file not open!\n", fname);
+		printf("%s file not open!\n", FILENAME_RANKINGDATA);
 		exit (-1);
 	} else {
-
-        bool loopflg = true;
-        int i=0;
-        while(loopflg){
-            int j=0;
-            do{
-                char ch = fgetc(fp);
-                if(ch == '\n'){
-                    break;
-                }
-                else if(ch == EOF)
-                {
-                    loopflg = false;
-                    break;
-                }
-                else{
-                    game.rankingName[i][j] = ch;
-                    j++;
-                }
-            }while(1);
-            i++;
+        fscanf(fp, "%d\n", &game.clientNum);
+        for(int i=0; i<game.clientNum; i++){
+            fscanf(fp,"%s\n",game.rankingData.clientName[i]);
+            game.rankingData.clientName[i][strlen(game.rankingData.clientName[i])+1] = '\0';
         }
-        for(int k=0; k<i-1; k++)
-        {
-            game.rankingName[k][strlen(game.rankingName[k]) + 1] = '\0';
-            std::cout << k << ':' << game.rankingName[k] << '\n';
+        for(int i=0; i<game.clientNum; i++){
+            fscanf(fp,"%f,%d,%d,%d,%d\n",&game.rankingData.score[i], &game.rankingData.kill_player[i], &game.rankingData.death[i], &game.rankingData.kill_enemy[i], &game.rankingData.kill_boss[i]);
+            game.rankingData.clientName[i][strlen(game.rankingData.clientName[i])+1] = '\0';
         }
-        
 	}
+    int i=0;
+    while(game.rankingData.clientName[0][i] != '\0')
+    {
+        printf("str[%d]:%c\n",i,game.rankingData.clientName[0][i]);
+        i++;
+    }
 	fclose(fp); // ファイルを閉じる
 }
