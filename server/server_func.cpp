@@ -28,6 +28,10 @@ void PlayerInit(void){
         player[i].mp = 0.0f;
         player[i].hp = (float)MAX_HP;
         player[i].score = 0.0f;
+        player[i].kill_player = 0;
+        player[i].death = 0;
+        player[i].kill_enemy = 0;
+        player[i].kill_boss = 0;
         player[i].isBarrier = 0.0f;
         player[i].isDisable = 0.0f;
         player[i].ability = UP_ATTACK;
