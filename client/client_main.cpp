@@ -210,9 +210,7 @@ void display(void)
     }
     else if(!player[clientID].enabled){
         player[clientID].anim = 0.0f;
-        printf("hukkatu\n");
-        player[clientID].enabled = true;
-        player[clientID].hp = MAX_HP;
+        Respawn();
     }
 	
     int i;
@@ -425,14 +423,43 @@ void display(void)
         glPopMatrix();
         draw_hpPos+=1;
     }
-    // time
-    char timeText[10];
-    sprintf(timeText,"%u",game.time);
-    glPushMatrix();
-        glColor3f(0.0, 0.0, 0.0);
-        glTranslatef(1.8, -1.8, 0);
-        DrawString(timeText, 0, 0);
-    glPopMatrix();
+    // textUI
+        char uiText[32];
+        // score
+        glPushMatrix();
+            sprintf(uiText,"score:%f",player[clientID].score);
+            glColor3f(0.0, 0.0, 0.0);
+            glTranslatef(1.7, 0, 0);
+            DrawString(uiText, 0, 0);
+        glPopMatrix();
+        // kill_player
+        glPushMatrix();
+            sprintf(uiText,"kill_player:%d",player[clientID].kill_player);
+            glColor3f(0.0, 0.0, 0.0);
+            glTranslatef(1.7, -0.3, 0);
+            DrawString(uiText, 0, 0);
+        glPopMatrix();
+        // kill_scoreball
+        glPushMatrix();
+            sprintf(uiText,"kill_enemy:%d",player[clientID].kill_enemy);
+            glColor3f(0.0, 0.0, 0.0);
+            glTranslatef(1.7, -0.6, 0);
+            DrawString(uiText, 0, 0);
+        glPopMatrix();
+        // death
+        glPushMatrix();
+            sprintf(uiText,"death:%d",player[clientID].death);
+            glColor3f(0.0, 0.0, 0.0);
+            glTranslatef(1.7, -0.9, 0);
+            DrawString(uiText, 0, 0);
+        glPopMatrix();
+        //time
+        glPushMatrix();
+            sprintf(uiText,"time:%u",game.time);
+            glColor3f(0.0, 0.0, 0.0);
+            glTranslatef(1.7, -1.8, 0);
+            DrawString(uiText, 0, 0);
+        glPopMatrix();
     
     glEnable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
@@ -502,6 +529,14 @@ void display(void)
             }
             Circle2D(0.03,calmini(1,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z),calmini(2,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z));
         }
+
+        // height
+        glPushMatrix();
+            char height[10];
+            sprintf(height,"%.2f",player[clientID].pos.y);
+            glTranslatef(-1.7, 1.1 ,0.0);
+            DrawString(height,0,0);
+        glPopMatrix();
 
         glEnable(GL_LIGHTING);
         glEnable(GL_DEPTH_TEST);
