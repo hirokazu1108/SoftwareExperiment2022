@@ -121,6 +121,10 @@ Uint32 PlayTimer(Uint32 interval, void* param)
 Uint32 GameTimer(Uint32 interval, void* param)
 {
     game.time++;
-    SendTimeCommand();
+    //SendTimeCommand();
+    if(game.time >= (int)GAMETIME&& game.state==State_Play){
+      SendRankingDataCommand();
+      game.state = State_Result;
+    }
     return interval;
 }
