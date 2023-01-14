@@ -178,7 +178,7 @@ class settingGame{
     SKILL skill;
     SPECIAL special;
     int parm[5];   //ステータスの値(5種類)　indexはPARAMATER列挙体参照
-    char rankingName[MAX_CLIENTS][NAME_MAX_LENGTH+1];
+    RankingData rankingData;
 };
 
 /* 画像の情報 */
