@@ -1,13 +1,18 @@
 #include "header.h"
 
-int maxButtonNum[SCENE_NUM]={3,3,12,13,12,0,9,2};    //シーンごとのボタンの最大数,indexはScene列挙体に対応
+int maxButtonNum[SCENE_NUM]={3,3,12,13,12,0,9,5};    //シーンごとのボタンの最大数,indexはScene列挙体に対応
 
 bool buttonEnabled = false; //確定ボタンが見えるか否か
 
 int scrollValue = 0;
+int *rankIndex;  //ランキングのクライアントインデックス
+int *rankNumber; //ランキングの順位 1st,2nd,2nd,4th
 
 void LaunchServer(void);
 void LaunchClient(void);
+template <typename T>
+T SortRankIndex(const T *a, int *rank,int *rank_num, int num, int mode);
+
 
 void InitSystem(void){
     SaveData data;
@@ -18,7 +23,7 @@ void InitSystem(void){
     game.selectButton_sub = 1;
     game.skill = SKILL_ATTACK;
     game.special = SPECIAL_BIGBULLET;
-    sprintf(game.clientName,(rand()%2) == 1 ? "OgitaMasaki" : "ShoreiRiku");
+    sprintf(game.clientName,"%s","Masaki");
     sprintf(tempName,"%s",game.clientName);
     for(int i=0; i<PARAMATER_NUM; i++)
         game.parm[i] = 0;
@@ -246,11 +251,21 @@ void PushedButton(void){
             break;
 	case SCENE_Result:
             switch(game.selectButton){
-                case 0://exit
+                case 0://left
+                    shiftSelect(-1,4,&rankingMode);
+                    break;
+                case 1://right
+                    shiftSelect(+1,4,&rankingMode);
+                    break;
+                case 2://exit
                     game.scene = SCENE_None;
                     game.selectButton = 0;
                     break;
-                case 1://toTitle
+                case 3://detail
+
+                    game.selectButton = 0;
+                    break;
+                case 4://toTitle
                     game.scene = SCENE_Title;
                     game.selectButton = 0;
                     break;
@@ -399,11 +414,82 @@ void ReadRankingFile(void){
             game.rankingData.clientName[i][strlen(game.rankingData.clientName[i])+1] = '\0';
         }
 	}
-    int i=0;
-    while(game.rankingData.clientName[0][i] != '\0')
-    {
-        printf("str[%d]:%c\n",i,game.rankingData.clientName[0][i]);
-        i++;
-    }
 	fclose(fp); // ファイルを閉じる
+}
+
+// 0:score
+// 1:kill num of player
+// 2:death
+// 3:kill num of enemy
+// 4:kill num of boss
+void SortRanking(int mode){
+    switch(mode){
+        case 0:
+            SortRankIndex(game.rankingData.score, rankIndex,rankNumber, game.clientNum, 0);
+            break;
+        case 1:
+            SortRankIndex(game.rankingData.kill_player, rankIndex, rankNumber, game.clientNum, 0);
+            break;
+        case 2:
+            SortRankIndex(game.rankingData.death, rankIndex, rankNumber, game.clientNum, 1);
+            break;
+        case 3:
+            SortRankIndex(game.rankingData.kill_enemy, rankIndex, rankNumber, game.clientNum,0);
+            break;
+        case 4:
+            SortRankIndex(game.rankingData.kill_boss, rankIndex, rankNumber, game.clientNum, 0);
+            break;
+    }
+}
+
+// mode : 0->降順 big to small, 1->昇順 small to big
+template <typename T>
+T SortRankIndex(const T *a, int *rank,int *rank_num, int num, int mode){
+    for(int i=0;i<game.clientNum; i++)
+    {
+        rank[i] = i;
+    }
+    // 昇順
+    for (int i=0; i<num; ++i){
+        for (int j=i+1; j<num; ++j){
+            if (a[i] > a[j]){
+                int tmp =  rank[i];
+                rank[i] = rank[j];
+                rank[j] = tmp;
+            } 
+        }
+    }
+
+    // 降順に変換
+    if(mode == 0){
+        for(int i=0; i<num/2; i++){
+            int tmp = rank[i];
+            rank[i] = rank[num-1-i];
+            rank[num-1-i] = tmp;
+        }
+
+    }
+
+    rank_num[0]=1;
+    for(int i=1; i<num; i++){
+        rank_num[i] = i+1;
+        if(a[rank[i]] == a[rank[i-1]])
+        {
+            rank_num[i] = rank_num[i-1];
+        }
+    }
+    for(int i=0; i<num;i++){
+        printf("%d:%db\n",i,rankIndex[i]);
+        printf("%d:%dc\n",i,rankNumber[i]);
+    }   
+}
+
+// error :-1
+int GetIndexFromName(char name[]){
+    for(int i=0; i<game.clientNum; i++){
+        if(strcmp(game.rankingData.clientName[i], name) == 0){
+            return i;
+        }
+    }
+    return -1;
 }
