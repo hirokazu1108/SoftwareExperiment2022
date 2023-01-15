@@ -280,6 +280,8 @@ void display(void)
                 cloud_flag = 1;
             }
             
+            
+
             glTranslatef(player[i].pos.x, player[i].pos.y,player[i].pos.z);
 
             glRotatef(player[i].turn1*57.5, 0, 1, 0);
@@ -298,16 +300,7 @@ void display(void)
             
             glPopMatrix();
 
-            if(player[i].isBarrier > 0.0f){
-                glPushMatrix();           /* ??????????é???? */
-                glEnable(GL_BLEND);
-                glColor4f(0.0, 1.0, 1.0, 0.95); /* ???????????? */
-                glScalef(1.0, 1.0, 1.0);
-                glTranslatef(player[i].pos.x, player[i].pos.y,player[i].pos.z);
-                glutSolidSphere(1.0,200,200);
-                glDisable(GL_BLEND);
-                glPopMatrix();
-            }
+            
         }
         
     }
@@ -341,6 +334,19 @@ void display(void)
 	
     moveScoreBall();
     drawScoreBall();
+
+    for(int i=0; i<gClientNum; i++){
+        if(player[i].isBarrier > 0.0f){
+                glPushMatrix();           /* ??????????é???? */
+                glEnable(GL_BLEND);
+                glColor4f(0.8 , 0.0 , 0.8, 0.4); /* ???????????? */
+                glScalef(1.0, 1.0, 1.0);
+                glTranslatef(player[i].pos.x, player[i].pos.y,player[i].pos.z);
+                glutSolidSphere(1.0,12,12);
+                glDisable(GL_BLEND);
+                glPopMatrix();
+            }
+    }
 
     /* Draw ui(right up) */
     glPushMatrix();
