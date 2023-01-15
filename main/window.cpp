@@ -1,13 +1,14 @@
 #include "header.h"
 
 /* 画像パス */
-static const char *imgFile[IMG_NUM] = { "bigbullet.png","name.png", "skill.png","special.png","status.png", "explain_skill.png","nowSelectButton.png", "changeButton.png","backButton.png",  "skill_attack.png", "skill_hp.png","skill_speed.png", "pin.png","rightSelect.png","leftSelect.png", "back.png","nameChange.png","skillChange.png","selectHikouki.png","logo.png", "rankingBoard.png", "rankingBack.png","title_sky.png","title_sky2.png","cloud.png", "castle.png","masao.png","masao_face.png"};
+static const char *imgFile[IMG_NUM] = { "name.png", "skill.png","special.png","status.png", "explain_skill.png","nowSelectButton.png", "changeButton.png","backButton.png",  "skill_attack.png", "skill_hp.png","skill_speed.png", "pin.png","rightSelect.png","leftSelect.png", "back.png","nameChange.png","skillChange.png","specialChange.png","selectHikouki.png","barrier.png","disabled.png","bigbullet.png","barrier_icon.png","disabled_icon.png","bigbullet_icon.png","logo.png", "rankingBoard.png", "rankingBack.png","title_sky.png","title_sky2.png","cloud.png", "castle.png","masao.png","masao_face.png"};
 static const char *textStr[TEXT_NUM] = {"Space Battle","サーバー","クライアント","カスタマイズ","input client num.","input passcode.","del","Enter","self","input device num.","clpc","nowLoading...","Result","Exit","Detail","Title","スコア  ランキング","キル数  ランキング","デス数  ランキング", "キル数（敵) ランキング","0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"," ", "-"};
 /* フォントパス */
 static char gFontFile[] = "../fonts/Yomogi-Regular.ttf";
 
 /* ボタンの位置 */
 std::vector<SDL_Rect> buttonPos[SCENE_NUM];
+std::vector<SDL_Rect> special_iconPos;
 
 float scroll_back = -50.0; //背景のスクロール
 
@@ -134,6 +135,12 @@ int InitWindow(void)
     buttonPos[SCENE_Result].push_back({590,850,200,90}); //detail
     buttonPos[SCENE_Result].push_back({830,850,200,90}); //totitle
 
+    special_iconPos.push_back({23,58,uiImg[uname_backButton].w,uiImg[uname_backButton].h});//戻るボタン
+    special_iconPos.push_back({220,320,128,128});
+    for(int i=2; i<SPECIAL_NUM+1; i++){
+        special_iconPos.push_back({special_iconPos[i-1].x+special_iconPos[i-1].w+20,special_iconPos[i-1].y,128,128});
+    }
+
     if(game.scene == SCENE_Title)
         RenderTitleWindow();
     else if(game.scene == SCENE_CLIENT_WAIT)
@@ -237,24 +244,27 @@ void RenderTitleWindow(void)
     boxColorRect(game.render,&buttonPos[SCENE_Title][game.selectButton],0x77777777);
 
     // masaloop
-    uiImg[uname_masao].drawTexture(600+400*sin(masao_loop),700,uiImg[uname_masao].w/2,uiImg[uname_masao].h/2);
-    uiImg[uname_masao_face].drawRotateTexture(masao_x,masao_y,uiImg[uname_masao_face].w,uiImg[uname_masao_face].h,masao_rotate);
-    masao_rotate +=8;
-    masao_x += (random()%2 == 1) ? 5: -5;
-    masao_y += (random()%2 == 1) ? 5: -5;
-    if(masao_x >= 1000)
-    {
-        masao_x -= 5;
+    if(strcmp(tempName,"masao")==0||strcmp(tempName,"Masao")==0||strcmp(tempName,"MASAO")==0){
+        uiImg[uname_masao].drawTexture(600+400*sin(masao_loop),700,uiImg[uname_masao].w/2,uiImg[uname_masao].h/2);
+        uiImg[uname_masao_face].drawRotateTexture(masao_x,masao_y,uiImg[uname_masao_face].w,uiImg[uname_masao_face].h,masao_rotate);
+        masao_rotate +=8;
+        masao_x += (random()%2 == 1) ? 5: -5;
+        masao_y += (random()%2 == 1) ? 5: -5;
+        if(masao_x >= 1000)
+        {
+            masao_x -= 5;
+        }
+        else if(masao_x <=0){
+            masao_x += 5;
+        }
+        else if(masao_y >= 1000){
+            masao_y -= 5;
+        }
+        else if(masao_y <= -200){
+            masao_y += 5;
+        }
     }
-    else if(masao_x <=0){
-        masao_x += 5;
-    }
-    else if(masao_y >= 1000){
-        masao_y -= 5;
-    }
-    else if(masao_y <= -200){
-        masao_y += 5;
-    }
+    
 
     SDL_RenderPresent(game.render);
 }
@@ -386,8 +396,6 @@ void RenderCustomizeWindow(void){
     //背景
     DrawBackGround();
 
-
-
     // 文字の表示　「CUSTOMIZE」
     textImg[tname_customize].drawTexture(285,25-scrollValue,textImg[tname_customize].w*0.95,textImg[tname_customize].h*0.95);
     boxColor(game.render,814,14-scrollValue,1180,120-scrollValue,0xffe6f5fd);//黄土色の枠組み
@@ -421,7 +429,7 @@ void RenderCustomizeWindow(void){
     // 画像の表示　「スペシャル欄」
     uiImg[uname_special].drawTexture(81,560-scrollValue,uiImg[uname_special].w/1.2,uiImg[uname_special].h/1.2);
     // 画像の表示　「選択しているスペシャル」
-    uiImg[uname_bigbullet].drawTexture(160,685-scrollValue,uiImg[uname_bigbullet].w/1.4,uiImg[uname_bigbullet].h/1.4);
+    uiImg[uname_barrier+(int)game.special].drawTexture(160,685-scrollValue,uiImg[uname_barrier+(int)game.special].w/1.4,uiImg[uname_barrier+(int)game.special].h/1.4);//スペシャルの説明
     // 画像の表示　「選択中」
     uiImg[uname_nowselect].drawTexture(90,650-scrollValue,uiImg[uname_nowselect].w/4,uiImg[uname_nowselect].h/4);
     // 画像の表示　「変更ボタン」
@@ -457,7 +465,7 @@ void RenderCustomizeWindow(void){
         uiImg[uname_nameChange].drawTexture(0,0);
         for(int i=0; tempName[i]!='\0'; i++){
             textName tn = retTextNameFromChar(tempName[i]);
-            textImg[tn].drawTexture(150+ i*45,210);
+            textImg[tn].drawTexture(200+ i*45,310);
         }
     }
     //スキル変更画面
@@ -484,16 +492,28 @@ void RenderCustomizeWindow(void){
     //スペシャル変更の画面
     else if(game.popScene == PopUp_Special){
         uiImg[uname_back].drawTexture(0,0); //後ろを暗くする
-        uiImg[uname_skillChange].drawTexture(300,50);//タイトル
-        boxColor(game.render,860,10,1190,110,0xffe6f5fd);
+        uiImg[uname_specialChange].drawTexture(300,50);//タイトル
+        boxColor(game.render,860,10,1190,110,0xffe6f5fd);//説明の背景
         uiImg[uname_explain_skill].drawTexture(860,10,uiImg[uname_explain_skill].w/1.6,uiImg[uname_explain_skill].h/1.6);//説明
+        boxColor(game.render,180,280,1020,580,0xffe6f5fd);//スペシャルアイコンの背景
+        for(int i=0;i<SPECIAL_NUM;i++){
+            //カーソルのあってるものを大きく
+            if(i==game.selectButton_sub-1){
+                uiImg[uname_barrier_icon+i].drawTexture(special_iconPos[i+1].x-10,special_iconPos[i+1].y-10,uiImg[uname_barrier_icon+(int)game.special].w/2,uiImg[uname_barrier_icon+(int)game.special].h/2);
+            }
+            else{
+                uiImg[uname_barrier_icon+i].drawTexture(special_iconPos[i+1].x,special_iconPos[i+1].y,uiImg[uname_barrier_icon+(int)game.special].w/2.4,uiImg[uname_barrier_icon+(int)game.special].h/2.4);
+            }   
+        }
         if(game.selectButton_sub != 0){
-            uiImg[uname_backButton].drawTexture(30,65,uiImg[uname_backButton].w/1.1,uiImg[uname_backButton].h/1.1);//戻るボタン
+            uiImg[uname_backButton].drawTexture(special_iconPos[0].x+7,special_iconPos[0].y+7,uiImg[uname_backButton].w/1.1,uiImg[uname_backButton].h/1.1);//戻るボタン
+            uiImg[uname_barrier+game.selectButton_sub-1].drawTexture(180,600,uiImg[uname_barrier+game.selectButton_sub-1].w*0.75,uiImg[uname_barrier+game.selectButton_sub-1].h*0.75);//スペシャルの説明
         }
         else{
-            uiImg[uname_backButton].drawTexture(23,58,uiImg[uname_backButton].w,uiImg[uname_backButton].h);//戻るボタン
+            uiImg[uname_backButton].drawTexture(special_iconPos[0].x,special_iconPos[0].y,uiImg[uname_backButton].w,uiImg[uname_backButton].h);//戻るボタン
             boxColor(game.render,30,73,270,150,0x77777777);
         }
+        uiImg[uname_nowselect].drawTexture(special_iconPos[(int)game.special+1].x-40,special_iconPos[(int)game.special+1].y-40,uiImg[uname_nowselect].w/5,uiImg[uname_nowselect].h/5);//選択中
     }
 
     SDL_RenderPresent(game.render);
@@ -671,33 +691,38 @@ textName retTextNameFromChar(char ch){
 
 void DrawBackGround(void){
     scroll_back -= 0.3;
-    masao_loop += M_PI/180;
-    if(masao_loop >= 2*M_PI){
-        masao_loop = 0;
-    }
     //背景
     uiImg[uname_cloud].drawTexture((int)scroll_back,0,uiImg[uname_cloud].w,uiImg[uname_cloud].h);
     if(scroll_back <= -uiImg[uname_cloud].w/2){
         scroll_back = 0;
     }
     uiImg[uname_castle].drawTexture(0,0,uiImg[uname_castle].w,uiImg[uname_castle].h);
-    uiImg[uname_masao].drawTexture(600+400*sin(masao_loop),700,uiImg[uname_masao].w/2,uiImg[uname_masao].h/2);
-    uiImg[uname_masao_face].drawRotateTexture(masao_x,masao_y,uiImg[uname_masao_face].w,uiImg[uname_masao_face].h,masao_rotate);
-    masao_rotate +=8;
-    masao_x += (random()%2 == 1) ? 5: -5;
-    masao_y += (random()%2 == 1) ? 5: -5;
-    if(masao_x >= 1000)
-    {
-        masao_x -= 5;
-    }
-    else if(masao_x <=0){
-        masao_x += 5;
-    }
-    else if(masao_y >= 1000){
-        masao_y -= 5;
-    }
-    else if(masao_y <= -200){
-        masao_y += 5;
+
+
+    if(strcmp(tempName,"masao")==0||strcmp(tempName,"Masao")==0||strcmp(tempName,"MASAO")==0){
+        masao_loop += M_PI/180;
+        if(masao_loop >= 2*M_PI){
+            masao_loop = 0;
+        }
+        
+        uiImg[uname_masao].drawTexture(600+400*sin(masao_loop),700,uiImg[uname_masao].w/2,uiImg[uname_masao].h/2);
+        uiImg[uname_masao_face].drawRotateTexture(masao_x,masao_y,uiImg[uname_masao_face].w,uiImg[uname_masao_face].h,masao_rotate);
+        masao_rotate +=8;
+        masao_x += (random()%2 == 1) ? 5: -5;
+        masao_y += (random()%2 == 1) ? 5: -5;
+        if(masao_x >= 1000)
+        {
+            masao_x -= 5;
+        }
+        else if(masao_x <=0){
+            masao_x += 5;
+        }
+        else if(masao_y >= 1000){
+            masao_y -= 5;
+        }
+        else if(masao_y <= -200){
+            masao_y += 5;
+        }
     }
 }
 
