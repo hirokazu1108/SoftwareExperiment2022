@@ -1,8 +1,8 @@
 #include "header.h"
 
 /* 画像パス */
-static const char *imgFile[IMG_NUM] = { "name.png", "skill.png","special.png","status.png", "explain_skill.png","nowSelectButton.png", "changeButton.png","backButton.png",  "skill_attack.png", "skill_hp.png","skill_speed.png", "pin.png","rightSelect.png","leftSelect.png", "back.png","nameChange.png","skillChange.png","selectHikouki.png","logo.png", "rankingBoard.png", "rankingBack.png","title_sky.png","title_sky2.png","cloud.png", "castle.png","masao.png","masao_face.png"};
-static const char *textStr[TEXT_NUM] = {"Space Battle","SERVER","CLIENT","CUSTOMIZE","input client num.","input passcode.","del","Enter","self","input device num.","clpc","nowLoading...","Result","Exit","Detail","Title","スコア  ランキング","キル数  ランキング","デス数  ランキング", "キル数（敵) ランキング","0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"," ", "-"};
+static const char *imgFile[IMG_NUM] = { "bigbullet.png","name.png", "skill.png","special.png","status.png", "explain_skill.png","nowSelectButton.png", "changeButton.png","backButton.png",  "skill_attack.png", "skill_hp.png","skill_speed.png", "pin.png","rightSelect.png","leftSelect.png", "back.png","nameChange.png","skillChange.png","selectHikouki.png","logo.png", "rankingBoard.png", "rankingBack.png","title_sky.png","title_sky2.png","cloud.png", "castle.png","masao.png","masao_face.png"};
+static const char *textStr[TEXT_NUM] = {"Space Battle","サーバー","クライアント","カスタマイズ","input client num.","input passcode.","del","Enter","self","input device num.","clpc","nowLoading...","Result","Exit","Detail","Title","スコア  ランキング","キル数  ランキング","デス数  ランキング", "キル数（敵) ランキング","0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"," ", "-"};
 /* フォントパス */
 static char gFontFile[] = "../fonts/Yomogi-Regular.ttf";
 
@@ -81,9 +81,9 @@ int InitWindow(void)
         return -1;
 
     /* ボタンの座標の格納 */
-    buttonPos[SCENE_Title].push_back({200,300,600,100}); //server
-    buttonPos[SCENE_Title].push_back({200,500,600,100}); //client
-    buttonPos[SCENE_Title].push_back({200,700,600,100}); //customize
+    buttonPos[SCENE_Title].push_back({270,450,600,100}); //server
+    buttonPos[SCENE_Title].push_back({270,620,600,100}); //client
+    buttonPos[SCENE_Title].push_back({270,790,600,100}); //customize
     buttonPos[SCENE_SERVER_0].push_back({200,400,100,100}); //2
     buttonPos[SCENE_SERVER_0].push_back({350,400,100,100}); //3
     buttonPos[SCENE_SERVER_0].push_back({500,400,100,100}); //4
@@ -216,19 +216,22 @@ void RenderTitleWindow(void)
     uiImg[uname_title_sky].drawTexture(-50,0,uiImg[uname_title_sky].w/1.07,uiImg[uname_title_sky].h/1.07);
     
     // 文字の表示　「Game Title」
-    textImg[tname_title].drawTexture(300,80);
+    uiImg[uname_logo].drawTexture(160,30,uiImg[uname_logo].w*2.7,uiImg[uname_logo].h*2.7);
 
     //ボタンの表示　「サーバー」
+    boxColor(game.render,buttonPos[SCENE_Title][0].x,buttonPos[SCENE_Title][0].y,buttonPos[SCENE_Title][0].x+buttonPos[SCENE_Title][0].w,buttonPos[SCENE_Title][0].y+buttonPos[SCENE_Title][0].h,0x99ffffff);
     rectangleColorRect(game.render,&buttonPos[SCENE_Title][0],0xff000000);
-    textImg[tname_server].drawTexture(350,280);
+    textImg[tname_server].drawTexture(buttonPos[SCENE_Title][0].x+140,buttonPos[SCENE_Title][0].y-20);
     
     //ボタンの表示　「クライアント」
+    boxColor(game.render,buttonPos[SCENE_Title][1].x,buttonPos[SCENE_Title][1].y,buttonPos[SCENE_Title][1].x+buttonPos[SCENE_Title][1].w,buttonPos[SCENE_Title][1].y+buttonPos[SCENE_Title][1].h,0x99ffffff);
     rectangleColorRect(game.render,&buttonPos[SCENE_Title][1],0xff000000);
-    textImg[tname_client].drawTexture(350,480);
+    textImg[tname_client].drawTexture(buttonPos[SCENE_Title][1].x+30,buttonPos[SCENE_Title][1].y-20);
 
     //ボタンの表示　「カスタマイズ」
+    boxColor(game.render,buttonPos[SCENE_Title][2].x,buttonPos[SCENE_Title][2].y,buttonPos[SCENE_Title][2].x+buttonPos[SCENE_Title][2].w,buttonPos[SCENE_Title][2].y+buttonPos[SCENE_Title][2].h,0x99ffffff);
     rectangleColorRect(game.render,&buttonPos[SCENE_Title][2],0xff000000);
-    textImg[tname_customize].drawTexture(300,680);
+    textImg[tname_customize].drawTexture(buttonPos[SCENE_Title][2].x+20,buttonPos[SCENE_Title][2].y-20,textImg[tname_customize].w/0.95,textImg[tname_customize].h*0.95);
 
     //選択状況の表示
     boxColorRect(game.render,&buttonPos[SCENE_Title][game.selectButton],0x77777777);
@@ -383,15 +386,19 @@ void RenderCustomizeWindow(void){
     //背景
     DrawBackGround();
 
+
+
     // 文字の表示　「CUSTOMIZE」
-    textImg[tname_customize].drawTexture(350,25-scrollValue);
-    uiImg[uname_explain_skill].drawTexture(790,25-scrollValue,uiImg[uname_explain_skill].w/1.5,uiImg[uname_explain_skill].h/1.5);//説明
+    textImg[tname_customize].drawTexture(285,25-scrollValue,textImg[tname_customize].w*0.95,textImg[tname_customize].h*0.95);
+    boxColor(game.render,814,14-scrollValue,1180,120-scrollValue,0xffe6f5fd);//黄土色の枠組み
+    uiImg[uname_explain_skill].drawTexture(815,10-scrollValue,uiImg[uname_explain_skill].w/1.5,uiImg[uname_explain_skill].h/1.5);//説明
 
     // 戻るボタン
     uiImg[uname_backButton].drawTexture(30-buttonSize[0]*20,45-buttonSize[0]*20-scrollValue,uiImg[uname_backButton].w/1.2+buttonSize[0]*40,uiImg[uname_backButton].h/1.2+buttonSize[0]*40);
 
+    
     // 画像の表示　「名前入力欄」
-    uiImg[uname_name].drawTexture(50,10-scrollValue,uiImg[uname_name].w/1.2,uiImg[uname_name].h/1.2);
+    uiImg[uname_name].drawTexture(81,158-scrollValue,uiImg[uname_name].w/1.2,uiImg[uname_name].h/1.2);
     
     
     // 文字の表示　「名前」
@@ -403,21 +410,25 @@ void RenderCustomizeWindow(void){
     uiImg[uname_change].drawTexture(buttonPos[SCENE_CUSTOMIZE][1].x-(buttonSize[1]*25),buttonPos[SCENE_CUSTOMIZE][1].y-(buttonSize[1]*25),(buttonSize[1]*50)+uiImg[uname_change].w/4,(buttonSize[1]*50)+uiImg[uname_change].h/4);
 
     // 画像の表示　「スキル欄」
-    uiImg[uname_skill].drawTexture(50,120-scrollValue,uiImg[uname_skill].w/1.2,uiImg[uname_skill].h/1.2);
+    uiImg[uname_skill].drawTexture(81,270-scrollValue,uiImg[uname_skill].w/1.2,uiImg[uname_skill].h/1.2);
     // 画像の表示　「選択しているスキル」
-    uiImg[uname_skill_attack+(int)game.skill].drawTexture(150,360-scrollValue,uiImg[uname_skill_attack+(int)game.skill].w/1.4,uiImg[uname_skill_attack+(int)game.skill].h/1.4);
+    uiImg[uname_skill_attack+(int)game.skill].drawTexture(160,370-scrollValue,uiImg[uname_skill_attack+(int)game.skill].w/1.4,uiImg[uname_skill_attack+(int)game.skill].h/1.4);
     // 画像の表示　「選択中」
-    uiImg[uname_nowselect].drawTexture(80,340-scrollValue,uiImg[uname_nowselect].w/4,uiImg[uname_nowselect].h/4);
+    uiImg[uname_nowselect].drawTexture(90,350-scrollValue,uiImg[uname_nowselect].w/4,uiImg[uname_nowselect].h/4);
     // 画像の表示　「変更ボタン」
     uiImg[uname_change].drawTexture(buttonPos[SCENE_CUSTOMIZE][2].x-(buttonSize[2]*25),buttonPos[SCENE_CUSTOMIZE][2].y-(buttonSize[2]*25),(buttonSize[2]*50)+uiImg[uname_change].w/4,(buttonSize[2]*50)+uiImg[uname_change].h/4);
 
     // 画像の表示　「スペシャル欄」
-    uiImg[uname_special].drawTexture(50,410-scrollValue,uiImg[uname_special].w/1.2,uiImg[uname_special].h/1.2);
+    uiImg[uname_special].drawTexture(81,560-scrollValue,uiImg[uname_special].w/1.2,uiImg[uname_special].h/1.2);
+    // 画像の表示　「選択しているスペシャル」
+    uiImg[uname_bigbullet].drawTexture(160,685-scrollValue,uiImg[uname_bigbullet].w/1.4,uiImg[uname_bigbullet].h/1.4);
+    // 画像の表示　「選択中」
+    uiImg[uname_nowselect].drawTexture(90,650-scrollValue,uiImg[uname_nowselect].w/4,uiImg[uname_nowselect].h/4);
     // 画像の表示　「変更ボタン」
     uiImg[uname_change].drawTexture(buttonPos[SCENE_CUSTOMIZE][3].x-(buttonSize[3]*25),buttonPos[SCENE_CUSTOMIZE][3].y-(buttonSize[3]*25),(buttonSize[3]*50)+uiImg[uname_change].w/4,(buttonSize[3]*50)+uiImg[uname_change].h/4);
 
     // 画像の表示　「ステータス欄」
-    uiImg[uname_status].drawTexture(50,760-scrollValue,uiImg[uname_status].w/1.2,uiImg[uname_status].h/1.2);
+    uiImg[uname_status].drawTexture(81,902-scrollValue,uiImg[uname_status].w/1.2,uiImg[uname_status].h/1.2);
     // 画像の表示　「ピンの表示」
     uiImg[uname_pin].drawTexture(parm_x[game.parm[0]+5]-(buttonSize[4]*10) ,1005-scrollValue-(buttonSize[4]*10),uiImg[uname_pin].w/5+(buttonSize[4]*20),uiImg[uname_pin].h/5+(buttonSize[4]*20));
     uiImg[uname_pin].drawTexture(parm_x[game.parm[1]+5]-(buttonSize[5]*10) ,1140-scrollValue-(buttonSize[5]*10),uiImg[uname_pin].w/5+(buttonSize[5]*20),uiImg[uname_pin].h/5+(buttonSize[5]*20));
@@ -437,8 +448,8 @@ void RenderCustomizeWindow(void){
     }
     // ステータスパラメータの合計数値の表示
     int rest = PARAMATER_SUM_MAX - retSumParamater();
-    textImg[tname_0+rest/10].drawTexture(830,1675-scrollValue,textImg[tname_0+rest/10].w/1.2,textImg[tname_0+rest/10].h/1.2);
-    textImg[tname_0+rest%10].drawTexture(875,1675-scrollValue,textImg[tname_0+rest%10].w/1.2,textImg[tname_0+rest%10].h/1.2);
+    textImg[tname_0+rest/10].drawTexture(840,1675-scrollValue,textImg[tname_0+rest/10].w/1.2,textImg[tname_0+rest/10].h/1.2);
+    textImg[tname_0+rest%10].drawTexture(885,1675-scrollValue,textImg[tname_0+rest%10].w/1.2,textImg[tname_0+rest%10].h/1.2);
 
     //名前の入力画面
     if(game.popScene == PopUp_Name){
