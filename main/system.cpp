@@ -32,6 +32,9 @@ void InitSystem(void){
         //ゲームデータが存在するなら
         ReadDataFile(&data);
         sprintf(game.clientName,"%s",data.clientName);
+        for(int i=0; tempName[i] != '\0'; i++){
+            tempName[i] = '\0';
+        }
         sprintf(tempName,"%s",game.clientName);
         game.skill = data.skill;
         game.special = data.special;
