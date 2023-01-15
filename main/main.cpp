@@ -572,9 +572,17 @@ void ExcuteInput(void){
                 case PopUp_Special:
                     switch(game.input){
                         case INPUT_DOWN:
-                            shiftSelect(+1,SPECIAL_NUM+1,&game.selectButton_sub);
+                            if(game.selectButton_sub==0)
+                                shiftSelect(+1,SPECIAL_NUM+1,&game.selectButton_sub);
                             break;
                         case INPUT_UP:
+                            if(game.selectButton_sub >= 1)
+                                game.selectButton_sub = 0;
+                            break;
+                        case INPUT_RIGHT:
+                            shiftSelect(+1,SPECIAL_NUM+1,&game.selectButton_sub);
+                            break;
+                        case INPUT_LEFT:
                             shiftSelect(-1,SPECIAL_NUM+1,&game.selectButton_sub);
                             break;
                         case INPUT_RETURN:

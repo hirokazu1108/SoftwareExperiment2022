@@ -221,13 +221,11 @@ void PushedButton(void){
                 switch(game.selectButton_sub){
                     case 0:
                         game.popScene = PopUp_None;
-
                         break; 
                     default:
                         game.special = static_cast<SPECIAL>(game.selectButton_sub-1);
                         printf("special:%d\n",game.special);
                         SaveGameData(); //ゲームデータを保存
-                        game.popScene = PopUp_None;
                         break;
                 }
             }
