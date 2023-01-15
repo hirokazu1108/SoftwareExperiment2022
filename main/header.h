@@ -157,6 +157,7 @@ typedef enum{
     INPUT_RETURN,
     INPUT_ESCAPE,
     INPUT_BACKSPACE,
+    INPUT_DELETE,
     INPUT_0,
     INPUT_1,
     INPUT_2,
