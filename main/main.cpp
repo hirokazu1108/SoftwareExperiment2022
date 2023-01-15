@@ -315,6 +315,11 @@ Scene InputNameEvent(void)
             case SDLK_LSHIFT:
                 game.isShift = true;
                 break;
+            case SDLK_DELETE:
+                for(int i=0; tempName[i] != '\0'; i++){
+                    tempName[i] = '\0';
+                }
+                break;
             default:
                 if(strlen(tempName) < NAME_MAX_LENGTH){
                     char ch = event.key.keysym.sym;
