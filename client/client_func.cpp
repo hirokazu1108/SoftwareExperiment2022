@@ -112,7 +112,7 @@ void Collider(void){
     // player loop (player->bullet)
     for(int i=0; i<gClientNum; i++){
         for(int j=0; j<bullet_Num;j++){
-            if(OnColliderSphere(Sphere(BULLET_RADIUS, array_bullet[j].pos),((player[i].isBarrier > 0.0f) ? Sphere(2.5f*BULLET_RADIUS,player[i].pos): player[i].collider))){
+            if(OnColliderSphere(Sphere(BULLET_RADIUS, array_bullet[j].pos),((player[i].isBarrier > 0.0f) ? Sphere(BARRIER_RADIUS*BULLET_RADIUS,player[i].pos): player[i].collider))){
 
                 Ability(array_bullet[j].shooter_id);
                 printf("speed:%f\n" ,player[array_bullet[j].shooter_id].speed);
@@ -137,7 +137,7 @@ void Collider(void){
     for(int i=0; i<scoreBallNum; i++){
         //player
         for(int j=0; j<gClientNum; j++){
-            if(OnColliderSphere(ary_scoreBall[i].collider,((player[j].isBarrier > 0.0f) ? Sphere(2.5f*BULLET_RADIUS,player[j].pos): player[j].collider))){
+            if(OnColliderSphere(ary_scoreBall[i].collider,((player[j].isBarrier > 0.0f) ? Sphere(BARRIER_RADIUS*BULLET_RADIUS,player[j].pos): player[j].collider))){
                 //damage
                 if(player[j].isBarrier > 0.0f){
                     player[j].isBarrier -= 1.0f;
