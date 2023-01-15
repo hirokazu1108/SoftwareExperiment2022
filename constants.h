@@ -27,7 +27,8 @@
 #define BULLET_SPEED   0.5f     // 弾の速度
 #define DAMAGE         1.0f				
 #define MAX_HP 3.0f
-#define MAX_BARRIER 3.0f
+#define BARRIER_RADIUS 3.0f
+#define MAX_BARRIER 4.0f //hp
 #define MAX_DISABLE_TIME 3.0f
 #define MAX_SPEED 2.0f
 #define MAX_ATTACK 2.0f
