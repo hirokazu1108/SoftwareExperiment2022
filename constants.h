@@ -47,7 +47,7 @@
 #define PARAMATER_SUM_MAX 10    //max of sum of status paramaters
 #define NAME_MAX_LENGTH 10      //max length of client name
 #define SKILL_NUM 3             //num of skills
-#define SPECIAL_NUM            //num of specials
+#define SPECIAL_NUM 3            //num of specials
 #define FILENAME_GAMEDATA "../data/gamedata.bin"
 #define FILENAME_RANKINGDATA "../data/ranking.txt"
 #define GAMETIME 100
