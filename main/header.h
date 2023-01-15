@@ -6,7 +6,7 @@
 
 #define WD_Height 1000
 #define WD_Width 1200
-#define IMG_NUM 28
+#define IMG_NUM 34
 #define TEXT_NUM 84
 #define SCENE_NUM 8
 
@@ -24,7 +24,6 @@ typedef enum{
 
 // imgFileと同じようにつける
 typedef enum{
-    uname_bigbullet,
     uname_name,
     uname_skill,
     uname_special,
@@ -42,7 +41,14 @@ typedef enum{
     uname_back,
     uname_nameChange,
     uname_skillChange,
+    uname_specialChange,
     uname_selectHikouki,
+    uname_barrier,
+    uname_disabled,
+    uname_bigbullet,
+    uname_barrier_icon,
+    uname_disabled_icon,
+    uname_bigbullet_icon,
     uname_logo,
     uname_rankingBoard,
     uname_rankingBack,
