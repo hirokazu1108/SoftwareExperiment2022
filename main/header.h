@@ -6,7 +6,7 @@
 
 #define WD_Height 1000
 #define WD_Width 1200
-#define IMG_NUM 34
+#define IMG_NUM 37
 #define TEXT_NUM 84
 #define SCENE_NUM 8
 
@@ -19,11 +19,14 @@ typedef enum{
     SCENE_CLIENT_WAIT,
     SCENE_CUSTOMIZE,
     SCENE_Result,
-    SCENE_None,//終了を示す
+    SCENE_None,//�?�????示�??
 }Scene;
 
-// imgFileと同じようにつける
+// imgFile????????????????????��?????
 typedef enum{
+    uname_inputClientNum,
+    uname_inputPasscodeNum,
+    uname_inputDeviceNum,
     uname_name,
     uname_skill,
     uname_special,
@@ -60,7 +63,7 @@ typedef enum{
     uname_masao_face,
 }uiName;
 
-// textStrと同じようにつける
+// textStr????????????????????��?????
 typedef enum{
     tname_title,
     tname_server,
@@ -184,7 +187,7 @@ class settingGame{
     Scene scene;
     PopUpScne popScene;
     int selectButton;
-    int selectButton_sub;//popup画面に使用
+    int selectButton_sub;//popup??��?��??使�??
     int clientNum;
     char port[5];
     char deviceNum[4];
@@ -194,11 +197,11 @@ class settingGame{
     char command[256];
     SKILL skill;
     SPECIAL special;
-    int parm[5];   //ステータスの値(5種類)　indexはPARAMATER列挙体参照
+    int parm[5];   //??��????��?��?��?????(5�?�?)???index???PARAMATER??????�???????
     RankingData rankingData;
 };
 
-/* 画像の情報 */
+/* ??��??????????? */
 typedef struct {
     public:
     int w;

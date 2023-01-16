@@ -1,6 +1,6 @@
 #include "header.h"
 
-int maxButtonNum[SCENE_NUM]={3,3,12,13,12,0,9,5};    //シーンごとのボタンの最大数,indexはScene列挙体に対応
+int maxButtonNum[SCENE_NUM]={3,4,13,14,13,0,9,5};    //シーンごとのボタンの最大数,indexはScene列挙体に対応
 
 bool buttonEnabled = false; //確定ボタンが見えるか否か
 
@@ -95,7 +95,7 @@ void PushedButton(void){
                     break;
                 case 1://clientボタン
                     game.scene = SCENE_CLIENT_0;
-                    game.selectButton = 11;
+                    game.selectButton = 12;
                     break;
                 case 2://customizeボタン
                     game.scene = SCENE_CUSTOMIZE;
@@ -109,15 +109,19 @@ void PushedButton(void){
                     game.clientNum = 1;
                     game.scene = SCENE_SERVER_1;
                     break;
-                case 0://2ボタン
+                case 0://Esc
+                    game.scene = SCENE_Title;
+                    game.selectButton = 0;
+                     break;
+                case 1://2ボタン
                     game.clientNum = 2;
                     game.scene = SCENE_SERVER_1;
                     break;
-                case 1://3ボタン
+                case 2://3ボタン
                     game.clientNum = 3;
                     game.scene = SCENE_SERVER_1;
                     break;
-                case 2://4ボタン
+                case 3://4ボタン
                     game.clientNum = 4;
                     game.scene = SCENE_SERVER_1;
                     break;
@@ -126,11 +130,15 @@ void PushedButton(void){
             break;
         case SCENE_SERVER_1:
             switch(game.selectButton){
-                case 10://削除ボタン
+                case 0://back
+                    game.scene = SCENE_SERVER_0;
+                    game.selectButton = 0;
+                    break;
+                case 11://削除ボタン
                     if(strlen(game.port)>0)
                         game.port[strlen(game.port)-1] = '\0';
                     break;
-                case 11://確定ボタン
+                case 12://確定ボタン
                     if(strlen(game.port) != 4){
                         break;
                     }
@@ -141,10 +149,10 @@ void PushedButton(void){
                     break;
                 default:
                     if(strlen(game.port) < 4){
-                        const char ch = '0'+game.selectButton;
+                        const char ch = '0'+game.selectButton-1;
                         sprintf(game.port,"%s%c",game.port,ch);   // 文字列の連結 押した番号2,もとの入力値19なら　192にする
                         if(strlen(game.port)==4){
-                            game.selectButton = 11;//4文字になったなら確定ボタンにずらす
+                            game.selectButton = 12;//4文字になったなら確定ボタンにずらす
                         }
                     }
                     break;
@@ -152,16 +160,20 @@ void PushedButton(void){
             break;
         case SCENE_CLIENT_0:
             switch(game.selectButton){
-                case 10://削除ボタン
+                case 0://back
+                    game.scene = SCENE_Title;
+                    game.selectButton = 0;
+                    break;
+                case 11://削除ボタン
                     if(strlen(game.deviceNum)>0)
                         game.deviceNum[strlen(game.deviceNum)-1] = '\0';
                     break;
-                case 11://localHostボタン
+                case 12://localHostボタン
                     game.deviceNum[0] = 'L';
                     printf("LocalHost\n");
                     game.scene = SCENE_CLIENT_1;
                     game.selectButton = 0;
-                case 12://確定ボタン
+                case 13://確定ボタン
                     if(strlen(game.deviceNum) != 3){
                         break;
                     }
@@ -171,10 +183,10 @@ void PushedButton(void){
                     break;
                 default:
                     if(strlen(game.deviceNum) < 3){
-                        const char ch = '0'+game.selectButton;
+                        const char ch = '0'+game.selectButton-1;
                         sprintf(game.deviceNum,"%s%c",game.deviceNum,ch);   // 文字列の連結 押した番号2,もとの入力値19なら　192にする
                         if(strlen(game.deviceNum)==3){
-                            game.selectButton = 12;//3文字になったなら確定ボタンにずらす
+                            game.selectButton = 13;//3文字になったなら確定ボタンにずらす
                         }
                     }
                     break;
@@ -182,25 +194,29 @@ void PushedButton(void){
             break;
         case SCENE_CLIENT_1:
             switch(game.selectButton){
-                case 10://削除ボタン
+                case 0://back
+                    game.scene = SCENE_SERVER_0;
+                    game.selectButton = 0;
+                    break;
+                case 11://削除ボタン
                     if(strlen(game.port)>0)
                         game.port[strlen(game.port)-1] = '\0';
                     break;
-                case 11://確定ボタン
+                case 12://確定ボタン
                     if(strlen(game.port) != 4){
                         break;
                     }
                     printf("port:%s\n",game.port);
                     game.selectButton = 0;
-                    LaunchClient();
-                    game.scene = SCENE_CLIENT_WAIT;
+                    LaunchServer();
+                    game.scene = SCENE_None;
                     break;
                 default:
                     if(strlen(game.port) < 4){
-                        const char ch = '0'+game.selectButton;
+                        const char ch = '0'+game.selectButton-1;
                         sprintf(game.port,"%s%c",game.port,ch);   // 文字列の連結 押した番号2,もとの入力値19なら　192にする
                         if(strlen(game.port)==4){
-                            game.selectButton = 11;//4文字になったなら確定ボタンにずらす
+                            game.selectButton = 12;//4文字になったなら確定ボタンにずらす
                         }
                     }
                     break;

@@ -1,16 +1,16 @@
 #include "header.h"
 
-/* 画像パス */
-static const char *imgFile[IMG_NUM] = { "name.png", "skill.png","special.png","status.png", "explain_skill.png","nowSelectButton.png", "changeButton.png","backButton.png",  "skill_attack.png", "skill_hp.png","skill_speed.png", "pin.png","rightSelect.png","leftSelect.png", "back.png","nameChange.png","skillChange.png","specialChange.png","selectHikouki.png","barrier.png","disabled.png","bigbullet.png","barrier_icon.png","disabled_icon.png","bigbullet_icon.png","logo.png", "rankingBoard.png", "rankingBack.png","title_sky.png","title_sky2.png","cloud.png", "castle.png","masao.png","masao_face.png"};
-static const char *textStr[TEXT_NUM] = {"Space Battle","サーバー","クライアント","カスタマイズ","input client num.","input passcode.","del","Enter","self","input device num.","clpc","nowLoading...","Result","Exit","Detail","Title","スコア  ランキング","キル数  ランキング","デス数  ランキング", "キル数（敵) ランキング","0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"," ", "-"};
-/* フォントパス */
+/* ??糸???????? */
+static const char *imgFile[IMG_NUM] = { "inputClientNum.png","inputPasscode.png","inputDeviceNum.png","name.png", "skill.png","special.png","status.png", "explain_skill.png","nowSelectButton.png", "changeButton.png","backButton.png",  "skill_attack.png", "skill_hp.png","skill_speed.png", "pin.png","rightSelect.png","leftSelect.png", "back.png","nameChange.png","skillChange.png","specialChange.png","selectHikouki.png","barrier.png","disabled.png","bigbullet.png","barrier_icon.png","disabled_icon.png","bigbullet_icon.png","logo.png", "rankingBoard.png", "rankingBack.png","title_sky.png","title_sky2.png","cloud.png", "castle.png","masao.png","masao_face.png"};
+static const char *textStr[TEXT_NUM] = {"Space Battle","SERVER","CLIENT","CUSTOMIZE","input client num.","input passcode.","del","Enter","self","input device num.","clpc","nowLoading...","Result","Exit","Detail","Title","SCORE RANKING","KILL RANKING","DEATH RANKING", "KILL ENEMY RANKING","0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"," ", "-"};
+/* ????????�????????? */
 static char gFontFile[] = "../fonts/Yomogi-Regular.ttf";
 
-/* ボタンの位置 */
+/* ?????帥?�???�??臀? */
 std::vector<SDL_Rect> buttonPos[SCENE_NUM];
 std::vector<SDL_Rect> special_iconPos;
 
-float scroll_back = -50.0; //背景のスクロール
+float scroll_back = -50.0; //???????????鴻????�??若??
 
 int rankingMode = 0; // 0:score  ,1:kill num of player  ,2:death  ,3:kill num of enemy and boss
 
@@ -19,9 +19,9 @@ float masao_rotate = 0;
 float masao_x = 500;
 float masao_y = 500;
 
-/* パラメータの場所 */
-static int parm_x[11] = {380,425,475,520,567,618,664,710,756,802,850};//ピンのx座標
-static int parmText_y[PARAMATER_NUM] ={1025,1160,1297,1435,1565};//数値のy座標
+/* ?????????�??若?帥????�??? */
+static int parm_x[11] = {380,425,475,520,567,618,664,710,756,802,850};//?????�???x綺�???
+static int parmText_y[PARAMATER_NUM] ={1025,1160,1297,1435,1565};//??医?�???y綺�???
 
 static const SDL_Color gWhite = { 255, 255, 255, 255 };
 static const SDL_Color gBlue  = { 0, 0, 255, 255 };
@@ -29,22 +29,22 @@ static const SDL_Color gBlue  = { 0, 0, 255, 255 };
 ImgInfo uiImg[IMG_NUM];
 ImgInfo textImg[TEXT_NUM];
 
-/* 関数 */
+/* ??∽?? */
 static int MakeMessage(void);
 static int rectangleColorRect(SDL_Renderer *render, SDL_Rect *rect, Uint32 color);
 static int boxColorRect(SDL_Renderer *render, SDL_Rect *rect, Uint32 color);
 static textName retTextNameFromChar(char ch);
 static void DrawBackGround(void);
 
-// メインウインドウの表示，設定
+// ???�??�??�?????�??�?????????茵?腓削??荐㊤??
 int InitWindow(void)
 {
-    /* SDL_image初期化 */
+    /* SDL_image????????? */
     if (IMG_INIT_PNG != IMG_Init(IMG_INIT_PNG)) {
         return PrintError("failed to initialize SDL_image");
     }
 
-    /** メインのウインドウ(表示画面)とレンダラーの作成 **/
+    /** ???�??�??�????????�??�??????(茵?腓�??�???)????????�????????若??�????? **/
     game.window = SDL_CreateWindow("main", 0, 0, WD_Width, WD_Height, 0);
     if (game.window == NULL)
         return PrintError(SDL_GetError());
@@ -53,11 +53,11 @@ int InitWindow(void)
     if (game.render == NULL)
         return PrintError(SDL_GetError());
 
-    /** キャラ画像の読み込み **/
-    /* 画像は，
-     *  横方向にアニメーションパターン
-     *  縦方向に向きパターン（時計回り，最初が↑）
-     *  があると想定
+    /** ??�???�?????糸?????茯�??粋昭??? **/
+    /* ??糸?????�??
+     *  �????劫???????≪?????�??若?激?�??�?????帥?若??
+     *  膰???劫????????????????帥?若?鰹?????�????????�??????????????�??
+     *  ??????????????�???
      */
     for (int i = 0; i < IMG_NUM; i++) {
         char pass[128];
@@ -77,17 +77,19 @@ int InitWindow(void)
         }
     }
 
-    /** メッセージ作成 **/
+    /** ???�?????�??若?娯????? **/
     if (MakeMessage())
         return -1;
 
-    /* ボタンの座標の格納 */
+    /* ?????帥?�???綺�????????主?? */
     buttonPos[SCENE_Title].push_back({270,450,600,100}); //server
     buttonPos[SCENE_Title].push_back({270,620,600,100}); //client
     buttonPos[SCENE_Title].push_back({270,790,600,100}); //customize
-    buttonPos[SCENE_SERVER_0].push_back({200,400,100,100}); //2
-    buttonPos[SCENE_SERVER_0].push_back({350,400,100,100}); //3
-    buttonPos[SCENE_SERVER_0].push_back({500,400,100,100}); //4
+    buttonPos[SCENE_SERVER_0].push_back({30,45,uiImg[uname_backButton].w/1.2,uiImg[uname_backButton].h/1.2}); //back
+    buttonPos[SCENE_SERVER_0].push_back({350,480,100,100}); //2
+    buttonPos[SCENE_SERVER_0].push_back({500,480,100,100}); //3
+    buttonPos[SCENE_SERVER_0].push_back({650,480,100,100}); //4
+    buttonPos[SCENE_SERVER_1].push_back({30,45,uiImg[uname_backButton].w/1.2,uiImg[uname_backButton].h/1.2}); //back 
     buttonPos[SCENE_SERVER_1].push_back({120,400,80,80});  //0
     buttonPos[SCENE_SERVER_1].push_back({220,400,80,80}); //1
     buttonPos[SCENE_SERVER_1].push_back({320,400,80,80}); //2
@@ -99,20 +101,22 @@ int InitWindow(void)
     buttonPos[SCENE_SERVER_1].push_back({420,520,80,80}); //8
     buttonPos[SCENE_SERVER_1].push_back({520,520,80,80}); //9
     buttonPos[SCENE_SERVER_1].push_back({620,460,80,80}); //?
-    buttonPos[SCENE_SERVER_1].push_back({200,600,400,100}); //確定
-    buttonPos[SCENE_CLIENT_0].push_back({120,400,80,80});  //0
-    buttonPos[SCENE_CLIENT_0].push_back({220,400,80,80}); //1
-    buttonPos[SCENE_CLIENT_0].push_back({320,400,80,80}); //2
-    buttonPos[SCENE_CLIENT_0].push_back({420,400,80,80}); //3
-    buttonPos[SCENE_CLIENT_0].push_back({520,400,80,80}); //4
-    buttonPos[SCENE_CLIENT_0].push_back({120,520,80,80}); //5
-    buttonPos[SCENE_CLIENT_0].push_back({220,520,80,80}); //6
-    buttonPos[SCENE_CLIENT_0].push_back({320,520,80,80}); //7
-    buttonPos[SCENE_CLIENT_0].push_back({420,520,80,80}); //8
-    buttonPos[SCENE_CLIENT_0].push_back({520,520,80,80}); //9
-    buttonPos[SCENE_CLIENT_0].push_back({620,460,80,80}); //?
-    buttonPos[SCENE_CLIENT_0].push_back({80,650,100,100}); //localHost
-    buttonPos[SCENE_CLIENT_0].push_back({200,650,400,100}); //確定
+    buttonPos[SCENE_SERVER_1].push_back({200,600,400,100}); //�?阪??
+    buttonPos[SCENE_CLIENT_0].push_back({30,45,uiImg[uname_backButton].w/1.2,uiImg[uname_backButton].h/1.2}); //back
+    buttonPos[SCENE_CLIENT_0].push_back({170,500,80,80});  //0
+    buttonPos[SCENE_CLIENT_0].push_back({270,500,80,80}); //1
+    buttonPos[SCENE_CLIENT_0].push_back({370,500,80,80}); //2
+    buttonPos[SCENE_CLIENT_0].push_back({470,500,80,80}); //3
+    buttonPos[SCENE_CLIENT_0].push_back({570,500,80,80}); //4
+    buttonPos[SCENE_CLIENT_0].push_back({170,620,80,80}); //5
+    buttonPos[SCENE_CLIENT_0].push_back({270,620,80,80}); //6
+    buttonPos[SCENE_CLIENT_0].push_back({370,620,80,80}); //7
+    buttonPos[SCENE_CLIENT_0].push_back({470,620,80,80}); //8
+    buttonPos[SCENE_CLIENT_0].push_back({570,620,80,80}); //9
+    buttonPos[SCENE_CLIENT_0].push_back({670,560,80,80}); //?
+    buttonPos[SCENE_CLIENT_0].push_back({150,750,100,100}); //localHost
+    buttonPos[SCENE_CLIENT_0].push_back({270,750,400,100}); //�?阪??
+    buttonPos[SCENE_CLIENT_1].push_back({30,45,uiImg[uname_backButton].w/1.2,uiImg[uname_backButton].h/1.2}); //back
     buttonPos[SCENE_CLIENT_1].push_back({120,400,80,80}); //0
     buttonPos[SCENE_CLIENT_1].push_back({220,400,80,80}); //1
     buttonPos[SCENE_CLIENT_1].push_back({320,400,80,80}); //2
@@ -124,18 +128,18 @@ int InitWindow(void)
     buttonPos[SCENE_CLIENT_1].push_back({420,520,80,80}); //8
     buttonPos[SCENE_CLIENT_1].push_back({520,520,80,80}); //9
     buttonPos[SCENE_CLIENT_1].push_back({620,460,80,80}); //?
-    buttonPos[SCENE_CLIENT_1].push_back({200,600,400,100}); //確定
-    buttonPos[SCENE_CUSTOMIZE].push_back({36,57-scrollValue,236,120}); //戻るボタン
-    buttonPos[SCENE_CUSTOMIZE].push_back({930,130-scrollValue,0,0}); //名前変更(丸ボタン)
-    buttonPos[SCENE_CUSTOMIZE].push_back({900,370-scrollValue,0,0}); //スキル変更(丸ボタン)
-    buttonPos[SCENE_CUSTOMIZE].push_back({900,700-scrollValue,0,0}); //スペシャル変更(丸ボタン)
+    buttonPos[SCENE_CLIENT_1].push_back({200,600,400,100}); //�?阪??
+    buttonPos[SCENE_CUSTOMIZE].push_back({36,57-scrollValue,236,120}); //??�????????帥??
+    buttonPos[SCENE_CUSTOMIZE].push_back({930,130-scrollValue,0,0}); //??????�?????(筝吾????帥??)
+    buttonPos[SCENE_CUSTOMIZE].push_back({900,370-scrollValue,0,0}); //??鴻?�???�?????(筝吾????帥??)
+    buttonPos[SCENE_CUSTOMIZE].push_back({900,700-scrollValue,0,0}); //??鴻????激??�???�?????(筝吾????帥??)
     buttonPos[SCENE_Result].push_back({590,850,200,90}); //left
     buttonPos[SCENE_Result].push_back({830,850,200,90}); //right
     buttonPos[SCENE_Result].push_back({350,850,200,90}); //exit
     buttonPos[SCENE_Result].push_back({590,850,200,90}); //detail
     buttonPos[SCENE_Result].push_back({830,850,200,90}); //totitle
 
-    special_iconPos.push_back({23,58,uiImg[uname_backButton].w,uiImg[uname_backButton].h});//戻るボタン
+    special_iconPos.push_back({23,58,uiImg[uname_backButton].w,uiImg[uname_backButton].h});//??�????????帥??
     special_iconPos.push_back({220,320,128,128});
     for(int i=2; i<SPECIAL_NUM+1; i++){
         special_iconPos.push_back({special_iconPos[i-1].x+special_iconPos[i-1].w+20,special_iconPos[i-1].y,128,128});
@@ -146,16 +150,16 @@ int InitWindow(void)
     else if(game.scene == SCENE_CLIENT_WAIT)
         RenderClientWaitWindow();
 
-    /* image利用終了(テクスチャに転送後はゲーム中に使わないので) */
+    /* image??????�??�??(????????鴻?????�???荵∫??�???????�??若??筝㏍??篏帥??????????????) */
     IMG_Quit();
 
     return 0;
 }
 
-/* ウインドウの終了処理 */
+/* ?????�??�?????????�??�???????? */
 void DestroyWindow(void)
 {
-    /* テクスチャなど */
+    /* ????????鴻?????�?????? */
     for (int i = 0; i < IMG_NUM; i++)
         SDL_DestroyTexture(uiImg[i].texture);
     for (int i = 0; i < TEXT_NUM; i++)
@@ -165,35 +169,35 @@ void DestroyWindow(void)
     SDL_DestroyWindow(game.window);
 }
 
-/* メッセージ作成
+/* ???�?????�??若?娯?????
  *
- * 返値
- *   正常終了: 0
- *   エラー  : 負数
+ * 菴????
+ *   罩?�?幻�??�??: 0
+ *   ?????????  : 莢????
  */
 static int MakeMessage(void)
 {
     int ret = 0;
-    /* フォントからメッセージテクスチャ作成 */
-    /* 初期化 */
+    /* ????????�????????????�?????�??若?吾???????鴻?????�?????? */
+    /* ????????? */
     if (TTF_Init() < 0) {
         return PrintError(TTF_GetError());
     }
-    /* フォントを開く */
+    /* ????????�???????????? */
     TTF_Font *ttf = TTF_OpenFont(gFontFile, 90);
     if (NULL == ttf) {
         ret = PrintError(TTF_GetError());
     }
-    /* メッセージ作成 */
+    /* ???�?????�??若?娯????? */
     SDL_Color cols[TEXT_NUM] = { gBlue };
     for (int i = 0; i < TEXT_NUM && ttf; i++) {
         SDL_Surface *sf;
-        /* フォントと文字列，色からサーフェイス作成 */
+        /* ????????�?????????�?????�????�????????泣?若????�??�??�?????? */
         sf = TTF_RenderUTF8_Blended(ttf, textStr[i], cols[i]);
         if (NULL == sf) {
             ret = PrintError(TTF_GetError());
         } else {
-            /* テクスチャへ */
+            /* ????????鴻?????�??? */
             textImg[i].texture = SDL_CreateTextureFromSurface(game.render, sf);
             if (NULL == textImg[i].texture) {
                 ret = PrintError(SDL_GetError());
@@ -201,47 +205,48 @@ static int MakeMessage(void)
             if (0 > SDL_QueryTexture(textImg[i].texture, NULL, NULL, &textImg[i].w, &textImg[i].h)) {
                 PrintError(SDL_GetError());
             }
-            /* サーフェイス解放(テクスチャに転送後はゲーム中に使わないので) */
+            /* ??泣?若????�??�??壕�????(????????鴻?????�???荵∫??�???????�??若??筝㏍??篏帥??????????????) */
             SDL_FreeSurface(sf);
         }
     }
 
-    /* フォントを閉じる */
+    /* ????????�??????????????? */
     TTF_CloseFont(ttf);
-    /* フォント利用終了(テクスチャに転送後はゲーム中に使わないので) */
+    /* ????????�?????????�??�??(????????鴻?????�???荵∫??�???????�??若??筝㏍??篏帥??????????????) */
     TTF_Quit();
 
     return ret;
 }
 
-/* ウインドウ描画
- *  メインウインドウに背景，キャラ，メッセージなどを転送する
+/* ?????�??�????????????
+ *  ???�??�??�?????�??�???????????????�????�???�???�?????�?????�??若?吾????????荵∫????????
  */
 void RenderTitleWindow(void)
 {
-    //背景
+    //??????
     uiImg[uname_title_sky].drawTexture(-50,0,uiImg[uname_title_sky].w/1.07,uiImg[uname_title_sky].h/1.07);
     
-    // 文字の表示　「Game Title」
+    // ???�?????茵?腓�?�?????Game Title???
     uiImg[uname_logo].drawTexture(160,30,uiImg[uname_logo].w*2.7,uiImg[uname_logo].h*2.7);
 
-    //ボタンの表示　「サーバー」
-    boxColor(game.render,buttonPos[SCENE_Title][0].x,buttonPos[SCENE_Title][0].y,buttonPos[SCENE_Title][0].x+buttonPos[SCENE_Title][0].w,buttonPos[SCENE_Title][0].y+buttonPos[SCENE_Title][0].h,0x99ffffff);
+
+    //?????帥?�???茵?腓�?�???????泣?若????若??
+    boxColor(game.render,buttonPos[SCENE_Title][0].x,buttonPos[SCENE_Title][0].y,buttonPos[SCENE_Title][0].x+buttonPos[SCENE_Title][0].w,buttonPos[SCENE_Title][0].y+buttonPos[SCENE_Title][0].h,0xbbffffff);
     rectangleColorRect(game.render,&buttonPos[SCENE_Title][0],0xff000000);
     textImg[tname_server].drawTexture(buttonPos[SCENE_Title][0].x+140,buttonPos[SCENE_Title][0].y-20);
     
-    //ボタンの表示　「クライアント」
-    boxColor(game.render,buttonPos[SCENE_Title][1].x,buttonPos[SCENE_Title][1].y,buttonPos[SCENE_Title][1].x+buttonPos[SCENE_Title][1].w,buttonPos[SCENE_Title][1].y+buttonPos[SCENE_Title][1].h,0x99ffffff);
+    //?????帥?�???茵?腓�?�?????????????�??≪?�??????
+    boxColor(game.render,buttonPos[SCENE_Title][1].x,buttonPos[SCENE_Title][1].y,buttonPos[SCENE_Title][1].x+buttonPos[SCENE_Title][1].w,buttonPos[SCENE_Title][1].y+buttonPos[SCENE_Title][1].h,0xbbffffff);
     rectangleColorRect(game.render,&buttonPos[SCENE_Title][1],0xff000000);
     textImg[tname_client].drawTexture(buttonPos[SCENE_Title][1].x+30,buttonPos[SCENE_Title][1].y-20);
 
-    //ボタンの表示　「カスタマイズ」
-    boxColor(game.render,buttonPos[SCENE_Title][2].x,buttonPos[SCENE_Title][2].y,buttonPos[SCENE_Title][2].x+buttonPos[SCENE_Title][2].w,buttonPos[SCENE_Title][2].y+buttonPos[SCENE_Title][2].h,0x99ffffff);
+    //?????帥?�???茵?腓�?�??????????鴻?帥????�??冴??
+    boxColor(game.render,buttonPos[SCENE_Title][2].x,buttonPos[SCENE_Title][2].y,buttonPos[SCENE_Title][2].x+buttonPos[SCENE_Title][2].w,buttonPos[SCENE_Title][2].y+buttonPos[SCENE_Title][2].h,0xbbffffff);
     rectangleColorRect(game.render,&buttonPos[SCENE_Title][2],0xff000000);
     textImg[tname_customize].drawTexture(buttonPos[SCENE_Title][2].x+20,buttonPos[SCENE_Title][2].y-20,textImg[tname_customize].w/0.95,textImg[tname_customize].h*0.95);
 
-    //選択状況の表示
-    boxColorRect(game.render,&buttonPos[SCENE_Title][game.selectButton],0x77777777);
+    //??御????倶?????茵?�??
+    boxColorRect(game.render,&buttonPos[SCENE_Title][game.selectButton],0xaa666666);
 
     // masaloop
     if(strcmp(tempName,"masao")==0||strcmp(tempName,"Masao")==0||strcmp(tempName,"MASAO")==0){
@@ -269,117 +274,151 @@ void RenderTitleWindow(void)
     SDL_RenderPresent(game.render);
 }
 
-/* サーバーの人数入力の画面 */
+/* ??泣?若????若??篋�?�?医?ュ???????�??? */
 void RenderServerWindow_0(void){
-    //背景
+    //??????
     DrawBackGround();
-    
-    // 文字の表示　「クライアント人数」
-    textImg[tname_inputNum].drawTexture(300,100);
 
-    //ボタンの表示　「2」
-    rectangleColorRect(game.render,&buttonPos[SCENE_SERVER_0][0],0xff000000);
-    textImg[tname_2].drawTexture(buttonPos[SCENE_SERVER_0][0].x +10,buttonPos[SCENE_SERVER_0][0].y-10);
-    
-    //ボタンの表示　「3」
+    //back
+    if(game.selectButton == 0){
+        uiImg[uname_backButton].drawTexture(buttonPos[SCENE_SERVER_0][0].x-20,buttonPos[SCENE_SERVER_0][0].y-20,buttonPos[SCENE_SERVER_0][0].w+40,buttonPos[SCENE_SERVER_0][0].h+40);
+    }
+    else{
+        uiImg[uname_backButton].drawTexture(buttonPos[SCENE_SERVER_0][0].x,buttonPos[SCENE_SERVER_0][0].y,buttonPos[SCENE_SERVER_0][0].w,buttonPos[SCENE_SERVER_0][0].h);
+    }
+
+    // ???�?????茵?腓�?�?????????????�??≪?�???篋�?�?�???
+    uiImg[uname_rankingBoard].drawTexture(100,320,uiImg[uname_rankingBoard].w*1.44,uiImg[uname_rankingBoard].h*0.2);
+    uiImg[uname_inputClientNum].drawTexture(100,340,uiImg[uname_inputClientNum].w*2,uiImg[uname_inputClientNum].h*2);
+
+    //?????帥?�???茵?腓�?�?????2???
+    boxColorRect(game.render,&buttonPos[SCENE_SERVER_0][1],0xffffffff);
     rectangleColorRect(game.render,&buttonPos[SCENE_SERVER_0][1],0xff000000);
-    textImg[tname_3].drawTexture(buttonPos[SCENE_SERVER_0][1].x+10,buttonPos[SCENE_SERVER_0][1].y-10);
-
-    //ボタンの表示　「4」
+    textImg[tname_2].drawTexture(buttonPos[SCENE_SERVER_0][1].x +10,buttonPos[SCENE_SERVER_0][1].y-10);
+    
+    //?????帥?�???茵?腓�?�?????3???
+    boxColorRect(game.render,&buttonPos[SCENE_SERVER_0][2],0xffffffff);
     rectangleColorRect(game.render,&buttonPos[SCENE_SERVER_0][2],0xff000000);
-    textImg[tname_4].drawTexture(buttonPos[SCENE_SERVER_0][2].x+10,buttonPos[SCENE_SERVER_0][2].y-10);
+    textImg[tname_3].drawTexture(buttonPos[SCENE_SERVER_0][2].x+10,buttonPos[SCENE_SERVER_0][2].y-10);
 
-    //選択状況の表示
-    boxColorRect(game.render,&buttonPos[SCENE_SERVER_0][game.selectButton],0x77777777);
+    //?????帥?�???茵?腓�?�?????4???
+    boxColorRect(game.render,&buttonPos[SCENE_SERVER_0][3],0xffffffff);
+    rectangleColorRect(game.render,&buttonPos[SCENE_SERVER_0][3],0xff000000);
+    textImg[tname_4].drawTexture(buttonPos[SCENE_SERVER_0][3].x+10,buttonPos[SCENE_SERVER_0][3].y-10);
+
+    //??御????倶?????茵?�??
+    if(game.selectButton != 0)
+        boxColorRect(game.render,&buttonPos[SCENE_SERVER_0][game.selectButton],0xaa666666);
 
     SDL_RenderPresent(game.render);
 }
 
-/* パスコード入力の画面 */
+/* ?????鴻?�??若????ュ???????�??? */
 void RenderPasscodeWindow(){
-    //背景
+    //??????
     DrawBackGround();
+
+
+    //back
+    if(game.selectButton == 0){
+        uiImg[uname_backButton].drawTexture(buttonPos[game.scene][0].x-20,buttonPos[game.scene][0].y-20,buttonPos[game.scene][0].w+40,buttonPos[game.scene][0].h+40);
+    }
+    else{
+        uiImg[uname_backButton].drawTexture(buttonPos[game.scene][0].x,buttonPos[game.scene][0].y,buttonPos[game.scene][0].w,buttonPos[game.scene][0].h);
+    }
     
-    // 文字の表示　「パスコード」
+    // ???�?????茵?腓�?�??????????鴻?�??若?????
     textImg[tname_inputPasscode].drawTexture(300,100);
 
-    //入力したポート番号の表示
+    //??ュ?????????????若??????垩??茵?�??
     for(int i=0; game.port[i] != '\0'; i++)
     {
         textImg[tname_0+game.port[i]-'0'].drawTexture(300+i*80,180);
     }
 
-    //ボタンの表示　「0」~「9」
+    //?????帥?�???茵?腓�?�?????0???~???9???
     for(int i=0; i<=9; i++){
-        rectangleColorRect(game.render,&buttonPos[game.scene][i],0xff000000);
-        textImg[tname_0+i].drawTexture(buttonPos[game.scene][i].x +10,buttonPos[game.scene][i].y-20);
+        rectangleColorRect(game.render,&buttonPos[game.scene][i+1],0xff000000);
+        textImg[tname_0+i].drawTexture(buttonPos[game.scene][i+1].x +10,buttonPos[game.scene][i+1].y-20);
     }
 
-    //ボタンの表示　「X」
-    rectangleColorRect(game.render,&buttonPos[game.scene][10],0xff000000);
-    textImg[tname_del].drawTexture(buttonPos[game.scene][10].x +10,buttonPos[game.scene][10].y-20);
+    //?????帥?�???茵?腓�?�?????X???
+    rectangleColorRect(game.render,&buttonPos[game.scene][11],0xff000000);
+    textImg[tname_del].drawTexture(buttonPos[game.scene][11].x +10,buttonPos[game.scene][11].y-20);
     
-    /* ポート番号が5桁入力されたら */
+    /* ?????若??????垩??5�????ュ?????????????? */
     if(strlen(game.port)>=4){
-        //ボタンの表示　「確定」
-        rectangleColorRect(game.render,&buttonPos[game.scene][11],0xff000000);
-        textImg[tname_enter].drawTexture(buttonPos[game.scene][11].x +10,buttonPos[game.scene][11].y-20);
+        //?????帥?�???茵?腓�?�?????�?阪?????
+        rectangleColorRect(game.render,&buttonPos[game.scene][12],0xff000000);
+        textImg[tname_enter].drawTexture(buttonPos[game.scene][12].x +10,buttonPos[game.scene][12].y-20);
     }
 
-    //選択状況の表示
-    boxColorRect(game.render,&buttonPos[game.scene][game.selectButton],0x77777777);
+    //??御????倶?????茵?�??
+    if(game.selectButton != 0)
+        boxColorRect(game.render,&buttonPos[game.scene][game.selectButton],0xaa666666);
 
     SDL_RenderPresent(game.render);
 }
 
-/* デバイス番号入力の画面 */
+/* ????????�??�????垸?ュ???????�??? */
 void RenderDeviceNumWindow(void){
-    //背景
+    //??????
     DrawBackGround();
+
+    //back
+    if(game.selectButton == 0){
+        uiImg[uname_backButton].drawTexture(buttonPos[SCENE_CLIENT_0][0].x-20,buttonPos[SCENE_CLIENT_0][0].y-20,buttonPos[SCENE_CLIENT_0][0].w+40,buttonPos[SCENE_CLIENT_0][0].h+40);
+    }
+    else{
+        uiImg[uname_backButton].drawTexture(buttonPos[SCENE_CLIENT_0][0].x,buttonPos[SCENE_CLIENT_0][0].y,buttonPos[SCENE_CLIENT_0][0].w,buttonPos[SCENE_CLIENT_0][0].h);
+    }
     
-    // 文字の表示　「デバイス名を入力してください」
-    textImg[tname_inputDevice].drawTexture(300,100);
+    // ???�?????茵?腓�?�?????????????�??劫???????ュ???????????????????????
+    uiImg[uname_rankingBoard].drawTexture(100,220,uiImg[uname_rankingBoard].w*1.44,uiImg[uname_rankingBoard].h*0.2);
+    uiImg[uname_inputDeviceNum].drawTexture(160,225,uiImg[uname_inputDeviceNum].w*2,uiImg[uname_inputDeviceNum].h*2);
 
-    // 文字の表示　「clpc」
-    textImg[tname_clpc].drawTexture(300,250);
+    // ???�?????茵?腓�?�?????clpc???
+    boxColor(game.render,220,360,980,480,0xffffffff);
+    textImg[tname_clpc].drawTexture(300,340);
 
-    //入力したデバイス番号の表示
+    //??ュ????????????????�??�????垩??茵?�??
     for(int i=0; game.deviceNum[i] != '\0'; i++)
     {
         textImg[tname_0+game.deviceNum[i]-'0'].drawTexture(500+i*80,250);
     }
 
-    //ボタンの表示　「0」~「9」
+    //?????帥?�???茵?腓�?�?????0???~???9???
     for(int i=0; i<=9; i++){
-        rectangleColorRect(game.render,&buttonPos[SCENE_CLIENT_0][i],0xff000000);
-        textImg[tname_0+i].drawTexture(buttonPos[SCENE_CLIENT_0][i].x +10,buttonPos[SCENE_CLIENT_0][i].y-20);
+        rectangleColorRect(game.render,&buttonPos[SCENE_CLIENT_0][i+1],0xff000000);
+        textImg[tname_0+i].drawTexture(buttonPos[SCENE_CLIENT_0][i+1].x +10,buttonPos[SCENE_CLIENT_0][i+1].y-20);
     }
 
-    //ボタンの表示　「X」
-    rectangleColorRect(game.render,&buttonPos[SCENE_CLIENT_0][10],0xff000000);
-    textImg[tname_del].drawTexture(buttonPos[SCENE_CLIENT_0][10].x +10,buttonPos[SCENE_CLIENT_0][10].y-20);
-    
-    //localHostボタンの表示
+    //?????帥?�???茵?腓�?�?????X???
     rectangleColorRect(game.render,&buttonPos[SCENE_CLIENT_0][11],0xff000000);
-    textImg[tname_self].drawTexture(buttonPos[SCENE_CLIENT_0][11].x +10,buttonPos[SCENE_CLIENT_0][11].y-20,textImg[tname_self].w/2,textImg[tname_self].h/2);
+    textImg[tname_del].drawTexture(buttonPos[SCENE_CLIENT_0][11].x +10,buttonPos[SCENE_CLIENT_0][11].y-20);
+    
+    //localHost?????帥?�???茵?�??
+    rectangleColorRect(game.render,&buttonPos[SCENE_CLIENT_0][12],0xff000000);
+    textImg[tname_self].drawTexture(buttonPos[SCENE_CLIENT_0][12].x +10,buttonPos[SCENE_CLIENT_0][12].y-20,textImg[tname_self].w/2,textImg[tname_self].h/2);
 
-    /* デバイス番号が3桁入力されたら */
+    /* ????????�??�????垩??3�????ュ?????????????? */
     if(strlen(game.deviceNum)>=3){
-        //ボタンの表示　「確定」
-        rectangleColorRect(game.render,&buttonPos[SCENE_CLIENT_0][12],0xff000000);
-        textImg[tname_enter].drawTexture(buttonPos[SCENE_CLIENT_0][12].x +10,buttonPos[SCENE_CLIENT_0][12].y-20);
+        //?????帥?�???茵?腓�?�?????�?阪?????
+        rectangleColorRect(game.render,&buttonPos[SCENE_CLIENT_0][13],0xff000000);
+        textImg[tname_enter].drawTexture(buttonPos[SCENE_CLIENT_0][13].x +10,buttonPos[SCENE_CLIENT_0][13].y-20);
     }
 
-    //選択状況の表示
-    boxColorRect(game.render,&buttonPos[SCENE_CLIENT_0][game.selectButton],0x77777777);
+    //??御????倶?????茵?�??
+    if(game.selectButton != 0)
+        boxColorRect(game.render,&buttonPos[SCENE_CLIENT_0][game.selectButton],0xaa666666);
 
     SDL_RenderPresent(game.render);
 }
 
-/* カスタマイズ画面の描画 */
+/* ?????鴻?帥????�??�??�??≪???????? */
 void RenderCustomizeWindow(void){
     
-    //ボタンの場所更新
+    //?????帥?�?????�?????�???
     buttonPos[SCENE_CUSTOMIZE][1].y = 57-scrollValue;
     buttonPos[SCENE_CUSTOMIZE][1].y = 130-scrollValue;
     buttonPos[SCENE_CUSTOMIZE][2].y = 370-scrollValue;
@@ -389,61 +428,61 @@ void RenderCustomizeWindow(void){
         buttonSize[i] = (i==game.selectButton) ? 1 : 0;
     }
 
-    //背景色（黄土色）
+    //????????�???藥??????�???
     /*
     SDL_SetRenderDrawColor(game.render,253,245,230,255);
     SDL_RenderClear(game.render);*/
-    //背景
+    //??????
     DrawBackGround();
 
-    // 文字の表示　「CUSTOMIZE」
+    // ???�?????茵?腓�?�?????CUSTOMIZE???
     textImg[tname_customize].drawTexture(285,25-scrollValue,textImg[tname_customize].w*0.95,textImg[tname_customize].h*0.95);
-    boxColor(game.render,814,14-scrollValue,1180,120-scrollValue,0xffe6f5fd);//黄土色の枠組み
-    uiImg[uname_explain_skill].drawTexture(815,10-scrollValue,uiImg[uname_explain_skill].w/1.5,uiImg[uname_explain_skill].h/1.5);//説明
+    boxColor(game.render,814,14-scrollValue,1180,120-scrollValue,0xffe6f5fd);//藥??????�??????�?????
+    uiImg[uname_explain_skill].drawTexture(815,10-scrollValue,uiImg[uname_explain_skill].w/1.5,uiImg[uname_explain_skill].h/1.5);//茯????
 
-    // 戻るボタン
+    // ??�????????帥??
     uiImg[uname_backButton].drawTexture(30-buttonSize[0]*20,45-buttonSize[0]*20-scrollValue,uiImg[uname_backButton].w/1.2+buttonSize[0]*40,uiImg[uname_backButton].h/1.2+buttonSize[0]*40);
 
     
-    // 画像の表示　「名前入力欄」
+    // ??糸?????茵?腓�?�?????????????ュ??罨????
     uiImg[uname_name].drawTexture(81,158-scrollValue,uiImg[uname_name].w/1.2,uiImg[uname_name].h/1.2);
     
     
-    // 文字の表示　「名前」
+    // ???�?????茵?腓�?�??????????????
     for(int i=0; game.clientName[i]!='\0'; i++){
             textName tn = retTextNameFromChar( game.clientName[i]);
             textImg[tn].drawTexture(370+ i*27,160-scrollValue,textImg[tn].w/1.8,textImg[tn].h/1.8);
     }
-    // 画像の表示　「変更ボタン」
+    // ??糸?????茵?腓�?�?????�????眼????帥?�???
     uiImg[uname_change].drawTexture(buttonPos[SCENE_CUSTOMIZE][1].x-(buttonSize[1]*25),buttonPos[SCENE_CUSTOMIZE][1].y-(buttonSize[1]*25),(buttonSize[1]*50)+uiImg[uname_change].w/4,(buttonSize[1]*50)+uiImg[uname_change].h/4);
 
-    // 画像の表示　「スキル欄」
+    // ??糸?????茵?腓�?�???????鴻?�???罨????
     uiImg[uname_skill].drawTexture(81,270-scrollValue,uiImg[uname_skill].w/1.2,uiImg[uname_skill].h/1.2);
-    // 画像の表示　「選択しているスキル」
+    // ??糸?????茵?腓�?�???????御????????????????鴻?�??????
     uiImg[uname_skill_attack+(int)game.skill].drawTexture(160,370-scrollValue,uiImg[uname_skill_attack+(int)game.skill].w/1.4,uiImg[uname_skill_attack+(int)game.skill].h/1.4);
-    // 画像の表示　「選択中」
+    // ??糸?????茵?腓�?�???????御??筝㏍??
     uiImg[uname_nowselect].drawTexture(90,350-scrollValue,uiImg[uname_nowselect].w/4,uiImg[uname_nowselect].h/4);
-    // 画像の表示　「変更ボタン」
+    // ??糸?????茵?腓�?�?????�????眼????帥?�???
     uiImg[uname_change].drawTexture(buttonPos[SCENE_CUSTOMIZE][2].x-(buttonSize[2]*25),buttonPos[SCENE_CUSTOMIZE][2].y-(buttonSize[2]*25),(buttonSize[2]*50)+uiImg[uname_change].w/4,(buttonSize[2]*50)+uiImg[uname_change].h/4);
 
-    // 画像の表示　「スペシャル欄」
+    // ??糸?????茵?腓�?�???????鴻????激??�???罨????
     uiImg[uname_special].drawTexture(81,560-scrollValue,uiImg[uname_special].w/1.2,uiImg[uname_special].h/1.2);
-    // 画像の表示　「選択しているスペシャル」
-    uiImg[uname_barrier+(int)game.special].drawTexture(160,685-scrollValue,uiImg[uname_barrier+(int)game.special].w/1.4,uiImg[uname_barrier+(int)game.special].h/1.4);//スペシャルの説明
-    // 画像の表示　「選択中」
+    // ??糸?????茵?腓�?�???????御????????????????鴻????激??�??????
+    uiImg[uname_barrier+(int)game.special].drawTexture(160,685-scrollValue,uiImg[uname_barrier+(int)game.special].w/1.4,uiImg[uname_barrier+(int)game.special].h/1.4);//??鴻????激??�??????茯????
+    // ??糸?????茵?腓�?�???????御??筝㏍??
     uiImg[uname_nowselect].drawTexture(90,650-scrollValue,uiImg[uname_nowselect].w/4,uiImg[uname_nowselect].h/4);
-    // 画像の表示　「変更ボタン」
+    // ??糸?????茵?腓�?�?????�????眼????帥?�???
     uiImg[uname_change].drawTexture(buttonPos[SCENE_CUSTOMIZE][3].x-(buttonSize[3]*25),buttonPos[SCENE_CUSTOMIZE][3].y-(buttonSize[3]*25),(buttonSize[3]*50)+uiImg[uname_change].w/4,(buttonSize[3]*50)+uiImg[uname_change].h/4);
 
-    // 画像の表示　「ステータス欄」
+    // ??糸?????茵?腓�?�???????鴻????若?帥?号?????
     uiImg[uname_status].drawTexture(81,902-scrollValue,uiImg[uname_status].w/1.2,uiImg[uname_status].h/1.2);
-    // 画像の表示　「ピンの表示」
+    // ??糸?????茵?腓�?�??????????�???茵?腓�?�??
     uiImg[uname_pin].drawTexture(parm_x[game.parm[0]+5]-(buttonSize[4]*10) ,1005-scrollValue-(buttonSize[4]*10),uiImg[uname_pin].w/5+(buttonSize[4]*20),uiImg[uname_pin].h/5+(buttonSize[4]*20));
     uiImg[uname_pin].drawTexture(parm_x[game.parm[1]+5]-(buttonSize[5]*10) ,1140-scrollValue-(buttonSize[5]*10),uiImg[uname_pin].w/5+(buttonSize[5]*20),uiImg[uname_pin].h/5+(buttonSize[5]*20));
     uiImg[uname_pin].drawTexture(parm_x[game.parm[2]+5]-(buttonSize[6]*10) ,1277-scrollValue-(buttonSize[6]*10),uiImg[uname_pin].w/5+(buttonSize[6]*20),uiImg[uname_pin].h/5+(buttonSize[6]*20));
     uiImg[uname_pin].drawTexture(parm_x[game.parm[3]+5]-(buttonSize[7]*10) ,1415-scrollValue-(buttonSize[7]*10),uiImg[uname_pin].w/5+(buttonSize[7]*20),uiImg[uname_pin].h/5+(buttonSize[7]*20));
     uiImg[uname_pin].drawTexture(parm_x[game.parm[4]+5]-(buttonSize[8]*10) ,1545-scrollValue-(buttonSize[8]*10),uiImg[uname_pin].w/5+(buttonSize[8]*20),uiImg[uname_pin].h/5+(buttonSize[8]*20));
-    // 数値の表示
+    // ??医?�???茵?�??
     for(int i=0; i<PARAMATER_NUM; i++)
     {
         if(game.parm[i]<0){
@@ -454,50 +493,50 @@ void RenderCustomizeWindow(void){
             textImg[tname_0+game.parm[i]].drawTexture(955,parmText_y[i]-scrollValue,textImg[tname_0+game.parm[i]].w/1.5,textImg[tname_0+game.parm[i]].h/1.5);
         }
     }
-    // ステータスパラメータの合計数値の表示
+    // ??鴻????若?帥?鴻????????�??若?帥?????�????医?�???茵?�??
     int rest = PARAMATER_SUM_MAX - retSumParamater();
     textImg[tname_0+rest/10].drawTexture(840,1675-scrollValue,textImg[tname_0+rest/10].w/1.2,textImg[tname_0+rest/10].h/1.2);
     textImg[tname_0+rest%10].drawTexture(885,1675-scrollValue,textImg[tname_0+rest%10].w/1.2,textImg[tname_0+rest%10].h/1.2);
 
-    //名前の入力画面
+    //???????????ュ????�???
     if(game.popScene == PopUp_Name){
-        uiImg[uname_back].drawTexture(0,0); //後ろを暗くする
+        uiImg[uname_back].drawTexture(0,0); //�????????????????????
         uiImg[uname_nameChange].drawTexture(0,0);
         for(int i=0; tempName[i]!='\0'; i++){
             textName tn = retTextNameFromChar(tempName[i]);
             textImg[tn].drawTexture(200+ i*45,310);
         }
     }
-    //スキル変更画面
+    //??鴻?�???�????�??�???
     else if(game.popScene == PopUp_Skill){
-        uiImg[uname_back].drawTexture(0,0); //後ろを暗くする
-        uiImg[uname_skillChange].drawTexture(300,50);//タイトル
+        uiImg[uname_back].drawTexture(0,0); //�????????????????????
+        uiImg[uname_skillChange].drawTexture(300,50);//??帥?�??????
         boxColor(game.render,860,10,1190,110,0xffe6f5fd);
-        uiImg[uname_explain_skill].drawTexture(860,10,uiImg[uname_explain_skill].w/1.6,uiImg[uname_explain_skill].h/1.6);//説明
-        uiImg[uname_skill_attack+(int)game.skill].drawTexture(200,200,uiImg[uname_skill_attack+(int)game.skill].w/1.2,uiImg[uname_skill_attack+(int)game.skill].h/1.2);//選択中のスキル
-        uiImg[uname_nowselect].drawTexture(170,170,uiImg[uname_nowselect].w/4,uiImg[uname_nowselect].h/4);//選択中
-        boxColor(game.render,150,370,1100,890,0xffe6f5fd);//黄土色の枠組み
+        uiImg[uname_explain_skill].drawTexture(860,10,uiImg[uname_explain_skill].w/1.6,uiImg[uname_explain_skill].h/1.6);//茯????
+        uiImg[uname_skill_attack+(int)game.skill].drawTexture(200,200,uiImg[uname_skill_attack+(int)game.skill].w/1.2,uiImg[uname_skill_attack+(int)game.skill].h/1.2);//??御??筝㏍????鴻?�???
+        uiImg[uname_nowselect].drawTexture(170,170,uiImg[uname_nowselect].w/4,uiImg[uname_nowselect].h/4);//??御??�??
+        boxColor(game.render,150,370,1100,890,0xffe6f5fd);//藥??????�??????�?????
         for(int i=0; i<SKILL_NUM; i++){
             uiImg[uname_skill_attack+i].drawTexture(300,400+i*150,uiImg[uname_skill_attack+i].w/1.4,uiImg[uname_skill_attack+i].h/1.4);
         }
         if(game.selectButton_sub != 0){
-            uiImg[uname_backButton].drawTexture(30,65,uiImg[uname_backButton].w/1.1,uiImg[uname_backButton].h/1.1);//戻るボタン
-            uiImg[uname_selectHikouki].drawTexture(170,380+(game.selectButton_sub-1)*150,uiImg[uname_selectHikouki].w/1.3,uiImg[uname_selectHikouki].h/1.3);//選択していることを示す飛行機
+            uiImg[uname_backButton].drawTexture(30,65,uiImg[uname_backButton].w/1.1,uiImg[uname_backButton].h/1.1);//??�????????帥??
+            uiImg[uname_selectHikouki].drawTexture(170,380+(game.selectButton_sub-1)*150,uiImg[uname_selectHikouki].w/1.3,uiImg[uname_selectHikouki].h/1.3);//??御???????????????????????腓�?�??�??茵?�??
         }
         else{
-            uiImg[uname_backButton].drawTexture(23,58,uiImg[uname_backButton].w,uiImg[uname_backButton].h);//戻るボタン
-            boxColor(game.render,30,73,270,150,0x77777777);
+            uiImg[uname_backButton].drawTexture(23,58,uiImg[uname_backButton].w,uiImg[uname_backButton].h);//??�????????帥??
+            boxColor(game.render,30,73,270,150,0xaa666666);
         }
     }
-    //スペシャル変更の画面
+    //??鴻????激??�???�????眼????�???
     else if(game.popScene == PopUp_Special){
-        uiImg[uname_back].drawTexture(0,0); //後ろを暗くする
-        uiImg[uname_specialChange].drawTexture(300,50);//タイトル
-        boxColor(game.render,860,10,1190,110,0xffe6f5fd);//説明の背景
-        uiImg[uname_explain_skill].drawTexture(860,10,uiImg[uname_explain_skill].w/1.6,uiImg[uname_explain_skill].h/1.6);//説明
-        boxColor(game.render,180,280,1020,580,0xffe6f5fd);//スペシャルアイコンの背景
+        uiImg[uname_back].drawTexture(0,0); //�????????????????????
+        uiImg[uname_specialChange].drawTexture(300,50);//??帥?�??????
+        boxColor(game.render,860,10,1190,110,0xffe6f5fd);//茯?????????????
+        uiImg[uname_explain_skill].drawTexture(860,10,uiImg[uname_explain_skill].w/1.6,uiImg[uname_explain_skill].h/1.6);//茯????
+        boxColor(game.render,180,280,1020,580,0xffe6f5fd);//??鴻????激??�?????≪?�??�??�?????????
         for(int i=0;i<SPECIAL_NUM;i++){
-            //カーソルのあってるものを大きく
+            //?????若?�????????????�???????????????紊�??????
             if(i==game.selectButton_sub-1){
                 uiImg[uname_barrier_icon+i].drawTexture(special_iconPos[i+1].x-10,special_iconPos[i+1].y-10,uiImg[uname_barrier_icon+(int)game.special].w/2,uiImg[uname_barrier_icon+(int)game.special].h/2);
             }
@@ -506,21 +545,21 @@ void RenderCustomizeWindow(void){
             }   
         }
         if(game.selectButton_sub != 0){
-            uiImg[uname_backButton].drawTexture(special_iconPos[0].x+7,special_iconPos[0].y+7,uiImg[uname_backButton].w/1.1,uiImg[uname_backButton].h/1.1);//戻るボタン
-            uiImg[uname_barrier+game.selectButton_sub-1].drawTexture(180,600,uiImg[uname_barrier+game.selectButton_sub-1].w*0.75,uiImg[uname_barrier+game.selectButton_sub-1].h*0.75);//スペシャルの説明
+            uiImg[uname_backButton].drawTexture(special_iconPos[0].x+7,special_iconPos[0].y+7,uiImg[uname_backButton].w/1.1,uiImg[uname_backButton].h/1.1);//??�????????帥??
+            uiImg[uname_barrier+game.selectButton_sub-1].drawTexture(180,600,uiImg[uname_barrier+game.selectButton_sub-1].w*0.75,uiImg[uname_barrier+game.selectButton_sub-1].h*0.75);//??鴻????激??�??????茯????
         }
         else{
-            uiImg[uname_backButton].drawTexture(special_iconPos[0].x,special_iconPos[0].y,uiImg[uname_backButton].w,uiImg[uname_backButton].h);//戻るボタン
-            boxColor(game.render,30,73,270,150,0x77777777);
+            uiImg[uname_backButton].drawTexture(special_iconPos[0].x,special_iconPos[0].y,uiImg[uname_backButton].w,uiImg[uname_backButton].h);//??�????????帥??
+            boxColor(game.render,30,73,270,150,0xaa666666);
         }
-        uiImg[uname_nowselect].drawTexture(special_iconPos[(int)game.special+1].x-40,special_iconPos[(int)game.special+1].y-40,uiImg[uname_nowselect].w/5,uiImg[uname_nowselect].h/5);//選択中
+        uiImg[uname_nowselect].drawTexture(special_iconPos[(int)game.special+1].x-40,special_iconPos[(int)game.special+1].y-40,uiImg[uname_nowselect].w/5,uiImg[uname_nowselect].h/5);//??御??�??
     }
 
     SDL_RenderPresent(game.render);
 }
 
 void RenderClientWaitWindow(void){
-    //背景
+    //??????
     DrawBackGround();
 
     textImg[tname_nowloading].drawTexture(100,100,textImg[tname_nowloading].w/1.2,textImg[tname_nowloading].h/1.2);
@@ -529,7 +568,7 @@ void RenderClientWaitWindow(void){
 }
 
 void RenderResultWindow(void){
-    //背景
+    //??????
     DrawBackGround();
 
     textImg[tname_result].drawTexture(55,40,textImg[tname_result].w/1.2,textImg[tname_result].h/1.3);
@@ -632,32 +671,32 @@ void RenderResultWindow(void){
     SDL_RenderPresent(game.render);
 }
 
-/* テクスチャの描画 */
+/* ????????鴻?????�????????? */
 void ImgInfo::drawTexture(int x, int y, int width, int height){
     if(width == 0 || height == 0){
         width=w;
         height=h;
     }
-    // 転送元設定
+    // 荵∫?????荐㊤??
     SDL_Rect src = {0,0,w,h};
-    // 転送先設定
+    // 荵∫?????荐㊤??
     SDL_Rect dst = {x, y, width, height};
-    // 転送
+    // 荵∫??
     if (0 > SDL_RenderCopy(game.render, texture, &src, &dst)) {
         PrintError(SDL_GetError());
     }
 }
-/* テクスチャの描画 */
+/* ????????鴻?????�????????? */
 void ImgInfo::drawRotateTexture(int x, int y, int width, int height, int rad, SDL_RendererFlip mode){
     if(width == 0 || height == 0){
         width=w;
         height=h;
     }
-    // 転送元設定
+    // 荵∫?????荐㊤??
     SDL_Rect src = {0,0,w,h};
-    // 転送先設定
+    // 荵∫?????荐㊤??
     SDL_Rect dst = {x, y, width, height};
-    // 転送
+    // 荵∫??
     if (0 > SDL_RenderCopyEx(game.render, texture, &src, &dst,rad, NULL, mode)) {
         PrintError(SDL_GetError());
     }
@@ -691,7 +730,7 @@ textName retTextNameFromChar(char ch){
 
 void DrawBackGround(void){
     scroll_back -= 0.3;
-    //背景
+    //??????
     uiImg[uname_cloud].drawTexture((int)scroll_back,0,uiImg[uname_cloud].w,uiImg[uname_cloud].h);
     if(scroll_back <= -uiImg[uname_cloud].w/2){
         scroll_back = 0;
@@ -727,12 +766,12 @@ void DrawBackGround(void){
 }
 
 /*
-    //画像の描画
-    // 転送元設定
+    //??糸???????????
+    // 荵∫?????荐㊤??
     src = {0,0,uiImg[0].w, uiImg[0].h};
-    // 転送先設定
+    // 荵∫?????荐㊤??
     dst = {0,0,uiImg[0].w, uiImg[0].h};
-    // 転送
+    // 荵∫??
     if (0 > SDL_RenderCopy(game.render, uiImg[0].texture, &src, &dst)) {
         PrintError(SDL_GetError());
     }
@@ -740,7 +779,7 @@ void DrawBackGround(void){
 */
 
 /*
-    // 文字の表示　「」
+    // ???�?????茵?腓�?�????????
     src = {0,0,textImg[0].w,textImg[0].h};
     dst = {0,0,textImg[0].w,textImg[0].h};
     if (0 > SDL_RenderCopy(game.render, textImg[0].texture, &src, &dst)) {
