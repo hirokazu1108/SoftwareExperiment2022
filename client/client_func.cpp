@@ -53,7 +53,7 @@ void PlayerInit(void){
         player[clientID].parm[i] = data.parm[i];
     }
     player[clientID].attack += (float)player[clientID].parm[PARM_ATTACK] / 5.0f;
-    player[clientID].speed += (float)player[clientID].parm[PARM_SPEED];
+    player[clientID].speed += 0.5f * (float)player[clientID].parm[PARM_SPEED] / 5.0f;
     player[clientID].size -= player[clientID].parm[PARM_SIZE];
 
 }
