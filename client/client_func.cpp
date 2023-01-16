@@ -361,31 +361,24 @@ void moveScoreBall(void){
                 if(ary_scoreBall[i].pos.y + 50 > player[j].pos.y && ary_scoreBall[i].pos.y - 50 < player[j].pos.y){
                 if(ary_scoreBall[i].pos.z + 50 > player[j].pos.z && ary_scoreBall[i].pos.z - 50 < player[j].pos.z){
                 
-            if(ary_scoreBall[i].pos.y + 2 > player[j].pos.y && ary_scoreBall[i].pos.y - 2 < player[j].pos.y&&ary_scoreBall[i].pos.x + 2 > player[j].pos.x && ary_scoreBall[i].pos.x - 2 < player[j].pos.x
-            &&ary_scoreBall[i].pos.z + 2 > player[j].pos.z && ary_scoreBall[i].pos.z - 2 < player[j].pos.z){
-                ary_scoreBall[i].howMove = Move_atack;
-            }
-            else if(ary_scoreBall[i].pos.x  > player[j].pos.x && ary_scoreBall[i].pos.y  > player[j].pos.y){
-                ary_scoreBall[i].howMove = Move_henntai;
-            }
-            else if(ary_scoreBall[i].pos.x  > player[j].pos.x && ary_scoreBall[i].pos.z  > player[j].pos.z){
-                ary_scoreBall[i].howMove = Move_player;
-            }
-            else if(ary_scoreBall[i].pos.y  < player[j].pos.y && ary_scoreBall[i].pos.z  < player[j].pos.z){
-                ary_scoreBall[i].howMove = Move_atack;
-            }
-            else if(ary_scoreBall[i].pos.z  > player[j].pos.x && ary_scoreBall[i].pos.z  > player[j].pos.y ){
-                ary_scoreBall[i].howMove = Move_aho;
-            }
-            else if(ary_scoreBall[i].pos.z  > player[j].pos.x){
-                ary_scoreBall[i].howMove = Move_henntai;
-            }
-            else if(ary_scoreBall[i].pos.y  > player[j].pos.x){
-                ary_scoreBall[i].howMove = Move_atack;
-            }
-            else{
-                ary_scoreBall[i].howMove = Move_dami;
-            }
+                    if(MAX_HP/2 > player[j].hp){
+                        ary_scoreBall[i].howMove = Move_aho;
+                        if(MAX_MP/2 > player[j].mp){
+                            ary_scoreBall[i].howMove = Move_atack;
+                        }
+                    }
+                    else if(MAX_HP/2 < player[j].hp){
+                        ary_scoreBall[i].howMove = Move_henntai;
+                        if(MAX_MP/2 > player[j].mp){
+                            ary_scoreBall[i].howMove = Move_player;
+                        }
+                    }
+                    if(player[j].kill_enemy < 5){
+                         ary_scoreBall[i].howMove = Move_atack;
+                    }
+                    else if(player[i].kill_player > 2){
+                        ary_scoreBall[i].howMove = Move_aho;
+                    }
 
             
                 num = j;
@@ -454,7 +447,7 @@ void moveScoreBall(void){
                 ary_scoreBall[i].howMove = Move_Stop;
                 break;
             case Move_aho:
-            if(rand()%50 > 25 && i%2 == 0){
+            if( i%2 == 0){
                 ary_scoreBall[i].pos.x = tamax +sin(move1);
             }
             else if(rand()%50 < 20)

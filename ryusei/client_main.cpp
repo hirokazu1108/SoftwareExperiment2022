@@ -1034,6 +1034,28 @@ void keyboard2(unsigned char key, int x, int y)
     x = y = 0;
 }
 
+void joystick(unsigned int buttonMask, int x, int y, int z)
+{
+        if (x)
+        {
+                /* 左スティックを左右に倒した際の処理 */
+        }
+        if (y)
+        {
+                /* 左スティックを上下に倒した際の処理 */
+        }
+        if (z)
+        {
+                /* 右スティックを左右に倒した際の処理 */
+        }
+        switch (buttonMask) {
+                case GLUT_JOYSTICK_BUTTON_A:
+                        /* ボタン 1 を押した際の処理 */
+                        break;
+                 ...
+         }
+}
+
 /***********************************************************
 |  �ؿ���myInit()
 |  ������������ɥ�ɽ������������ν����
@@ -1065,6 +1087,7 @@ void myInit(char *windowTitle)
      glutMouseFunc   (mouseButton);  /* マウスボタンを押した時*/
     glutKeyboardUpFunc(keyboard2);
     glutKeyboardFunc(keyboard);  /* �����ܡ��ɤ򲡤����� */
+    glutJoystickFunc(joystick,100);
     //glutKeyboardUpFunc(keyboard2);
    // glutKeyboardFunc(keyboard2); 
     glutReshapeFunc(resize);
