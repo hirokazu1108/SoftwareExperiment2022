@@ -255,9 +255,11 @@ void PushedButton(void){
             switch(game.selectButton){
                 case 0://left
                     shiftSelect(-1,4,&rankingMode);
+                    SortRanking(rankingMode);
                     break;
                 case 1://right
                     shiftSelect(+1,4,&rankingMode);
+                    SortRanking(rankingMode);
                     break;
                 case 2://exit
                     game.scene = SCENE_None;
