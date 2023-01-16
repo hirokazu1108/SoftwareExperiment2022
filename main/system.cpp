@@ -195,7 +195,7 @@ void PushedButton(void){
         case SCENE_CLIENT_1:
             switch(game.selectButton){
                 case 0://back
-                    game.scene = SCENE_SERVER_0;
+                    game.scene = SCENE_CLIENT_0;
                     game.selectButton = 0;
                     break;
                 case 11://削除ボタン
@@ -208,7 +208,7 @@ void PushedButton(void){
                     }
                     printf("port:%s\n",game.port);
                     game.selectButton = 0;
-                    LaunchServer();
+                    LaunchClient();
                     game.scene = SCENE_None;
                     break;
                 default:
