@@ -454,26 +454,46 @@ void ExcuteInput(void){
                 adjust = 0;
             switch(game.input){
                 case INPUT_UP:
-                    if(game.selectButton<10 && game.selectButton >=5)
+                    if(game.selectButton == 0)
+                        game.selectButton = 13+adjust; 
+                    else if(game.selectButton == 13)
+                        game.selectButton = 6;
+                    else if(game.selectButton<=5 && game.selectButton >=1 || game.selectButton == 11)
+                        game.selectButton = 0;
+                    else if(game.selectButton<=10 && game.selectButton >=6)
                         shiftSelect(-5,maxButtonNum[game.scene]+adjust,&game.selectButton);
-                    else if(game.selectButton<5 && game.selectButton >=0 && adjust == 0)
+                    else if(game.selectButton==12)
                         game.selectButton = 11;
-                    else if(game.selectButton == 11)
-                        shiftSelect(-6,maxButtonNum[game.scene]+adjust,&game.selectButton);
                     break;
                 case INPUT_DOWN:
-                    if(game.selectButton<5 && game.selectButton >=0)
+                    if(game.selectButton == 0)
+                        game.selectButton = 1;
+                    else if(game.selectButton == 13)
+                        game.selectButton = 0;
+                    else if(((game.selectButton<=10 && game.selectButton >=6)||(game.selectButton == 12)) && adjust == -1)
+                        game.selectButton = 0;
+                    else if(((game.selectButton<=10 && game.selectButton >=6)||(game.selectButton == 12)) && adjust == 0)
+                        game.selectButton = 13;
+                    else if(game.selectButton<=5 && game.selectButton >=1)
                         shiftSelect(+5,maxButtonNum[game.scene]+adjust,&game.selectButton);
-                    else if(game.selectButton<10 && game.selectButton >=5 && adjust == 0)
-                        game.selectButton = 11;
-                    else if(game.selectButton == 11)
-                        shiftSelect(+1,maxButtonNum[game.scene]+adjust,&game.selectButton);
+                    else if(game.selectButton==11)
+                        game.selectButton = 12;
                     break;
                 case INPUT_RIGHT:
-                        shiftSelect(+1,maxButtonNum[game.scene]+adjust,&game.selectButton);
+                        if(game.selectButton == 5)
+                            game.selectButton = 11;
+                        else if(game.selectButton == 10)
+                            game.selectButton = 12;
+                        else if(game.selectButton != 11 && game.selectButton != 12)
+                            shiftSelect(+1,maxButtonNum[game.scene]+adjust,&game.selectButton);
                     break;
                 case INPUT_LEFT:
-                        shiftSelect(-1,maxButtonNum[game.scene]+adjust,&game.selectButton);
+                        if(game.selectButton == 11)
+                            game.selectButton = 5;
+                        else if(game.selectButton == 12)
+                            game.selectButton = 10;
+                        else if(game.selectButton != 12 && game.selectButton != 6 && game.selectButton != 1)
+                            shiftSelect(-1,maxButtonNum[game.scene]+adjust,&game.selectButton);
                     break;
                 case INPUT_RETURN:
                     PushedButton();

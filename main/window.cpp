@@ -2,7 +2,7 @@
 
 /* ??Á≥∏???????? */
 static const char *imgFile[IMG_NUM] = { "inputClientNum.png","inputPasscode.png","inputDeviceNum.png","name.png", "skill.png","special.png","status.png", "explain_skill.png","nowSelectButton.png", "changeButton.png","backButton.png",  "skill_attack.png", "skill_hp.png","skill_speed.png", "pin.png","rightSelect.png","leftSelect.png", "back.png","nameChange.png","skillChange.png","specialChange.png","selectHikouki.png","barrier.png","disabled.png","bigbullet.png","barrier_icon.png","disabled_icon.png","bigbullet_icon.png","logo.png", "rankingBoard.png", "rankingBack.png","title_sky.png","title_sky2.png","cloud.png", "castle.png","masao.png","masao_face.png"};
-static const char *textStr[TEXT_NUM] = {"Space Battle","SERVER","CLIENT","CUSTOMIZE","input client num.","input passcode.","del","Enter","self","input device num.","clpc","nowLoading...","Result","Exit","Detail","Title","SCORE RANKING","KILL RANKING","DEATH RANKING", "KILL ENEMY RANKING","0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"," ", "-"};
+static const char *textStr[TEXT_NUM] = {"Space Battle","SERVER","CLIENT","CUSTOMIZE","input client num.","input passcode.","back","Enter","local","input device num.","clpc","nowLoading...","Result","Exit","Detail","Title","SCORE RANKING","KILL RANKING","DEATH RANKING", "KILL ENEMY RANKING","0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"," ", "-"};
 /* ????????ÊΩ????????? */
 static char gFontFile[] = "../fonts/Yomogi-Regular.ttf";
 
@@ -103,19 +103,19 @@ int InitWindow(void)
     buttonPos[SCENE_SERVER_1].push_back({620,460,80,80}); //?
     buttonPos[SCENE_SERVER_1].push_back({200,600,400,100}); //ËÖ?Èò™??
     buttonPos[SCENE_CLIENT_0].push_back({30,45,uiImg[uname_backButton].w/1.2,uiImg[uname_backButton].h/1.2}); //back
-    buttonPos[SCENE_CLIENT_0].push_back({170,500,80,80});  //0
-    buttonPos[SCENE_CLIENT_0].push_back({270,500,80,80}); //1
-    buttonPos[SCENE_CLIENT_0].push_back({370,500,80,80}); //2
-    buttonPos[SCENE_CLIENT_0].push_back({470,500,80,80}); //3
-    buttonPos[SCENE_CLIENT_0].push_back({570,500,80,80}); //4
-    buttonPos[SCENE_CLIENT_0].push_back({170,620,80,80}); //5
-    buttonPos[SCENE_CLIENT_0].push_back({270,620,80,80}); //6
-    buttonPos[SCENE_CLIENT_0].push_back({370,620,80,80}); //7
-    buttonPos[SCENE_CLIENT_0].push_back({470,620,80,80}); //8
-    buttonPos[SCENE_CLIENT_0].push_back({570,620,80,80}); //9
-    buttonPos[SCENE_CLIENT_0].push_back({670,560,80,80}); //?
-    buttonPos[SCENE_CLIENT_0].push_back({150,750,100,100}); //localHost
-    buttonPos[SCENE_CLIENT_0].push_back({270,750,400,100}); //ËÖ?Èò™??
+    buttonPos[SCENE_CLIENT_0].push_back({280,520,100,100});  //0
+    buttonPos[SCENE_CLIENT_0].push_back({380,520,100,100}); //1
+    buttonPos[SCENE_CLIENT_0].push_back({480,520,100,100}); //2
+    buttonPos[SCENE_CLIENT_0].push_back({580,520,100,100}); //3
+    buttonPos[SCENE_CLIENT_0].push_back({680,520,100,100}); //4
+    buttonPos[SCENE_CLIENT_0].push_back({280,620,100,100}); //5
+    buttonPos[SCENE_CLIENT_0].push_back({380,620,100,100}); //6
+    buttonPos[SCENE_CLIENT_0].push_back({480,620,100,100}); //7
+    buttonPos[SCENE_CLIENT_0].push_back({580,620,100,100}); //8
+    buttonPos[SCENE_CLIENT_0].push_back({680,620,100,100}); //9
+    buttonPos[SCENE_CLIENT_0].push_back({780,520,100,100}); //back
+    buttonPos[SCENE_CLIENT_0].push_back({780,620,100,100}); //localHost
+    buttonPos[SCENE_CLIENT_0].push_back({720,740,250,100}); //enter
     buttonPos[SCENE_CLIENT_1].push_back({30,45,uiImg[uname_backButton].w/1.2,uiImg[uname_backButton].h/1.2}); //back
     buttonPos[SCENE_CLIENT_1].push_back({120,400,80,80}); //0
     buttonPos[SCENE_CLIENT_1].push_back({220,400,80,80}); //1
@@ -378,32 +378,36 @@ void RenderDeviceNumWindow(void){
     uiImg[uname_inputDeviceNum].drawTexture(160,225,uiImg[uname_inputDeviceNum].w*2,uiImg[uname_inputDeviceNum].h*2);
 
     // ???Áµ?????Ëåµ?ËÖìÂ?¥?????clpc???
-    boxColor(game.render,220,350,980,470,0xffffffff);
-    textImg[tname_clpc].drawTexture(300,340);
+    boxColor(game.render,290,350,860,470,0xffffffff);
+    textImg[tname_clpc].drawTexture(345,340);
 
     //??„É•????????????????„Ç??Âê????Âû©??Ëåµ?ËÖ??
     for(int i=0; game.deviceNum[i] != '\0'; i++)
     {
-        textImg[tname_0+game.deviceNum[i]-'0'].drawTexture(500+i*80,250);
+        textImg[tname_0+game.deviceNum[i]-'0'].drawTexture(580+i*80,350);
     }
 
     //?????Â∏•?ÊΩ???Ëåµ?ËÖìÂ?¥?????0???~???9???
     for(int i=0; i<=9; i++){
+        boxColorRect(game.render,&buttonPos[SCENE_CLIENT_0][i+1],0xffffffff);
         rectangleColorRect(game.render,&buttonPos[SCENE_CLIENT_0][i+1],0xff000000);
-        textImg[tname_0+i].drawTexture(buttonPos[SCENE_CLIENT_0][i+1].x +10,buttonPos[SCENE_CLIENT_0][i+1].y-20);
+        textImg[tname_0+i].drawTexture(buttonPos[SCENE_CLIENT_0][i+1].x+30,buttonPos[SCENE_CLIENT_0][i+1].y-20);
     }
 
     //?????Â∏•?ÊΩ???Ëåµ?ËÖìÂ?¥?????X???
+    boxColorRect(game.render,&buttonPos[SCENE_CLIENT_0][11],0xffffffff);
     rectangleColorRect(game.render,&buttonPos[SCENE_CLIENT_0][11],0xff000000);
-    textImg[tname_del].drawTexture(buttonPos[SCENE_CLIENT_0][11].x +10,buttonPos[SCENE_CLIENT_0][11].y-20);
+    textImg[tname_del].drawTexture(buttonPos[SCENE_CLIENT_0][11].x +8,buttonPos[SCENE_CLIENT_0][11].y+10,textImg[tname_del].w/2,textImg[tname_del].h/2);
     
     //localHost?????Â∏•?ÊΩ???Ëåµ?ËÖ??
+    boxColorRect(game.render,&buttonPos[SCENE_CLIENT_0][12],0xffffffff);
     rectangleColorRect(game.render,&buttonPos[SCENE_CLIENT_0][12],0xff000000);
-    textImg[tname_self].drawTexture(buttonPos[SCENE_CLIENT_0][12].x +10,buttonPos[SCENE_CLIENT_0][12].y-20,textImg[tname_self].w/2,textImg[tname_self].h/2);
+    textImg[tname_self].drawTexture(buttonPos[SCENE_CLIENT_0][12].x,buttonPos[SCENE_CLIENT_0][12].y+10,textImg[tname_self].w/2.1,textImg[tname_self].h/2.1);
 
     /* ????????„Ç??Âê????Âû©??3ÁΩ????„É•?????????????? */
     if(strlen(game.deviceNum)>=3){
         //?????Â∏•?ÊΩ???Ëåµ?ËÖìÂ?¥?????ËÖ?Èò™?????
+        boxColorRect(game.render,&buttonPos[SCENE_CLIENT_0][13],0xffffffff);
         rectangleColorRect(game.render,&buttonPos[SCENE_CLIENT_0][13],0xff000000);
         textImg[tname_enter].drawTexture(buttonPos[SCENE_CLIENT_0][13].x +10,buttonPos[SCENE_CLIENT_0][13].y-20);
     }
