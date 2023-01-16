@@ -433,6 +433,9 @@ void ReadRankingFile(void){
             fscanf(fp,"%f,%d,%d,%d,%d\n",&game.rankingData.score[i], &game.rankingData.kill_player[i], &game.rankingData.death[i], &game.rankingData.kill_enemy[i], &game.rankingData.kill_boss[i]);
             game.rankingData.clientName[i][strlen(game.rankingData.clientName[i])+1] = '\0';
         }
+        for(int i=0; i<game.clientNum; i++){
+            game.rankingData.kill_sum[i] = game.rankingData.kill_enemy[i] + game.rankingData.kill_boss[i];
+        }
 	}
 	fclose(fp); // ファイルを閉じる
 }
@@ -442,6 +445,7 @@ void ReadRankingFile(void){
 // 2:death
 // 3:kill num of enemy
 // 4:kill num of boss
+// 5:kill num of enemy sum
 void SortRanking(int mode){
     switch(mode){
         case 0:
@@ -454,17 +458,30 @@ void SortRanking(int mode){
             SortRankIndex(game.rankingData.death, rankIndex, rankNumber, game.clientNum, 1);
             break;
         case 3:
-            SortRankIndex(game.rankingData.kill_enemy, rankIndex, rankNumber, game.clientNum,0);
+            SortRankIndex(game.rankingData.kill_sum, rankIndex, rankNumber, game.clientNum, 0);
+            for(int i=0; i<game.clientNum;i++)
+                printf("sum[%d]:%d\n",i,game.rankingData.kill_sum[i]);
+            for(int i=0; i<game.clientNum;i++)
+                printf("sum[%d]:%d\n",i,game.rankingData.kill_sum[rankIndex[i]]);
             break;
         case 4:
+            SortRankIndex(game.rankingData.kill_enemy, rankIndex, rankNumber, game.clientNum,0);
+            break;
+        case 5:
             SortRankIndex(game.rankingData.kill_boss, rankIndex, rankNumber, game.clientNum, 0);
             break;
+        
     }
 }
 
 // mode : 0->降順 big to small, 1->昇順 small to big
 template <typename T>
 T SortRankIndex(const T *a, int *rank,int *rank_num, int num, int mode){
+    T t[num];
+    for(int i=0; i<num; i++){
+        t[i] = a[i];
+    }
+
     for(int i=0;i<game.clientNum; i++)
     {
         rank[i] = i;
@@ -472,14 +489,17 @@ T SortRankIndex(const T *a, int *rank,int *rank_num, int num, int mode){
     // 昇順
     for (int i=0; i<num; ++i){
         for (int j=i+1; j<num; ++j){
-            if (a[i] > a[j]){
+            if (t[i] > t[j]){
                 int tmp =  rank[i];
+                T tmp2 = t[i];
                 rank[i] = rank[j];
+                t[i] = t[j];
                 rank[j] = tmp;
+                t[j] = tmp2;
+                
             } 
         }
     }
-
     // 降順に変換
     if(mode == 0){
         for(int i=0; i<num/2; i++){
@@ -499,9 +519,11 @@ T SortRankIndex(const T *a, int *rank,int *rank_num, int num, int mode){
         }
     }
     for(int i=0; i<num;i++){
-        printf("%d:%db\n",i,rankIndex[i]);
-        printf("%d:%dc\n",i,rankNumber[i]);
-    }   
+        printf("client index[%d]:%d\n",i,rankIndex[i]);
+    } 
+    for(int i=0; i<num ;i++){
+        printf("client number[%d]:%d\n",i,rankNumber[i]);
+    }
 }
 
 // error :-1

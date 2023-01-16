@@ -197,6 +197,7 @@ class RankingData{
     int death[MAX_CLIENTS];
     int kill_enemy[MAX_CLIENTS];
     int kill_boss[MAX_CLIENTS];
+    int kill_sum[MAX_CLIENTS];
 };
 
 #endif 

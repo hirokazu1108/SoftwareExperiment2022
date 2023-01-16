@@ -12,7 +12,7 @@ std::vector<SDL_Rect> special_iconPos;
 
 float scroll_back = -50.0; //???????????鴻????�??若??
 
-int rankingMode = 0; // 0:score  ,1:kill num of player  ,2:death  ,3:kill num of enemy and boss
+int rankingMode = 0; // 0:score  ,1:kill num of player  ,2:death  ,3:kill num of enemy and boss, 4:kill num of enemy , 5:kill num of boss
 
 float masao_loop = 0;
 float masao_rotate = 0;
