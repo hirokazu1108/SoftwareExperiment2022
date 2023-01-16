@@ -90,18 +90,18 @@ int InitWindow(void)
     buttonPos[SCENE_SERVER_0].push_back({500,480,100,100}); //3
     buttonPos[SCENE_SERVER_0].push_back({650,480,100,100}); //4
     buttonPos[SCENE_SERVER_1].push_back({30,45,uiImg[uname_backButton].w/1.2,uiImg[uname_backButton].h/1.2}); //back 
-    buttonPos[SCENE_SERVER_1].push_back({120,400,80,80});  //0
-    buttonPos[SCENE_SERVER_1].push_back({220,400,80,80}); //1
-    buttonPos[SCENE_SERVER_1].push_back({320,400,80,80}); //2
-    buttonPos[SCENE_SERVER_1].push_back({420,400,80,80}); //3
-    buttonPos[SCENE_SERVER_1].push_back({520,400,80,80}); //4
-    buttonPos[SCENE_SERVER_1].push_back({120,520,80,80}); //5
-    buttonPos[SCENE_SERVER_1].push_back({220,520,80,80}); //6
-    buttonPos[SCENE_SERVER_1].push_back({320,520,80,80}); //7
-    buttonPos[SCENE_SERVER_1].push_back({420,520,80,80}); //8
-    buttonPos[SCENE_SERVER_1].push_back({520,520,80,80}); //9
-    buttonPos[SCENE_SERVER_1].push_back({620,460,80,80}); //?
-    buttonPos[SCENE_SERVER_1].push_back({200,600,400,100}); //ËÖ?Èò™??
+    buttonPos[SCENE_SERVER_1].push_back({280,520,100,100}); //0
+    buttonPos[SCENE_SERVER_1].push_back({380,520,100,100}); //1
+    buttonPos[SCENE_SERVER_1].push_back({480,520,100,100}); //2
+    buttonPos[SCENE_SERVER_1].push_back({580,520,100,100}); //3
+    buttonPos[SCENE_SERVER_1].push_back({680,520,100,100}); //4
+    buttonPos[SCENE_SERVER_1].push_back({280,620,100,100}); //5
+    buttonPos[SCENE_SERVER_1].push_back({380,620,100,100}); //6
+    buttonPos[SCENE_SERVER_1].push_back({480,620,100,100}); //7
+    buttonPos[SCENE_SERVER_1].push_back({580,620,100,100}); //8
+    buttonPos[SCENE_SERVER_1].push_back({680,620,100,100}); //9
+    buttonPos[SCENE_SERVER_1].push_back({780,620,100,100}); //back
+    buttonPos[SCENE_SERVER_1].push_back({720,740,250,100}); //enter
     buttonPos[SCENE_CLIENT_0].push_back({30,45,uiImg[uname_backButton].w/1.2,uiImg[uname_backButton].h/1.2}); //back
     buttonPos[SCENE_CLIENT_0].push_back({280,520,100,100});  //0
     buttonPos[SCENE_CLIENT_0].push_back({380,520,100,100}); //1
@@ -117,18 +117,18 @@ int InitWindow(void)
     buttonPos[SCENE_CLIENT_0].push_back({780,620,100,100}); //localHost
     buttonPos[SCENE_CLIENT_0].push_back({720,740,250,100}); //enter
     buttonPos[SCENE_CLIENT_1].push_back({30,45,uiImg[uname_backButton].w/1.2,uiImg[uname_backButton].h/1.2}); //back
-    buttonPos[SCENE_CLIENT_1].push_back({120,400,80,80}); //0
-    buttonPos[SCENE_CLIENT_1].push_back({220,400,80,80}); //1
-    buttonPos[SCENE_CLIENT_1].push_back({320,400,80,80}); //2
-    buttonPos[SCENE_CLIENT_1].push_back({420,400,80,80}); //3
-    buttonPos[SCENE_CLIENT_1].push_back({520,400,80,80}); //4
-    buttonPos[SCENE_CLIENT_1].push_back({120,520,80,80}); //5
-    buttonPos[SCENE_CLIENT_1].push_back({220,520,80,80}); //6
-    buttonPos[SCENE_CLIENT_1].push_back({320,520,80,80}); //7
-    buttonPos[SCENE_CLIENT_1].push_back({420,520,80,80}); //8
-    buttonPos[SCENE_CLIENT_1].push_back({520,520,80,80}); //9
-    buttonPos[SCENE_CLIENT_1].push_back({620,460,80,80}); //?
-    buttonPos[SCENE_CLIENT_1].push_back({200,600,400,100}); //ËÖ?Èò™??
+    buttonPos[SCENE_CLIENT_1].push_back({280,520,100,100}); //0
+    buttonPos[SCENE_CLIENT_1].push_back({380,520,100,100}); //1
+    buttonPos[SCENE_CLIENT_1].push_back({480,520,100,100}); //2
+    buttonPos[SCENE_CLIENT_1].push_back({580,520,100,100}); //3
+    buttonPos[SCENE_CLIENT_1].push_back({680,520,100,100}); //4
+    buttonPos[SCENE_CLIENT_1].push_back({280,620,100,100}); //5
+    buttonPos[SCENE_CLIENT_1].push_back({380,620,100,100}); //6
+    buttonPos[SCENE_CLIENT_1].push_back({480,620,100,100}); //7
+    buttonPos[SCENE_CLIENT_1].push_back({580,620,100,100}); //8
+    buttonPos[SCENE_CLIENT_1].push_back({680,620,100,100}); //9
+    buttonPos[SCENE_CLIENT_1].push_back({780,620,100,100}); //back
+    buttonPos[SCENE_CLIENT_1].push_back({720,740,250,100}); //enter
     buttonPos[SCENE_CUSTOMIZE].push_back({36,57-scrollValue,236,120}); //??Á•????????Â∏•??
     buttonPos[SCENE_CUSTOMIZE].push_back({930,130-scrollValue,0,0}); //??????Á¥?????(Á≠ùÂêæ????Â∏•??)
     buttonPos[SCENE_CUSTOMIZE].push_back({900,370-scrollValue,0,0}); //??È¥ª?„è???Á¥?????(Á≠ùÂêæ????Â∏•??)
@@ -318,7 +318,6 @@ void RenderPasscodeWindow(){
     //??????
     DrawBackGround();
 
-
     //back
     if(game.selectButton == 0){
         uiImg[uname_backButton].drawTexture(buttonPos[game.scene][0].x-20,buttonPos[game.scene][0].y-20,buttonPos[game.scene][0].w+40,buttonPos[game.scene][0].h+40);
@@ -328,27 +327,32 @@ void RenderPasscodeWindow(){
     }
     
     // ???Áµ?????Ëåµ?ËÖìÂ?¥??????????È¥ª?ÊΩ??Ëã•?????
-    textImg[tname_inputPasscode].drawTexture(300,100);
+    uiImg[uname_rankingBoard].drawTexture(100,220,uiImg[uname_rankingBoard].w*1.44,uiImg[uname_rankingBoard].h*0.2);
+    uiImg[uname_inputPasscodeNum].drawTexture(305,230,uiImg[uname_inputPasscodeNum].w*2,uiImg[uname_inputPasscodeNum].h*2);
+    boxColor(game.render,290,350,860,470,0xffffffff);
 
     //??„É•?????????????Ëã•??????Âû©??Ëåµ?ËÖ??
     for(int i=0; game.port[i] != '\0'; i++)
     {
-        textImg[tname_0+game.port[i]-'0'].drawTexture(300+i*80,180);
+        textImg[tname_0+game.port[i]-'0'].drawTexture(430+i*80,340);
     }
 
     //?????Â∏•?ÊΩ???Ëåµ?ËÖìÂ?¥?????0???~???9???
     for(int i=0; i<=9; i++){
+        boxColorRect(game.render,&buttonPos[game.scene][i+1],0xffffffff);
         rectangleColorRect(game.render,&buttonPos[game.scene][i+1],0xff000000);
-        textImg[tname_0+i].drawTexture(buttonPos[game.scene][i+1].x +10,buttonPos[game.scene][i+1].y-20);
+        textImg[tname_0+i].drawTexture(buttonPos[game.scene][i+1].x+30,buttonPos[game.scene][i+1].y-20);
     }
 
     //?????Â∏•?ÊΩ???Ëåµ?ËÖìÂ?¥?????X???
+    boxColorRect(game.render,&buttonPos[game.scene][11],0xffffffff);
     rectangleColorRect(game.render,&buttonPos[game.scene][11],0xff000000);
-    textImg[tname_del].drawTexture(buttonPos[game.scene][11].x +10,buttonPos[game.scene][11].y-20);
+    textImg[tname_del].drawTexture(buttonPos[game.scene][11].x +8,buttonPos[game.scene][11].y+10,textImg[tname_del].w/2,textImg[tname_del].h/2);
     
     /* ?????Ëã•??????Âû©??5ÁΩ????„É•?????????????? */
     if(strlen(game.port)>=4){
         //?????Â∏•?ÊΩ???Ëåµ?ËÖìÂ?¥?????ËÖ?Èò™?????
+        boxColorRect(game.render,&buttonPos[game.scene][12],0xffffffff);
         rectangleColorRect(game.render,&buttonPos[game.scene][12],0xff000000);
         textImg[tname_enter].drawTexture(buttonPos[game.scene][12].x +10,buttonPos[game.scene][12].y-20);
     }
