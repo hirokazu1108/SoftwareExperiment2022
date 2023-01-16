@@ -351,13 +351,16 @@ float x,y,z;
 void moveScoreBall(void){
     //int move;
     int num;
+    float tamax;
+    float tamaz;
+    float tamay;
     
     for(int i=0; i<scoreBallNum; i++){
          for(int j = 0; j < gClientNum; j++){
              if(ary_scoreBall[i].pos.x + 50 > player[j].pos.x && ary_scoreBall[i].pos.x - 50 < player[j].pos.x){
                 if(ary_scoreBall[i].pos.y + 50 > player[j].pos.y && ary_scoreBall[i].pos.y - 50 < player[j].pos.y){
                 if(ary_scoreBall[i].pos.z + 50 > player[j].pos.z && ary_scoreBall[i].pos.z - 50 < player[j].pos.z){
-                ary_scoreBall[i].howMove = Move_atack;
+                
             if(ary_scoreBall[i].pos.y + 2 > player[j].pos.y && ary_scoreBall[i].pos.y - 2 < player[j].pos.y&&ary_scoreBall[i].pos.x + 2 > player[j].pos.x && ary_scoreBall[i].pos.x - 2 < player[j].pos.x
             &&ary_scoreBall[i].pos.z + 2 > player[j].pos.z && ary_scoreBall[i].pos.z - 2 < player[j].pos.z){
                 ary_scoreBall[i].howMove = Move_atack;
@@ -372,26 +375,32 @@ void moveScoreBall(void){
                 ary_scoreBall[i].howMove = Move_atack;
             }
             else if(ary_scoreBall[i].pos.z  > player[j].pos.x && ary_scoreBall[i].pos.z  > player[j].pos.y ){
-                ary_scoreBall[i].howMove = Move_atack;
+                ary_scoreBall[i].howMove = Move_aho;
             }
             else if(ary_scoreBall[i].pos.z  > player[j].pos.x){
-                ary_scoreBall[i].howMove = Move_tossinn;
+                ary_scoreBall[i].howMove = Move_henntai;
             }
             else if(ary_scoreBall[i].pos.y  > player[j].pos.x){
                 ary_scoreBall[i].howMove = Move_atack;
             }
             else{
-                ary_scoreBall[i].howMove = Move_henntai;
+                ary_scoreBall[i].howMove = Move_dami;
             }
 
-
-
+            
                 num = j;
                 break;
              }
              }
              }
+             else {
+                ary_scoreBall[i].howMove = Move_aho;
+                tamax = ary_scoreBall[i].pos.x;
+                tamay = ary_scoreBall[i].pos.y;
+                tamaz = ary_scoreBall[i].pos.z;
+             }
          }
+         
         switch(ary_scoreBall[i].howMove)
         {
             case Move_Stop:
@@ -445,10 +454,16 @@ void moveScoreBall(void){
                 ary_scoreBall[i].howMove = Move_Stop;
                 break;
             case Move_aho:
-                ary_scoreBall[i].pos.x = ary_scoreBall[i].pos.x+sin(move1)*5;
-                //ary_scoreBall[i].pos.y = ary_scoreBall[i].pos.y+cos(move);
+            if(rand()%50 > 25 && i%2 == 0){
+                ary_scoreBall[i].pos.x = tamax +sin(move1);
+            }
+            else if(rand()%50 < 20)
+                ary_scoreBall[i].pos.y = tamay+cos(move1);
+                else{
+                ary_scoreBall[i].pos.z = tamaz+cos(move1);
+                }
                 
-                move1 = move1 + 0.5;
+                move1 = move1 + 0.001;
                 ary_scoreBall[i].howMove = Move_Stop;
                 break;
             case Move_tossinn:
