@@ -388,6 +388,9 @@ void RenderDeviceNumWindow(void){
     //??„É•????????????????„Ç??Âê????Âû©??Ëåµ?ËÖ??
     for(int i=0; game.deviceNum[i] != '\0'; i++)
     {
+        if(game.deviceNum[0] == 'L'){
+            break;
+        }
         textImg[tname_0+game.deviceNum[i]-'0'].drawTexture(580+i*80,350);
     }
 

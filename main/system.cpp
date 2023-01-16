@@ -91,11 +91,14 @@ void PushedButton(void){
             switch(game.selectButton){
                 case 0://serverボタン
                     game.scene = SCENE_SERVER_0;
-                    game.selectButton = 0;
+                    game.selectButton = 1;
                     break;
                 case 1://clientボタン
                     game.scene = SCENE_CLIENT_0;
                     game.selectButton = 12;
+                    for(int i=0; game.deviceNum[i]!='\0';i++){
+                        game.deviceNum[i] = '\0';
+                    }
                     break;
                 case 2://customizeボタン
                     game.scene = SCENE_CUSTOMIZE;
@@ -126,6 +129,10 @@ void PushedButton(void){
                     game.scene = SCENE_SERVER_1;
                     break;
             }
+            for(int i=0; game.port[i]!='\0';i++){
+               game.port[i] = '\0';
+            }
+            game.selectButton = 1;
             printf("clientNum:%d\n",game.clientNum);
             break;
         case SCENE_SERVER_1:
@@ -173,13 +180,19 @@ void PushedButton(void){
                     printf("LocalHost\n");
                     game.scene = SCENE_CLIENT_1;
                     game.selectButton = 0;
+                    for(int i=0; game.port[i]!='\0';i++){
+                        game.port[i] = '\0';
+                    }
                 case 13://確定ボタン
                     if(strlen(game.deviceNum) != 3){
                         break;
                     }
                     printf("deviceNum:%s\n",game.deviceNum);
                     game.scene = SCENE_CLIENT_1;
-                    game.selectButton = 0;
+                    game.selectButton = 1;
+                    for(int i=0; game.port[i]!='\0';i++){
+                        game.port[i] = '\0';
+                    }
                     break;
                 default:
                     if(strlen(game.deviceNum) < 3){
@@ -197,6 +210,9 @@ void PushedButton(void){
                 case 0://back
                     game.scene = SCENE_CLIENT_0;
                     game.selectButton = 0;
+                    for(int i=0; game.deviceNum[i]!='\0';i++){
+                        game.deviceNum[i] = '\0';
+                    }
                     break;
                 case 11://削除ボタン
                     if(strlen(game.port)>0)

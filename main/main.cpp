@@ -442,7 +442,10 @@ void ExcuteInput(void){
                         game.scene = SCENE_SERVER_0;
                     else if(game.scene == SCENE_CLIENT_1)
                         game.scene = SCENE_CLIENT_0;
-                    game.selectButton = 0;
+                    game.selectButton = 1;
+                    for(int i=0; game.deviceNum[i]!='\0';i++){
+                        game.deviceNum[i] = '\0';
+                    }
                     break;
                 case INPUT_BACKSPACE:
                     game.selectButton = 11;//???????????????
