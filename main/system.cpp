@@ -209,7 +209,7 @@ void PushedButton(void){
                     printf("port:%s\n",game.port);
                     game.selectButton = 0;
                     LaunchClient();
-                    game.scene = SCENE_None;
+                    game.scene = SCENE_CLIENT_WAIT;
                     break;
                 default:
                     if(strlen(game.port) < 4){
