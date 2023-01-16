@@ -357,8 +357,35 @@ void moveScoreBall(void){
              if(ary_scoreBall[i].pos.x + 50 > player[j].pos.x && ary_scoreBall[i].pos.x - 50 < player[j].pos.x){
                 if(ary_scoreBall[i].pos.y + 50 > player[j].pos.y && ary_scoreBall[i].pos.y - 50 < player[j].pos.y){
                 if(ary_scoreBall[i].pos.z + 50 > player[j].pos.z && ary_scoreBall[i].pos.z - 50 < player[j].pos.z){
+                ary_scoreBall[i].howMove = Move_atack;
+            if(ary_scoreBall[i].pos.y + 2 > player[j].pos.y && ary_scoreBall[i].pos.y - 2 < player[j].pos.y&&ary_scoreBall[i].pos.x + 2 > player[j].pos.x && ary_scoreBall[i].pos.x - 2 < player[j].pos.x
+            &&ary_scoreBall[i].pos.z + 2 > player[j].pos.z && ary_scoreBall[i].pos.z - 2 < player[j].pos.z){
+                ary_scoreBall[i].howMove = Move_atack;
+            }
+            else if(ary_scoreBall[i].pos.x  > player[j].pos.x && ary_scoreBall[i].pos.y  > player[j].pos.y){
+                ary_scoreBall[i].howMove = Move_henntai;
+            }
+            else if(ary_scoreBall[i].pos.x  > player[j].pos.x && ary_scoreBall[i].pos.z  > player[j].pos.z){
+                ary_scoreBall[i].howMove = Move_player;
+            }
+            else if(ary_scoreBall[i].pos.y  < player[j].pos.y && ary_scoreBall[i].pos.z  < player[j].pos.z){
+                ary_scoreBall[i].howMove = Move_atack;
+            }
+            else if(ary_scoreBall[i].pos.z  > player[j].pos.x && ary_scoreBall[i].pos.z  > player[j].pos.y ){
+                ary_scoreBall[i].howMove = Move_atack;
+            }
+            else if(ary_scoreBall[i].pos.z  > player[j].pos.x){
                 ary_scoreBall[i].howMove = Move_tossinn;
-                
+            }
+            else if(ary_scoreBall[i].pos.y  > player[j].pos.x){
+                ary_scoreBall[i].howMove = Move_atack;
+            }
+            else{
+                ary_scoreBall[i].howMove = Move_henntai;
+            }
+
+
+
                 num = j;
                 break;
              }
