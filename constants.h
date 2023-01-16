@@ -21,7 +21,7 @@
 
 
 #define PORT			(u_short)88888	/* デフォルトポート番号 */
-#define MAX_CLIENTS		4				/* 最大プレイ人数 */
+#define MAX_CLIENTS		6				/* 最大プレイ人数 */
 #define MAX_DATA		200
 #define MAX_BULLET_NUM   25    // 最大弾数
 #define BULLET_SPEED   0.5f     // 弾の速度
