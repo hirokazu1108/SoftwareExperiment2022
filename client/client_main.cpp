@@ -125,7 +125,7 @@ float calmap(int i);
 #define TEX_HEIGHT 32
 #define TEX_WIDTH 32
 static GLubyte image[TEX_HEIGHT][TEX_WIDTH][4];
-char *modelname[] = {"player_red.obj","player_blue.obj","player_yellow.obj","player_green.obj","cloud.obj" ,"under_cloud.obj" ,"data/castle.obj"} ;
+char *modelname[] = {"player_red.obj","player_blue.obj","player_yellow.obj","player_green.obj","cloud.obj" ,"under_cloud.obj" ,"data/castle.obj","laser.obj"} ;
 int cloud_flag = 0;
 
 /***********************************************************
@@ -280,6 +280,8 @@ void display(void)
                 lists(5);
                 glmScale(model[6], 36.00);
                 lists(6);
+		glmScale(model[7], 1000.00);
+                lists(7);
                 cloud_flag = 1;
             }
             
@@ -318,6 +320,16 @@ void display(void)
             }
         }
     }*/
+    glPushMatrix(); 
+    glEnable(GL_BLEND);
+    glTranslatef(player[0].pos.x, player[0].pos.y,player[0].pos.z);
+    glRotatef(player[0].turn1*57.5, 0, 1, 0);
+    glRotatef(player[0].turn2*57.5*-1, 1, 0, 0);
+    glColor4f(1.0f,1.0f,1.0f,0.95f);
+    glCallList(model_list[7]);
+    glDisable(GL_BLEND);
+    glPopMatrix();
+	
     glPushMatrix(); 
     glTranslatef(0,0,0);
     glCallList(model_list[4]);
