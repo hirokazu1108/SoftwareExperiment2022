@@ -144,8 +144,8 @@ void Collider(void){
                     player[clientID].isBarrier -= player[array_bullet[j].shooter_id].attack * player[array_bullet[j].shooter_id].rate_attack / player[i].parm[PARM_HP];
                 }
                 else{
-                    //player[i].hp -= player[array_bullet[j].shooter_id].attack * player[array_bullet[j].shooter_id].rate_attack / player[i].parm[PARM_HP];
-                    player[i].hp -= 0.1;
+                    player[i].hp -= player[array_bullet[j].shooter_id].attack * player[array_bullet[j].shooter_id].rate_attack / player[i].parm[PARM_HP];
+
                 }
                 deleteBullet(j);
 
