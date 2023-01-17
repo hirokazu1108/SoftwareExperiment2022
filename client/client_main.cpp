@@ -204,6 +204,9 @@ void display(void)
     if(player[clientID].isDisable > 0.0f){
         player[clientID].isDisable -= 0.01f;
     }
+    if(player[clientID].isSpecial > 0.0f){
+        player[clientID].isSpecial -= 0.01f;
+    }
     // death
     if(player[clientID].anim > 0.0f){
         player[clientID].anim -= 1.0f;
@@ -345,8 +348,23 @@ void display(void)
                 glutSolidSphere(1.0,12,12);
                 glDisable(GL_BLEND);
                 glPopMatrix();
+        }
+
+        if(player[i].isSpecial > 0.0f){
+            for(int j=0; j<scoreBallNum; j++){
+                glPushMatrix(); 
+                glColor3f(1,0,0);
+                glLineWidth(5);
+                glBegin(GL_LINES);
+                glVertex3f( player[i].pos.x, player[i].pos.y, player[i].pos.z );
+                glVertex3f( ary_scoreBall[j].pos.x, ary_scoreBall[j].pos.y, ary_scoreBall[j].pos.z );
+                glEnd();
+                glPopMatrix();
             }
+        }
     }
+
+    
 
     /* Draw ui(right up) */
     glPushMatrix();
@@ -511,6 +529,7 @@ void display(void)
         glColor3f(0.0f,0.0f,0.0f);
 
         //glLineWidth(10);
+        glLineWidth(1);
         glBegin(GL_LINES);
 		glVertex2f(-1.8,1.5);
 		//glVertex2f(-1.8*sin(player[clientID].turn1),2.0);
@@ -736,7 +755,7 @@ void Oval2D(float radius,int x,int y,float ovalx,float ovaly)
   float y1 = radius * sin(th1_rad)*(ovaly/100.0f);
   float x2 = radius * cos(th2_rad)*(ovalx/100.0f);
   float y2 = radius * sin(th2_rad)*(ovaly/100.0f);
-
+  glLineWidth(1);
   glBegin(GL_LINES);   
    glVertex2f( x1+x, y1+y );     
    glVertex2f( x2+x, y2+y );
@@ -1065,6 +1084,7 @@ void keyboard2(unsigned char key, int x, int y)
 
     case 'z':
         can_special = true;
+        player[clientID].isSpecial = (float)MAX_LINES_TIME;
         useSpecial();
         break;
     default:
