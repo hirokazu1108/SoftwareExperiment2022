@@ -1084,7 +1084,6 @@ void keyboard2(unsigned char key, int x, int y)
 
     case 'z':
         can_special = true;
-        player[clientID].isSpecial = (float)MAX_LINES_TIME;
         useSpecial();
         break;
     default:
