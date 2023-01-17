@@ -18,7 +18,7 @@ void PlayerInit(void){
         player[i].dir = glm::vec3(0,0,0);
         player[i].pos = glm::vec3(0,0,0);//spawnPos[i];
         player[i].upVec = glm::vec3(0,0,0);
-	player[i].rate_attack = 1.0;
+	    player[i].rate_attack = 1.0;
         player[i].turn1 = 0;
         player[i].turn2 = 0;
         player[i].turn3 = 0;
@@ -34,6 +34,7 @@ void PlayerInit(void){
         player[i].kill_boss = 0;
         player[i].isBarrier = (float)MAX_BARRIER;
         player[i].isDisable = 0.0f;
+        player[i].isSpecial = 0.0f;
 	    player[i].ability = UP_ATTACK;
         player[i].skill = SKILL_ATTACK;
         player[i].special = SPECIAL_BIGBULLET;
@@ -89,6 +90,27 @@ bool OnColliderSphere(Sphere a, Sphere b){
   return result;
 }
 
+bool OnColliderLinesSphere(const Sphere *a, glm::vec3 sp, glm::vec3 ep){
+    glm::vec3 sv = glm::normalize(ep-sp);
+    glm::vec3 pv = a->pos - sp;
+    float d = glm::dot(sv,pv);
+
+    if(glm::length(ep-a->pos) <= a->radius){
+        return true;
+    }
+    else if(glm::length(sp-a->pos) <= a->radius){
+        return true;
+    }
+    else if(0<d && d<glm::length(ep-sp)){
+        pv -= d*sv;
+        if(glm::length(pv) < a->radius)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 /* player???å½?????????¤å??????????? */
 void drawPlayerCollider(void){
     for(int i = 0; i < gClientNum; i++){
@@ -122,12 +144,26 @@ void Collider(void){
                     player[clientID].isBarrier -= player[array_bullet[j].shooter_id].attack * player[array_bullet[j].shooter_id].rate_attack / player[i].parm[PARM_HP];
                 }
                 else{
-                    player[i].hp -= player[array_bullet[j].shooter_id].attack * player[array_bullet[j].shooter_id].rate_attack / player[i].parm[PARM_HP];
+                    //player[i].hp -= player[array_bullet[j].shooter_id].attack * player[array_bullet[j].shooter_id].rate_attack / player[i].parm[PARM_HP];
+                    player[i].hp -= 0.1;
                 }
                 deleteBullet(j);
 
                if(player[i].hp <= 0.0f){
                     player[array_bullet[j].shooter_id].kill_player += 1; // kill player
+                }
+            }
+        }
+        
+        if(player[i].isSpecial > 0.0f && i != clientID){
+            for(int j=0; j<scoreBallNum; j++){
+                if(OnColliderLinesSphere(&player[clientID].collider, player[i].pos, ary_scoreBall[j].pos)){
+                    player[clientID].hp -= 0.1;
+                    printf("hit lines\n");
+                    if(player[clientID].hp <= 0.0f){
+                        SendPlayerInfoData(i,0,+1); //client[i]'s kii_player num ++
+                        player[clientID].death += 1;
+                    }
                 }
             }
         }
@@ -162,6 +198,8 @@ void Collider(void){
                 }
             }
         }
+
+        
     }
 }
 
@@ -202,11 +240,15 @@ void useSpecial(void){
             case SPECIAL_DISABLE:
                 player[clientID].isDisable = (float)MAX_DISABLE_TIME;
                 break;
+            case SPECIAL_BIGBULLET:
+                break;
+            case SPECIAL_LINES:
+                player[clientID].isSpecial = (float)MAX_LINES_TIME;
+                break;
 	    case SPECIAL_GAMBLE:
 
                 break;
-            case SPECIAL_BIGBULLET:
-                break;
+            
             default:
                 break;
         }

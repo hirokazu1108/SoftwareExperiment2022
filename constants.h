@@ -30,6 +30,7 @@
 #define BARRIER_RADIUS 3.0f
 #define MAX_BARRIER 4.0f //hp
 #define MAX_DISABLE_TIME 3.0f
+#define MAX_LINES_TIME 20.0f //lines
 #define MAX_SPEED 2.0f
 #define MAX_ATTACK 2.0f
 #define BULLET_RADIUS 0.3       //radius of bullet collider
@@ -41,13 +42,14 @@
 #define RANKING_DATA 'r'
 #define SCOREBALL_COMMAND 's'
 #define TIMER_COMMAND 't'
+#define PLAYERINFO_COMMAND 'i'
 
 #define PARAMATER_MAX 5         //max value of status paramaters
 #define PARAMATER_NUM 5         //num of status paramaters
 #define PARAMATER_SUM_MAX 10    //max of sum of status paramaters
 #define NAME_MAX_LENGTH 10      //max length of client name
 #define SKILL_NUM 3             //num of skills
-#define SPECIAL_NUM 3            //num of specials
+#define SPECIAL_NUM 4            //num of specials
 #define FILENAME_GAMEDATA "../data/gamedata.bin"
 #define FILENAME_RANKINGDATA "../data/ranking.txt"
 #define GAMETIME 100
@@ -82,6 +84,7 @@ typedef enum{
     SPECIAL_BARRIER,
     SPECIAL_DISABLE,
     SPECIAL_BIGBULLET,
+    SPECIAL_LINES,
     SPECIAL_GAMBLE,
     SPECIAL_POWERUP,
     SPECIAL_LASER,
@@ -125,6 +128,7 @@ public:
     int reloadTime;
     float isBarrier; //0< : barrier mode
     float isDisable; //0< : toumei mode
+    float isSpecial; //0< ::special mode
     float score;
     int kill_player;
     int death;
