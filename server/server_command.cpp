@@ -71,7 +71,21 @@ int ExecuteCommand(char command,int pos)
                 }
             }
             break;
-	    case END_COMMAND:
+	case PLAYERINFO_COMMAND:
+            {
+                int mode, cindex;
+                RecvData(pos, &mode, sizeof(int));
+                RecvData(pos, &cindex,sizeof(int));
+                switch(mode){
+                    case 0://kill_player
+                        player[cindex].kill_player += 1;
+                    break;
+                }
+                SendData(cindex, &command,sizeof(char));
+                SendData(cindex, &player[cindex],sizeof(Player));
+            }
+            break;
+	 case END_COMMAND:
 			dataSize = 0;
 			/* ??????????????? */
 			SetCharData2DataBlock(data,command,&dataSize);
