@@ -1019,6 +1019,7 @@ void keyboard(unsigned char key, int x, int y)
          player[clientID].pos.z =player[clientID].pos.z-cos(player[clientID].turn1)*cos(player[clientID].turn2);
          player[clientID].pos.y = player[clientID].pos.y - sin(player[clientID].turn2);
          player[clientID].collider.pos = player[clientID].pos;
+	player[clientID].dir = glm::vec3(-sin(player[clientID].turn1)*cos(player[clientID].turn2), - sin(player[clientID].turn2), -cos(player[clientID].turn1)*cos(player[clientID].turn2));
       
         //printf("%f\n",player[clientID].pos.x);
        }
@@ -1534,6 +1535,7 @@ void move(){
          player[clientID].pos.z =player[clientID].pos.z-cos(player[clientID].turn1)*cos(player[clientID].turn2)*0.1*player[clientID].speed;
          player[clientID].pos.y = player[clientID].pos.y - sin(player[clientID].turn2)*0.1*player[clientID].speed;
          player[clientID].collider.pos = player[clientID].pos;
+	player[clientID].dir = glm::vec3(-sin(player[clientID].turn1)*cos(player[clientID].turn2), - sin(player[clientID].turn2), -cos(player[clientID].turn1)*cos(player[clientID].turn2));
       
 
       if(player[clientID].pos.z>WORLDSIZE_Z||player[clientID].pos.z<-WORLDSIZE_Z){
