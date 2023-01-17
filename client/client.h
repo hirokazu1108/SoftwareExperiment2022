@@ -50,11 +50,13 @@ extern void SendEndCommand(void);
 extern void SendPlayerDataCommand(void);
 extern void SendBulletDataCommand(int num);
 extern void SendScoreBallDataCommand(void);
+extern void SendPlayerInfoData(int clientIndex, int mode,int num);
 
 /* client_func.cpp */
 extern void PlayerInit(void);
 extern void AudioInit(int *argc, char **argv);
 extern bool OnColliderSphere(Sphere a, Sphere b);
+extern bool OnColliderLinesSphere(const Sphere *a, glm::vec3 sp, glm::vec3 ep);
 extern void drawPlayerCollider(void);
 extern void Collider(void);
 extern void Ability(int id);
