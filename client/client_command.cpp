@@ -82,6 +82,9 @@ int ExecuteCommand(char command)
         case TIMER_COMMAND:
             RecvData(&game.time, sizeof(unsigned int));
             break;
+        case PLAYERINFO_COMMAND:
+            RecvData(&player[clientID],sizeof(Player));
+            break;
         case END_COMMAND:
             if(isRanking){
                 endFlag = 0;
@@ -157,6 +160,21 @@ void SendScoreBallDataCommand(void){
     //ScoreBallDataの送信
     
     SendData(&ary_scoreBall[scoreBallNum-1],sizeof(ScoreBall));
+}
+
+
+// mode 0:kill_player num
+void SendPlayerInfoData(int clientIndex, int mode,int num){
+    char com = PLAYERINFO_COMMAND;
+    /* データの送信 */
+    SendData(&com,sizeof(char));
+
+    num=1;//not send
+
+    //Dataの送信
+    SendData(&mode, sizeof(int));
+    SendData(&clientIndex,sizeof(int));
+
 }
 
 /*****
