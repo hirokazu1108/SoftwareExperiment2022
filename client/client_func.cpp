@@ -453,7 +453,8 @@ void moveScoreBall(void){
                         }
                     }
                     if(player[j].kill_enemy < 5){
-                         ary_scoreBall[i].howMove = Move_atack;
+                         //ary_scoreBall[i].howMove = Move_atack;
+                         ary_scoreBall[i].howMove = Move_tossinn;
                     }
                     else if(player[i].kill_player > 2){
                         ary_scoreBall[i].howMove = Move_aho;
@@ -472,7 +473,8 @@ void moveScoreBall(void){
                 tamaz = ary_scoreBall[i].pos.z;
              }
          }
-         
+         glm::vec3 dir;
+         glm::vec3 mokuhyou;
         switch(ary_scoreBall[i].howMove)
         {
             case Move_Stop:
@@ -505,7 +507,10 @@ void moveScoreBall(void){
                 ary_scoreBall[i].howMove = Move_Stop;
                 break;
             case Move_atack:
-                if(ary_scoreBall[i].pos.x  > player[num].pos.x){
+            //array_scoreBall[i].p
+             dir = glm::normalize((cal_vec(player[num].pos , ary_scoreBall[i].pos)));
+            ary_scoreBall[i].pos += dir / (1+ 2.0f);  
+                /*if(ary_scoreBall[i].pos.x  > player[num].pos.x){
                     ary_scoreBall[i].pos.x = (ary_scoreBall[i].pos.x - 0.1);
                 }
                 else{
@@ -522,10 +527,11 @@ void moveScoreBall(void){
                 }
                 else{
                     ary_scoreBall[i].pos.z = (ary_scoreBall[i].pos.z + 0.1);
-                }
+                }*/
                 ary_scoreBall[i].howMove = Move_Stop;
                 break;
             case Move_aho:
+            
             if( i%2 == 0){
                 ary_scoreBall[i].pos.x = tamax +sin(move1);
             }
@@ -536,6 +542,7 @@ void moveScoreBall(void){
                 }
                 
                 move1 = move1 + 0.001;
+               
                 ary_scoreBall[i].howMove = Move_Stop;
                 break;
             case Move_tossinn:
@@ -545,7 +552,12 @@ void moveScoreBall(void){
                 z = player[num].pos.z;
                 hit = false;
                 }
-                if(ary_scoreBall[i].pos.x  > x){
+                 mokuhyou.x = x;
+                mokuhyou.y = y;
+                mokuhyou.z = z; 
+            dir = glm::normalize((cal_vec(mokuhyou , ary_scoreBall[i].pos)));
+            ary_scoreBall[i].pos += dir / (1+ 2.0f);  
+                /*if(ary_scoreBall[i].pos.x  > x){
                     ary_scoreBall[i].pos.x = ary_scoreBall[i].pos.x - 0.1;
                 }
                 else{
@@ -562,12 +574,13 @@ void moveScoreBall(void){
                 }
                 else{
                     ary_scoreBall[i].pos.z =ary_scoreBall[i].pos.z + 0.1;
-                }
+                }*/
                 /*if(ary_scoreBall[i].pos.z -2 <= z && ary_scoreBall[i].pos.z+2 >= z && ary_scoreBall[i].pos.y-2 <= y && ary_scoreBall[i].pos.y+2 >= y
                 && ary_scoreBall[i].pos.x - 2 <= x&& ary_scoreBall[i].pos.x+2 >= x){
                     hit = true;
                 }*/
-                if(ary_scoreBall[i].pos.z ==z&& ary_scoreBall[i].pos.y == y&&ary_scoreBall[i].pos.x==x){
+                if(ary_scoreBall[i].pos.z+1 >= z&&ary_scoreBall[i].pos.z-1 <= z&& ary_scoreBall[i].pos.y+1 >= y&&ary_scoreBall[i].pos.y-1 <= y
+                &&ary_scoreBall[i].pos.x + 1>=x && ary_scoreBall[i].pos.x - 1<=x ){
                     hit = true;
                 }
                 ary_scoreBall[i].howMove = Move_Stop;
@@ -608,22 +621,22 @@ void Respawn(void){
     player[clientID].turn3 = 0;
 }
 
-// ï¼???¤ã?????????????????è§?åº????æ±???????ï¼?0Â°???180Â°ï¼?
+// ï¿½???ï¿½ï¿½?????????????????ï¿½?ï¿½????ï¿½???????ï¿½?0Â°???180Â°ï¿½?
 float cal_angle(glm::vec3 vec1, glm::vec3 vec2){
     vec1 = glm::normalize(vec1);
     vec2 = glm::normalize(vec2);
-    float dot = glm::dot( vec1, vec2 ); // ???ç©?è¨?ç®?
+    float dot = glm::dot( vec1, vec2 ); // ???ï¿½?ï¿½?ï¿½?
     float angle = glm::acos(dot) * 180.0 / M_PI;
     return angle;
 }
 
-// ï¼???¹ã????????????????????æ±???????
+// ï¿½???ï¿½ï¿½????????????????????ï¿½???????
 glm::vec3 cal_vec(glm::vec3 pos1, glm::vec3 pos2){
     glm::vec3 vec = pos1 - pos2;
     return vec;
 }
 
-// ??¿ã?¼ã?²ã????????????????¤ã?¢ã?³ã??????·ã??æ±???????
+// ??ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½????????????????ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½??????ï¿½ï¿½ï¿½??ï¿½???????
 int Target(int shooter){
     int id = NOTARGET;
     float min_value = 0.0f; 
