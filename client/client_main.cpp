@@ -483,12 +483,7 @@ void display(void)
         glColor3f(0.0f,0.0f,0.0f);
         Circle2D(0.03,0,0);
         for(int i = 0; i<gClientNum; i++){
-            if(i == clientID){
-                glColor3f(1.0f,0.0f,0.0f);
-            }
-            else{
-                glColor3f(0.0f,1.0f,0.0f);
-            }
+            glColor3f(nameColor[i][0],nameColor[i][1],nameColor[i][2]);
             Circle2D(0.03,player[i].pos.x/1000,player[i].pos.z*-1/1000);
         }
 	for(int i=0; i<scoreBallNum; i++){
@@ -499,18 +494,17 @@ void display(void)
         glEnable(GL_DEPTH_TEST);
         glPopMatrix();
     }
-
-      glPushMatrix();
+glPushMatrix();
         glDisable(GL_LIGHTING);
         glDisable(GL_DEPTH_TEST);
         uiSetting();
         glColor3f(1.0f,1.0f,1.0f);
         glRectf(-2.3,1.0,-1.3,2.0);
-        glColor3f(1.0f,0.0f,0.0f);
-        Circle2D(0.03,-1.8f,1.5f);
+        
         glColor3f(0.0f,0.0f,0.0f);
 
         //glLineWidth(10);
+        glLineWidth(1);
         glBegin(GL_LINES);
 		glVertex2f(-1.8,1.5);
 		//glVertex2f(-1.8*sin(player[clientID].turn1),2.0);
@@ -520,20 +514,53 @@ void display(void)
 		//glVertex2f(0.9 , 0.9);
 	    glEnd();
 
+        glBegin(GL_TRIANGLES);
+                glColor3f(1.0, 0.0, 0.0);
+                glVertex2f(-1.8,1.5); // (1.0, 0.0, 0.0) ???
+                glVertex2f(-0.4f, 0.4f); // (1.0, 0.0, 0.0) ???
+                glColor3f(1.0, 0.0, 1.0);
+                glVertex2f(-0.2f, 0.0f); // (1.0, 0.0, 1.0) ???
+                glEnd();
+                
+        glPopMatrix();
+
        // glRectf(-1.805,1.5,-1.795,2.0);
         for(int i = 0; i<gClientNum; i++){
+            glPushMatrix();
+            uiSetting();
+            glColor3f(nameColor[i][0],nameColor[i][1],nameColor[i][2]);
             if(i == clientID){
-               
+                Circle2D(0.03,-1.8f,1.5f);
+                glPopMatrix();
             }
             else{
                 if(player[clientID].pos.y<player[i].pos.y){
-                    glColor3f(0.0f,1.0f,0.0f);
+                    Circle2D(0.03,calmini(1,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z),calmini(2,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z));
+                    glPopMatrix();
+                    glPushMatrix();
+                    uiSetting();
+                    glBegin(GL_TRIANGLES);
+                    glColor3f(nameColor[i][0],nameColor[i][1],nameColor[i][2]);
+                    glVertex2f(calmini(1,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z),calmini(2,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z) + 0.09); // (1.0, 0.0, 0.0) ???
+                    glVertex2f(calmini(1,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z) - 0.06,calmini(2,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z) + 0.06);
+                    glVertex2f(calmini(1,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z) + 0.06,calmini(2,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z) + 0.06); // (1.0, 0.0, 0.0) ???
+                    glEnd();
+                    glPopMatrix();
                 }
                 else{
-                glColor3f(0.0f,0.0f,1.0f);
+                    Circle2D(0.03,calmini(1,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z),calmini(2,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z));
+                    glPopMatrix();
+                    glPushMatrix();
+                    uiSetting();
+                    glBegin(GL_TRIANGLES);
+                    glColor3f(nameColor[i][0],nameColor[i][1],nameColor[i][2]);
+                    glVertex2f(calmini(1,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z) - 0.06,calmini(2,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z) - 0.06);
+                    glVertex2f(calmini(1,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z),calmini(2,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z) - 0.09); 
+                    glVertex2f(calmini(1,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z) + 0.06,calmini(2,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z) - 0.06);
+                    glEnd();
+                    glPopMatrix();
                 }
             }
-            Circle2D(0.03,calmini(1,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z),calmini(2,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z));
         }
 
         // height
@@ -1560,7 +1587,7 @@ void joystick(unsigned int buttonMask, int x, int y, int z)
 {
         if (x>0)
         {
-                /* Â∑???π„????£„????????Â∑??è≥„??????????????????????? */
+                /* Â∑???π„????£„????????Â∑??ù≥„??????????????????????? */
                 printf("aiueo");
                 key1 = true;
                 if(cos(player[clientID].turn2)<0){
@@ -1586,7 +1613,7 @@ void joystick(unsigned int buttonMask, int x, int y, int z)
         }
         if (z)
         {
-                /* ?è≥„?π„????£„????????Â∑??è≥„??????????????????????? */
+                /* ?ù≥„?π„????£„????????Â∑??ù≥„??????????????????????? */
         }
         switch (buttonMask) {
                 case GLUT_JOYSTICK_BUTTON_A:
