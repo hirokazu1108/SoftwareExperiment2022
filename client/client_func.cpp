@@ -132,19 +132,18 @@ void deleteBullet(int index){
 }
 
 
-/* æ©?ä½????å½?????????¤å??????????? */
 void Collider(void){
     // player loop (player->bullet)
     for(int i=0; i<gClientNum; i++){
         for(int j=0; j<bullet_Num;j++){
-            if(OnColliderSphere(Sphere((array_bullet[j].type == SPECIAL_BIGBULLET) ? (BIGBULLET_RADIUS) : (BULLET_RADIUS), array_bullet[j].pos),((player[i].isBarrier > 0.0f) ? Sphere(BARRIER_RADIUS*BULLET_RADIUS,player[i].pos): player[i].collider))){
+            if(OnColliderSphere(Sphere((array_bullet[j].type == SPECIAL_BIGBULLET) ? (BIGBULLET_RADIUS) : (BULLET_RADIUS), array_bullet[j].pos),((player[i].isBarrier > 0.0f) ? Sphere(BARRIER_RADIUS,player[i].pos): player[i].collider))){
 
                 Ability(array_bullet[j].shooter_id);
                 printf("speed:%f\n" ,player[array_bullet[j].shooter_id].speed);
 
-                if(player[clientID].isBarrier>0.0f){
+                if(player[i].isBarrier>0.0f){
                     printf("barrier protected me!!\n");
-                    player[clientID].isBarrier -= player[array_bullet[j].shooter_id].attack * player[array_bullet[j].shooter_id].rate_attack - player[i].parm[PARM_HP];
+                    player[i].isBarrier -= player[array_bullet[j].shooter_id].attack * player[array_bullet[j].shooter_id].rate_attack - player[i].parm[PARM_HP];
                 }
                 else{
                     player[i].hp -= player[array_bullet[j].shooter_id].attack * player[array_bullet[j].shooter_id].rate_attack - player[i].parm[PARM_HP];
@@ -152,8 +151,8 @@ void Collider(void){
                 }
                 deleteBullet(j);
 
-               if(player[i].hp <= 0.0f){
-                    player[array_bullet[j].shooter_id].kill_player += 1; // kill player
+               if(player[clientID].hp <= 0.0f && player[clientID].enabled){
+                    SendPlayerInfoData(array_bullet[j].shooter_id ,0,+1); //client[i]'s kii_player num ++
                 }
             }
         }
@@ -161,10 +160,16 @@ void Collider(void){
         // lines
         if(player[i].isSpecial > 0.0f && i != clientID && player[i].special == SPECIAL_LINES){
             for(int j=0; j<scoreBallNum; j++){
-                if(OnColliderLinesSphere(&player[clientID].collider, player[i].pos, ary_scoreBall[j].pos)){
-                    player[clientID].hp -= 0.1;
-                    printf("hit lines\n");
-                    if(player[clientID].hp <= 0.0f){
+                if(OnColliderLinesSphere( (player[clientID].isBarrier > 0.0f) ? Sphere(BARRIER_RADIUS,player[clientID].pos): player[clientID].collider, player[i].pos, ary_scoreBall[j].pos)){
+                    if(player[clientID].isBarrier>0.0f){
+                        player[clientID].isBarrier -= 0.1;  //damage to barrier by lines
+                        printf("barrier protected me by lines!!\n");
+                    }
+                    else {
+                        player[clientID].hp -= 0.1;
+                        printf("hit lines\n");
+                    }
+                    if(player[clientID].hp <= 0.0f && player[clientID].enabled){
                         SendPlayerInfoData(i,0,+1); //client[i]'s kii_player num ++
                     }
                 }
@@ -173,29 +178,37 @@ void Collider(void){
 
         //damageArea  player[me]--enemy[damage] 
         if(player[i].isSpecial >0.0f && i!=clientID && player[i].special == SPECIAL_DAMAGEAREA){
-            if(OnColliderSphere(Sphere(DAMEGEAREA_RADIUS,player[i].pos),player[clientID].collider)){
-                player[clientID].hp -= 0.1;
-                printf("hit damageArea\n");
-                if(player[clientID].hp <= 0.0f){
+            if(OnColliderSphere(Sphere(DAMEGEAREA_RADIUS,player[i].pos), (player[clientID].isBarrier > 0.0f) ? Sphere(BARRIER_RADIUS,player[clientID].pos): player[clientID].collider)){
+                
+
+                if(player[clientID].isBarrier>0.0f){
+                    player[clientID].isBarrier -= 0.1;  //damage to barrier by damageArea
+                    printf("barrier protected me by damageArea!!\n");
+                }
+                else {
+                    player[clientID].hp -= 0.1;  // damage
+                    printf("hit damageArea\n");
+                }
+                if(player[clientID].hp <= 0.0f && player[clientID].enabled){
                     SendPlayerInfoData(i,0,+1); //client[i]'s kii_player num ++
                 }
             }
         }
 	    
-	//beam  player[me]--enemy[beam] 
+	    //beam  player[me]--enemy[beam] 
         if(player[i].isSpecial >0.0f && i!=clientID && player[i].special == SPECIAL_BEAM){
             for(int j=0; j<100; j++){
                 glm::vec3 d = glm::vec3(3*player[i].dir.x*(j+1),3*player[i].dir.y*(j+1),3*player[i].dir.z*(j+1));
-                if(OnColliderSphere(Sphere(1.5,player[i].pos+d),player[clientID].collider)){
+                if(OnColliderSphere(Sphere(1.5,player[i].pos+d), (player[clientID].isBarrier > 0.0f) ? Sphere(BARRIER_RADIUS,player[clientID].pos): player[clientID].collider)){
                     if(player[clientID].isBarrier>0.0f){
                         printf("barrier protected me by beam!!\n");
                         player[clientID].isBarrier -= 0.01;  //damage to barrier by beam
                     }
                     else {
-                        player[clientID].hp -= 0.01;  // dama
+                        player[clientID].hp -= 0.01;  // damage
                         printf("hit beam\n");
                     }
-                    if(player[clientID].hp <= 0.0f){
+                    if(player[clientID].hp <= 0.0f && player[clientID].enabled){
                         SendPlayerInfoData(i,0,+1); //client[i]'s kii_player num ++
                     }
                 }
@@ -204,21 +217,23 @@ void Collider(void){
         }
     }
 
+
     // scoreBall loop  (scoreBall -> player,bullet)
     for(int i=0; i<scoreBallNum; i++){
         //player
         for(int j=0; j<gClientNum; j++){
-            if(OnColliderSphere(ary_scoreBall[i].collider,((player[j].isBarrier > 0.0f) ? Sphere(BARRIER_RADIUS*BULLET_RADIUS,player[j].pos): player[j].collider))){
+            if(OnColliderSphere(ary_scoreBall[i].collider,((player[j].isBarrier > 0.0f) ? Sphere(BARRIER_RADIUS,player[j].pos): player[j].collider))){
                 //damage
                 if(player[j].isBarrier > 0.0f){
                     player[j].isBarrier -= 1.0f;
                 }
                 else{
                     player[j].hp -= 0.01f;
-                    printf("dam\n");
+                    printf("damage by scoreBall\n");
                 }
             }
         }
+
         //bullet
         for(int j=0; j<bullet_Num; j++){
             if(OnColliderSphere(ary_scoreBall[i].collider,Sphere(BULLET_RADIUS,glm::vec3(array_bullet[j].pos)))){
@@ -235,8 +250,42 @@ void Collider(void){
         }
 
         
+        for(int j=0; j<gClientNum; j++){
+            if(player[j].isSpecial >0.0f && player[j].special == SPECIAL_DAMAGEAREA){
+                //damageArea
+                if(OnColliderSphere(Sphere(DAMEGEAREA_RADIUS,player[j].pos), ary_scoreBall[i].collider)){            
+                    //score
+                    player[j].score += 0.1f;
+
+                    //delete
+                    ary_scoreBall[i].hp -= 1.0f; //damage
+                    if(ary_scoreBall[i].hp <= 0.0){
+                        player[j].kill_enemy += 1;
+                        deleteScoreBall(i);
+                    }
+                }
+            }  
+            //beam  player[me]--enemy[beam] 
+            else if(player[i].isSpecial >0.0f && i!=clientID && player[i].special == SPECIAL_BEAM){
+                for(int k=0; k<100; k++){
+                    glm::vec3 d = glm::vec3(3*player[j].dir.x*(k+1),3*player[j].dir.y*(k+1),3*player[j].dir.z*(k+1));
+                    if(OnColliderSphere(Sphere(1.5,player[j].pos+d), ary_scoreBall[i].collider)){
+                        //score
+                        player[j].score += 0.1f;
+
+                        //delete
+                        ary_scoreBall[i].hp -= 1.0f; //damage
+                        if(ary_scoreBall[i].hp <= 0.0){
+                            player[j].kill_enemy += 1;
+                            deleteScoreBall(i);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
+
 
 void Ability(int id){
     switch(player[id].ability){
