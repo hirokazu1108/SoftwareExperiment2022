@@ -171,7 +171,7 @@ void Collider(void){
         if(player[i].isSpecial >0.0f && i!=clientID && player[i].special == SPECIAL_DAMAGEAREA){
             if(OnColliderSphere(Sphere(DAMEGEAREA_RADIUS,player[i].pos),player[clientID].collider)){
                 player[clientID].hp -= 0.1;
-                printf("hit lines\n");
+                printf("hit damageArea\n");
                 if(player[clientID].hp <= 0.0f){
                     SendPlayerInfoData(i,0,+1); //client[i]'s kii_player num ++
                 }
