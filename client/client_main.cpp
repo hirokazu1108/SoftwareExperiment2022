@@ -195,15 +195,21 @@ int main(int argc, char **argv)
 void display(void)
 {
 
-    if(player[clientID].mp <= MAX_MP){
+    if(player[clientID].mp <= MAX_MP && player[clientID].isspecial == false){
         player[clientID].mp += 0.1f +player[clientID].parm[PARM_MP]*0.001;
     }
     if(player[clientID].isBarrier > 0.0f){
         player[clientID].isBarrier -= 0.01f;
+        if(player[clientID].isSpecial <= 0.0f){
+            player[clientID].isspecial == false;
+        }
     }
 
     if(player[clientID].isSpecial > 0.0f){
         player[clientID].isSpecial -= 0.01f;
+        if(player[clientID].isSpecial <= 0.0f){
+            player[clientID].isspecial == false;
+        }
     }
     else{
         player[clientID].isSpecial = 0.0f;
@@ -1762,6 +1768,9 @@ void create_bullet(int num){
         b.target_id = Target(b.shooter_id);
         b.type = SPECIAL_CHASE;
         player[b.shooter_id].isChase--;
+        if(player[b.shooter_id].isChase <= 0){
+            player[b.shooter_id].isspecial = false;
+        }
     }
     array_bullet.push_back(BULLET(b));
     bullet_Num++;

@@ -118,6 +118,7 @@ class Sphere{
 class Player{
 public:
     bool enabled;   //true????????��???????��??
+    bool isspecial;
     int type;
     float speed;
     glm::vec3 pos;
