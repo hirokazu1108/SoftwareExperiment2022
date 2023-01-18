@@ -280,7 +280,7 @@ void useSpecial(void){
 	    case SPECIAL_GAMBLE:
 
                 break;
-	ã€€ã€€case SPECIAL_BEAM:
+case SPECIAL_BEAM:
                 player[clientID].isSpecial = (float)MAX_BEAM_TIME;
                 break;
             case SPECIAL_CHASE:
@@ -608,22 +608,22 @@ void Respawn(void){
     player[clientID].turn3 = 0;
 }
 
-// ï¼’ã¤ã®ãƒ™ã‚¯ãƒˆãƒ«ã®è§’åº¦ã‚’æ±‚ã‚ã‚‹ï¼ˆ0Â°ã€œ180Â°ï¼‰
+// ï¼???¤ã?????????????????è§?åº????æ±???????ï¼?0Â°???180Â°ï¼?
 float cal_angle(glm::vec3 vec1, glm::vec3 vec2){
     vec1 = glm::normalize(vec1);
     vec2 = glm::normalize(vec2);
-    float dot = glm::dot( vec1, vec2 ); // å†…ç©è¨ˆç®—
+    float dot = glm::dot( vec1, vec2 ); // ???ç©?è¨?ç®?
     float angle = glm::acos(dot) * 180.0 / M_PI;
     return angle;
 }
 
-// ï¼’ç‚¹ã‹ã‚‰ãƒ™ã‚¯ãƒˆãƒ«ã‚’æ±‚ã‚ã‚‹
+// ï¼???¹ã????????????????????æ±???????
 glm::vec3 cal_vec(glm::vec3 pos1, glm::vec3 pos2){
     glm::vec3 vec = pos1 - pos2;
     return vec;
 }
 
-// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆç•ªå·ã‚’æ±‚ã‚ã‚‹
+// ??¿ã?¼ã?²ã????????????????¤ã?¢ã?³ã??????·ã??æ±???????
 int Target(int shooter){
     int id = NOTARGET;
     float min_value = 0.0f; 
