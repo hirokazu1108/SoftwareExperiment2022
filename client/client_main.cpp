@@ -1853,8 +1853,13 @@ void create_bullet(int num){
     b.dir = {-sin(player[clientID].turn1)*cos(player[clientID].turn2), - sin(player[clientID].turn2), -cos(player[clientID].turn1)*cos(player[clientID].turn2)};
     b.pos = player[clientID].pos + b.dir * 1.5f; 
     b.shooter_id = clientID;
-    if(player[b.shooter_id].special == SPECIAL_BIGBULLET){
+    if(player[b.shooter_id].isBigbullet > 0){
         b.pos = player[b.shooter_id].pos + b.dir * 1.5f * 5.0f;
+        b.type = SPECIAL_BIGBULLET;
+        player[b.shooter_id].isBigbullet--;
+        if(player[b.shooter_id].isBigbullet <= 0){
+            player[b.shooter_id].isspecial = false;
+        }
     }
     if(player[b.shooter_id].isChase > 0){
         b.target_id = Target(b.shooter_id);
@@ -1881,7 +1886,12 @@ void draw_bullet(int num){
             glColor3f(1.0, 1.0, 1.0);
         }
         glTranslatef(array_bullet[i].pos.x, array_bullet[i].pos.y, array_bullet[i].pos.z);
-        glutSolidSphere(BULLET_RADIUS, 16, 16);
+        if(array_bullet[i].type == SPECIAL_BIGBULLET){
+            glutSolidSphere(BIGBULLET_RADIUS, 16, 16);
+        }
+        else{
+            glutSolidSphere(BULLET_RADIUS, 16, 16);
+        }
         glPopMatrix();
     }
 }
