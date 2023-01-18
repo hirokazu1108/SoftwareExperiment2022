@@ -162,7 +162,6 @@ void Collider(void){
                     printf("hit lines\n");
                     if(player[clientID].hp <= 0.0f){
                         SendPlayerInfoData(i,0,+1); //client[i]'s kii_player num ++
-                        player[clientID].death += 1;
                     }
                 }
             }
