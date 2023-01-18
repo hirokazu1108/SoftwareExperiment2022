@@ -33,7 +33,6 @@ void PlayerInit(void){
         player[i].kill_enemy = 0;
         player[i].kill_boss = 0;
         player[i].isBarrier = (float)MAX_BARRIER;
-        player[i].isDisable = 0.0f;
         player[i].isSpecial = 0.0f;
 	    player[i].ability = UP_ATTACK;
         player[i].skill = SKILL_ATTACK;
@@ -56,6 +55,8 @@ void PlayerInit(void){
     player[clientID].attack += (float)player[clientID].parm[PARM_ATTACK] / 5.0f;
     player[clientID].speed += 0.5f * (float)player[clientID].parm[PARM_SPEED] / 5.0f;
     player[clientID].size -= player[clientID].parm[PARM_SIZE];
+
+    printf("sp:%d\n", player[clientID].special);
 
 }
 
@@ -155,7 +156,8 @@ void Collider(void){
             }
         }
         
-        if(player[i].isSpecial > 0.0f && i != clientID){
+        //lines player
+        if(player[i].special == SPECIAL_LINES && player[i].isSpecial > 0.0f && i != clientID){
             for(int j=0; j<scoreBallNum; j++){
                 if(OnColliderLinesSphere(&player[clientID].collider, player[i].pos, ary_scoreBall[j].pos)){
                     player[clientID].hp -= 0.1;
@@ -237,7 +239,7 @@ void useSpecial(void){
              	player[clientID].isBarrier = (float)MAX_BARRIER;
                 break;
             case SPECIAL_DISABLE:
-                player[clientID].isDisable = (float)MAX_DISABLE_TIME;
+                player[clientID].isSpecial = (float)MAX_DISABLE_TIME;
                 break;
             case SPECIAL_BIGBULLET:
                 break;
