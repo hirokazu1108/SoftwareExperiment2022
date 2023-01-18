@@ -33,6 +33,7 @@ void PlayerInit(void){
         player[i].death = 0;
         player[i].kill_enemy = 0;
         player[i].kill_boss = 0;
+        player[i].isBigbullet = 0;
         player[i].isChase = 0;
         player[i].isBarrier = (float)MAX_BARRIER;
         player[i].isSpecial = 0.0f;
@@ -271,6 +272,7 @@ void useSpecial(void){
                 player[clientID].isSpecial = (float)MAX_DISABLE_TIME;
                 break;
             case SPECIAL_BIGBULLET:
+                player[clientID].isBigbullet = 4;
                 break;
             case SPECIAL_LINES:
                 player[clientID].isSpecial = (float)MAX_LINES_TIME;

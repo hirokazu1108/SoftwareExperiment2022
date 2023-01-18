@@ -36,7 +36,8 @@
 #define MAX_BEAM_TIME 20.0f // beam time
 #define MAX_SPEED 2.0f
 #define MAX_ATTACK 2.0f
-#define BULLET_RADIUS 0.3       //radius of bullet collider
+#define BULLET_RADIUS 0.3f       //radius of bullet collider
+#define BIGBULLET_RADIUS 1.5f
 #define MAX_MP 100.0f
 #define NOTARGET 10
 
@@ -134,6 +135,7 @@ public:
     float hp;
     float size;
     int reloadTime;
+    int isBigbullet;
     int isChase;
     float isBarrier; //0< : barrier mode
     float isSpecial; //0< ::special mode
