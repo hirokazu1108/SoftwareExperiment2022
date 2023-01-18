@@ -1635,21 +1635,62 @@ void joystick(unsigned int buttonMask, int x, int y, int z)
         else if(y < 0){
             key4 = true;
         }
-        if (z)
+        if (z > 0)
         {
-                /* ?���?��????��????????�??���??????????????????????? */
+               
+        }
+        else if(z < 0){
+            
         }
         switch (buttonMask) {
                 case GLUT_JOYSTICK_BUTTON_A:
-                key7 = true;
+                can_special = true;
+                    useSpecial();
                 printf("a\n");
-               // glutPostRedisplay();
-                        /* ?????��?? 1 ?????��????????????????? */
-                 break;
+               break;
+
+                case GLUT_JOYSTICK_BUTTON_B:
+                if(key8){
+                    key8 = false;
+                }
+                else{
+                    key8 = true;
+                }
+                break;
+                case GLUT_JOYSTICK_BUTTON_C:
+                    if(player[clientID].mp > 0){
+                    player[clientID].pos.x = player[clientID].pos.x-sin(player[clientID].turn1)*cos(player[clientID].turn2);
+                    player[clientID].pos.z =player[clientID].pos.z-cos(player[clientID].turn1)*cos(player[clientID].turn2);
+                    player[clientID].pos.y = player[clientID].pos.y - sin(player[clientID].turn2);
+                    player[clientID].collider.pos = player[clientID].pos;
+                    player[clientID].dir = glm::vec3(-sin(player[clientID].turn1)*cos(player[clientID].turn2), - sin(player[clientID].turn2), -cos(player[clientID].turn1)*cos(player[clientID].turn2));
+                    player[clientID].mp = player[clientID].mp - 1;
+                    }
+                break;
+                case GLUT_JOYSTICK_BUTTON_D:
+                    key7 = true;
+                    
+                break;
+                case GLUT_JOYSTICK_BUTTON_E:/*5のボタン*/
+                 key7 = true;
+                break;
+                case GLUT_JOYSTICK_BUTTON_F:/*6のボタン*/
+                 key7 = true;
+                break;
+                case GLUT_JOYSTICK_BUTTON_G:/*5のボタン*/
+                can_special = true;
+                    useSpecial();
+                break;
+                case GLUT_JOYSTICK_BUTTON_H:/*5のボタン*/
+                can_special = true;
+                    useSpecial();
+                break;
+
+
 
                 
          }
-         printf("%u\n",buttonMask);
+         //printf("%u\n",buttonMask);
 }
 
 /***********************************************************
