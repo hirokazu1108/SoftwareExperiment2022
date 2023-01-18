@@ -166,6 +166,17 @@ void Collider(void){
                 }
             }
         }
+
+        //damageArea  player[me]--enemy[damage] 
+        if(player[i].isSpecial >0.0f && i!=clientID && player[i].special == SPECIAL_DAMAGEAREA){
+            if(OnColliderSphere(Sphere(DAMEGEAREA_RADIUS,player[i].pos),player[clientID].collider)){
+                player[clientID].hp -= 0.1;
+                printf("hit lines\n");
+                if(player[clientID].hp <= 0.0f){
+                    SendPlayerInfoData(i,0,+1); //client[i]'s kii_player num ++
+                }
+            }
+        }
     }
 
     // scoreBall loop  (scoreBall -> player,bullet)
@@ -243,9 +254,11 @@ void useSpecial(void){
                 break;
             case SPECIAL_LINES:
                 player[clientID].isSpecial = (float)MAX_LINES_TIME;
-
                 break;
-	    case SPECIAL_GAMBLE:
+            case SPECIAL_DAMAGEAREA:
+                player[clientID].isSpecial = (float)MAX_DAMAGEAREA_TIME;
+                break;
+	        case SPECIAL_GAMBLE:
 
                 break;
             
