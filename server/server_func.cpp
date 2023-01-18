@@ -32,6 +32,7 @@ void PlayerInit(void){
         player[i].death = 0;
         player[i].kill_enemy = 0;
         player[i].kill_boss = 0;
+        player[i].isChase = 0;
         player[i].isBarrier = 0.0f;
 	    player[i].isSpecial = 0.0f;
         player[i].ability = UP_ATTACK;

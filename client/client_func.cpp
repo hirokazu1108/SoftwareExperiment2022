@@ -32,6 +32,7 @@ void PlayerInit(void){
         player[i].death = 0;
         player[i].kill_enemy = 0;
         player[i].kill_boss = 0;
+        player[i].isChase = 0;
         player[i].isBarrier = (float)MAX_BARRIER;
         player[i].isSpecial = 0.0f;
 	    player[i].ability = UP_ATTACK;
@@ -55,6 +56,7 @@ void PlayerInit(void){
     player[clientID].attack += (float)player[clientID].parm[PARM_ATTACK] / 5.0f;
     player[clientID].speed += 0.5f * (float)player[clientID].parm[PARM_SPEED] / 5.0f;
     player[clientID].size -= player[clientID].parm[PARM_SIZE];
+    player[clientID].special = SPECIAL_CHASE;
 
 }
 
@@ -261,7 +263,9 @@ void useSpecial(void){
 	        case SPECIAL_GAMBLE:
 
                 break;
-            
+            case SPECIAL_CHASE:
+                player[clientID].isChase = 4;
+                break;
             default:
                 break;
         }
@@ -582,4 +586,62 @@ void Respawn(void){
     player[clientID].turn1 = 0;
     player[clientID].turn2 = 0;
     player[clientID].turn3 = 0;
+}
+
+// ２つのベクトルの角度を求める（0°〜180°）
+float cal_angle(glm::vec3 vec1, glm::vec3 vec2){
+    vec1 = glm::normalize(vec1);
+    vec2 = glm::normalize(vec2);
+    float dot = glm::dot( vec1, vec2 ); // 内積計算
+    float angle = glm::acos(dot) * 180.0 / M_PI;
+    return angle;
+}
+
+// ２点からベクトルを求める
+glm::vec3 cal_vec(glm::vec3 pos1, glm::vec3 pos2){
+    glm::vec3 vec = pos1 - pos2;
+    return vec;
+}
+
+// ターゲットのクライアント番号を求める
+int Target(int shooter){
+    int id = NOTARGET;
+    float min_value = 0.0f; 
+    float angle[gClientNum] = {};
+    float len[gClientNum] = {};
+    glm::vec3 x[gClientNum] = {};
+    glm::vec3 y[gClientNum] = {};
+
+    for(int i = 0; i < gClientNum; i++){
+        angle[i] = 90.0f;
+        len[i] = 1000.0f;
+        x[i] = {glm::vec3(0.0f,0.0f,0.0f)};
+        y[i] = {glm::vec3(1000.0f,1000.0f,1000.0f)};
+    }
+
+    glm::vec3 dir_vec = {-sin(player[shooter].turn1)*cos(player[shooter].turn2), - sin(player[shooter].turn2), -cos(player[shooter].turn1)*cos(player[shooter].turn2)};
+    for(int i = 0; i < gClientNum; i++){
+        if(i != shooter){
+            x[i] = cal_vec(player[i].pos, player[shooter].pos);
+            angle[i] = cal_angle(x[i], dir_vec); 
+            if(angle[i] >= 0.0f && angle[i] <= 45.0f){
+                y[i] = x[i];
+                len[i] = glm::length(y[i]);
+            }    
+        }
+    }
+    min_value = len[0];
+    if(len[0] != 1000.f){
+        id = 0;
+    }
+    for (int j = 0; j < gClientNum; j++) {
+        if(j != shooter){   
+            if (len[j] < min_value) {
+                min_value = len[j];
+                id = j;
+            }
+        }
+    }
+
+    return id;
 }
