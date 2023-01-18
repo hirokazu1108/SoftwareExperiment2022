@@ -328,16 +328,7 @@ void display(void)
             }
         }
     }*/
-    glPushMatrix(); 
-    glEnable(GL_BLEND);
-    glTranslatef(player[0].pos.x, player[0].pos.y,player[0].pos.z);
-    glRotatef(player[0].turn1*57.5, 0, 1, 0);
-    glRotatef(player[0].turn2*57.5*-1, 1, 0, 0);
-    glColor4f(1.0f,1.0f,1.0f,0.95f);
-    glCallList(model_list[7]);
-    glDisable(GL_BLEND);
-    glPopMatrix();
-	
+
     glPushMatrix(); 
     glTranslatef(0,0,0);
     glCallList(model_list[4]);
@@ -396,7 +387,33 @@ void display(void)
                 glDisable(GL_BLEND);
             glPopMatrix();
         }
-
+	
+	        // beam
+        /*
+        if(player[i].isSpecial > 0.0f && player[i].special == SPECIAL_BEAM){
+            glPushMatrix(); 
+            glEnable(GL_BLEND);
+            glTranslatef(player[i].pos.x, player[i].pos.y,player[i].pos.z);
+            glRotatef(player[i].turn1*57.5, 0, 1, 0);
+            glRotatef(player[i].turn2*57.5*-1, 1, 0, 0);
+            glColor4f(1.0f,1.0f,1.0f,0.95f);
+            glCallList(model_list[7]);
+            glDisable(GL_BLEND);
+            glPopMatrix();
+        }
+        */
+        if(player[i].isSpecial >0.0f && player[i].special == SPECIAL_BEAM){
+            for(int j=0; j<100; j++){
+                glm::vec3 d = glm::vec3(3*player[i].dir.x*(j+1),3*player[i].dir.y*(j+1),3*player[i].dir.z*(j+1));
+                glPushMatrix();           
+                glEnable(GL_BLEND);
+                glColor4f(1.0 , 0.0 , 0.0, 0.9); 
+                glTranslatef(player[i].pos.x+d.x, player[i].pos.y+d.y, player[i].pos.z+d.z);
+                glutSolidSphere(1.5,12,12);
+                glDisable(GL_BLEND);
+                glPopMatrix();
+            }
+        }
         
     }
 
