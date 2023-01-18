@@ -37,6 +37,7 @@ void PlayerInit(void){
         player[i].isChase = 0;
         player[i].isBarrier = (float)MAX_BARRIER;
         player[i].isSpecial = 0.0f;
+        player[i].transformIndex = 0;
 	    player[i].ability = UP_ATTACK;
         player[i].skill = SKILL_ATTACK;
         player[i].special = SPECIAL_BIGBULLET;
@@ -59,6 +60,7 @@ void PlayerInit(void){
     player[clientID].speed += 0.5f * (float)player[clientID].parm[PARM_SPEED] / 5.0f;
     player[clientID].parm[PARM_HP] = 0.5f + player[clientID].parm[PARM_HP] * 0.1f;
     player[clientID].size = 1.0f - player[clientID].parm[PARM_SIZE] * 0.1f;
+    player[clientID].special = SPECIAL_TRANSFORM;
 
 }
 
@@ -146,12 +148,24 @@ void Collider(void){
                     player[i].isBarrier -= player[array_bullet[j].shooter_id].attack * player[array_bullet[j].shooter_id].rate_attack - player[i].parm[PARM_HP];
                 }
                 else{
-                    player[i].hp -= player[array_bullet[j].shooter_id].attack * player[array_bullet[j].shooter_id].rate_attack - player[i].parm[PARM_HP];
-
+                    if( i!=clientID && player[i].isSpecial > 0.0f && player[i].special == SPECIAL_TRANSFORM && player[i].transformIndex == clientID){
+                        player[clientID].hp -= player[array_bullet[j].shooter_id].attack * player[array_bullet[j].shooter_id].rate_attack - player[i].parm[PARM_HP];
+                    }
+                    else if(i==clientID && player[clientID].isSpecial > 0.0f && player[clientID].special == SPECIAL_TRANSFORM){
+                        player[player[clientID].transformIndex].hp -= player[array_bullet[j].shooter_id].attack * player[array_bullet[j].shooter_id].rate_attack - player[clientID].parm[PARM_HP];
+                        printf("migawari\n");
+                    }
+                    else{
+                        player[i].hp -= player[array_bullet[j].shooter_id].attack * player[array_bullet[j].shooter_id].rate_attack - player[i].parm[PARM_HP];
+                    }
                 }
                 deleteBullet(j);
 
-               if(player[clientID].hp <= 0.0f && player[clientID].enabled){
+                //migawari
+                if(player[clientID].hp <= 0.0f && player[clientID].enabled && i!=clientID && player[i].isSpecial > 0.0f && player[i].special == SPECIAL_TRANSFORM && player[i].transformIndex == clientID){
+                    SendPlayerInfoData(i ,0,+1); 
+                }
+               else if(player[clientID].hp <= 0.0f && player[clientID].enabled){
                     SendPlayerInfoData(array_bullet[j].shooter_id ,0,+1); //client[i]'s kii_player num ++
                 }
             }
@@ -352,10 +366,15 @@ void useSpecial(void){
             case SPECIAL_DAMAGEAREA:
                 player[clientID].isSpecial = (float)MAX_DAMAGEAREA_TIME;
                 break;
-	    case SPECIAL_GAMBLE:
-
+            case SPECIAL_TRANSFORM:
+                do{
+                    player[clientID].transformIndex = rand()%gClientNum;
+                }while(player[clientID].transformIndex == clientID);
+                player[clientID].isSpecial = (float)MAX_TRANSFORM_TIME;
                 break;
-case SPECIAL_BEAM:
+	        case SPECIAL_GAMBLE:
+                break;
+            case SPECIAL_BEAM:
                 player[clientID].isSpecial = (float)MAX_BEAM_TIME;
                 break;
             case SPECIAL_CHASE:
@@ -682,6 +701,7 @@ void checkDeath(void){
             }
         }
     }
+
 }
 
 
