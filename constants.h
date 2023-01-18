@@ -31,6 +31,8 @@
 #define MAX_BARRIER 4.0f //hp
 #define MAX_DISABLE_TIME 3.0f
 #define MAX_LINES_TIME 20.0f //lines
+#define MAX_DAMAGEAREA_TIME 5.0f //damage area time
+#define DAMEGEAREA_RADIUS 2.0f
 #define MAX_SPEED 2.0f
 #define MAX_ATTACK 2.0f
 #define BULLET_RADIUS 0.3       //radius of bullet collider
