@@ -34,6 +34,7 @@
 #define MAX_DAMAGEAREA_TIME 5.0f //damage area time
 #define DAMEGEAREA_RADIUS 2.0f
 #define MAX_BEAM_TIME 20.0f // beam time
+#define MAX_TRANSFORM_TIME 10.0f
 #define MAX_SPEED 2.0f
 #define MAX_ATTACK 2.0f
 #define BULLET_RADIUS 0.3f       //radius of bullet collider
