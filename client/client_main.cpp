@@ -371,7 +371,7 @@ void display(void)
                 glColor4f(0.8 , 0.0 , 0.8, 0.4); /* ???????????? */
                 glScalef(1.0, 1.0, 1.0);
                 glTranslatef(player[i].pos.x, player[i].pos.y,player[i].pos.z);
-                glutSolidSphere(1.0,12,12);
+                glutSolidSphere(BARRIER_RADIUS,12,12);
                 glDisable(GL_BLEND);
                 glPopMatrix();
         }
