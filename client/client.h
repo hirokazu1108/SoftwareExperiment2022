@@ -65,7 +65,7 @@ extern void SendPlayerInfoData(int clientIndex, int mode,int num);
 extern void PlayerInit(void);
 extern void AudioInit(int *argc, char **argv);
 extern bool OnColliderSphere(Sphere a, Sphere b);
-extern extern bool OnColliderLinesSphere(Sphere a, glm::vec3 sp, glm::vec3 ep);
+extern bool OnColliderLinesSphere(Sphere a, glm::vec3 sp, glm::vec3 ep);
 extern void drawPlayerCollider(void);
 extern void Collider(void);
 extern void Ability(int id);
