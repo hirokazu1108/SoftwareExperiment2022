@@ -457,7 +457,7 @@ void moveScoreBall(void){
                          ary_scoreBall[i].howMove = Move_tossinn;
                     }
                     else if(player[i].kill_player > 2){
-                        ary_scoreBall[i].howMove = Move_aho;
+                        ary_scoreBall[i].howMove = Move_henntai;
                     }
 
             
@@ -556,7 +556,7 @@ void moveScoreBall(void){
                 mokuhyou.y = y;
                 mokuhyou.z = z; 
             dir = glm::normalize((cal_vec(mokuhyou , ary_scoreBall[i].pos)));
-            ary_scoreBall[i].pos += dir / (1+ 2.0f);  
+            ary_scoreBall[i].pos += dir / (1+ 6.0f);  
                 /*if(ary_scoreBall[i].pos.x  > x){
                     ary_scoreBall[i].pos.x = ary_scoreBall[i].pos.x - 0.1;
                 }
