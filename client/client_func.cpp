@@ -56,7 +56,8 @@ void PlayerInit(void){
     }
     player[clientID].attack += (float)player[clientID].parm[PARM_ATTACK] / 5.0f;
     player[clientID].speed += 0.5f * (float)player[clientID].parm[PARM_SPEED] / 5.0f;
-    player[clientID].size -= player[clientID].parm[PARM_SIZE];
+    player[clientID].parm[PARM_HP] = 0.5f + player[clientID].parm[PARM_HP] * 0.1f;
+    player[clientID].size = 1.0f - player[clientID].parm[PARM_SIZE] * 0.1f;
 
 }
 
@@ -142,10 +143,10 @@ void Collider(void){
 
                 if(player[clientID].isBarrier>0.0f){
                     printf("barrier protected me!!\n");
-                    player[clientID].isBarrier -= player[array_bullet[j].shooter_id].attack * player[array_bullet[j].shooter_id].rate_attack / player[i].parm[PARM_HP];
+                    player[clientID].isBarrier -= player[array_bullet[j].shooter_id].attack * player[array_bullet[j].shooter_id].rate_attack - player[i].parm[PARM_HP];
                 }
                 else{
-                    player[i].hp -= player[array_bullet[j].shooter_id].attack * player[array_bullet[j].shooter_id].rate_attack / player[i].parm[PARM_HP];
+                    player[i].hp -= player[array_bullet[j].shooter_id].attack * player[array_bullet[j].shooter_id].rate_attack - player[i].parm[PARM_HP];
 
                 }
                 deleteBullet(j);
