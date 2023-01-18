@@ -33,8 +33,7 @@ void PlayerInit(void){
         player[i].kill_enemy = 0;
         player[i].kill_boss = 0;
         player[i].isBarrier = 0.0f;
-        player[i].isDisable = 0.0f;
-	player[i].isSpecial = 0.0f;
+	    player[i].isSpecial = 0.0f;
         player[i].ability = UP_ATTACK;
         player[i].skill = SKILL_ATTACK;
         player[i].special = SPECIAL_BIGBULLET;

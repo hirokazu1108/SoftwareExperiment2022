@@ -128,7 +128,6 @@ public:
     float size;
     int reloadTime;
     float isBarrier; //0< : barrier mode
-    float isDisable; //0< : toumei mode
     float isSpecial; //0< ::special mode
     float score;
     int kill_player;
