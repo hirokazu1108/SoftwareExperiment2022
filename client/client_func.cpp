@@ -187,8 +187,14 @@ void Collider(void){
             for(int j=0; j<100; j++){
                 glm::vec3 d = glm::vec3(3*player[i].dir.x*(j+1),3*player[i].dir.y*(j+1),3*player[i].dir.z*(j+1));
                 if(OnColliderSphere(Sphere(1.5,player[i].pos+d),player[clientID].collider)){
-                    player[clientID].hp -= 0.01;
-                    printf("hit beam\n");
+                    if(player[clientID].isBarrier>0.0f){
+                        printf("barrier protected me by beam!!\n");
+                        player[clientID].isBarrier -= 0.01;  //damage to barrier by beam
+                    }
+                    else {
+                        player[clientID].hp -= 0.01;  // dama
+                        printf("hit beam\n");
+                    }
                     if(player[clientID].hp <= 0.0f){
                         SendPlayerInfoData(i,0,+1); //client[i]'s kii_player num ++
                     }
