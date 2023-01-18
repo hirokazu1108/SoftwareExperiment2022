@@ -362,7 +362,8 @@ void display(void)
                 glPopMatrix();
         }
 
-        if(player[i].isSpecial > 0.0f){
+        //toumei
+        if(player[i].isSpecial > 0.0f && player[i].special == SPECIAL_DISABLE){
             for(int j=0; j<scoreBallNum; j++){
                 glPushMatrix(); 
                 glColor3f(1,0,0);
@@ -374,6 +375,8 @@ void display(void)
                 glPopMatrix();
             }
         }
+
+        
     }
 
     
