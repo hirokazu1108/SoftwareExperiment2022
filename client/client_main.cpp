@@ -201,9 +201,14 @@ void display(void)
     if(player[clientID].isBarrier > 0.0f){
         player[clientID].isBarrier -= 0.01f;
     }
+
     if(player[clientID].isSpecial > 0.0f){
         player[clientID].isSpecial -= 0.01f;
     }
+    else{
+        player[clientID].isSpecial = 0.0f;
+    }
+    
     // death
     if(player[clientID].anim > 0.0f){
         player[clientID].anim -= 1.0f;
@@ -373,6 +378,17 @@ void display(void)
                 glEnable(GL_LIGHTING);
                 glPopMatrix();
             }
+        }
+
+        //damageArea
+        if(player[i].isSpecial > 0.0f && player[i].special == SPECIAL_DAMAGEAREA){
+            glPushMatrix();           /* ??????????é???????? */
+                glEnable(GL_BLEND);
+                glColor4f(1.0 , 0.0 , 0.0, 0.9); /* ???????????? */
+                glTranslatef(player[i].pos.x, player[i].pos.y,player[i].pos.z);
+                glutSolidSphere(DAMEGEAREA_RADIUS,12,12);
+                glDisable(GL_BLEND);
+            glPopMatrix();
         }
 
         
