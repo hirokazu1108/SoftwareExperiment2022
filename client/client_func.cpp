@@ -137,7 +137,7 @@ void Collider(void){
     // player loop (player->bullet)
     for(int i=0; i<gClientNum; i++){
         for(int j=0; j<bullet_Num;j++){
-            if(OnColliderSphere(Sphere(BULLET_RADIUS, array_bullet[j].pos),((player[i].isBarrier > 0.0f) ? Sphere(BARRIER_RADIUS*BULLET_RADIUS,player[i].pos): player[i].collider))){
+            if(OnColliderSphere(Sphere((array_bullet[j].type == SPECIAL_BIGBULLET) ? (BIGBULLET_RADIUS) : (BULLET_RADIUS), array_bullet[j].pos),((player[i].isBarrier > 0.0f) ? Sphere(BARRIER_RADIUS*BULLET_RADIUS,player[i].pos): player[i].collider))){
 
                 Ability(array_bullet[j].shooter_id);
                 printf("speed:%f\n" ,player[array_bullet[j].shooter_id].speed);
@@ -602,6 +602,7 @@ void checkDeath(void){
     for(int i=0; i<gClientNum; i++){
         if(player[i].hp <= 0.0f){
 	    player[i].hp = 0.0f;
+        player[i].isspecial = false;
             player[i].enabled = false;
             if(i==clientID){
                 player[clientID].anim = 200.0f;
