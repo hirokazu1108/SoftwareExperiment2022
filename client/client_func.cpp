@@ -93,20 +93,20 @@ bool OnColliderSphere(Sphere a, Sphere b){
   return result;
 }
 
-bool OnColliderLinesSphere(const Sphere *a, glm::vec3 sp, glm::vec3 ep){
+bool OnColliderLinesSphere(Sphere a, glm::vec3 sp, glm::vec3 ep){
     glm::vec3 sv = glm::normalize(ep-sp);
-    glm::vec3 pv = a->pos - sp;
+    glm::vec3 pv = a.pos - sp;
     float d = glm::dot(sv,pv);
 
-    if(glm::length(ep-a->pos) <= a->radius){
+    if(glm::length(ep-a.pos) <= a.radius){
         return true;
     }
-    else if(glm::length(sp-a->pos) <= a->radius){
+    else if(glm::length(sp-a.pos) <= a.radius){
         return true;
     }
     else if(0<d && d<glm::length(ep-sp)){
         pv -= d*sv;
-        if(glm::length(pv) < a->radius)
+        if(glm::length(pv) < a.radius)
         {
             return true;
         }
