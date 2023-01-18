@@ -266,7 +266,7 @@ void Collider(void){
                 }
             }  
             //beam  player[me]--enemy[beam] 
-            else if(player[i].isSpecial >0.0f && i!=clientID && player[i].special == SPECIAL_BEAM){
+            else if(player[j].isSpecial >0.0f && player[j].special == SPECIAL_BEAM){
                 for(int k=0; k<100; k++){
                     glm::vec3 d = glm::vec3(3*player[j].dir.x*(k+1),3*player[j].dir.y*(k+1),3*player[j].dir.z*(k+1));
                     if(OnColliderSphere(Sphere(1.5,player[j].pos+d), ary_scoreBall[i].collider)){
@@ -282,6 +282,23 @@ void Collider(void){
                     }
                 }
             }
+		
+		/*if(player[clientID].isSpecial >0.0f && player[clientID].special == SPECIAL_BEAM){
+            for(int k=0; k<100; k++){
+                glm::vec3 d = glm::vec3(3*player[clientID].dir.x*(k+1),3*player[clientID].dir.y*(k+1),3*player[clientID].dir.z*(k+1));
+                if(OnColliderSphere(Sphere(1.5,player[clientID].pos+d), ary_scoreBall[i].collider)){
+                    //score
+                    player[clientID].score += 0.1f;
+
+                    //delete
+                    ary_scoreBall[i].hp -= 1.0f; //damage
+                    if(ary_scoreBall[i].hp <= 0.0){
+                        player[clientID].kill_enemy += 1;
+                        deleteScoreBall(i);
+                    }
+                }
+            }
+        }*/
         }
     }
 }
