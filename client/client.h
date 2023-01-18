@@ -16,6 +16,15 @@
 
 #define Model_Num 8
 
+/* 10 button Joystick */
+#define GLUT_JOYSTICK_BUTTON_E  0x10    /* 5 */
+#define GLUT_JOYSTICK_BUTTON_F  0x20    /* 6 */
+#define GLUT_JOYSTICK_BUTTON_G  0x40    /* 7 */
+#define GLUT_JOYSTICK_BUTTON_H  0x80    /* 8 */
+#define GLUT_JOYSTICK_BUTTON_I  0x100   /* 9 */
+#define GLUT_JOYSTICK_BUTTON_J  0x200   /* 10 */
+/* 10 button Joystick */
+
 /* bar struct */
 class Bar{
     public:
