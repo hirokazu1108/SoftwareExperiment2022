@@ -322,6 +322,9 @@ void display(void)
                 glCallList(model_list[1]);
                 glDisable(GL_BLEND);
             }
+            else if(player[i].isSpecial > 0.0f && player[i].special == SPECIAL_TRANSFORM){
+                glCallList(model_list[player[i].transformIndex]);
+            }
             else{
                 glCallList(model_list[i]);
             }
