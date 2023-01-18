@@ -548,6 +548,7 @@ void moveScoreBall(void){
 void checkDeath(void){
     for(int i=0; i<gClientNum; i++){
         if(player[i].hp <= 0.0f){
+	    player[i].hp = 0.0f;
             player[i].enabled = false;
             if(i==clientID){
                 player[clientID].anim = 200.0f;
