@@ -201,9 +201,6 @@ void display(void)
     if(player[clientID].isBarrier > 0.0f){
         player[clientID].isBarrier -= 0.01f;
     }
-    if(player[clientID].isDisable > 0.0f){
-        player[clientID].isDisable -= 0.01f;
-    }
     if(player[clientID].isSpecial > 0.0f){
         player[clientID].isSpecial -= 0.01f;
     }
@@ -292,7 +289,7 @@ void display(void)
             glRotatef(player[i].turn1*57.5, 0, 1, 0);
             glRotatef(player[i].turn2*57.5*-1, 1, 0, 0);
 
-            if(player[i].isDisable > 0.0f)
+            if(player[i].isSpecial > 0.0f && player[i].special == SPECIAL_DISABLE)
             {
                 glEnable(GL_BLEND);
                 glColor4f(1.0f,1.0f,1.0f,0.95f);
@@ -363,15 +360,17 @@ void display(void)
         }
 
         //toumei
-        if(player[i].isSpecial > 0.0f && player[i].special == SPECIAL_DISABLE){
+        if(player[i].isSpecial > 0.0f && player[i].special == SPECIAL_LINES){
             for(int j=0; j<scoreBallNum; j++){
                 glPushMatrix(); 
+                glDisable(GL_LIGHTING);
                 glColor3f(1,0,0);
                 glLineWidth(5);
                 glBegin(GL_LINES);
                 glVertex3f( player[i].pos.x, player[i].pos.y, player[i].pos.z );
                 glVertex3f( ary_scoreBall[j].pos.x, ary_scoreBall[j].pos.y, ary_scoreBall[j].pos.z );
                 glEnd();
+                glEnable(GL_LIGHTING);
                 glPopMatrix();
             }
         }
