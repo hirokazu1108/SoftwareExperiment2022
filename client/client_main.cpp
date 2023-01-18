@@ -206,15 +206,15 @@ void display(void)
     }
     if(player[clientID].isBarrier > 0.0f){
         player[clientID].isBarrier -= 0.01f;
-        if(player[clientID].isSpecial <= 0.0f){
-            player[clientID].isspecial == false;
+        if(player[clientID].isBarrier <= 0.0f){
+            player[clientID].isspecial = false;
         }
     }
 
     if(player[clientID].isSpecial > 0.0f){
         player[clientID].isSpecial -= 0.01f;
         if(player[clientID].isSpecial <= 0.0f){
-            player[clientID].isspecial == false;
+            player[clientID].isspecial = false;
         }
     }
     else{
@@ -654,6 +654,7 @@ void display(void)
         
         // height
         glPushMatrix();
+        uiSetting();
             char height[10];
             sprintf(height,"%.2f",player[clientID].pos.y);
             glTranslatef(-1.7, 1.1 ,0.0);
