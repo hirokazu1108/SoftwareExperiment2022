@@ -19,7 +19,7 @@ void PlayerInit(void){
         player[i].upVec.x = 0;
         player[i].upVec.y = 0;
         player[i].upVec.z = 0;
-	    player[i].rate_attack = 1.0;
+	player[i].rate_attack = 1.0;
         player[i].turn1 = 0;
         player[i].turn2 = 0;
         player[i].turn3 = 0;
@@ -36,7 +36,8 @@ void PlayerInit(void){
         player[i].isBigbullet = 0;
         player[i].isChase = 0;
         player[i].isBarrier = 0.0f;
-	    player[i].isSpecial = 0.0f;
+	player[i].isSpecial = 0.0f;
+	player[i].transformIndex = 0;
         player[i].ability = UP_ATTACK;
         player[i].skill = SKILL_ATTACK;
         player[i].special = SPECIAL_BIGBULLET;
