@@ -57,7 +57,6 @@ void PlayerInit(void){
     player[clientID].attack += (float)player[clientID].parm[PARM_ATTACK] / 5.0f;
     player[clientID].speed += 0.5f * (float)player[clientID].parm[PARM_SPEED] / 5.0f;
     player[clientID].size -= player[clientID].parm[PARM_SIZE];
-    player[clientID].special = SPECIAL_CHASE;
 
 }
 
@@ -180,6 +179,21 @@ void Collider(void){
                 }
             }
         }
+	    
+	//beam  player[me]--enemy[beam] 
+        if(player[i].isSpecial >0.0f && i!=clientID && player[i].special == SPECIAL_BEAM){
+            for(int j=0; j<100; j++){
+                glm::vec3 d = glm::vec3(3*player[i].dir.x*(j+1),3*player[i].dir.y*(j+1),3*player[i].dir.z*(j+1));
+                if(OnColliderSphere(Sphere(1.5,player[i].pos+d),player[clientID].collider)){
+                    player[clientID].hp -= 0.01;
+                    printf("hit beam\n");
+                    if(player[clientID].hp <= 0.0f){
+                        SendPlayerInfoData(i,0,+1); //client[i]'s kii_player num ++
+                    }
+                }
+            }
+            
+        }
     }
 
     // scoreBall loop  (scoreBall -> player,bullet)
@@ -263,8 +277,11 @@ void useSpecial(void){
             case SPECIAL_DAMAGEAREA:
                 player[clientID].isSpecial = (float)MAX_DAMAGEAREA_TIME;
                 break;
-	        case SPECIAL_GAMBLE:
+	    case SPECIAL_GAMBLE:
 
+                break;
+	　　case SPECIAL_BEAM:
+                player[clientID].isSpecial = (float)MAX_BEAM_TIME;
                 break;
             case SPECIAL_CHASE:
                 player[clientID].isChase = 4;
