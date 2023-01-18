@@ -244,6 +244,9 @@ void useSpecial(void){
             case SPECIAL_LINES:
                 player[clientID].isSpecial = (float)MAX_LINES_TIME;
                 break;
+            case SPECIAL_DAMAGEAREA:
+                player[clientID].isSpecial = (float)3.0f;
+                break;
 	    case SPECIAL_GAMBLE:
 
                 break;

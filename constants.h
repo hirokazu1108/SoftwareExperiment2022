@@ -1,7 +1,7 @@
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
-/* ヘッダのインクルード */
+/* ??????????????��?��???????��?? */
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
@@ -20,11 +20,11 @@
 #include<sys/types.h>
 
 
-#define PORT			(u_short)88888	/* デフォルトポート番号 */
-#define MAX_CLIENTS		4				/* 最大プレイ人数 */
+#define PORT			(u_short)88888	/* ????????????????????��???????? */
+#define MAX_CLIENTS		4				/* ???大�???????�人??? */
 #define MAX_DATA		200
-#define MAX_BULLET_NUM   25    // 最大弾数
-#define BULLET_SPEED   0.5f     // 弾の速度
+#define MAX_BULLET_NUM   25    // ???大弾???
+#define BULLET_SPEED   0.5f     // 弾�?????�?
 #define DAMAGE         1.0f				
 #define MAX_HP 3.0f
 #define BARRIER_RADIUS 3.0f
@@ -49,7 +49,7 @@
 #define PARAMATER_SUM_MAX 10    //max of sum of status paramaters
 #define NAME_MAX_LENGTH 10      //max length of client name
 #define SKILL_NUM 3             //num of skills
-#define SPECIAL_NUM 4            //num of specials
+#define SPECIAL_NUM 5            //num of specials
 #define FILENAME_GAMEDATA "../data/gamedata.bin"
 #define FILENAME_RANKINGDATA "../data/ranking.txt"
 #define GAMETIME 100
@@ -85,6 +85,7 @@ typedef enum{
     SPECIAL_DISABLE,
     SPECIAL_BIGBULLET,
     SPECIAL_LINES,
+    SPECIAL_DAMAGEAREA;
     SPECIAL_GAMBLE,
     SPECIAL_POWERUP,
     SPECIAL_LASER,
@@ -101,7 +102,7 @@ typedef enum{
 
 }Move_Pattern;
 
-/* 球の当たり判定 */
+/* ??????�?????????��?? */
 class Sphere{
     public:
     float radius;
@@ -111,7 +112,7 @@ class Sphere{
 
 class Player{
 public:
-    bool enabled;   //trueならみえる状態
+    bool enabled;   //true????????��???????��??
     int type;
     float speed;
     glm::vec3 pos;
@@ -149,15 +150,15 @@ class Game{
         GameState state;
 };
 
-/* 弾のクラス */
+/* 弾�??????????? */
 class BULLET{
     public:
         int shooter_id;
-        //int type;           // 弾�??�??�??
+        //int type;           // 弾�??�???�???
         glm::vec3 pos;      // 弾�??座�??
-        //glm::vec3 speed;    // 弾�?????�??
+        //glm::vec3 speed;    // 弾�?????�???
         glm::vec3 dir;      // 弾�????��??????????????
-        int lifetime;       // 弾�??�??示�?????
+        int lifetime;       // 弾�??�???示�?????
         BULLET(){pos.x = pos.y = pos.z = dir.x = dir.y = dir.z = 0;};
         BULLET(const BULLET& b){
             pos = b.pos;
