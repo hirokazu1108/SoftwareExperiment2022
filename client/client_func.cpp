@@ -14,6 +14,7 @@ void PlayerInit(void){
     for(int i = 0; i< gClientNum;i++)
     {
         player[i].enabled = true;
+        player[i].isspecial = false;
         player[i].speed = 1.0;
         player[i].dir = glm::vec3(0,0,0);
         player[i].pos = glm::vec3(0,0,0);//spawnPos[i];
@@ -244,6 +245,8 @@ void Ability(int id){
 void useSpecial(void){
     if(player[clientID].mp >= (float)MAX_MP)
     {
+        player[clientID].mp = 0.0f;
+        player[clientID].isspecial = true;
         switch(player[clientID].special){
             case SPECIAL_BARRIER:
 		    printf("create barrier\n");
