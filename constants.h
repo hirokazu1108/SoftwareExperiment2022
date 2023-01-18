@@ -140,6 +140,7 @@ public:
     int isChase;
     float isBarrier; //0< : barrier mode
     float isSpecial; //0< ::special mode
+    int transformIndex;
     float score;
     int kill_player;
     int death;
