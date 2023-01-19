@@ -58,7 +58,7 @@ void drawScoreBall(void){
         glPushMatrix();
         glColor3f(1.0, 0.0, 0.0);
         glTranslatef(ary_scoreBall[i].pos.x, ary_scoreBall[i].pos.y, ary_scoreBall[i].pos.z);
-        glutSolidSphere(ary_scoreBall[i].collider.radius, 16, 16);
+        glCallList(model_list[8]);
         glPopMatrix();
     }
 }
