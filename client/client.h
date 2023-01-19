@@ -10,11 +10,11 @@
 #define WINDOW_WIDTH 1000
 #define WINDOW_HEIGHT 1000
 
-#define WORLDSIZE_X 1000
-#define WORLDSIZE_Y 500
-#define WORLDSIZE_Z 1000
+#define WORLDSIZE_X 250
+#define WORLDSIZE_Y 250
+#define WORLDSIZE_Z 250
 
-#define Model_Num 8
+#define Model_Num 9
 
 /* 10 button Joystick */
 #define GLUT_JOYSTICK_BUTTON_E  0x10    /* 5 */
@@ -95,6 +95,7 @@ extern int scoreBallNum;
 extern bool firstRecvPlayerInfo;
 extern std::vector<BULLET> array_bullet;
 extern int bullet_Num;   // 発射された弾の個数
+extern GLuint  model_list[Model_Num];		/* display list for object */
 
 extern ALuint buffer;
 extern ALuint source;
