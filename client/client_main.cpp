@@ -335,17 +335,17 @@ void display(void)
         }
         
     }
-    /*
-    for (int i= -4 ; i < 5; i++){
+    
+    for (int i= -1 ; i < 2; i++){
         for (int j= -1 ;j < 2; j++){
-            for (int k = -4; k < 5; k++){
+            for (int k = -1; k < 2; k++){
                 glPushMatrix(); 
                 glTranslatef(i*250,j*250,k*250);
                 glCallList(model_list[4]);
                 glPopMatrix();
             }
         }
-    }*/
+    }
 
     glPushMatrix(); 
     glTranslatef(0,0,0);
