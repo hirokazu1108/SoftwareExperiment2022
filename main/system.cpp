@@ -179,7 +179,7 @@ void PushedButton(void){
                     game.deviceNum[0] = 'L';
                     printf("LocalHost\n");
                     game.scene = SCENE_CLIENT_1;
-                    game.selectButton = 0;
+                    game.selectButton = 1;
                     for(int i=0; game.port[i]!='\0';i++){
                         game.port[i] = '\0';
                     }
@@ -274,11 +274,11 @@ void PushedButton(void){
                     break;
                 case 2:
                     game.popScene = PopUp_Skill;
-                    game.selectButton_sub = 1;
+                    game.selectButton_sub = (int)game.skill+1;
                     break;
                 case 3:
                     game.popScene = PopUp_Special;
-                    game.selectButton_sub = 1;
+                    game.selectButton_sub = (int)game.special+1;
                     break;
                 }
             }
