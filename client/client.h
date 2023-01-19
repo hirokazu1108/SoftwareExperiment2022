@@ -92,6 +92,7 @@ extern Player *player;
 extern Game game;
 extern std::vector<ScoreBall> ary_scoreBall;
 extern int scoreBallNum;
+extern bool firstRecvPlayerInfo;
 extern std::vector<BULLET> array_bullet;
 extern int bullet_Num;   // 発射された弾の個数
 
