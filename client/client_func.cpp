@@ -38,7 +38,6 @@ void PlayerInit(void){
         player[i].isBarrier = (float)MAX_BARRIER;
         player[i].isSpecial = 0.0f;
         player[i].transformIndex = 0;
-	    player[i].ability = UP_ATTACK;
         player[i].skill = SKILL_ATTACK;
         player[i].special = SPECIAL_BIGBULLET;
         for(int j=0; j<PARAMATER_NUM; j++)
@@ -60,6 +59,7 @@ void PlayerInit(void){
     player[clientID].speed += 0.5f * (float)player[clientID].parm[PARM_SPEED] / 5.0f;
     player[clientID].parm[PARM_HP] = 0.5f + player[clientID].parm[PARM_HP] * 0.1f;
     player[clientID].size = 1.0f - player[clientID].parm[PARM_SIZE] * 0.1f;
+    player[clientID].collider.radius = player[clientID].size;
 
 }
 
@@ -318,21 +318,21 @@ void Collider(void){
 
 
 void Ability(int id){
-    switch(player[id].ability){
+    switch(player[id].skill){
         
-        case UP_ATTACK:
+        case SKILL_ATTACK:
         if(player[id].rate_attack < MAX_ATTACK){
             player[id].rate_attack += 0.25;
         }
         break;
 
-        case HEAL:
+        case SKILL_HP:
         if(player[id].hp < MAX_HP){
             player[id].hp += 0.5;
         }
         break;
 
-        case UP_SPEED:
+        case SKILL_SPEED:
         if(player[id].speed < MAX_SPEED){
             player[id].speed += 0.5;
         }
@@ -493,7 +493,7 @@ void ExitClientProgram(int mode){
 
 void createScoreBall(void){
     
-    for(int i=0; i<5; i++){
+    for(int i=0; i<10; i++){
         ScoreBall s;
         glm::vec3 spawnPos = glm::vec3(rand()%((int)(WORLDSIZE_X/5))*((rand()%2)==1 ? 1: -1),rand()%((int)(WORLDSIZE_Y/5))*((rand()%2)==1 ? 1: -1),rand()%((int)(WORLDSIZE_Z/5))*((rand()%2)==1 ? 1: -1));
         s.pos = spawnPos;
@@ -508,6 +508,11 @@ void createScoreBall(void){
         printf("scoreBall Data was sent.\n");
     }
     
+}
+
+void PopEnemy(int PopEnemy_ID){
+    createScoreBall();
+    glutTimerFunc(60000, PopEnemy, 0);
 }
 
 void deleteScoreBall(int index){
@@ -716,22 +721,22 @@ void Respawn(void){
     player[clientID].turn3 = 0;
 }
 
-// ï¿????ï¿½ï¿½?????????????????ï¿??ï¿?????ï¿????????ï¿??0Â°???180Â°ï¿??
+// ï¿½????ï¿½ï¿½?????????????????ï¿½??ï¿½?????ï¿½????????ï¿½??0Â°???180Â°ï¿½??
 float cal_angle(glm::vec3 vec1, glm::vec3 vec2){
     vec1 = glm::normalize(vec1);
     vec2 = glm::normalize(vec2);
-    float dot = glm::dot( vec1, vec2 ); // ???ï¿??ï¿??ï¿??
+    float dot = glm::dot( vec1, vec2 ); // ???ï¿½??ï¿½??ï¿½??
     float angle = glm::acos(dot) * 180.0 / M_PI;
     return angle;
 }
 
-// ï¿????ï¿½ï¿½????????????????????ï¿????????
+// ï¿½????ï¿½ï¿½????????????????????ï¿½????????
 glm::vec3 cal_vec(glm::vec3 pos1, glm::vec3 pos2){
     glm::vec3 vec = pos1 - pos2;
     return vec;
 }
 
-// ??ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½????????????????ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½??????ï¿½ï¿½ï¿???ï¿????????
+// ??ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½????????????????ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½??????ï¿½ï¿½ï¿½???ï¿½????????
 int Target(int shooter){
     int id = NOTARGET;
     float min_value = 0.0f; 

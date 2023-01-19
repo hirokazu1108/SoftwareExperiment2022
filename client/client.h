@@ -77,6 +77,7 @@ extern void WriteMatchFile(int value);
 extern void WriteRankingFile(int num, RankingData *data);
 extern void ExitClientProgram(int mode);
 extern void createScoreBall(void);
+void PopEnemy(int PopEnemy_ID);
 extern void deleteScoreBall(int index);
 extern void moveScoreBall(void);
 extern void checkDeath(void);
