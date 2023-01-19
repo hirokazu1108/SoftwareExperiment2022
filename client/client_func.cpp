@@ -55,9 +55,9 @@ void PlayerInit(void){
     for(int i=0; i<PARAMATER_NUM; i++){
         player[clientID].parm[i] = data.parm[i];
     }
-    player[clientID].attack += (float)player[clientID].parm[PARM_ATTACK] / 5.0f;
-    player[clientID].speed += 0.5f * (float)player[clientID].parm[PARM_SPEED] / 5.0f;
-    player[clientID].parm[PARM_HP] = 0.5f + player[clientID].parm[PARM_HP] * 0.1f;
+    player[clientID].attack += ((float)player[clientID].parm[PARM_ATTACK] + 5.0f) * 0.5f;
+    player[clientID].speed += 1.0f + (float)player[clientID].parm[PARM_SPEED] * 0.1f;
+    player[clientID].parm[PARM_HP] = 6.0f + (player[clientID].parm[PARM_HP] + 5.0f) * 0.5f;
     player[clientID].size = 1.0f - player[clientID].parm[PARM_SIZE] * 0.1f;
     player[clientID].collider.radius = player[clientID].size;
 
@@ -144,18 +144,18 @@ void Collider(void){
 
                 if(player[i].isBarrier>0.0f){
                     printf("barrier protected me!!\n");
-                    player[i].isBarrier -= player[array_bullet[j].shooter_id].attack * player[array_bullet[j].shooter_id].rate_attack - player[i].parm[PARM_HP];
+                    player[i].isBarrier -= (player[array_bullet[j].shooter_id].attack - player[i].parm[PARM_HP]) * player[array_bullet[j].shooter_id].rate_attack;
                 }
                 else{
                     if( i!=clientID && player[i].isSpecial > 0.0f && player[i].special == SPECIAL_TRANSFORM && player[i].transformIndex == clientID){
-                        player[clientID].hp -= player[array_bullet[j].shooter_id].attack * player[array_bullet[j].shooter_id].rate_attack - player[i].parm[PARM_HP];
+                        player[clientID].hp -= (player[array_bullet[j].shooter_id].attack - player[i].parm[PARM_HP]) * player[array_bullet[j].shooter_id].rate_attack;
                     }
                     else if(i==clientID && player[clientID].isSpecial > 0.0f && player[clientID].special == SPECIAL_TRANSFORM){
-                        player[player[clientID].transformIndex].hp -= player[array_bullet[j].shooter_id].attack * player[array_bullet[j].shooter_id].rate_attack - player[clientID].parm[PARM_HP];
+                        player[player[clientID].transformIndex].hp -= (player[array_bullet[j].shooter_id].attack - player[i].parm[PARM_HP]) * player[array_bullet[j].shooter_id].rate_attack;
                         printf("migawari\n");
                     }
                     else{
-                        player[i].hp -= player[array_bullet[j].shooter_id].attack * player[array_bullet[j].shooter_id].rate_attack - player[i].parm[PARM_HP];
+                        player[i].hp -= (player[array_bullet[j].shooter_id].attack - player[i].parm[PARM_HP]) * player[array_bullet[j].shooter_id].rate_attack;
                     }
                 }
                 deleteBullet(j);
@@ -726,22 +726,22 @@ void Respawn(void){
     player[clientID].turn3 = 0;
 }
 
-// ï¿?????ï¿½ï¿½?????????????????ï¿???ï¿??????ï¿?????????ï¿???0Â°???180Â°ï¿???
+// ï¿½?????ï¿½ï¿½?????????????????ï¿½???ï¿½??????ï¿½?????????ï¿½???0Â°???180Â°ï¿½???
 float cal_angle(glm::vec3 vec1, glm::vec3 vec2){
     vec1 = glm::normalize(vec1);
     vec2 = glm::normalize(vec2);
-    float dot = glm::dot( vec1, vec2 ); // ???ï¿???ï¿???ï¿???
+    float dot = glm::dot( vec1, vec2 ); // ???ï¿½???ï¿½???ï¿½???
     float angle = glm::acos(dot) * 180.0 / M_PI;
     return angle;
 }
 
-// ï¿?????ï¿½ï¿½????????????????????ï¿?????????
+// ï¿½?????ï¿½ï¿½????????????????????ï¿½?????????
 glm::vec3 cal_vec(glm::vec3 pos1, glm::vec3 pos2){
     glm::vec3 vec = pos1 - pos2;
     return vec;
 }
 
-// ??ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½????????????????ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½??????ï¿½ï¿½ï¿????ï¿?????????
+// ??ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½????????????????ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½??????ï¿½ï¿½ï¿½????ï¿½?????????
 int Target(int shooter){
     int id = NOTARGET;
     float min_value = 0.0f; 
@@ -759,7 +759,7 @@ int Target(int shooter){
 
     glm::vec3 dir_vec = {-sin(player[shooter].turn1)*cos(player[shooter].turn2), - sin(player[shooter].turn2), -cos(player[shooter].turn1)*cos(player[shooter].turn2)};
     for(int i = 0; i < gClientNum; i++){
-        if(i != shooter){
+        if(i != shooter || (player[i].isSpecial > 0 && player[i].special == SPECIAL_DISABLE)){
             x[i] = cal_vec(player[i].pos, player[shooter].pos);
             angle[i] = cal_angle(x[i], dir_vec); 
             if(angle[i] >= 0.0f && angle[i] <= 45.0f){
@@ -773,7 +773,7 @@ int Target(int shooter){
         id = 0;
     }
     for (int j = 0; j < gClientNum; j++) {
-        if(j != shooter){   
+        if(j != shooter || (player[j].isSpecial > 0 && player[j].special == SPECIAL_DISABLE)){   
             if (len[j] < min_value) {
                 min_value = len[j];
                 id = j;
