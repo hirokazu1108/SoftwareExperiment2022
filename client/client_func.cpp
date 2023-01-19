@@ -198,11 +198,11 @@ void Collider(void){
                 
 
                 if(player[clientID].isBarrier>0.0f){
-                    player[clientID].isBarrier -= 0.1;  //damage to barrier by damageArea
+                    player[clientID].isBarrier -= 0.2;  //damage to barrier by damageArea
                     printf("barrier protected me by damageArea!!\n");
                 }
                 else {
-                    player[clientID].hp -= 0.1;  // damage
+                    player[clientID].hp -= 0.2;  // damage
                     printf("hit damageArea\n");
                 }
                 if(player[clientID].hp <= 0.0f && player[clientID].enabled){
@@ -219,10 +219,10 @@ void Collider(void){
                 if(OnColliderSphere(Sphere(1.5,player[i].pos+d), (player[clientID].isBarrier > 0.0f) ? Sphere(BARRIER_RADIUS,player[clientID].pos): player[clientID].collider)){
                     if(player[clientID].isBarrier>0.0f){
                         printf("barrier protected me by beam!!\n");
-                        player[clientID].isBarrier -= 0.01;  //damage to barrier by beam
+                        player[clientID].isBarrier -= 0.1;  //damage to barrier by beam
                     }
                     else {
-                        player[clientID].hp -= 0.01;  // damage
+                        player[clientID].hp -= 0.1;  // damage
                         printf("hit beam\n");
                     }
                     if(player[clientID].hp <= 0.0f && player[clientID].enabled){
@@ -499,7 +499,7 @@ void createScoreBall(void){
     
     for(int i=0; i<10; i++){
         ScoreBall s;
-        glm::vec3 spawnPos = glm::vec3(rand()%((int)(WORLDSIZE_X/5))*((rand()%2)==1 ? 1: -1),rand()%((int)(WORLDSIZE_Y/5))*((rand()%2)==1 ? 1: -1),rand()%((int)(WORLDSIZE_Z/5))*((rand()%2)==1 ? 1: -1));
+        glm::vec3 spawnPos = glm::vec3(rand()%((int)(WORLDSIZE_X/1.3))*((rand()%2)==1 ? 1: -1),rand()%((int)(WORLDSIZE_Y/1.3))*((rand()%2)==1 ? 1: -1),rand()%((int)(WORLDSIZE_Z/1.3))*((rand()%2)==1 ? 1: -1));
         s.pos = spawnPos;
         s.collider = Sphere(1.5,s.pos);
         s.hp = 1;
@@ -715,7 +715,7 @@ void checkDeath(void){
 
 
 void Respawn(void){
-    glm::vec3 respawnPos = glm::vec3(((rand()%2)==1 ? 1: -1)*rand()%(WORLDSIZE_X/5),((rand()%2)==1 ? 1: -1)*rand()%(WORLDSIZE_Y/5),((rand()%2)==1 ? 1: -1)*rand()%(WORLDSIZE_Z/5));
+    glm::vec3 respawnPos = glm::vec3(((rand()%2)==1 ? 1: -1)*rand()%(WORLDSIZE_X-10),((rand()%2)==1 ? 1: -1)*rand()%(WORLDSIZE_Y-10),((rand()%2)==1 ? 1: -1)*rand()%(WORLDSIZE_Z-10));
     player[clientID].pos = respawnPos;
     printf("hukkatu\n");
     player[clientID].enabled = true;
