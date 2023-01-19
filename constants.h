@@ -24,7 +24,7 @@
 #define MAX_CLIENTS		4				/* ???大�???????�人??? */
 #define MAX_DATA		200
 #define MAX_BULLET_NUM   25    // ???大弾???
-#define BULLET_SPEED   0.5f     // 弾�?????�??
+#define BULLET_SPEED   0.5f     // 弾�?????�???
 #define DAMAGE         1.0f				
 #define MAX_HP 10.0f
 #define BARRIER_RADIUS 1.0f
@@ -55,7 +55,7 @@
 #define PARAMATER_SUM_MAX 10    //max of sum of status paramaters
 #define NAME_MAX_LENGTH 10      //max length of client name
 #define SKILL_NUM 3             //num of skills
-#define SPECIAL_NUM 6            //num of specials
+#define SPECIAL_NUM 8            //num of specials
 #define FILENAME_GAMEDATA "../data/gamedata.bin"
 #define FILENAME_RANKINGDATA "../data/ranking.txt"
 #define GAMETIME 100
@@ -110,7 +110,7 @@ typedef enum{
 
 }Move_Pattern;
 
-/* ??????�??????????��?? */
+/* ??????�???????????��?? */
 class Sphere{
     public:
     float radius;
@@ -165,10 +165,10 @@ class Game{
 class BULLET{
     public:
         int shooter_id;
-        SPECIAL type;           // 弾�??�???�???
+        SPECIAL type;           // 弾�??�????�????
         glm::vec3 pos;      // 弾�??座�??
         glm::vec3 dir;      // 弾�????��??????????????
-        int lifetime;       // 弾�??�???示�?????
+        int lifetime;       // 弾�??�????示�?????
         int target_id;
         BULLET(){
             shooter_id = 10;

@@ -1,7 +1,7 @@
 #include "header.h"
 
 /* ??ç³¸???????? */
-static const char *imgFile[IMG_NUM] = { "inputClientNum.png","inputPasscode.png","inputDeviceNum.png","name.png", "skill.png","special.png","status.png", "explain_skill.png","nowSelectButton.png", "changeButton.png","backButton.png",  "skill_attack.png", "skill_hp.png","skill_speed.png", "pin.png","rightSelect.png","leftSelect.png", "back.png","nameChange.png","skillChange.png","specialChange.png","selectHikouki.png","barrier.png","disabled.png","bigbullet.png","barrier_icon.png","disabled_icon.png","bigbullet_icon.png", "lines_icon.png","damageArea_icon.png","beam_icon.png","chase_icon.png","transform_icon.png","logo.png", "rankingBoard.png", "rankingBack.png","title_sky.png","title_sky2.png","cloud.png", "castle.png","masao.png","masao_face.png"};
+static const char *imgFile[IMG_NUM] = { "inputClientNum.png","inputPasscode.png","inputDeviceNum.png","name.png", "skill.png","special.png","status.png", "explain_skill.png","nowSelectButton.png", "changeButton.png","backButton.png",  "skill_attack.png", "skill_hp.png","skill_speed.png", "pin.png","rightSelect.png","leftSelect.png", "back.png","nameChange.png","skillChange.png","specialChange.png","selectHikouki.png","barrier.png","disabled.png","bigbullet.png","lines.png","damageArea.png","beam.png","chase.png","transform.png","barrier_icon.png","disabled_icon.png","bigbullet_icon.png", "lines_icon.png", "damageArea_icon.png","beam_icon.png","chase_icon.png","transform_icon.png","logo.png", "rankingBoard.png", "rankingBack.png","title_sky.png","title_sky2.png","cloud.png", "castle.png","masao.png","masao_face.png"};
 static const char *textStr[TEXT_NUM] = {"Space Battle","SERVER","CLIENT","CUSTOMIZE","input client num.","input passcode.","back","Enter","local","input device num.","clpc","nowLoading...","Result","Exit","Detail","Title","SCORE RANKING","KILL RANKING","DEATH RANKING", "KILL ENEMY RANKING","0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"," ", "-"};
 /* ????????æ½????????? */
 static char gFontFile[] = "../fonts/Yomogi-Regular.ttf";
@@ -140,9 +140,14 @@ int InitWindow(void)
     buttonPos[SCENE_Result].push_back({830,850,200,90}); //totitle
 
     special_iconPos.push_back({23,58,uiImg[uname_backButton].w,uiImg[uname_backButton].h});//??ç¥????????å¸¥??
-    special_iconPos.push_back({220,320,128,128});
-    for(int i=2; i<SPECIAL_NUM+1; i++){
-        special_iconPos.push_back({special_iconPos[i-1].x+special_iconPos[i-1].w+20,special_iconPos[i-1].y,128,128});
+    special_iconPos.push_back({220,320,128,128});//1
+    for(int i=1; i<SPECIAL_NUM+1; i++){
+        if(i < 4){
+            special_iconPos.push_back({special_iconPos[i].x+special_iconPos[i].w+20,special_iconPos[i].y,128,128});
+        }
+        else{
+            special_iconPos.push_back({special_iconPos[i-3].x+special_iconPos[i].w+20,special_iconPos[i-3].y+148,128,128});
+        }
     }
 
     if(game.scene == SCENE_Title)
