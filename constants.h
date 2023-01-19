@@ -42,6 +42,9 @@
 #define BIGBULLET_RADIUS 1.5f
 #define MAX_MP 100.0f
 #define NOTARGET 10
+#define SCORE_KILL_ENEMY 100.0f
+#define SCORE_KILL_PLAYER 500.0f
+#define SCORE_DEATH -300.0f
 
 #define PLAYERDATA_COMMAND 'p'
 #define END_COMMAND 'e'

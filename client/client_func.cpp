@@ -162,7 +162,7 @@ void Collider(void){
 
                 //migawari
                 if(player[clientID].hp <= 0.0f && player[clientID].enabled && i!=clientID && player[i].isSpecial > 0.0f && player[i].special == SPECIAL_TRANSFORM && player[i].transformIndex == clientID){
-                    SendPlayerInfoData(i ,0,+1); 
+                    SendPlayerInfoData(i ,0,+1); //client[i]'s kii_player num ++
                     break;
                 }
                else if(player[clientID].hp <= 0.0f && player[clientID].enabled){
@@ -261,7 +261,7 @@ void Collider(void){
                 ary_scoreBall[i].hp -= 1.0f;
                 if(ary_scoreBall[i].hp <= 0.0){
                     //score
-                    player[array_bullet[j].shooter_id].score += 150.0f;
+                    player[array_bullet[j].shooter_id].score += SCORE_KILL_ENEMY;
                     player[array_bullet[j].shooter_id].kill_enemy += 1;
                     deleteScoreBall(i);
                 }
@@ -273,12 +273,11 @@ void Collider(void){
             if(player[j].isSpecial >0.0f && player[j].special == SPECIAL_DAMAGEAREA){
                 //damageArea
                 if(OnColliderSphere(Sphere(DAMEGEAREA_RADIUS,player[j].pos), ary_scoreBall[i].collider)){            
-
                     //delete
                     ary_scoreBall[i].hp -= 1.0f; //damage
                     if(ary_scoreBall[i].hp <= 0.0){
                         //score
-                        player[j].score += 150.0f;
+                        player[j].score += SCORE_KILL_ENEMY;
                         player[j].kill_enemy += 1;
                         deleteScoreBall(i);
                     }
@@ -293,7 +292,7 @@ void Collider(void){
                         ary_scoreBall[i].hp -= 1.0f; //damage
                         if(ary_scoreBall[i].hp <= 0.0){
                             //score
-                            player[j].score += 150.0f;
+                            player[j].score += SCORE_KILL_ENEMY;
                             player[j].kill_enemy += 1;
                             deleteScoreBall(i);
                         }
@@ -707,6 +706,7 @@ void checkDeath(void){
             if(i==clientID){
                 player[clientID].anim = 200.0f;
                 player[clientID].death += 1;
+                player[clientID].score += SCORE_DEATH;
             }
         }
     }

@@ -79,6 +79,7 @@ int ExecuteCommand(char command,int pos)
                 switch(mode){
                     case 0://kill_player
                         player[cindex].kill_player += 1;
+                        player[cindex].score += SCORE_KILL_PLAYER;
                     break;
                 }
                 SendData(cindex, &command,sizeof(char));
@@ -105,7 +106,7 @@ int ExecuteCommand(char command,int pos)
 void SendTimeCommand(void){
     char com = TIMER_COMMAND;
 
-    /* ãƒ‡ãƒ¼ã‚¿ã®é€ä¿¡ */
+    /* ?????¼ã?¿ã?????ä¿? */
     SendData(ALL_CLIENTS,&com,sizeof(char));
 
         
@@ -115,10 +116,10 @@ void SendTimeCommand(void){
 void SendRankingDataCommand(void){
     char com = RANKING_DATA;
 
-    /* ãƒ‡ãƒ¼ã‚¿ã®é€ä¿¡ */
+    /* ?????¼ã?¿ã?????ä¿? */
     SendData(ALL_CLIENTS,&com,sizeof(char));
 
-    // playerã®æœ€æ–°æƒ…å ±
+    // player????????°æ?????
     SendData(ALL_CLIENTS,player,sizeof(Player)*gClientNum);
 
 }
