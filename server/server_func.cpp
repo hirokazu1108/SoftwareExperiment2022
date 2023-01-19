@@ -38,7 +38,6 @@ void PlayerInit(void){
         player[i].isBarrier = 0.0f;
         player[i].isSpecial = 0.0f;
         player[i].transformIndex = 0;
-        player[i].ability = UP_ATTACK;
         player[i].skill = SKILL_ATTACK;
         player[i].special = SPECIAL_BIGBULLET;
         for(int j=0; j<PARAMATER_NUM; j++)

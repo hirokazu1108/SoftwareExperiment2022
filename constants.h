@@ -24,7 +24,7 @@
 #define MAX_CLIENTS		4				/* ???大�???????�人??? */
 #define MAX_DATA		200
 #define MAX_BULLET_NUM   25    // ???大弾???
-#define BULLET_SPEED   0.5f     // 弾�?????�???
+#define BULLET_SPEED   0.5f     // 弾�?????�???
 #define DAMAGE         1.0f				
 #define MAX_HP 10.0f
 #define BARRIER_RADIUS 1.0f
@@ -66,11 +66,6 @@ typedef enum {
     State_Result,
 }GameState;
 
-typedef enum{
-    UP_ATTACK,
-    HEAL,
-    UP_SPEED,
-}Ability_Type;
 
 typedef enum{
     PARM_ATTACK,
@@ -110,7 +105,7 @@ typedef enum{
 
 }Move_Pattern;
 
-/* ??????�???????????��?? */
+/* ??????�???????????��?? */
 class Sphere{
     public:
     float radius;
@@ -147,7 +142,6 @@ public:
     int kill_enemy;
     int kill_boss;
     Sphere collider;
-    Ability_Type ability;
     SKILL skill;
     SPECIAL special;
     int parm[PARAMATER_NUM];
@@ -165,10 +159,10 @@ class Game{
 class BULLET{
     public:
         int shooter_id;
-        SPECIAL type;           // 弾�??�????�????
+        SPECIAL type;           // 弾�??�????�????
         glm::vec3 pos;      // 弾�??座�??
         glm::vec3 dir;      // 弾�????��??????????????
-        int lifetime;       // 弾�??�????示�?????
+        int lifetime;       // 弾�??�????示�?????
         int target_id;
         BULLET(){
             shooter_id = 10;
