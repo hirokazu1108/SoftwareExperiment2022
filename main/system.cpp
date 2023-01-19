@@ -1,6 +1,6 @@
 #include "header.h"
 
-int maxButtonNum[SCENE_NUM]={3,4,13,14,13,0,9,5};    //シーンごとのボタンの最大数,indexはScene列挙体に対応
+int maxButtonNum[SCENE_NUM]={2,4,13,14,13,0,10,5};    //シーンごとのボタンの最大数,indexはScene列挙体に対応
 
 bool buttonEnabled = false; //確定ボタンが見えるか否か
 
@@ -94,15 +94,12 @@ void PushedButton(void){
                     game.selectButton = 1;
                     break;
                 case 1://clientボタン
-                    game.scene = SCENE_CLIENT_0;
-                    game.selectButton = 12;
+                    game.scene = SCENE_CUSTOMIZE;
+                    game.selectButton = 1;
+                    scrollValue = 0.0f;
                     for(int i=0; game.deviceNum[i]!='\0';i++){
                         game.deviceNum[i] = '\0';
                     }
-                    break;
-                case 2://customizeボタン
-                    game.scene = SCENE_CUSTOMIZE;
-                    game.selectButton = 1;
                     break;
             }
             break;
@@ -168,8 +165,9 @@ void PushedButton(void){
         case SCENE_CLIENT_0:
             switch(game.selectButton){
                 case 0://back
-                    game.scene = SCENE_Title;
-                    game.selectButton = 0;
+                    game.scene = SCENE_CLIENT_0;
+                    game.selectButton = 1;
+                    scrollValue = 0.0f;
                     break;
                 case 11://削除ボタン
                     if(strlen(game.deviceNum)>0)
@@ -279,6 +277,13 @@ void PushedButton(void){
                 case 3:
                     game.popScene = PopUp_Special;
                     game.selectButton_sub = (int)game.special+1;
+                    break;
+                case 9:
+                    game.selectButton = 1;
+                    game.scene = SCENE_CLIENT_0;
+                    for(int i=0; game.deviceNum[i]!='\0';i++){
+                        game.deviceNum[i] = '\0';
+                    }
                     break;
                 }
             }

@@ -511,8 +511,9 @@ void ExcuteInput(void){
                     PushedButton();
                     break;
                 case INPUT_ESCAPE:
-                    game.scene = SCENE_Title;
-                    game.selectButton = 0;
+                    game.scene = SCENE_CUSTOMIZE;
+                    game.selectButton = 1;
+                    scrollValue = 0.0f;
                     break;
                 case INPUT_BACKSPACE:
                     game.selectButton = 11;//???????????????
@@ -534,7 +535,7 @@ void ExcuteInput(void){
                         switch(game.input)
                         {
                             case INPUT_DOWN:
-                                if(scrollValue <=850)
+                                if(scrollValue <=905)
                                     scrollValue += 15;
                                 break;
                             case INPUT_UP:
@@ -555,9 +556,9 @@ void ExcuteInput(void){
                         {
                             case INPUT_DOWN:
                                 if(game.selectButton == 3){
-                                    scrollValue = 850;
+                                    scrollValue = 905;
                                 }
-                                else if(game.selectButton == 8){
+                                else if(game.selectButton == 9){
                                     scrollValue = 0;
                                 }
                                 shiftSelect(+1,maxButtonNum[game.scene],&game.selectButton);
@@ -567,7 +568,7 @@ void ExcuteInput(void){
                                     scrollValue = 0;
                                 }
                                 else if(game.selectButton == 0){
-                                    scrollValue = 850;
+                                    scrollValue = 905;
                                 }
                                 shiftSelect(-1,maxButtonNum[game.scene],&game.selectButton);
                                 break;
