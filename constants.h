@@ -28,18 +28,18 @@
 #define DAMAGE         1.0f				
 #define MAX_HP 10.0f
 #define BARRIER_RADIUS 1.0f
-#define MAX_BARRIER 4.0f //hp
-#define MAX_DISABLE_TIME 3.0f
-#define MAX_LINES_TIME 20.0f //lines
-#define MAX_DAMAGEAREA_TIME 5.0f //damage area time
-#define DAMAGEAREA_SPEED 2.0f
+#define MAX_BARRIER 8.0f //hp
+#define MAX_DISABLE_TIME 10.0f
+#define MAX_LINES_TIME 6.0f //lines
+#define MAX_DAMAGEAREA_TIME 6.0f //damage area time
+#define DAMAGEAREA_SPEED 3.5f
 #define DAMEGEAREA_RADIUS 3.5f
-#define MAX_BEAM_TIME 20.0f // beam time
+#define MAX_BEAM_TIME 8.0f // beam time
 #define MAX_TRANSFORM_TIME 10.0f
 #define MAX_SPEED 2.0f
 #define MAX_ATTACK 2.0f
 #define BULLET_RADIUS 0.3f       //radius of bullet collider
-#define BIGBULLET_RADIUS 1.5f
+#define BIGBULLET_RADIUS 2.0f
 #define MAX_MP 100.0f
 #define NOTARGET 10
 #define SCORE_KILL_ENEMY 100.0f

@@ -584,7 +584,11 @@ void display(void)
         Circle2D(0.03,0,0);
         for(int i = 0; i<gClientNum; i++){
             glColor3f(nameColor[i][0],nameColor[i][1],nameColor[i][2]);
-            Circle2D(0.03,player[i].pos.x/250,player[i].pos.z*-1/250);
+            if(player[i].isSpecial > 0.0f && player[i].special == SPECIAL_DISABLE){
+            }
+            else {
+                Circle2D(0.03,player[i].pos.x/250,player[i].pos.z*-1/250);
+            }
         }
 	for(int i=0; i<scoreBallNum; i++){
             glColor3f(0.6 , 0.0 , 1.0);
@@ -636,32 +640,37 @@ void display(void)
                 glPopMatrix();
             }
             else{
-                if(player[clientID].pos.y<player[i].pos.y){
-                    Circle2D(0.03,calmini(1,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z),calmini(2,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z));
-                    glPopMatrix();
-                    glPushMatrix();
-                    uiSetting();
-                    glBegin(GL_TRIANGLES);
-                    glColor3f(nameColor[i][0],nameColor[i][1],nameColor[i][2]);
-                    glVertex2f(calmini(1,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z),calmini(2,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z) + 0.09); // (1.0, 0.0, 0.0) ???
-                    glVertex2f(calmini(1,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z) - 0.06,calmini(2,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z) + 0.06);
-                    glVertex2f(calmini(1,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z) + 0.06,calmini(2,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z) + 0.06); // (1.0, 0.0, 0.0) ???
-                    glEnd();
-                    glPopMatrix();
+                if(player[i].isSpecial > 0.0f && player[i].special == SPECIAL_DISABLE){
                 }
                 else{
-                    Circle2D(0.03,calmini(1,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z),calmini(2,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z));
-                    glPopMatrix();
-                    glPushMatrix();
-                    uiSetting();
-                    glBegin(GL_TRIANGLES);
-                    glColor3f(nameColor[i][0],nameColor[i][1],nameColor[i][2]);
-                    glVertex2f(calmini(1,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z) - 0.06,calmini(2,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z) - 0.06);
-                    glVertex2f(calmini(1,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z),calmini(2,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z) - 0.09); 
-                    glVertex2f(calmini(1,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z) + 0.06,calmini(2,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z) - 0.06);
-                    glEnd();
-                    glPopMatrix();
+                    if(player[clientID].pos.y<player[i].pos.y){
+                        Circle2D(0.03,calmini(1,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z),calmini(2,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z));
+                        glPopMatrix();
+                        glPushMatrix();
+                        uiSetting();
+                        glBegin(GL_TRIANGLES);
+                        glColor3f(nameColor[i][0],nameColor[i][1],nameColor[i][2]);
+                        glVertex2f(calmini(1,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z),calmini(2,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z) + 0.09); // (1.0, 0.0, 0.0) ???
+                        glVertex2f(calmini(1,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z) - 0.06,calmini(2,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z) + 0.06);
+                        glVertex2f(calmini(1,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z) + 0.06,calmini(2,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z) + 0.06); // (1.0, 0.0, 0.0) ???
+                        glEnd();
+                       
+                    }
+                    else{
+                        Circle2D(0.03,calmini(1,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z),calmini(2,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z));
+                        glPopMatrix();
+                        glPushMatrix();
+                        uiSetting();
+                        glBegin(GL_TRIANGLES);
+                        glColor3f(nameColor[i][0],nameColor[i][1],nameColor[i][2]);
+                        glVertex2f(calmini(1,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z) - 0.06,calmini(2,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z) - 0.06);
+                        glVertex2f(calmini(1,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z),calmini(2,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z) - 0.09); 
+                        glVertex2f(calmini(1,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z) + 0.06,calmini(2,i,player[clientID].pos.x,player[i].pos.x,player[clientID].pos.z,player[i].pos.z) - 0.06);
+                        glEnd();
+                        
+                    }
                 }
+                 glPopMatrix();
             }
         }
 
@@ -1692,7 +1701,7 @@ void joystick(unsigned int buttonMask, int x, int y, int z)
 {
         if (x>0)
         {
-                /* ï¿½?????ï¿½ï¿½????ï¿½ï¿½????????ï¿½????ï¿½ï¿½ï¿½????????????????????????? */
+                /* ï¿??????ï¿½ï¿½????ï¿½ï¿½????????ï¿?????ï¿½ï¿½ï¿?????????????????????????? */
                 printf("aiueo");
                 key1 = true;
                 if(cos(player[clientID].turn2)<0){
@@ -1711,7 +1720,7 @@ void joystick(unsigned int buttonMask, int x, int y, int z)
         {
             printf("aiuoe");
             key2 = true;
-                /* ï¿½?????ï¿½ï¿½????ï¿½ï¿½????????ï¿½???ï¿½??????????????????????????? */
+                /* ï¿??????ï¿½ï¿½????ï¿½ï¿½????????ï¿????ï¿???????????????????????????? */
         }
         else if(y < 0){
             key4 = true;
