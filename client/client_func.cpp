@@ -163,9 +163,11 @@ void Collider(void){
                 //migawari
                 if(player[clientID].hp <= 0.0f && player[clientID].enabled && i!=clientID && player[i].isSpecial > 0.0f && player[i].special == SPECIAL_TRANSFORM && player[i].transformIndex == clientID){
                     SendPlayerInfoData(i ,0,+1); 
+                    break;
                 }
                else if(player[clientID].hp <= 0.0f && player[clientID].enabled){
                     SendPlayerInfoData(array_bullet[j].shooter_id ,0,+1); //client[i]'s kii_player num ++
+                    break;
                 }
             }
         }
@@ -184,6 +186,7 @@ void Collider(void){
                     }
                     if(player[clientID].hp <= 0.0f && player[clientID].enabled){
                         SendPlayerInfoData(i,0,+1); //client[i]'s kii_player num ++
+                        break;
                     }
                 }
             }
@@ -204,6 +207,7 @@ void Collider(void){
                 }
                 if(player[clientID].hp <= 0.0f && player[clientID].enabled){
                     SendPlayerInfoData(i,0,+1); //client[i]'s kii_player num ++
+                    break;
                 }
             }
         }
@@ -223,6 +227,7 @@ void Collider(void){
                     }
                     if(player[clientID].hp <= 0.0f && player[clientID].enabled){
                         SendPlayerInfoData(i,0,+1); //client[i]'s kii_player num ++
+                        break;
                     }
                 }
             }
@@ -721,22 +726,22 @@ void Respawn(void){
     player[clientID].turn3 = 0;
 }
 
-// ï¿½????ï¿½ï¿½?????????????????ï¿½??ï¿½?????ï¿½????????ï¿½??0Â°???180Â°ï¿½??
+// ï¿?????ï¿½ï¿½?????????????????ï¿???ï¿??????ï¿?????????ï¿???0Â°???180Â°ï¿???
 float cal_angle(glm::vec3 vec1, glm::vec3 vec2){
     vec1 = glm::normalize(vec1);
     vec2 = glm::normalize(vec2);
-    float dot = glm::dot( vec1, vec2 ); // ???ï¿½??ï¿½??ï¿½??
+    float dot = glm::dot( vec1, vec2 ); // ???ï¿???ï¿???ï¿???
     float angle = glm::acos(dot) * 180.0 / M_PI;
     return angle;
 }
 
-// ï¿½????ï¿½ï¿½????????????????????ï¿½????????
+// ï¿?????ï¿½ï¿½????????????????????ï¿?????????
 glm::vec3 cal_vec(glm::vec3 pos1, glm::vec3 pos2){
     glm::vec3 vec = pos1 - pos2;
     return vec;
 }
 
-// ??ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½????????????????ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½??????ï¿½ï¿½ï¿½???ï¿½????????
+// ??ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½????????????????ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½??????ï¿½ï¿½ï¿????ï¿?????????
 int Target(int shooter){
     int id = NOTARGET;
     float min_value = 0.0f; 
