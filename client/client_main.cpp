@@ -14,6 +14,7 @@ Player *player;
 Game game; //?????????
 std::vector<ScoreBall> ary_scoreBall;
 int scoreBallNum = 0;
+bool firstRecvPlayerInfo = false; //データを受け取ったかどうか
 int endFlag = 1; //1:巽??????????????????????-1:????即????邸??????????添??????  0:????????????????足??????????属巽直??辰????
 static float nameColor[MAX_CLIENTS][3] = {{1.0,0.0,0.0}, {0.0,0.0,1.0}, {1.0 , 0.8 , 0.0}, {0.0 , 0.4 , 0.0}};
 
@@ -201,6 +202,13 @@ int main(int argc, char **argv)
 void display(void)
 {
 
+    /* netwaork*/
+    if((endFlag = SendRecvManager()) != 1)
+    {
+        ExitClientProgram(endFlag);
+    }
+    SendPlayerDataCommand(); //PlayerData
+
     if(player[clientID].mp <= MAX_MP && player[clientID].isspecial == false){
         player[clientID].mp += 0.1f +player[clientID].parm[PARM_MP]*0.001;
     }
@@ -288,15 +296,10 @@ void display(void)
     /* ???????????????????? */
      move();
 
-   
-    
-    for (i = 0; i < gClientNum; i++) {
-        if(player[i].enabled){
-            glPushMatrix();           /* ??????????辿???????? */
-            glColor3f(1.0, 1.0, 1.0); /* ???????????? */
-            glScalef(1.0, 1.0, 1.0);
-            
-            if (cloud_flag == 0){
+    if (firstRecvPlayerInfo == true && cloud_flag == 0){
+        for(int z=0; z<gClientNum; z++){
+            printf("size[%d]:%lf\n",z,player[z].size);
+        }
                 glmScale(model[4], 100.00);
                 lists(4);
                 glmScale(model[5], 60.00);
@@ -305,12 +308,21 @@ void display(void)
                 lists(6);
 		        glmScale(model[7], 1000.00);
                 lists(7);
-                for (i = 0; i < gClientNum; i++) {
-                    glmScale(model[i],player[i].size);
-                    lists(i);
+                for (int p = 0; p< gClientNum; p++) {
+                    glmScale(model[p],player[p].size);
+                    lists(p);
                 }
                 cloud_flag = 1;
-            }
+    }
+   
+    
+    for (i = 0; i < gClientNum; i++) {
+        if(player[i].enabled){
+            glPushMatrix();           /* ??????????辿???????? */
+            glColor3f(1.0, 1.0, 1.0); /* ???????????? */
+            glScalef(1.0, 1.0, 1.0);
+            
+            
             
             
 
@@ -695,12 +707,7 @@ void display(void)
     } */
     
     
-    /* ???????????????????????????? */
-    if((endFlag = SendRecvManager()) != 1)
-    {
-        ExitClientProgram(endFlag);
-    }
-    SendPlayerDataCommand(); //PlayerData??????辿?????????
+    
     
     
 }

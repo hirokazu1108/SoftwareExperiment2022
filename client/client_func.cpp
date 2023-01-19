@@ -255,12 +255,13 @@ void Collider(void){
         //bullet
         for(int j=0; j<bullet_Num; j++){
             if(OnColliderSphere(ary_scoreBall[i].collider,Sphere(BULLET_RADIUS,glm::vec3(array_bullet[j].pos)))){
-                //score
-                player[array_bullet[j].shooter_id].score += 1.0f;
+                
 
                 //delete
                 ary_scoreBall[i].hp -= 1.0f;
                 if(ary_scoreBall[i].hp <= 0.0){
+                    //score
+                    player[array_bullet[j].shooter_id].score += 150.0f;
                     player[array_bullet[j].shooter_id].kill_enemy += 1;
                     deleteScoreBall(i);
                 }
@@ -272,12 +273,12 @@ void Collider(void){
             if(player[j].isSpecial >0.0f && player[j].special == SPECIAL_DAMAGEAREA){
                 //damageArea
                 if(OnColliderSphere(Sphere(DAMEGEAREA_RADIUS,player[j].pos), ary_scoreBall[i].collider)){            
-                    //score
-                    player[j].score += 0.1f;
 
                     //delete
                     ary_scoreBall[i].hp -= 1.0f; //damage
                     if(ary_scoreBall[i].hp <= 0.0){
+                        //score
+                        player[j].score += 150.0f;
                         player[j].kill_enemy += 1;
                         deleteScoreBall(i);
                     }
@@ -288,12 +289,11 @@ void Collider(void){
                 for(int k=0; k<100; k++){
                     glm::vec3 d = glm::vec3(3*player[j].dir.x*(k+1),3*player[j].dir.y*(k+1),3*player[j].dir.z*(k+1));
                     if(OnColliderSphere(Sphere(1.5,player[j].pos+d), ary_scoreBall[i].collider)){
-                        //score
-                        player[j].score += 0.1f;
-
                         //delete
                         ary_scoreBall[i].hp -= 1.0f; //damage
                         if(ary_scoreBall[i].hp <= 0.0){
+                            //score
+                            player[j].score += 150.0f;
                             player[j].kill_enemy += 1;
                             deleteScoreBall(i);
                         }
