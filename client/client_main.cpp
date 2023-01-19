@@ -1626,7 +1626,7 @@ void move(){
 
      float rate_vel = 1.0f;
     if(player[clientID].isSpecial > 0.0f && player[clientID].special == SPECIAL_DAMAGEAREA){
-        rate_vel = DAMAGEAREA_SPEED;
+        rate_vel = (float)DAMAGEAREA_SPEED;
     }
     player[clientID].pos.x = player[clientID].pos.x-sin(player[clientID].turn1)*cos(player[clientID].turn2)*0.1*player[clientID].speed * rate_vel;
     player[clientID].pos.z =player[clientID].pos.z-cos(player[clientID].turn1)*cos(player[clientID].turn2)*0.1*player[clientID].speed * rate_vel;
