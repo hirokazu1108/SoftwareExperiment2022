@@ -6,7 +6,7 @@
 
 #define WD_Height 1000
 #define WD_Width 1200
-#define IMG_NUM 42
+#define IMG_NUM 47
 #define TEXT_NUM 84
 #define SCENE_NUM 8
 
@@ -49,6 +49,11 @@ typedef enum{
     uname_barrier,
     uname_disabled,
     uname_bigbullet,
+    uname_lines,
+    uname_damageArea,
+    uname_beam,
+    uname_chase,
+    uname_transform,
     uname_barrier_icon,
     uname_disabled_icon,
     uname_bigbullet_icon,
