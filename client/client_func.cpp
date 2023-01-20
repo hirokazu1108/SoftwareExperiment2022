@@ -146,18 +146,18 @@ void Collider(void){
 
                 if(player[i].isBarrier>0.0f){
                     printf("barrier protected me!!\n");
-                    player[i].isBarrier -= (player[array_bullet[j].shooter_id].attack - player[i].parm[PARM_HP]) * player[array_bullet[j].shooter_id].rate_attack * big_rate/2;
+                    player[i].isBarrier -= ((player[array_bullet[j].shooter_id].attack* big_rate - player[i].parm[PARM_HP]) * player[array_bullet[j].shooter_id].rate_attack)/2;
                 }
                 else{
                     if( i!=clientID && player[i].isSpecial > 0.0f && player[i].special == SPECIAL_TRANSFORM && player[i].transformIndex == clientID){
-                        player[clientID].hp -= (player[array_bullet[j].shooter_id].attack - player[i].parm[PARM_HP]) * player[array_bullet[j].shooter_id].rate_attack* big_rate;
+                        player[clientID].hp -= (player[array_bullet[j].shooter_id].attack* big_rate - player[i].parm[PARM_HP]) * player[array_bullet[j].shooter_id].rate_attack;
                     }
                     else if(i==clientID && player[clientID].isSpecial > 0.0f && player[clientID].special == SPECIAL_TRANSFORM){
-                        player[player[clientID].transformIndex].hp -= (player[array_bullet[j].shooter_id].attack - player[i].parm[PARM_HP]) * player[array_bullet[j].shooter_id].rate_attack* big_rate;
+                        player[player[clientID].transformIndex].hp -= (player[array_bullet[j].shooter_id].attack* big_rate - player[i].parm[PARM_HP]) * player[array_bullet[j].shooter_id].rate_attack;
                         printf("migawari\n");
                     }
                     else{
-                        player[i].hp -= (player[array_bullet[j].shooter_id].attack - player[i].parm[PARM_HP]) * player[array_bullet[j].shooter_id].rate_attack* big_rate;
+                        player[i].hp -= (player[array_bullet[j].shooter_id].attack* big_rate - player[i].parm[PARM_HP]) * player[array_bullet[j].shooter_id].rate_attack;
                     }
                 }
                 deleteBullet(j);
