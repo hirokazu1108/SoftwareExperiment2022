@@ -289,7 +289,7 @@ void Collider(void){
                     glm::vec3 d = glm::vec3(3*player[j].dir.x*(k+1),3*player[j].dir.y*(k+1),3*player[j].dir.z*(k+1));
                     if(OnColliderSphere(Sphere(1.5,player[j].pos+d), ary_scoreBall[i].collider)){
                         //delete
-                        ary_scoreBall[i].hp -= 1.0f; //damage
+                        ary_scoreBall[i].hp -= 2.0f; //damage
                         if(ary_scoreBall[i].hp <= 0.0){
                             //score
                             player[j].score += SCORE_KILL_ENEMY;

@@ -1923,7 +1923,7 @@ void move_bullet(int num){
     for(int i = 0; i < num; i++){
         if(array_bullet[i].type == SPECIAL_CHASE && array_bullet[i].target_id != NOTARGET){
             array_bullet[i].dir = glm::normalize((cal_vec(player[array_bullet[i].target_id].pos , array_bullet[i].pos)));
-            array_bullet[i].pos += array_bullet[i].dir * (player[array_bullet[i].target_id].speed + 1.0f);  
+            array_bullet[i].pos += array_bullet[i].dir * (player[array_bullet[i].target_id].speed + 1.5f);  
         }
         else{
             array_bullet[i].pos += array_bullet[i].dir * player[array_bullet[i].shooter_id].speed;
