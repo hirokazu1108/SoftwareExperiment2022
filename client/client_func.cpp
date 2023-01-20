@@ -517,8 +517,8 @@ void createScoreBall(void){
 }
 
 void PopEnemy(int PopEnemy_ID){
-    createScoreBall();
-    glutTimerFunc(60000, PopEnemy, 0);
+    if(scoreBallNum <= 20){createScoreBall();}
+    glutTimerFunc(15000, PopEnemy, 0);
 }
 
 void deleteScoreBall(int index){
