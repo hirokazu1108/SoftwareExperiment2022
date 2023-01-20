@@ -181,7 +181,7 @@ void Collider(void){
                         printf("barrier protected me by lines!!\n");
                     }
                     else {
-                        player[clientID].hp -= 0.1;
+                        player[clientID].hp -= 0.5;
                         printf("hit lines\n");
                     }
                     if(player[clientID].hp <= 0.0f && player[clientID].enabled){
@@ -331,8 +331,8 @@ void Ability(int id){
         break;
 
         case SKILL_HP:
-        if(player[id].hp < MAX_HP){
-            player[id].hp += 0.5;
+        if(player[id].hp < 11.0){
+            player[id].parm[PARM_HP] += 0.5;
         }
         break;
 
