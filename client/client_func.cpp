@@ -139,23 +139,25 @@ void Collider(void){
         for(int j=0; j<bullet_Num;j++){
             if(OnColliderSphere(Sphere((array_bullet[j].type == SPECIAL_BIGBULLET) ? (BIGBULLET_RADIUS) : (BULLET_RADIUS), array_bullet[j].pos),((player[i].isBarrier > 0.0f) ? Sphere(BARRIER_RADIUS,player[i].pos): player[i].collider))){
 
+                float big_rate = 1.0f;
+                if(array_bullet[j].type == SPECIAL_BIGBULLET){big_rate = 5.0f;}
                 Ability(array_bullet[j].shooter_id);
                 printf("speed:%f\n" ,player[array_bullet[j].shooter_id].speed);
 
                 if(player[i].isBarrier>0.0f){
                     printf("barrier protected me!!\n");
-                    player[i].isBarrier -= (player[array_bullet[j].shooter_id].attack - player[i].parm[PARM_HP]) * player[array_bullet[j].shooter_id].rate_attack;
+                    player[i].isBarrier -= (player[array_bullet[j].shooter_id].attack - player[i].parm[PARM_HP]) * player[array_bullet[j].shooter_id].rate_attack * big_rate/2;
                 }
                 else{
                     if( i!=clientID && player[i].isSpecial > 0.0f && player[i].special == SPECIAL_TRANSFORM && player[i].transformIndex == clientID){
-                        player[clientID].hp -= (player[array_bullet[j].shooter_id].attack - player[i].parm[PARM_HP]) * player[array_bullet[j].shooter_id].rate_attack;
+                        player[clientID].hp -= (player[array_bullet[j].shooter_id].attack - player[i].parm[PARM_HP]) * player[array_bullet[j].shooter_id].rate_attack* big_rate;
                     }
                     else if(i==clientID && player[clientID].isSpecial > 0.0f && player[clientID].special == SPECIAL_TRANSFORM){
-                        player[player[clientID].transformIndex].hp -= (player[array_bullet[j].shooter_id].attack - player[i].parm[PARM_HP]) * player[array_bullet[j].shooter_id].rate_attack;
+                        player[player[clientID].transformIndex].hp -= (player[array_bullet[j].shooter_id].attack - player[i].parm[PARM_HP]) * player[array_bullet[j].shooter_id].rate_attack* big_rate;
                         printf("migawari\n");
                     }
                     else{
-                        player[i].hp -= (player[array_bullet[j].shooter_id].attack - player[i].parm[PARM_HP]) * player[array_bullet[j].shooter_id].rate_attack;
+                        player[i].hp -= (player[array_bullet[j].shooter_id].attack - player[i].parm[PARM_HP]) * player[array_bullet[j].shooter_id].rate_attack* big_rate;
                     }
                 }
                 deleteBullet(j);
@@ -177,7 +179,7 @@ void Collider(void){
             for(int j=0; j<scoreBallNum; j++){
                 if(OnColliderLinesSphere( (player[clientID].isBarrier > 0.0f) ? Sphere(BARRIER_RADIUS,player[clientID].pos): player[clientID].collider, player[i].pos, ary_scoreBall[j].pos)){
                     if(player[clientID].isBarrier>0.0f){
-                        player[clientID].isBarrier -= 0.1;  //damage to barrier by lines
+                        player[clientID].isBarrier -= 0.1/2;  //damage to barrier by lines
                         printf("barrier protected me by lines!!\n");
                     }
                     else {
@@ -198,7 +200,7 @@ void Collider(void){
                 
 
                 if(player[clientID].isBarrier>0.0f){
-                    player[clientID].isBarrier -= 0.2;  //damage to barrier by damageArea
+                    player[clientID].isBarrier -= 0.2/2;  //damage to barrier by damageArea
                     printf("barrier protected me by damageArea!!\n");
                 }
                 else {
@@ -219,7 +221,7 @@ void Collider(void){
                 if(OnColliderSphere(Sphere(1.5,player[i].pos+d), (player[clientID].isBarrier > 0.0f) ? Sphere(BARRIER_RADIUS,player[clientID].pos): player[clientID].collider)){
                     if(player[clientID].isBarrier>0.0f){
                         printf("barrier protected me by beam!!\n");
-                        player[clientID].isBarrier -= 0.1;  //damage to barrier by beam
+                        player[clientID].isBarrier -= 0.1/2;  //damage to barrier by beam
                     }
                     else {
                         player[clientID].hp -= 0.1;  // damage
@@ -243,7 +245,7 @@ void Collider(void){
             if(OnColliderSphere(ary_scoreBall[i].collider,((player[j].isBarrier > 0.0f) ? Sphere(BARRIER_RADIUS,player[j].pos): player[j].collider))){
                 //damage
                 if(player[j].isBarrier > 0.0f){
-                    player[j].isBarrier -= 1.0f;
+                    player[j].isBarrier -= 1.0f/2;
                 }
                 else{
                     player[j].hp -= 0.01f;
@@ -535,7 +537,7 @@ void moveScoreBall(void){
     float tamax;
     float tamaz;
     float tamay;
-    
+    if(player[clientID].isSpecial <= 0.0f || player[clientID].special != SPECIAL_DISABLE){
     for(int i=0; i<scoreBallNum; i++){
          for(int j = 0; j < gClientNum; j++){
              if(ary_scoreBall[i].pos.x + 50 > player[j].pos.x && ary_scoreBall[i].pos.x - 50 < player[j].pos.x){
@@ -694,6 +696,7 @@ void moveScoreBall(void){
                 break;
         }
         ary_scoreBall[i].collider.pos = ary_scoreBall[i].pos;
+    }
     }
 }
 
