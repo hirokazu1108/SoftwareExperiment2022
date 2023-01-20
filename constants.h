@@ -63,7 +63,7 @@
 #define SPECIAL_NUM 8            //num of specials
 #define FILENAME_GAMEDATA "../data/gamedata.bin"
 #define FILENAME_RANKINGDATA "../data/ranking.txt"
-#define GAMETIME 240
+#define GAMETIME 180
 
 typedef enum {
     State_Wait,
