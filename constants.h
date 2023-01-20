@@ -45,6 +45,7 @@
 #define SCORE_KILL_ENEMY 100.0f
 #define SCORE_KILL_PLAYER 500.0f
 #define SCORE_DEATH -300.0f
+#define MAX_ENEMY 20
 
 #define PLAYERDATA_COMMAND 'p'
 #define END_COMMAND 'e'
