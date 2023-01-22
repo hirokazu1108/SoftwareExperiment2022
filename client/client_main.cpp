@@ -218,6 +218,9 @@ void display(void)
             player[clientID].isspecial = false;
         }
     }
+    else{
+        player[clientID].isBarrier = 0.0f;
+    }
 
     if(player[clientID].isSpecial > 0.0f){
         player[clientID].isSpecial -= 0.01f;
@@ -348,15 +351,14 @@ void display(void)
     }
     
     for (int i= -1 ; i < 2; i++){
-        for (int j= -1 ;j < 2; j++){
-            for (int k = -1; k < 2; k++){
-                glPushMatrix(); 
-                glTranslatef(i*250,j*250,k*250);
-                glCallList(model_list[4]);
-                glPopMatrix();
-            }
+        for (int k = -1; k < 2; k++){
+            glPushMatrix(); 
+            glTranslatef(i*250,0,k*250);
+            glCallList(model_list[4]);
+            glPopMatrix();
         }
     }
+
 
     glPushMatrix(); 
     glTranslatef(0,0,0);
@@ -488,12 +490,53 @@ void display(void)
     glRectf( bar_mp.x1, bar_mp.y1, bar_mp.x1+bar_mp.w*player[clientID].mp/(float)MAX_MP, bar_mp.y2);
     glColor3f( 0.0f, 0.0f, 0.0f );
     glRectf(bar_mp.x1+bar_mp.w*player[clientID].mp/MAX_MP,bar_mp.y1,bar_mp.x2,bar_mp.y2);
-    // barrier hp
-    Bar bar_barrier(0.7f,1.35f,2.0f,1.45f);
-    glColor3f( 0.4f, 0.4f, 1.0f );
-    glRectf( bar_barrier.x1, bar_barrier.y1, bar_barrier.x1+bar_barrier.w*player[clientID].isBarrier/(float)MAX_BARRIER, bar_barrier.y2);
-    glColor3f( 0.0f, 0.0f, 0.0f );
-    glRectf(bar_barrier.x1+bar_barrier.w*player[clientID].isBarrier/(float)MAX_BARRIER,bar_barrier.y1,bar_barrier.x2,bar_barrier.y2);
+    //  special mater
+    if(player[clientID].isBarrier > 0.0f)
+    {
+        glPushMatrix();
+            glColor3f(0.0,0.0,0.0);
+            glTranslatef(0.70,1.20,0);
+            DrawString("BARRIER GAGE",0,0);
+        glPopMatrix();
+
+        Bar bar_barrier(0.7f,1.05f,2.0f,1.15f);
+        glColor3f( 0.4f, 0.4f, 1.0f );
+        glRectf( bar_barrier.x1, bar_barrier.y1, bar_barrier.x1+bar_barrier.w*player[clientID].isBarrier/(float)MAX_BARRIER, bar_barrier.y2);
+        glColor3f( 0.0f, 0.0f, 0.0f );
+        glRectf(bar_barrier.x1+bar_barrier.w*player[clientID].isBarrier/(float)MAX_BARRIER,bar_barrier.y1,bar_barrier.x2,bar_barrier.y2);
+    }
+    else if(player[clientID].isSpecial > 0.0f){
+        glPushMatrix();
+            glColor3f(0.0,0.0,0.0);
+            glTranslatef(0.70,1.20,0);
+            DrawString("SPECIAL GAGE",0,0);
+        glPopMatrix();
+
+        Bar bar_special(0.7f,1.05f,2.0f,1.15f);
+        float bar_pos;
+        glColor3f( 0.4f, 0.4f, 1.0f );
+        switch(player[clientID].special){
+            case SPECIAL_DISABLE:
+                bar_pos = bar_special.w*player[clientID].isSpecial/(float)MAX_DISABLE_TIME;
+                break;
+            case SPECIAL_LINES:
+                bar_pos = bar_special.w*player[clientID].isSpecial/(float)MAX_LINES_TIME;
+                break;
+            case SPECIAL_DAMAGEAREA:
+                bar_pos = bar_special.w*player[clientID].isSpecial/(float)MAX_DAMAGEAREA_TIME;
+                break; 
+            case SPECIAL_TRANSFORM:
+                bar_pos = bar_special.w*player[clientID].isSpecial/(float)MAX_TRANSFORM_TIME;
+                break;
+            case SPECIAL_BEAM:
+                bar_pos = bar_special.w*player[clientID].isSpecial/(float)MAX_BEAM_TIME;
+                break;
+        }
+        glRectf( bar_special.x1, bar_special.y1, bar_special.x1+bar_pos, bar_special.y2);
+        glColor3f( 0.0f, 0.0f, 0.0f );
+        glRectf(bar_special.x1+bar_pos,bar_special.y1,bar_special.x2,bar_special.y2);
+    }
+    
     glEnable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
     glPopMatrix();
@@ -529,7 +572,7 @@ void display(void)
         glPopMatrix();
         draw_hpPos+=1;
     }
-        /* textUI
+    /* textUI
         char uiText[32];
         // score
         glPushMatrix();
@@ -601,6 +644,7 @@ void display(void)
     }
     
     
+
     glEnable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
     glPopMatrix();
