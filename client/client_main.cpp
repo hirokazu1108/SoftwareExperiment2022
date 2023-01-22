@@ -529,7 +529,7 @@ void display(void)
         glPopMatrix();
         draw_hpPos+=1;
     }
-    // textUI
+        /* textUI
         char uiText[32];
         // score
         glPushMatrix();
@@ -566,6 +566,40 @@ void display(void)
             glTranslatef(1.7, -1.8, 0);
             DrawString(uiText, 0, 0);
         glPopMatrix();
+    */
+   //textUI
+   // score
+    char uiText[32];
+
+    glPushMatrix();
+        glColor3f( 1.0f, 1.0f, 1.0f );
+        glRectf( -2.3,-1.4-(gClientNum-1)*0.2,-1.2,-0.9);
+    glPopMatrix();
+    glPushMatrix();
+        glColor3f( 0.0f, 0.0f, 0.0f );
+        glTranslatef(-1.9,-1.05,0.0);
+        DrawString("SCORE", 0, 0);
+    glPopMatrix();
+    for(int i=0; i<gClientNum; i++){
+        int digit = 0;
+        int nn = player[i].score;
+        do{
+            nn /= 10;
+            digit++;
+        }while(nn != 0);
+        glPushMatrix();
+            glColor3f(nameColor[i][0],nameColor[i][1],nameColor[i][2]);
+            glTranslatef(-2.15, -1.3f-i*0.19,0);
+            DrawString(game.clientName[i], 0, 0);
+        glPopMatrix();
+        glPushMatrix();
+            sprintf(uiText,(player[i].score>=0) ? "  %.0f" : "%.0f",player[i].score);
+            glColor3f(nameColor[i][0],nameColor[i][1],nameColor[i][2]);
+            glTranslatef(-1.45-(digit-1)*0.04f, -1.3f-i*0.19, 0);
+            DrawString(uiText, 0, 0);
+        glPopMatrix();
+    }
+    
     
     glEnable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
