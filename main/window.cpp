@@ -1,7 +1,7 @@
 #include "header.h"
 
 /* ??Ă§ÂłÂ¸???????? */
-static const char *imgFile[IMG_NUM] = { "inputClientNum.png","inputPasscode.png","inputDeviceNum.png","name.png", "skill.png","special.png","status.png", "explain_skill.png","nowSelectButton.png", "changeButton.png","backButton.png",  "skill_attack.png", "skill_hp.png","skill_speed.png", "pin.png","rightSelect.png","leftSelect.png", "back.png","nameChange.png","skillChange.png","specialChange.png","selectHikouki.png","barrier.png","disabled.png","bigbullet.png","lines.png","damageArea.png","beam.png","chase.png","transform.png","barrier_icon.png","disabled_icon.png","bigbullet_icon.png", "lines_icon.png", "damageArea_icon.png","beam_icon.png","chase_icon.png","transform_icon.png","logo.png", "rankingBoard.png", "rankingBack.png","title_sky.png","title_sky2.png","cloud.png", "castle.png","masao.png","masao_face.png"};
+static const char *imgFile[IMG_NUM] = { "inputClientNum.png","inputPasscode.png","inputDeviceNum.png","name.png", "skill.png","special.png","status.png", "explain_skill.png","nowSelectButton.png", "changeButton.png","backButton.png",  "skill_attack.png", "skill_hp.png","skill_speed.png", "pin.png","rightSelect.png","leftSelect.png", "back.png","nameChange.png","skillChange.png","specialChange.png","selectHikouki.png","barrier.png","disabled.png","bigbullet.png","lines.png","damageArea.png","beam.png","chase.png","transform.png","barrier_icon.png","disabled_icon.png","bigbullet_icon.png", "lines_icon.png", "damageArea_icon.png","beam_icon.png","chase_icon.png","transform_icon.png","logo.png", "rankingBoard.png", "rankingBack.png","title_sky.png","title_sky2.png","cloud.png", "castle.png","sidePlane.png","loading.png","masao.png","masao_face.png"};
 static const char *textStr[TEXT_NUM] = {"Space Battle","SERVER","CLIENT","CUSTOMIZE","input client num.","input passcode.","back","Enter","local","input device num.","clpc","nowLoading...","Result","Exit","Detail","Title","SCORE RANKING","KILL RANKING","DEATH RANKING", "KILL ENEMY RANKING","0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"," ", "-"};
 /* ????????ĂŚÂ˝????????? */
 static char gFontFile[] = "../fonts/Yomogi-Regular.ttf";
@@ -18,6 +18,8 @@ float masao_loop = 0;
 float masao_rotate = 0;
 float masao_x = 500;
 float masao_y = 500;
+
+float planeMoveTurn = 0.0f;
 
 /* ?????????Âź??Ă¨âšÂĽ?ĂĽÂ¸ÂĽ????Ă¨Â´??? */
 static int parm_x[11] = {380,425,475,520,567,618,664,710,756,802,850};//?????ĂŚÂ˝???xĂ§ÂśÂşĂ????
@@ -583,10 +585,13 @@ void RenderCustomizeWindow(void){
 }
 
 void RenderClientWaitWindow(void){
-    //??????
-    DrawBackGround();
+    uiImg[uname_loading].drawTexture(0,230,uiImg[uname_loading].w*0.6,uiImg[uname_loading].h*0.6);
 
-    textImg[tname_nowloading].drawTexture(100,100,textImg[tname_nowloading].w/1.2,textImg[tname_nowloading].h/1.2);
+    uiImg[uname_sidePlane].drawTexture(200,230+20*sin(planeMoveTurn)+20*sin(planeMoveTurn+M_PI/3),uiImg[uname_sidePlane].w*0.7,uiImg[uname_sidePlane].h*0.7);
+    planeMoveTurn += M_PI/180;
+    if(planeMoveTurn > 2*M_PI){
+        planeMoveTurn = 0.0f;
+    }
 
     SDL_RenderPresent(game.render);
 }
