@@ -302,7 +302,7 @@ void display(void)
         for(int z=0; z<gClientNum; z++){
             printf("size[%d]:%lf\n",z,player[z].size);
         }
-                glmScale(model[4], 100.00);
+                glmScale(model[4], 150.00);
                 lists(4);
                 glmScale(model[5], 60.00);
                 lists(5);
@@ -349,11 +349,11 @@ void display(void)
         
     }
     
-    for (int i= -1 ; i < 2; i++){
-        for(int j=-1; j < 2; j++){
-            for (int k = -1; k < 2; k++){
+    for (int i= 0 ; i < 2; i++){
+        for(int j=0; j < 2; j++){
+            for (int k = 0; k < 2; k++){
                 glPushMatrix(); 
-                glTranslatef(i*250,j*250,k*250);
+                glTranslatef(i*350 - 175,j*350 - 175 ,k*350 - 175);
                 glCallList(model_list[4]);
                 glPopMatrix();
             }
