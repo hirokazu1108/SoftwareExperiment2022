@@ -125,7 +125,6 @@ void count_time(int count_timeID);      // ??????????????é?????????????????????
 void del_bullet(void);  // ???????????��?????????é?????????????
 void deleteBullet(int index);
 void interval_attack(int interval_attackID);    // ???????????��???????????????????????????????????????????
-void Circle2D(float radius,float x,float y);
 void Oval2D(float radius,int x,int y,float ovalx,float ovaly);
 float calmini(int f,int pnum,float ppx, float epx,float ppy, float epy);
 float calmap(int i);
@@ -536,6 +535,48 @@ void display(void)
         glColor3f( 0.0f, 0.0f, 0.0f );
         glRectf(bar_special.x1+bar_pos,bar_special.y1,bar_special.x2,bar_special.y2);
     }
+    else if(player[clientID].isBigbullet>0){
+        glPushMatrix();
+    //uiSetting();
+    glColor3f(0.0,0.0,0.0);
+            glTranslatef(0.70,1.20,0);
+            DrawString("REMAINING BULLETS",0,0);
+        glPopMatrix();
+    glPushMatrix();
+    glColor3f(0.0,0.0,0.0);
+            glTranslatef(0.70,1.20,0);
+            DrawString("REMAINING BULLETS",0,0);
+        glPopMatrix(); 
+    //uiSetting();
+    glColor3f(1.0f, 0.0f, 0.0f);
+    for(int i=0; i<player[clientID].isBigbullet; i++){
+        
+        Circle2D(0.06f, 0.435f+0.425*i+0.3, 1.02f);
+      
+    }
+  glPopMatrix();
+    }
+    else if(player[clientID].isChase>0){
+        glPushMatrix();
+    //uiSetting();
+    glColor3f(0.0,0.0,0.0);
+            glTranslatef(0.70,1.20,0);
+            DrawString("REMAINING BULLETS",0,0);
+        glPopMatrix();
+    glPushMatrix();
+    glColor3f(0.0,0.0,0.0);
+            glTranslatef(0.70,1.20,0);
+            DrawString("REMAINING BULLETS",0,0);
+        glPopMatrix(); 
+    //uiSetting();
+    glColor3f(1.0f, 0.0f, 0.0f);
+    for(int i=0; i<player[clientID].isChase; i++){
+        
+        Circle2D(0.06f, 0.435f+0.425*i+0.3, 1.02f);
+      
+    }
+  glPopMatrix();
+    }
     
     glEnable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
@@ -913,29 +954,6 @@ float calmini(int f,int pnum,float ppx, float epx,float ppy, float epy){
     return numtiten /* cos(player[clientID].turn1)*/;
 }
 
-void Circle2D(float radius,float x,float y)
-{
- for (float th1 = 0.0;  th1 <= 720.0;  th1 = th1 + 1.0)
- {
-             
-  float th2 = th1 + 10.0;
-  float th1_rad = th1 / 180.0 * M_PI; 
-  float th2_rad = th2 / 180.0 * M_PI;
-
-  float x1 = radius * cos(th1_rad);
-  float y1 = radius * sin(th1_rad);
-  float x2 = radius * cos(th2_rad);
-  float y2 = radius * sin(th2_rad);
-
- 
-   glBegin(GL_TRIANGLES); 
-   glVertex2f( x, y );
-   glVertex2f( x1+x, y1+y );     
-   glVertex2f( x2+x, y2+y );
-  glEnd();
-  
- }
-}
 
 void Oval2D(float radius,int x,int y,float ovalx,float ovaly)
 {
@@ -1218,9 +1236,7 @@ void keyboard(unsigned char key, int x, int y)
             key8 = true;
         }
     }  
-    if(key == 'm'){
-        createScoreBall();
-    }
+    
     if(key == 'n'){
         for(int i=0; i<gClientNum; i++)
             printf("score:%lf\n",player[i].score);
@@ -1780,7 +1796,7 @@ void joystick(unsigned int buttonMask, int x, int y, int z)
         if (x>0)
         {
                 /* �??????��????��????????�?????���?????????????????????????? */
-                printf("aiueo");
+                //printf("aiueo");
                 key1 = true;
                 if(cos(player[clientID].turn2)<0){
             key1 = false;
@@ -1796,7 +1812,7 @@ void joystick(unsigned int buttonMask, int x, int y, int z)
         }
         if (y > 0)
         {
-            printf("aiuoe");
+            //printf("aiuoe");
             key2 = true;
                 /* �??????��????��????????�????�???????????????????????????? */
         }
