@@ -3,6 +3,7 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 
 #define WD_Height 1000
 #define WD_Width 1200
@@ -229,6 +230,7 @@ extern settingGame game;
 extern char tempName[NAME_MAX_LENGTH+1];
 extern int PrintError(const char* str);
 extern void EndProgram(void);
+extern Mix_Music *bgm;
 
 /* window.cpp */
 extern int InitWindow(void);
