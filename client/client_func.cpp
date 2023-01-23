@@ -74,14 +74,14 @@ void AudioInit(int *argc, char **argv){
 
     // ï¿½ï¿½ï¿½ç?´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?"hello world"ï¿½ï¿½ï¿½ï¿½ï¿½å??ï¼?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï??ï¿½ï¿½ç¯?ï¿½ï¿½ï¿½ï¿½
     buffer = alutCreateBufferHelloWorld ();
-    /*if(rand()%2 == 0){
+    if(rand()%2 == 0){
     buffer2 = alutCreateBufferFromFile( "BGM.wav" );
     }
     else{
-         buffer2 = alutCreateBufferFromFile( "SKYWARS_BATTLE.wav" );
+        buffer2 = alutCreateBufferFromFile("BGM2.wav");
          printf("aiueo");
-    }*/
-    buffer2 = alutCreateBufferFromFile("BGM.wav");
+    }
+    
     alSourcei( source, AL_BUFFER, buffer );
     alSourcei( source2, AL_BUFFER, buffer2 );
     alSourcei(source2, AL_LOOPING, AL_TRUE );
