@@ -85,6 +85,7 @@ extern void Respawn(void);
 extern float cal_angle(glm::vec3 vec1, glm::vec3 vec2);
 extern glm::vec3 cal_vec(glm::vec3 pos1, glm::vec3 pos2);
 extern int Target(int shooter);
+extern void Circle2D(float radius,float x,float y);
 
 extern int		gClientNum;
 extern int		clientID;
