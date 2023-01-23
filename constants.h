@@ -57,7 +57,7 @@
 
 #define PARAMATER_MAX 5         //max value of status paramaters
 #define PARAMATER_NUM 5         //num of status paramaters
-#define PARAMATER_SUM_MAX 7    //max of sum of status paramaters
+#define PARAMATER_SUM_MAX 5    //max of sum of status paramaters
 #define NAME_MAX_LENGTH 10      //max length of client name
 #define SKILL_NUM 3             //num of skills
 #define SPECIAL_NUM 8            //num of specials
