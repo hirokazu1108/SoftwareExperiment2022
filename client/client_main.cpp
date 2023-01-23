@@ -488,7 +488,7 @@ void display(void)
         glTranslatef(0.50,1.53,0);
         DrawString("MP",0,0);
     glPopMatrix();
-    glColor3f( 0.4f, 0.4f, 1.0f );
+    glColor3f( 0.8 , 0.2 , 1.0);
     glRectf( bar_mp.x1, bar_mp.y1, bar_mp.x1+bar_mp.w*player[clientID].mp/(float)MAX_MP, bar_mp.y2);
     glColor3f( 0.0f, 0.0f, 0.0f );
     glRectf(bar_mp.x1+bar_mp.w*player[clientID].mp/MAX_MP,bar_mp.y1,bar_mp.x2,bar_mp.y2);
