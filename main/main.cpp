@@ -9,6 +9,7 @@ void ExcuteInput(void);
 bool isReadRankingflg = false;//isread rannkinng
 settingGame game;
 char tempName[NAME_MAX_LENGTH+1];
+Mix_Music *bgm;
 
 /* main */
 int main(int argc, char* argv[])
@@ -34,7 +35,8 @@ int main(int argc, char* argv[])
     /* ???????????????????????? */
     InitSystem();
     /* SDL */
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0) {
+
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_AUDIO) < 0) {
         return PrintError(SDL_GetError());
     }
     /** UI????????? **/
@@ -43,7 +45,12 @@ int main(int argc, char* argv[])
         EndProgram();
         return 0;
     }
-
+    if(Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT,2, 1024)==-1) {
+        printf("Failed: %s\n", Mix_GetError());
+        exit(-1);
+    }
+    bgm = Mix_LoadMUS("TITLE.wav"); // Music型で読み込み
+    Mix_PlayMusic(bgm, -1); // Music型サウンドを無限に再生
 
     /* ?O????????????????????????????
      *  ????????????????????????????????????????????????????[?
@@ -154,6 +161,12 @@ int main(int argc, char* argv[])
             framecnt++;
         }
     }
+
+    Mix_FreeMusic(bgm);
+    bgm=NULL; // 解放したことを明示するために
+    Mix_CloseAudio();
+    Mix_Quit();
+
     system("exit");
     return 0;
 }

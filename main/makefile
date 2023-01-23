@@ -8,7 +8,7 @@ TEX = platex
 CFLAGS = -Wall $(COPTIONS)
 LDFLAGS = 
 LOADLIBES = 
-LDLIBS = -lm -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_gfx
+LDLIBS = -lm -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_gfx -lSDL2_mixer
 
 TARGET = main
 SRCS = main.cpp window.cpp system.cpp
