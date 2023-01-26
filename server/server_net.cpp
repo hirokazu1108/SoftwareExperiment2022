@@ -4,10 +4,10 @@
 #include<netdb.h>
 
 
-CLIENT	gClients[MAX_CLIENTS];	/* クライアント */
+CLIENT	gClients[MAX_CLIENTS]; // clients data
 
-static fd_set	gMask;					/* select()用のマスク */
-static int	gWidth;						/* gMask中のチェックすべきビット数 */
+static fd_set	gMask;					/* select() mask */
+static int	gWidth;						/* gMask sides */
 
 static int MultiAccept(int request_soc,int num);
 static void Enter(int pos, int fd);
@@ -16,13 +16,7 @@ static void SendAllName(void);
 bool InputEvent(void);
 
 
-/*****************************************************************
-関数名	: SetUpServer
-機能	: クライアントとのコネクションを設立し，
-		  ユーザーの名前の送受信を行う
-引数	: int		num		  : クライアント数
-出力	: コネクションに失敗した時-1,成功した時0
-*****************************************************************/
+// SetUpServer()
 int SetUpServer(int num, u_short port)
 {
     struct sockaddr_in	server;
@@ -30,7 +24,6 @@ int SetUpServer(int num, u_short port)
     int                 maxfd;
     int			val = 1;
  
-    /* 引き数チェック */
     assert(0<num && num<=MAX_CLIENTS);
 
     bzero((char*)&server,sizeof(server));
@@ -38,14 +31,14 @@ int SetUpServer(int num, u_short port)
     server.sin_port = htons(port);
     server.sin_addr.s_addr = htonl(INADDR_ANY);
 
-    /* ソケットを作成する */
+    // create socket
     if((request_soc = socket(AF_INET,SOCK_STREAM,0)) < 0){
 		fprintf(stderr,"Socket allocation failed\n");
 		return -1;
     }
     setsockopt(request_soc,SOL_SOCKET,SO_REUSEADDR,&val,sizeof(val));
 
-    /* ソケットに名前をつける */
+    /* bind */
     if(bind(request_soc,(struct sockaddr*)&server,sizeof(server))==-1){
 		fprintf(stderr,"Cannot bind\n");
 		close(request_soc);
@@ -53,7 +46,7 @@ int SetUpServer(int num, u_short port)
     }
     fprintf(stderr,"Successfully bind!\n");
     
-    /* クライアントからの接続要求を待つ */
+    /* listen */
     if(listen(request_soc, gClientNum) == -1){
 		fprintf(stderr,"Cannot listen\n");
 		close(request_soc);
@@ -61,27 +54,19 @@ int SetUpServer(int num, u_short port)
     }
     fprintf(stderr,"Listen OK\n");
 
-    /* クライアントと接続する */
+    /* accept */
     maxfd = MultiAccept(request_soc, gClientNum);
     close(request_soc);
     if(maxfd == -1)return -1;
 
-    /* 全クライアントの全ユーザー名を送る */
     SendAllName();
 
-    /* select()のためのマスク値を設定する */
     SetMask(maxfd);
 
     return 0;
 }
 
-/*****************************************************************
-関数名	: SendRecvManager
-機能	: サーバーから送られてきたデータを処理する
-引数	: なし
-出力	: プログラム終了コマンドが送られてきた時0を返す．
-		  それ以外は1を返す
-*****************************************************************/
+// SendRecvManager()
 int SendRecvManager(void)
 {
     char	command;
@@ -90,38 +75,25 @@ int SendRecvManager(void)
     int		endFlag = 1;
 
     readOK = gMask;
-    /* クライアントからデータが届いているか調べる */
+    /* select */
     if(select(gWidth,&readOK,NULL,NULL,NULL) < 0){
-        /* エラーが起こった */
-        return endFlag;
+      return endFlag;
     }
     for(i=0;i<gClientNum;i++){
-		if(FD_ISSET(gClients[i].fd,&readOK)){
-	    	/* クライアントからデータが届いていた */
-	    	/* コマンドを読み込む */
-			RecvData(i,&command,sizeof(char));
-      //printf("command:%c\n",command);
-	    	/* コマンドに対する処理を行う */
-
-	    	endFlag = ExecuteCommand(command,i);
-	    	if(endFlag == 0)break;
-		}
+      if(FD_ISSET(gClients[i].fd,&readOK)){
+        RecvData(i,&command,sizeof(char));
+        endFlag = ExecuteCommand(command,i);
+        if(endFlag == 0)break;
+      }
     }
     return endFlag;
 }
 
-/*****************************************************************
-関数名	: RecvIntData
-機能	: クライアントからint型のデータを受け取る
-引数	: int		pos	        : クライアント番号
-		  int		*intData	: 受信したデータ
-出力	: 受け取ったバイト数
-*****************************************************************/
+// RecvIntData()
 int RecvIntData(int pos,int *intData)
 {
     int n,tmp;
-    
-    /* 引き数チェック */
+
     assert(0<=pos && pos<gClientNum);
     assert(intData!=NULL);
 
@@ -131,48 +103,30 @@ int RecvIntData(int pos,int *intData)
     return n;
 }
 
-/*****************************************************************
-関数名	: SendData
-機能	: クライアントにデータを送る
-引数	: int	   pos		: クライアント番号
-							  ALL_CLIENTSが指定された時には全員に送る
-		  void	   *data	: 送るデータ
-		  int	   dataSize	: 送るデータのサイズ
-出力	: なし
-*****************************************************************/
+// SendData()
 void SendData(int pos,void *data,int dataSize)
 {
     int	i;
-   
-    /* 引き数チェック */
+  
     assert(0<=pos && pos<gClientNum || pos==ALL_CLIENTS);
     assert(data!=NULL);
     assert(0<dataSize);
 
     if(pos == ALL_CLIENTS){
-    	/* 全クライアントにデータを送る */
-		for(i=0;i<gClientNum;i++){
-			write(gClients[i].fd,data,dataSize);
-		}
+      for(i=0;i<gClientNum;i++){
+        write(gClients[i].fd,data,dataSize);
+      }
     }
     else{
-		write(gClients[pos].fd,data,dataSize);
+		  write(gClients[pos].fd,data,dataSize);
     }
 }
 
-/*****************************************************************
-関数名	: RecvData
-機能	: クライアントからデータを受け取る
-引数	: int		pos	        : クライアント番号
-		  void		*data		: 受信したデータ
-		  int		dataSize	: 受信するデータのサイズ
-出力	: 受け取ったバイト数
-*****************************************************************/
+// RecvData()
 int RecvData(int pos,void *data,int dataSize)
 {
     int n;
     
-    /* 引き数チェック */
     assert(0<=pos && pos<gClientNum);
     assert(data!=NULL);
     assert(0<dataSize);
@@ -183,12 +137,7 @@ int RecvData(int pos,void *data,int dataSize)
 }
 
 
-/*****************************************************************
-関数名	: Ending
-機能	: 全クライアントとのコネクションを切断する
-引数	: なし
-出力	: なし
-*****************************************************************/
+// Ending()
 void Ending(void)
 {
     int	i;
@@ -197,16 +146,7 @@ void Ending(void)
     for(i=0;i<gClientNum;i++)close(gClients[i].fd);
 }
 
-/*****
-static
-*****/
-/*****************************************************************
-関数名	: MultiAccept
-機能	: 接続要求のあったクライアントとのコネクションを設立する
-引数	: int		request_soc	: ソケット
-		  int		num     	: クライアント数
-出力	: ソケットディスクリプタ
-*****************************************************************/
+// MultiAccept()
 static int MultiAccept(int request_soc,int num)
 {
     int	i,j;
@@ -216,7 +156,7 @@ static int MultiAccept(int request_soc,int num)
     int ret_select;
     struct timeval	timeout;
 
-    /* select()の待ち時間を設定する */
+    /* select timeout settings */
     timeout.tv_sec = 0;
     timeout.tv_usec = 10;
     
@@ -224,7 +164,7 @@ static int MultiAccept(int request_soc,int num)
 
       FD_ZERO(&readOK);
       FD_SET(request_soc,&readOK);
-      /* サーバーからデータが届いているか調べる */
+      /* select */
       ret_select = select(request_soc+1,&readOK,NULL,NULL,&timeout);
       if(ret_select == -1)
       {
@@ -256,16 +196,9 @@ static int MultiAccept(int request_soc,int num)
     
 }
 
-/*****************************************************************
-関数名	: Enter
-機能	: クライアントのユーザー名を受信する
-引数	: int		pos		: クライアント番号
-		  int		fd		: ソケットディスクリプタ
-出力	: なし
-*****************************************************************/
+// Enter
 static void Enter(int pos, int fd)
 {
-	/* クライアントのユーザー名を受信する */
 	read(fd,gClients[pos].name,sizeof(char)*(NAME_MAX_LENGTH+1));
 #ifndef NDEBUG
 	printf("%s is accepted\n",gClients[pos].name);
@@ -273,12 +206,7 @@ static void Enter(int pos, int fd)
 	gClients[pos].fd = fd;
 }
 
-/*****************************************************************
-関数名	: SetMask
-機能	: int		maxfd	: ソケットディスクリプタの最大値
-引数	: なし
-出力	: なし
-*****************************************************************/
+// SetMask()
 static void SetMask(int maxfd)
 {
     int	i;
@@ -289,12 +217,7 @@ static void SetMask(int maxfd)
     for(i=0;i<gClientNum;i++)FD_SET(gClients[i].fd,&gMask);
 }
 
-/*****************************************************************
-関数名	: SendAllName
-機能	: 全クライアントに全ユーザー名を送る
-引数	: なし
-出力	: なし
-*****************************************************************/
+// SendAllName()
 static void SendAllName(void)
 {
   int	i,j,tmp1,tmp2;
@@ -311,22 +234,19 @@ static void SendAllName(void)
 	}
 }
 
-/* 入力イベントの読み取り */
+// InputEvent()
 bool InputEvent(void)
 {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
         case SDL_QUIT:
-            /** 終了指示 **/
             return false;
         case SDL_KEYDOWN:
             if (event.key.repeat)
                 break;
-            /** キーが押された方向を設定 **/
             switch (event.key.keysym.sym) {
             case SDLK_ESCAPE:
-                /** 終了指示 **/
                 return false;
             default:
                 break;

@@ -1,21 +1,19 @@
 #include "server.h"
 
-int	gClientNum; //????????¤ã?¢ã?³ã?????
+int	gClientNum;
 Player *player;
 Game game;
-
 uiInfo gUi;
+
 static Uint32 PlayTimer(Uint32 interval, void* param);
 static Uint32 GameTimer(Uint32 interval, void* param);
 
 int main(int argc,char *argv[])
 {
-
 	int	endFlag = 1;
   u_short port = PORT;
   game.state = State_Wait;
 
-	/* å¼??????°ã????§ã????? */
   switch (argc) {
   case 1:
 	fprintf(stderr,"Usage: number of clients\n");
@@ -40,20 +38,18 @@ int main(int argc,char *argv[])
     return 1;
   }
 
+  /* SDL Init */
+  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0) {
+    return PrintError(SDL_GetError());
+  }
+  /* UI Init */
+  if (InitWindow() < 0) {
+    PrintError("failed to initialize Windows");
+    EndWindow();
+    return 0;
+  }
 
-  /** ??????????????? **/
-    /* SDL */
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0) {
-        return PrintError(SDL_GetError());
-    }
-    /** UI????????? **/
-    if (InitWindow() < 0) {
-        PrintError("failed to initialize Windows");
-        EndWindow();
-        return 0;
-    }
-
-  //??¿ã?¤ã????¼èµ·???
+  /* Timer Init */
   SDL_TimerID ptimer = SDL_AddTimer(1000, PlayTimer, NULL);
   if (ptimer == 0) {
     PrintError(SDL_GetError());
@@ -61,18 +57,23 @@ int main(int argc,char *argv[])
     return 0;
   }
 
-	/* ????????¤ã?¢ã?³ã?????????Ž¥ç¶? */
+	/* Server Init */
 	if(SetUpServer(gClientNum,port) == -1){
 		fprintf(stderr,"Cannot setup server\n");
 		exit(-1);
 	}
-  EndWindow();
 
+  EndWindow(); // Quit Window
+  SDL_RemoveTimer(ptimer);
+
+
+
+  /* GameState Init */
   PlayerInit();
-
-  /* ??²ã?¼ã???????±ã??????????? */
   game.state = State_Play;
   game.time = 0;
+  
+  /* Timer Init */
   SDL_TimerID qtimer = SDL_AddTimer(1000, GameTimer, NULL);
   if (qtimer == 0) {
     PrintError(SDL_GetError());
@@ -80,15 +81,12 @@ int main(int argc,char *argv[])
     return 0;
   }
 
-	/* ??¡ã?¤ã?³ã?¤ã????³ã???????¼ã?? */
+	/* server loop */
 	while(endFlag){
 		endFlag = SendRecvManager();
-    printf("ed:%d\n",endFlag);
 	};
 
-
 	Ending();
-
 	return 0;
 }
 
@@ -99,16 +97,11 @@ int PrintError(const char* str)
 }
 
 void EndWindow(void){
-    /** çµ?äº??????? **/
-
-    //SDL_RemoveTimer(atimer);
-    DestroyWindow();
-    SDL_Quit();
-
+  DestroyWindow();
+  SDL_Quit();
 }
 
-
-//??¿ã?¤ã????¼å?????(??¢ã????¡ã?¼ã?·ã?§ã?³ã????´æ??)
+// PlayTimer()
 Uint32 PlayTimer(Uint32 interval, void* param)
 {
   gUi.time_sec ++;
@@ -118,10 +111,10 @@ Uint32 PlayTimer(Uint32 interval, void* param)
   return interval;
 }
 
+// GameTimer()
 Uint32 GameTimer(Uint32 interval, void* param)
 {
     game.time++;
-    //SendTimeCommand();
     if(game.time >= (int)GAMETIME&& game.state==State_Play){
       SendRankingDataCommand();
       game.state = State_Result;
