@@ -22,7 +22,7 @@ int SetUpClient(char *hostName,u_short port,int *clientID,int *num,char clientNa
 
     if((servHost = gethostbyname(hostName))==NULL){
 		fprintf(stderr,"Unknown host\n");
-		return -1;int SetUpServer(int num);int SetUpServer(int num);
+		return -1;
     }
 
     bzero((char*)&server,sizeof(server));
