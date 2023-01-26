@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
         printf("Failed: %s\n", Mix_GetError());
         exit(-1);
     }
-    bgm = Mix_LoadMUS("TITLE.wav"); // Music型で読み込み
+    bgm = Mix_LoadMUS("../audio/TITLE.wav"); // Music型で読み込み
     Mix_PlayMusic(bgm, -1); // Music型サウンドを無限に再生
 
     int framecnt = 0;
@@ -615,7 +615,7 @@ void ExcuteInput(void){
                             shiftSelect(+1,4,&rankingMode);
                             SortRanking(rankingMode);
                             break;
-                        case 4:
+                        case 3:
                             game.selectButton = 2;
                             break;
                         default:
@@ -635,7 +635,7 @@ void ExcuteInput(void){
                             SortRanking(rankingMode);
                             break;
                         case 2:
-                            game.selectButton = 4;
+                            game.selectButton = 3;
                             break;
                         default:
                             game.selectButton -= 1;

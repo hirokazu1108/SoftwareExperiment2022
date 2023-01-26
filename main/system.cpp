@@ -1,6 +1,6 @@
 #include "header.h"
 
-int maxButtonNum[SCENE_NUM]={2,4,13,14,13,0,10,5};    //シーンごとのボタンの最大数,indexはScene列挙体に対応
+int maxButtonNum[SCENE_NUM]={2,4,13,14,13,0,10,4};    //シーンごとのボタンの最大数,indexはScene列挙体に対応
 
 bool buttonEnabled = false; //確定ボタンが見えるか否か
 
