@@ -80,7 +80,6 @@ extern int maxButtonNum[SCENE_NUM];
 /* server_net.cpp */
 extern int SetUpServer(int num, u_short port);
 extern void Ending(void);
-extern int RecvIntData(int pos,int *intData);
 extern void SendData(int pos,void *data,int dataSize);
 extern int RecvData(int pos,void *data,int dataSize);
 extern int SendRecvManager(void);
