@@ -7,7 +7,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 
-#define ALL_CLIENTS	-1   /* ??????????????????????????????? */
+#define ALL_CLIENTS	-1
 #define WD_Height 1000
 #define WD_Width 1000
 #define IMG_NUM 2
@@ -15,17 +15,11 @@
 #define SCENE_NUM 1
 
 typedef enum{
-    SCENE_WaitClient,
-    SCENE_None,//終了を示す
-}Scene;
-
-// imgFileと同じようにつける
-typedef enum{
     uname_title_sky,
     uname_title_sky2,
 }uiName;
 
-// textStrと同じようにつける
+
 typedef enum{
     tname_WaitClient,
 	tname_Passcode,
@@ -41,7 +35,7 @@ typedef enum{
     tname_9,
 }textName;
 
-/* 画像の情報 */
+
 typedef struct {
     public:
     int w;
@@ -55,21 +49,19 @@ class uiInfo{
 	public:
 	SDL_Window *window;
     SDL_Renderer *render;
-    Scene scene;
     int selectButton;
-	int currentNum;//現在のクライアント人数
+	int currentNum;
 	char port[6];
 	int time_sec;
 };
 
-/* クライアントを表す構造体 */
 typedef struct{
 	int		fd;
 	char	name[NAME_MAX_LENGTH+1];
 }CLIENT;
 
 /* server_main.cpp */
-extern int	gClientNum; //クライアント数
+extern int	gClientNum;
 extern Player *player;
 extern Game game;
 extern uiInfo gUi;
@@ -84,7 +76,6 @@ extern std::vector<SDL_Rect> buttonPos[SCENE_NUM];
 
 /* server_func.cpp */
 extern int maxButtonNum[SCENE_NUM];
-extern void shiftButtonSelect(int shift, int max);
 
 /* server_net.cpp */
 extern int SetUpServer(int num, u_short port);
