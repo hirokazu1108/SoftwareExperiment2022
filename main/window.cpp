@@ -123,7 +123,6 @@ int InitWindow(void)
     buttonPos[SCENE_Result].push_back({590,850,200,90}); //left
     buttonPos[SCENE_Result].push_back({830,850,200,90}); //right
     buttonPos[SCENE_Result].push_back({350,850,200,90}); //exit
-    buttonPos[SCENE_Result].push_back({590,850,200,90}); //detail
     buttonPos[SCENE_Result].push_back({830,850,200,90}); //totitle
 
     special_iconPos.push_back({23,58,(int)uiImg[uname_backButton].w,(int)uiImg[uname_backButton].h});
@@ -579,11 +578,9 @@ void RenderResultWindow(void){
     rectangleColorRect(game.render,&buttonPos[SCENE_Result][2],0xff000000);
     textImg[tname_exit].drawTexture(buttonPos[SCENE_Result][2].x+20,buttonPos[SCENE_Result][2].y, textImg[tname_exit].w/1.6, textImg[tname_exit].h/1.6);
 
-
-
-    boxColorRect(game.render,&buttonPos[SCENE_Result][4],0xffffffff);
-    rectangleColorRect(game.render,&buttonPos[SCENE_Result][4],0xff000000);
-    textImg[tname_totitle].drawTexture(buttonPos[SCENE_Result][4].x+20,buttonPos[SCENE_Result][4].y, textImg[tname_totitle].w/1.6, textImg[tname_totitle].h/1.6);
+    boxColorRect(game.render,&buttonPos[SCENE_Result][3],0xffffffff);
+    rectangleColorRect(game.render,&buttonPos[SCENE_Result][3],0xff000000);
+    textImg[tname_totitle].drawTexture(buttonPos[SCENE_Result][3].x+20,buttonPos[SCENE_Result][3].y, textImg[tname_totitle].w/1.6, textImg[tname_totitle].h/1.6);
 
     if(2 <= game.selectButton && game.selectButton <= 4)
         boxColorRect(game.render,&buttonPos[SCENE_Result][game.selectButton],0x99555555);

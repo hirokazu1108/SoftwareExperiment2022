@@ -68,12 +68,12 @@ void AudioInit(int *argc, char **argv){
     alGenBuffers( 2, &buffer2 );
     alGenSources( 2, &source2 );
 
-    buffer = alutCreateBufferFromFile( "shot.wav" );
+    buffer = alutCreateBufferFromFile( "../audio/shot.wav" );
     if(rand()%2 == 0){
-    buffer2 = alutCreateBufferFromFile( "BGM.wav" );
+    buffer2 = alutCreateBufferFromFile( "../audio/BGM.wav" );
     }
     else{
-        buffer2 = alutCreateBufferFromFile("BGM2.wav");
+        buffer2 = alutCreateBufferFromFile("../audio/BGM2.wav");
     }
     
     alSourcei( source, AL_BUFFER, buffer );
