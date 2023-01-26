@@ -85,13 +85,9 @@ void init(int CModel);
 void text(GLuint x, GLuint y, GLfloat scale, char* format, ...);
 void lists(int CModel);
 int joyconev();
-void move(void);
-void create_bullet();    
-void draw_bullet(); 
-void move_bullet();    
+void move(void);   
 void add_lifetime(int add_lifetimeID); 
-void count_time(int count_timeID);      
-void del_bullet(void);  
+void count_time(int count_timeID);        
 void deleteBullet(int index);
 void interval_attack(int interval_attackID);    
 void Oval2D(float radius,int x,int y,float ovalx,float ovaly);
@@ -1626,75 +1622,6 @@ void myInit(char *windowTitle)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEX_WIDTH, TEX_HEIGHT,0, GL_RGBA, GL_UNSIGNED_BYTE, image);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);    
-}
-
-void create_bullet(){
-
-    BULLET b;
-    b.dir = {-sin(player[clientID].turn1)*cos(player[clientID].turn2), - sin(player[clientID].turn2), -cos(player[clientID].turn1)*cos(player[clientID].turn2)};
-    b.pos = player[clientID].pos + b.dir * 1.5f * player[clientID].size; 
-    b.shooter_id = clientID;
-    if(player[b.shooter_id].isBigbullet > 0){
-        b.pos = player[b.shooter_id].pos + b.dir * 1.5f * 5.0f;
-        b.type = SPECIAL_BIGBULLET;
-        player[b.shooter_id].isBigbullet--;
-        if(player[b.shooter_id].isBigbullet <= 0){
-            player[b.shooter_id].isspecial = false;
-        }
-    }
-    if(player[b.shooter_id].isChase > 0){
-        b.target_id = Target(b.shooter_id);
-        b.type = SPECIAL_CHASE;
-        player[b.shooter_id].isChase--;
-        if(player[b.shooter_id].isChase <= 0){
-            player[b.shooter_id].isspecial = false;
-        }
-    }
-    array_bullet.push_back(BULLET(b));
-    bullet_Num++;
-    SendBulletDataCommand(bullet_Num);
-}
-
-void draw_bullet(){
-    for(int i = 0; i < bullet_Num; i++){
-        
-        glPushMatrix();
-        if(player[array_bullet[i].shooter_id].rate_attack > 1.0){
-            glColor3f(1.0, 2.0 - player[array_bullet[i].shooter_id].rate_attack, 2.0 - player[array_bullet[i].shooter_id].rate_attack);
-        }
-        else{
-            glColor3f(1.0, 1.0, 1.0);
-        }
-        glTranslatef(array_bullet[i].pos.x, array_bullet[i].pos.y, array_bullet[i].pos.z);
-        if(array_bullet[i].type == SPECIAL_BIGBULLET){
-            glutSolidSphere(BIGBULLET_RADIUS, 16, 16);
-        }
-        else{
-            glutSolidSphere(BULLET_RADIUS, 16, 16);
-        }
-        glPopMatrix();
-    }
-}
-
-void move_bullet(){
-    for(int i = 0; i < bullet_Num; i++){
-        if(array_bullet[i].type == SPECIAL_CHASE && array_bullet[i].target_id != NOTARGET){
-            array_bullet[i].dir = glm::normalize((cal_vec(player[array_bullet[i].target_id].pos , array_bullet[i].pos)));
-            array_bullet[i].pos += array_bullet[i].dir/(player[array_bullet[i].target_id].speed + 1.0f);  
-        }
-        else{
-            array_bullet[i].pos += array_bullet[i].dir * player[array_bullet[i].shooter_id].speed;
-        }
-    }
-}
-
-void del_bullet(){
-    for(int i = 0; i < bullet_Num; i++){
-        if(array_bullet[i].lifetime >= 5){
-            array_bullet.erase(array_bullet.begin() + i);      
-            bullet_Num--;
-        }
-    } 
 }
 
 void interval_attack(int interval_attackID){
