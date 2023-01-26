@@ -1,7 +1,6 @@
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
-/* ??????????????��?��???????��?? */
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
@@ -20,11 +19,11 @@
 #include<sys/types.h>
 
 
-#define PORT			(u_short)88888	/* ????????????????????��???????? */
-#define MAX_CLIENTS		4				/* ???大�???????�人??? */
+#define PORT			(u_short)88888	/* port numeber */
+#define MAX_CLIENTS		4				/* max clients */
 #define MAX_DATA		200
-#define MAX_BULLET_NUM   25    // ???大弾???
-#define BULLET_SPEED   0.5f     // 弾�?????�?????
+#define MAX_BULLET_NUM   25    
+#define BULLET_SPEED   0.5f   
 #define DAMAGE         12.5f				
 #define MAX_HP 10.0f
 #define BARRIER_RADIUS 1.0f
@@ -55,12 +54,12 @@
 #define TIMER_COMMAND 't'
 #define PLAYERINFO_COMMAND 'i'
 
-#define PARAMATER_MAX 5         //max value of status paramaters
-#define PARAMATER_NUM 5         //num of status paramaters
+#define PARAMATER_MAX 5        //max value of status paramaters
+#define PARAMATER_NUM 5        //num of status paramaters
 #define PARAMATER_SUM_MAX 5    //max of sum of status paramaters
-#define NAME_MAX_LENGTH 10      //max length of client name
-#define SKILL_NUM 3             //num of skills
-#define SPECIAL_NUM 8            //num of specials
+#define NAME_MAX_LENGTH 10     //max length of client name
+#define SKILL_NUM 3            //num of skills
+#define SPECIAL_NUM 8          //num of specials
 #define FILENAME_GAMEDATA "../data/gamedata.bin"
 #define FILENAME_RANKINGDATA "../data/ranking.txt"
 #define GAMETIME 180
@@ -110,7 +109,6 @@ typedef enum{
 
 }Move_Pattern;
 
-/* ??????�?????????????��?? */
 class Sphere{
     public:
     float radius;
@@ -120,7 +118,7 @@ class Sphere{
 
 class Player{
 public:
-    bool enabled;   //true????????��???????��??
+    bool enabled;   // true
     bool isspecial;
     int type;
     float speed;
@@ -160,14 +158,13 @@ class Game{
         GameState state;
 };
 
-/* 弾�??????????? */
 class BULLET{
     public:
         int shooter_id;
-        SPECIAL type;           // 弾�??�??????�??????
-        glm::vec3 pos;      // 弾�??座�??
-        glm::vec3 dir;      // 弾�????��??????????????
-        int lifetime;       // 弾�??�??????示�?????
+        SPECIAL type;
+        glm::vec3 pos;      
+        glm::vec3 dir;      
+        int lifetime;      
         int target_id;
         BULLET(){
             shooter_id = 10;
