@@ -225,7 +225,7 @@ void Collider(void){
                         printf("hit beam\n");
                     }
                     if(player[clientID].hp <= 0.0f && player[clientID].enabled){
-                        SendPlayerInfoData(i,0,+1); //client[i]'s kii_player num ++
+                        SendPlayerInfoData(i); //client[i]'s kii_player num ++
                         break;
                     }
                 }
