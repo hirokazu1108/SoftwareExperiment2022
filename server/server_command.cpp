@@ -1,6 +1,5 @@
 #include "server.h"
 #include <netinet/in.h>
-static void SetIntData2DataBlock(void *data,int intData,int *dataSize);
 static void SetCharData2DataBlock(void *data,char charData,int *dataSize);
 
 int readNum = 0; 
@@ -90,32 +89,11 @@ int ExecuteCommand(char command,int pos)
     return endFlag;
 }
 
-// SendTimeCommand()
-void SendTimeCommand(void){
-    char com = TIMER_COMMAND;
-    SendData(ALL_CLIENTS,&com,sizeof(char));
-    SendData(ALL_CLIENTS,&game.time,sizeof(unsigned int));
-}
-
 // SendRankingDataCommand()
 void SendRankingDataCommand(void){
     char com = RANKING_DATA;
     SendData(ALL_CLIENTS,&com,sizeof(char));
     SendData(ALL_CLIENTS,player,sizeof(Player)*gClientNum);
-}
-
-// SetIntData2DataBlock()
-static void SetIntData2DataBlock(void *data,int intData,int *dataSize)
-{
-    int tmp;
-
-    assert(data!=NULL);
-    assert(0<=(*dataSize));
-
-    tmp = htonl(intData);
-
-    memcpy((int*)data + (*dataSize),&tmp,sizeof(int));
-    (*dataSize) += sizeof(int);
 }
 
 // SetCharData2DataBlock()
