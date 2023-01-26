@@ -96,7 +96,7 @@ float calmap(int i);
 #define TEX_HEIGHT 32
 #define TEX_WIDTH 32
 static GLubyte image[TEX_HEIGHT][TEX_WIDTH][4];
-char *modelname[] = {"player_red.obj","player_blue.obj","player_yellow.obj","player_green.obj","cloud.obj" ,"under_cloud.obj" ,"data/castle.obj","laser.obj","enemy.obj"} ;
+char *modelname[] = {"../object/player_red.obj","../object/player_blue.obj","../object/player_yellow.obj","../object/player_green.obj","../object/cloud.obj" ,"../object/under_cloud.obj" ,"../object/castle.obj","../object/laser.obj","../object/enemy.obj"} ;
 int cloud_flag = 0;
 
 
