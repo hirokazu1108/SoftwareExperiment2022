@@ -89,20 +89,6 @@ int SendRecvManager(void)
     return endFlag;
 }
 
-// RecvIntData()
-int RecvIntData(int pos,int *intData)
-{
-    int n,tmp;
-
-    assert(0<=pos && pos<gClientNum);
-    assert(intData!=NULL);
-
-    n = RecvData(pos,&tmp,sizeof(int));
-    (*intData) = ntohl(tmp);
-    
-    return n;
-}
-
 // SendData()
 void SendData(int pos,void *data,int dataSize)
 {
