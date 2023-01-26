@@ -1,7 +1,6 @@
 #include "client.h"
 #include <netinet/in.h>
 
-static void SetIntData2DataBlock(void *data,int intData,int *dataSize);
 static void SetCharData2DataBlock(void *data,char charData,int *dataSize);
 
 bool isRanking = false;
@@ -69,9 +68,6 @@ int ExecuteCommand(char command)
                 printf("scoreBall Data was recieved.\n");
             }
             break;
-        case TIMER_COMMAND:
-            RecvData(&game.time, sizeof(unsigned int));
-            break;
         case PLAYERINFO_COMMAND:
             RecvData(&player[clientID],sizeof(Player));
             break;
@@ -131,28 +127,11 @@ void SendScoreBallDataCommand(void){
 }
 
 
-// mode 0:kill_player num
-void SendPlayerInfoData(int clientIndex, int mode,int num){
+//SendPlayerInfoData()
+void SendPlayerInfoData(int clientIndex){
     char com = PLAYERINFO_COMMAND;
     SendData(&com,sizeof(char));
-    num=1;//not send
-	
-    SendData(&mode, sizeof(int));
     SendData(&clientIndex,sizeof(int));
-}
-
-// SetIntData2DataBlock()
-static void SetIntData2DataBlock(void *data,int intData,int *dataSize)
-{
-    int tmp;
-	
-    assert(data!=NULL);
-    assert(0<=(*dataSize));
-
-    tmp = htonl(intData);
-
-    memcpy(data + (*dataSize),&tmp,sizeof(int));
-    (*dataSize) += sizeof(int);
 }
 
 // SetCharData2DataBlock()

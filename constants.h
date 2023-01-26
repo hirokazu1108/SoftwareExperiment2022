@@ -49,7 +49,6 @@
 #define BULLETDATA_COMMAND 'b'
 #define RANKING_DATA 'r'
 #define SCOREBALL_COMMAND 's'
-#define TIMER_COMMAND 't'
 #define PLAYERINFO_COMMAND 'i'
 
 #define PARAMATER_MAX 5        //max value of status paramaters

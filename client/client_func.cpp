@@ -161,11 +161,11 @@ void Collider(void){
 
                 //migawari
                 if(player[clientID].hp <= 0.0f && player[clientID].enabled && i!=clientID && player[i].isSpecial > 0.0f && player[i].special == SPECIAL_TRANSFORM && player[i].transformIndex == clientID){
-                    SendPlayerInfoData(i ,0,+1); //client[i]'s kii_player num ++
+                    SendPlayerInfoData(i); //client[i]'s kii_player num ++
                     break;
                 }
                else if(player[clientID].hp <= 0.0f && player[clientID].enabled){
-                    SendPlayerInfoData(array_bullet[j].shooter_id ,0,+1); //client[i]'s kii_player num ++
+                    SendPlayerInfoData(array_bullet[j].shooter_id); //client[i]'s kii_player num ++
                     break;
                 }
             }
@@ -184,7 +184,7 @@ void Collider(void){
                         printf("hit lines\n");
                     }
                     if(player[clientID].hp <= 0.0f && player[clientID].enabled){
-                        SendPlayerInfoData(i,0,+1); //client[i]'s kii_player num ++
+                        SendPlayerInfoData(i); //client[i]'s kii_player num ++
                         break;
                     }
                 }
@@ -205,7 +205,7 @@ void Collider(void){
                     printf("hit damageArea\n");
                 }
                 if(player[clientID].hp <= 0.0f && player[clientID].enabled){
-                    SendPlayerInfoData(i,0,+1); //client[i]'s kii_player num ++
+                    SendPlayerInfoData(i); //client[i]'s kii_player num ++
                     break;
                 }
             }
@@ -225,7 +225,7 @@ void Collider(void){
                         printf("hit beam\n");
                     }
                     if(player[clientID].hp <= 0.0f && player[clientID].enabled){
-                        SendPlayerInfoData(i,0,+1); //client[i]'s kii_player num ++
+                        SendPlayerInfoData(i); //client[i]'s kii_player num ++
                         break;
                     }
                 }

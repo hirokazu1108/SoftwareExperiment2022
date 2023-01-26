@@ -64,15 +64,10 @@ int ExecuteCommand(char command,int pos)
             break;
 	case PLAYERINFO_COMMAND:
             {
-                int mode, cindex;
-                RecvData(pos, &mode, sizeof(int));
+                int cindex;
                 RecvData(pos, &cindex,sizeof(int));
-                switch(mode){
-                    case 0: //kill_player
-                        player[cindex].kill_player += 1;
-                        player[cindex].score += SCORE_KILL_PLAYER;
-                    break;
-                }
+                player[cindex].kill_player += 1;
+                player[cindex].score += SCORE_KILL_PLAYER;
                 SendData(cindex, &command,sizeof(char));
                 SendData(cindex, &player[cindex],sizeof(Player));
             }
