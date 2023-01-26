@@ -1,7 +1,6 @@
 #include "client.h"
 
 void PlayerInit(void){
-     /* Player???????????? */
     SaveData data;
     srand(time(NULL));
     glm::vec3 spawnPos[gClientNum];
@@ -48,7 +47,6 @@ void PlayerInit(void){
         player[i].anim = 0.0f;
     }
 
-    /* ???????????²ã?¼ã???????¼ã?¿ã????¡ã?¤ã?????èª­ã?¿è¾¼?????§ã????¼ã?¿ã????????????????? */
     ReadDataFile(&data);
     player[clientID].skill = data.skill;
     player[clientID].special = data.special;
@@ -72,14 +70,12 @@ void AudioInit(int *argc, char **argv){
     alGenBuffers( 2, &buffer2 );
     alGenSources( 2, &source2 );
 
-    // ï¿½ï¿½ï¿½ç?´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?"hello world"ï¿½ï¿½ï¿½ï¿½ï¿½å??ï¼?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï??ï¿½ï¿½ç¯?ï¿½ï¿½ï¿½ï¿½
     buffer = alutCreateBufferFromFile( "shot.wav" );
     if(rand()%2 == 0){
     buffer2 = alutCreateBufferFromFile( "BGM.wav" );
     }
     else{
         buffer2 = alutCreateBufferFromFile("BGM2.wav");
-         printf("aiueo");
     }
     
     alSourcei( source, AL_BUFFER, buffer );
@@ -88,7 +84,6 @@ void AudioInit(int *argc, char **argv){
     alSourcePlay( source2 );
 }
 
-/* ??????å£????å½?????????¤å?? */
 bool OnColliderSphere(Sphere a, Sphere b){
   
   bool result = false;
@@ -121,7 +116,6 @@ bool OnColliderLinesSphere(Sphere a, glm::vec3 sp, glm::vec3 ep){
     return false;
 }
 
-/* player???å½?????????¤å??????????? */
 void drawPlayerCollider(void){
     for(int i = 0; i < gClientNum; i++){
         glPushMatrix();
@@ -132,7 +126,6 @@ void drawPlayerCollider(void){
     }
 }
 
-/* ???????????¤ã??è¡???? */
 void deleteBullet(int index){
     array_bullet.erase(array_bullet.begin() + index);       //  i??????????????????????????
     bullet_Num--;
@@ -307,23 +300,6 @@ void Collider(void){
                     }
                 }
             }
-		
-		/*if(player[clientID].isSpecial >0.0f && player[clientID].special == SPECIAL_BEAM){
-            for(int k=0; k<100; k++){
-                glm::vec3 d = glm::vec3(3*player[clientID].dir.x*(k+1),3*player[clientID].dir.y*(k+1),3*player[clientID].dir.z*(k+1));
-                if(OnColliderSphere(Sphere(1.5,player[clientID].pos+d), ary_scoreBall[i].collider)){
-                    //score
-                    player[clientID].score += 0.1f;
-
-                    //delete
-                    ary_scoreBall[i].hp -= 1.0f; //damage
-                    if(ary_scoreBall[i].hp <= 0.0){
-                        player[clientID].kill_enemy += 1;
-                        deleteScoreBall(i);
-                    }
-                }
-            }
-        }*/
         }
     }
 }
@@ -401,22 +377,22 @@ void useSpecial(void){
     
 }
 
-/* ?????¡ã?¤ã?????å­????????????????è¿???? */
+
 bool retExists(const char *f){
     bool isExist;
     FILE *fp;
     if ( (fp = fopen(f,"r")) != NULL ){
-        // ?????¡ã?¤ã?????å­??????????
+       
         isExist = true;
         fclose(fp);
     }
     else{
-        // ?????¡ã?¤ã?????å­?????????????
+       
         isExist = false;
     }
     return isExist;
 }
-/* ??²ã?¼ã???????¼ã?¿ã????¡ã?¤ã???????¸ã??è¾¼ã?? */
+
 void WriteDataFile(SaveData *data){
     FILE *fp;
     if ( (fp = fopen(FILENAME_GAMEDATA,"wb")) != NULL ){
@@ -428,7 +404,7 @@ void WriteDataFile(SaveData *data){
         exit(1);
     }
 }
-/* ??²ã?¼ã???????¼ã?¿ã????¡ã?¤ã?????èª­ã?¿è¾¼??? */
+
 void ReadDataFile(SaveData *data){
     FILE *fp;
     if ( (fp = fopen(FILENAME_GAMEDATA,"rb")) != NULL ){
@@ -441,15 +417,12 @@ void ReadDataFile(SaveData *data){
     }
 }
 
-/* ???????????³ã?°ã??ä½¿ç???????? */
-// 0:???????????³ã?°ä¸­
-// 1:???????????³ã?°å??äº?
-// -1:???????????³ã?°ç??äº?
+
 void WriteMatchFile(int value){
-    FILE *fp; // FILE???æ§????ä½?
+    FILE *fp; 
 	char fname[] = "../data/judgeMatch.txt";
  
-	fp = fopen(fname, "w"); // ?????¡ã?¤ã??????????????å¤±æ???????????NULL???è¿???????
+	fp = fopen(fname, "w"); 
 	if(fp == NULL) {
 		printf("%s file not open!\n", fname);
 		exit (-1);
@@ -457,7 +430,7 @@ void WriteMatchFile(int value){
 		fprintf(fp,"%d",value);
 	}
  
-	fclose(fp); // ?????¡ã?¤ã??????????????
+	fclose(fp); 
 }
 
 
@@ -479,11 +452,9 @@ void WriteRankingFile(int num, RankingData *data){
         }
 	}
  
-	fclose(fp); // ?????¡ã?¤ã??????????????
+	fclose(fp); 
 }
 
-/* ????????¤ã?¢ã?³ã???????­ã?°ã????????çµ?äº????????????³ã?­ã?³ã?°ç?»é?¢ã??ç«???¡ä???????? */
-//mode -1:only exit  0:exit and start result program
 void ExitClientProgram(int mode){
     switch(mode)
     {
@@ -538,7 +509,6 @@ bool hit = true;
 float x,y,z;
 
 void moveScoreBall(void){
-    //int move;
     int num;
     float tamax;
     float tamaz;
@@ -563,7 +533,6 @@ void moveScoreBall(void){
                         }
                     }
                     if(player[j].kill_enemy < 5){
-                         //ary_scoreBall[i].howMove = Move_atack;
                          ary_scoreBall[i].howMove = Move_tossinn;
                     }
                     else if(player[i].kill_player > 2){
@@ -617,27 +586,9 @@ void moveScoreBall(void){
                 ary_scoreBall[i].howMove = Move_Stop;
                 break;
             case Move_atack:
-            //array_scoreBall[i].p
+            
              dir = glm::normalize((cal_vec(player[num].pos , ary_scoreBall[i].pos)));
             ary_scoreBall[i].pos += dir / (1+ 2.0f);  
-                /*if(ary_scoreBall[i].pos.x  > player[num].pos.x){
-                    ary_scoreBall[i].pos.x = (ary_scoreBall[i].pos.x - 0.1);
-                }
-                else{
-                    ary_scoreBall[i].pos.x = (ary_scoreBall[i].pos.x + 0.1);
-                }
-                if(ary_scoreBall[i].pos.y  > player[num].pos.y){
-                    ary_scoreBall[i].pos.y = (ary_scoreBall[i].pos.y - 0.1);
-                }
-                else{
-                    ary_scoreBall[i].pos.y = (ary_scoreBall[i].pos.y + 0.1);
-                }
-                if(ary_scoreBall[i].pos.z  > player[num].pos.z){
-                    ary_scoreBall[i].pos.z = (ary_scoreBall[i].pos.z - 0.1);
-                }
-                else{
-                    ary_scoreBall[i].pos.z = (ary_scoreBall[i].pos.z + 0.1);
-                }*/
                 ary_scoreBall[i].howMove = Move_Stop;
                 break;
             case Move_aho:
@@ -667,28 +618,7 @@ void moveScoreBall(void){
                 mokuhyou.z = z; 
             dir = glm::normalize((cal_vec(mokuhyou , ary_scoreBall[i].pos)));
             ary_scoreBall[i].pos += dir / (1+ 6.0f);  
-                /*if(ary_scoreBall[i].pos.x  > x){
-                    ary_scoreBall[i].pos.x = ary_scoreBall[i].pos.x - 0.1;
-                }
-                else{
-                    ary_scoreBall[i].pos.x =ary_scoreBall[i].pos.x + 0.1;
-                }
-                if(ary_scoreBall[i].pos.y  > y){
-                    ary_scoreBall[i].pos.y =ary_scoreBall[i].pos.y - 0.1;
-                }
-                else{
-                    ary_scoreBall[i].pos.y =ary_scoreBall[i].pos.y + 0.1;
-                }
-                if(ary_scoreBall[i].pos.z  > z){
-                    ary_scoreBall[i].pos.z =ary_scoreBall[i].pos.z - 0.1;
-                }
-                else{
-                    ary_scoreBall[i].pos.z =ary_scoreBall[i].pos.z + 0.1;
-                }*/
-                /*if(ary_scoreBall[i].pos.z -2 <= z && ary_scoreBall[i].pos.z+2 >= z && ary_scoreBall[i].pos.y-2 <= y && ary_scoreBall[i].pos.y+2 >= y
-                && ary_scoreBall[i].pos.x - 2 <= x&& ary_scoreBall[i].pos.x+2 >= x){
-                    hit = true;
-                }*/
+                
                 if(ary_scoreBall[i].pos.z+1 >= z&&ary_scoreBall[i].pos.z-1 <= z&& ary_scoreBall[i].pos.y+1 >= y&&ary_scoreBall[i].pos.y-1 <= y
                 &&ary_scoreBall[i].pos.x + 1>=x && ary_scoreBall[i].pos.x - 1<=x ){
                     hit = true;
@@ -696,8 +626,6 @@ void moveScoreBall(void){
                 ary_scoreBall[i].howMove = Move_Stop;
                 break;
             default:
-                //ary_scoreBall[i].pos.x = ary_scoreBall[i].pos.x + 1;
-                
                 ary_scoreBall[i].howMove = Move_Stop;
                 break;
         }
@@ -735,22 +663,21 @@ void Respawn(void){
     player[clientID].turn3 = 0;
 }
 
-// �??????��?????????????????�????�???????�??????????�????0°???180°�????
+
 float cal_angle(glm::vec3 vec1, glm::vec3 vec2){
     vec1 = glm::normalize(vec1);
     vec2 = glm::normalize(vec2);
-    float dot = glm::dot( vec1, vec2 ); // ???�????�????�????
+    float dot = glm::dot( vec1, vec2 ); // ???�????�????�????
     float angle = glm::acos(dot) * 180.0 / M_PI;
     return angle;
 }
 
-// �??????��????????????????????�??????????
 glm::vec3 cal_vec(glm::vec3 pos1, glm::vec3 pos2){
     glm::vec3 vec = pos1 - pos2;
     return vec;
 }
 
-// ??��?��?��????????????????��?��?��??????���?????�??????????
+
 int Target(int shooter){
     int id = NOTARGET;
     float min_value = 0.0f; 
@@ -815,6 +742,75 @@ void Circle2D(float radius,float x,float y)
   glEnd();
   
  }
+}
+
+void create_bullet(){
+
+    BULLET b;
+    b.dir = {-sin(player[clientID].turn1)*cos(player[clientID].turn2), - sin(player[clientID].turn2), -cos(player[clientID].turn1)*cos(player[clientID].turn2)};
+    b.pos = player[clientID].pos + b.dir * 1.5f * player[clientID].size; 
+    b.shooter_id = clientID;
+    if(player[b.shooter_id].isBigbullet > 0){
+        b.pos = player[b.shooter_id].pos + b.dir * 1.5f * 5.0f;
+        b.type = SPECIAL_BIGBULLET;
+        player[b.shooter_id].isBigbullet--;
+        if(player[b.shooter_id].isBigbullet <= 0){
+            player[b.shooter_id].isspecial = false;
+        }
+    }
+    if(player[b.shooter_id].isChase > 0){
+        b.target_id = Target(b.shooter_id);
+        b.type = SPECIAL_CHASE;
+        player[b.shooter_id].isChase--;
+        if(player[b.shooter_id].isChase <= 0){
+            player[b.shooter_id].isspecial = false;
+        }
+    }
+    array_bullet.push_back(BULLET(b));
+    bullet_Num++;
+    SendBulletDataCommand(bullet_Num);
+}
+
+void draw_bullet(){
+    for(int i = 0; i < bullet_Num; i++){
+        
+        glPushMatrix();
+        if(player[array_bullet[i].shooter_id].rate_attack > 1.0){
+            glColor3f(1.0, 2.0 - player[array_bullet[i].shooter_id].rate_attack, 2.0 - player[array_bullet[i].shooter_id].rate_attack);
+        }
+        else{
+            glColor3f(1.0, 1.0, 1.0);
+        }
+        glTranslatef(array_bullet[i].pos.x, array_bullet[i].pos.y, array_bullet[i].pos.z);
+        if(array_bullet[i].type == SPECIAL_BIGBULLET){
+            glutSolidSphere(BIGBULLET_RADIUS, 16, 16);
+        }
+        else{
+            glutSolidSphere(BULLET_RADIUS, 16, 16);
+        }
+        glPopMatrix();
+    }
+}
+
+void move_bullet(){
+    for(int i = 0; i < bullet_Num; i++){
+        if(array_bullet[i].type == SPECIAL_CHASE && array_bullet[i].target_id != NOTARGET){
+            array_bullet[i].dir = glm::normalize((cal_vec(player[array_bullet[i].target_id].pos , array_bullet[i].pos)));
+            array_bullet[i].pos += array_bullet[i].dir/(player[array_bullet[i].target_id].speed + 1.0f);  
+        }
+        else{
+            array_bullet[i].pos += array_bullet[i].dir * player[array_bullet[i].shooter_id].speed;
+        }
+    }
+}
+
+void del_bullet(){
+    for(int i = 0; i < bullet_Num; i++){
+        if(array_bullet[i].lifetime >= 5){
+            array_bullet.erase(array_bullet.begin() + i);      
+            bullet_Num--;
+        }
+    } 
 }
 
 

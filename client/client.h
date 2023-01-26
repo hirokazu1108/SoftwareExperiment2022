@@ -86,6 +86,10 @@ extern float cal_angle(glm::vec3 vec1, glm::vec3 vec2);
 extern glm::vec3 cal_vec(glm::vec3 pos1, glm::vec3 pos2);
 extern int Target(int shooter);
 extern void Circle2D(float radius,float x,float y);
+extern void create_bullet(void);    
+extern void draw_bullet(void); 
+extern void move_bullet(void); 
+extern void del_bullet(void);
 
 extern int		gClientNum;
 extern int		clientID;
@@ -97,6 +101,8 @@ extern bool firstRecvPlayerInfo;
 extern std::vector<BULLET> array_bullet;
 extern int bullet_Num;   // 発射された弾の個数
 extern GLuint  model_list[Model_Num];		/* display list for object */
+extern int bullet_Num;
+extern bool can_attack; 
 
 extern ALuint buffer;
 extern ALuint source;
