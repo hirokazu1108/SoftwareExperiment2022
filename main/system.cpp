@@ -17,7 +17,6 @@ void SortRankIndex(const T *a, int *rank,int *rank_num, int num, int mode);
 void InitSystem(void){
     SaveData data;
     srand(time(NULL));
-    //game.scene = SCENE_Title;
     game.popScene = PopUp_None;
     game.selectButton = 0;
     game.selectButton_sub = 1;

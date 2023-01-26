@@ -20,10 +20,9 @@ typedef enum{
     SCENE_CLIENT_WAIT,
     SCENE_CUSTOMIZE,
     SCENE_Result,
-    SCENE_None,//çµ?äº????ç¤ºã??
+    SCENE_None,
 }Scene;
 
-// imgFile????????????????????¤ã?????
 typedef enum{
     uname_inputClientNum,
     uname_inputPasscodeNum,
@@ -74,7 +73,6 @@ typedef enum{
     uname_loading,
 }uiName;
 
-// textStr????????????????????¤ã?????
 typedef enum{
     tname_title,
     tname_server,
@@ -198,7 +196,7 @@ class settingGame{
     Scene scene;
     PopUpScne popScene;
     int selectButton;
-    int selectButton_sub;//popup??»é?¢ã??ä½¿ç??
+    int selectButton_sub;//popup scene
     int clientNum;
     char port[5];
     char deviceNum[4];
@@ -208,19 +206,16 @@ class settingGame{
     char command[256];
     SKILL skill;
     SPECIAL special;
-    int parm[5];   //??¹ã????¼ã?¿ã?¹ã?????(5ç¨?é¡?)???index???PARAMATER??????ä½???????
+    int parm[5];
     RankingData rankingData;
 };
 
-/* ??»å??????????? */
 typedef struct {
     public:
     int w;
     int h;         
     SDL_Texture* texture;
-    void drawRotateTexture(int x, int y, int width=0,int height=0, int rad=0, SDL_RendererFlip mode=SDL_FLIP_HORIZONTAL);
-    void drawTexture(int x, int y, int width=0,int height=0);
-    
+    void drawTexture(int x, int y, int width=0,int height=0);  
 }ImgInfo;
 
 /* main.cpp */
