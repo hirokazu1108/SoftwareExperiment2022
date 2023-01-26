@@ -10,7 +10,6 @@ void PlayerInit(void){
         player[i].speed = 1.0;
         player[i].dir = glm::vec3(0,0,0);
         player[i].pos = glm::vec3(0,0,0);
-        player[i].upVec = glm::vec3(0,0,0);
 	    player[i].rate_attack = 1.0;
         player[i].turn1 = 0;
         player[i].turn2 = 0;
@@ -34,7 +33,6 @@ void PlayerInit(void){
         player[i].special = SPECIAL_BIGBULLET;
         for(int j=0; j<PARAMATER_NUM; j++)
             player[i].parm[j] = 0;
-        player[i].reloadTime= 0;
         player[i].collider.radius = 1.0;
         player[i].collider.pos = player[i].pos;
         player[i].anim = 0.0f;

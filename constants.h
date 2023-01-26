@@ -21,9 +21,7 @@
 
 #define PORT			(u_short)88888	/* port numeber */
 #define MAX_CLIENTS		4				/* max clients */
-#define MAX_DATA		200
-#define MAX_BULLET_NUM   25    
-#define BULLET_SPEED   0.5f   
+#define MAX_DATA		200  
 #define DAMAGE         12.5f				
 #define MAX_HP 10.0f
 #define BARRIER_RADIUS 1.0f
@@ -124,7 +122,6 @@ public:
     float speed;
     glm::vec3 pos;
     glm::vec3 dir;
-    glm::vec3 upVec;
     float rate_attack;
     float turn1;
     float turn2;
@@ -209,7 +206,7 @@ class SaveData{
     int parm[PARAMATER_NUM];
 };
 
-/* the class to ranking data */
+/* the class for ranking data */
 class RankingData{
     public:
     char clientName[MAX_CLIENTS][NAME_MAX_LENGTH+2];

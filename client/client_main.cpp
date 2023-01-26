@@ -1072,7 +1072,7 @@ void move(){
             player[clientID].turn3= 0;
         }
         if(can_attack == true){
-            if(bullet_Num >= MAX_BULLET_NUM){bullet_Num = 0;}
+            
             create_bullet();
             glutTimerFunc(1000, add_lifetime, 0);
             can_attack = false;
@@ -1104,7 +1104,6 @@ void move(){
             player[clientID].turn1 = 0;
         }
         if(can_attack == true){
-            if(bullet_Num >= MAX_BULLET_NUM){bullet_Num = 0;}
             create_bullet();
             glutTimerFunc(1000, add_lifetime, 0);
             can_attack = false;
@@ -1136,7 +1135,6 @@ void move(){
             player[clientID].turn3= 0;
         }
         if(can_attack == true){
-            if(bullet_Num >= MAX_BULLET_NUM){bullet_Num = 0;}
             create_bullet();
             glutTimerFunc(1000, add_lifetime, 0);
             can_attack = false;
@@ -1167,7 +1165,6 @@ void move(){
             player[clientID].turn3= 0;
         }
         if(can_attack == true){
-            if(bullet_Num >= MAX_BULLET_NUM){bullet_Num = 0;}
             create_bullet();
             glutTimerFunc(1000, add_lifetime, 0);
             can_attack = false;
@@ -1286,7 +1283,6 @@ void move(){
             player[clientID].turn1 = 0;
         }
          if(can_attack == true){
-            if(bullet_Num >= MAX_BULLET_NUM){bullet_Num = 0;}
             create_bullet();
             glutTimerFunc(1000, add_lifetime, 0);
             can_attack = false;
@@ -1312,7 +1308,6 @@ void move(){
             player[clientID].turn3= 0;
         }
          if(can_attack == true){
-            if(bullet_Num >= MAX_BULLET_NUM){bullet_Num = 0;}
             create_bullet();
             glutTimerFunc(1000, add_lifetime, 0);
             can_attack = false;
@@ -1333,7 +1328,6 @@ void move(){
             player[clientID].turn1 = 0;
         }
          if(can_attack == true){
-            if(bullet_Num >= MAX_BULLET_NUM){bullet_Num = 0;}
             create_bullet();
             glutTimerFunc(1000, add_lifetime, 0);
             can_attack = false;
@@ -1359,7 +1353,6 @@ void move(){
             player[clientID].turn3= 0;
         }
          if(can_attack == true){
-            if(bullet_Num >= MAX_BULLET_NUM){bullet_Num = 0;}
             create_bullet();
             glutTimerFunc(1000, add_lifetime, 0);
             can_attack = false;
@@ -1437,7 +1430,6 @@ void move(){
        }
     else if(key7 == true){
         if(can_attack == true){
-            if(bullet_Num >= MAX_BULLET_NUM){bullet_Num = 0;}
             create_bullet();
             glutTimerFunc(1000, add_lifetime, 0);
             can_attack = false;
