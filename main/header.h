@@ -7,7 +7,7 @@
 
 #define WD_Height 1000
 #define WD_Width 1200
-#define IMG_NUM 49
+#define IMG_NUM 47
 #define TEXT_NUM 84
 #define SCENE_NUM 8
 
@@ -72,8 +72,6 @@ typedef enum{
     uname_castle,
     uname_sidePlane,
     uname_loading,
-    uname_masao,
-    uname_masao_face,
 }uiName;
 
 // textStr????????????????????¤ã?????

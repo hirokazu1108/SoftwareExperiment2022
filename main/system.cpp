@@ -11,7 +11,7 @@ int *rankNumber; //ランキングの順位 1st,2nd,2nd,4th
 void LaunchServer(void);
 void LaunchClient(void);
 template <typename T>
-T SortRankIndex(const T *a, int *rank,int *rank_num, int num, int mode);
+void SortRankIndex(const T *a, int *rank,int *rank_num, int num, int mode);
 
 
 void InitSystem(void){
@@ -497,7 +497,7 @@ void SortRanking(int mode){
 
 // mode : 0->降順 big to small, 1->昇順 small to big
 template <typename T>
-T SortRankIndex(const T *a, int *rank,int *rank_num, int num, int mode){
+void SortRankIndex(const T *a, int *rank,int *rank_num, int num, int mode){
     T t[num];
     for(int i=0; i<num; i++){
         t[i] = a[i];
