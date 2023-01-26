@@ -59,7 +59,7 @@ extern void SendEndCommand(void);
 extern void SendPlayerDataCommand(void);
 extern void SendBulletDataCommand(int num);
 extern void SendScoreBallDataCommand(void);
-extern void SendPlayerInfoData(int clientIndex, int mode,int num);
+extern void SendPlayerInfoData(int clientIndex);
 
 /* client_func.cpp */
 extern void PlayerInit(void);
