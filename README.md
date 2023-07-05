@@ -8,7 +8,7 @@
 - ### プレイ動画
    [作品紹介動画](http://netadm.iss.tokushima-u.ac.jp/soft/2022/2nd/game.html)
   
-   [上記のURLがない場合](https://drive.google.com/drive/folders/1wf6xUjTrAFtylgJ2kHkbrIom9IfR53eB?usp=drive_link)
+   [上記のURLがない場合 -> プレイ動画](https://drive.google.com/drive/folders/1wf6xUjTrAFtylgJ2kHkbrIom9IfR53eB?usp=drive_link)
 
 - ### 主な担当箇所
    - タイトル・カスタマイズ・リザルト画面の設計
