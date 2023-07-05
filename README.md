@@ -1,6 +1,6 @@
 # SoftwareExperiment2022
 
-<img width="521" alt="image" src="https://github.com/hirokazu1108/SoftwareExperiment2022/assets/87222170/c3594f67-b97a-4885-b755-6ff7fe8b13ec" style="margin:20px">
+<img width="521" alt="image" src="https://github.com/hirokazu1108/SoftwareExperiment2022/assets/87222170/c3594f67-b97a-4885-b755-6ff7fe8b13ec" align="center">
 
 
 - ### 概要
