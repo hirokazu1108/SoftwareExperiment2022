@@ -6,7 +6,7 @@
    この制作では,C++のクラスなどを未収得のものもいる上,授業では初の大規模共同開発,3D開発,ネットワークプログラミングを3か月間で行う必要があったため,完成を優先させたためオブジェクト指向や命名規則などがあまり意識できていないコードが多くありますが,ご了承ください.
 
 - ### プレイ動画・マニュアル
-   [プレイ動画・マニュアル](https://drive.google.com/drive/folders/1wf6xUjTrAFtylgJ2kHkbrIom9IfR53eB?usp=drive_link)
+   [プレイ動画・マニュアル（Google Driveに移動）](https://drive.google.com/drive/folders/1wf6xUjTrAFtylgJ2kHkbrIom9IfR53eB?usp=drive_link)
    
    [作品紹介動画](http://netadm.iss.tokushima-u.ac.jp/soft/2022/2nd/game.html)
 
