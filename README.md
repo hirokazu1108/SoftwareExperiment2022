@@ -11,13 +11,12 @@
    この制作では,C++のクラスなどを未収得のものもいる上,授業では初の大規模共同開発,3D開発,ネットワークプログラミングを3か月間で行う必要があったため,完成を優先させたためオブジェクト指向や命名規則などがあまり意識できていないコードが多くありますが,ご了承ください.
 
    この制作では以下を使用しています.
-  
-      - C/C++
-      - [OpenGL](https://www.opengl.org/)[プレイ動画・マニュアル（Google Driveに移動）](https://drive.google.com/drive/folders/1wf6xUjTrAFtylgJ2kHkbrIom9IfR53eB?usp=drive_link)
-      - [OpenAL](https://www.openal.org/)
-      - Shell Script
-      - [Blender](https://www.blender.org/)
-      ...etc
+   - C/C++
+   - Shell Script
+   - [OpenGL](https://www.opengl.org/)
+   - [OpenAL](https://www.openal.org/)
+   - [Blender](https://www.blender.org/)
+   ...etc
 
 - ### プレイ動画・マニュアル
    [プレイ動画・マニュアル（Google Driveに移動）](https://drive.google.com/drive/folders/1wf6xUjTrAFtylgJ2kHkbrIom9IfR53eB?usp=drive_link)
