@@ -1,6 +1,6 @@
 # SoftwareExperiment2022
 
-<p  align="center"><img width="521" alt="image" src="https://github.com/hirokazu1108/SoftwareExperiment2022/assets/87222170/c3594f67-b97a-4885-b755-6ff7fe8b13ec"></p>
+<p  align="center"><img width="521" alt="image" src="https://github.com/hirokazu1108/SoftwareExperiment2022/assets/87222170/e5f12da5-621d-45fd-a4ba-69be5404cf86"></p>
 
 - ### 作品名
    SKY WARS
