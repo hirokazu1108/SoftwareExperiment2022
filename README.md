@@ -2,11 +2,21 @@
 
 <p  align="center"><img width="521" alt="image" src="https://github.com/hirokazu1108/SoftwareExperiment2022/assets/87222170/c3594f67-b97a-4885-b755-6ff7fe8b13ec"></p>
 
+- ### 作品名
+   Sky Wars
 
 - ### 概要
    学部2年生後期の講義「ソフトウェア設計及び実験」における共同開発により作成したネットワーク対戦型3Dシューティングゲームです.総合優秀賞と技術賞を頂きました.製作期間は2022年10月末から2023年1月末の約3か月で,4人のメンバで制作を行いました.
    
    この制作では,C++のクラスなどを未収得のものもいる上,授業では初の大規模共同開発,3D開発,ネットワークプログラミングを3か月間で行う必要があったため,完成を優先させたためオブジェクト指向や命名規則などがあまり意識できていないコードが多くありますが,ご了承ください.
+
+   この制作では以下を使用しています.
+      - C/C++
+      - [OpenGL](https://www.opengl.org/)
+      - [OpenAL](https://www.openal.org/)
+      - Shell Script
+      - [Blender](https://www.blender.org/)
+               ...etc
 
 - ### プレイ動画・マニュアル
    [プレイ動画・マニュアル（Google Driveに移動）](https://drive.google.com/drive/folders/1wf6xUjTrAFtylgJ2kHkbrIom9IfR53eB?usp=drive_link)
