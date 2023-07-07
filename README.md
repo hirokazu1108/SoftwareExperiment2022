@@ -13,7 +13,7 @@
    この制作では以下を使用しています.
   
       - C/C++
-      - [OpenGL](https://www.opengl.org/)
+      - [OpenGL](https://www.opengl.org/)[プレイ動画・マニュアル（Google Driveに移動）](https://drive.google.com/drive/folders/1wf6xUjTrAFtylgJ2kHkbrIom9IfR53eB?usp=drive_link)
       - [OpenAL](https://www.openal.org/)
       - Shell Script
       - [Blender](https://www.blender.org/)
