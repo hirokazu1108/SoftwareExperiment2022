@@ -13,9 +13,9 @@
    この制作では以下を使用しています.
    - C/C++
    - Shell Script
-   - [OpenGL](https://www.opengl.org/)
-   - [OpenAL](https://www.openal.org/)
-   - [Blender](https://www.blender.org/)
+   - [OpenGL(https://www.opengl.org/)](https://www.opengl.org/)
+   - [OpenAL(https://www.openal.org/)](https://www.openal.org/)
+   - [Blender(https://www.blender.org/)](https://www.blender.org/)
    ...etc
 
 - ### プレイ動画・マニュアル
