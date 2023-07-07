@@ -21,7 +21,6 @@
 
 - ### プレイ動画・マニュアル
    - [プレイ動画データ・マニュアル（Google Driveに移動）](https://drive.google.com/drive/folders/1wf6xUjTrAFtylgJ2kHkbrIom9IfR53eB?usp=drive_link)
-   - [プレイ動画(YouTube)]()
    - [作品紹介動画（外部サイトへ）](http://netadm.iss.tokushima-u.ac.jp/soft/2022/2nd/game.html)
 
 - ### 主な担当箇所
