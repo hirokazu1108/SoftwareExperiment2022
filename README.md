@@ -3,7 +3,7 @@
 <p  align="center"><img width="521" alt="image" src="https://github.com/hirokazu1108/SoftwareExperiment2022/assets/87222170/c3594f67-b97a-4885-b755-6ff7fe8b13ec"></p>
 
 - ### 作品名
-   Sky Wars
+   SKY WARS
 
 - ### 概要
    学部2年生後期の講義「ソフトウェア設計及び実験」における共同開発により作成したネットワーク対戦型3Dシューティングゲームです.総合優秀賞と技術賞を頂きました.製作期間は2022年10月末から2023年1月末の約3か月で,4人のメンバで制作を行いました.
