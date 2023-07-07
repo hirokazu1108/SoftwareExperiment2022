@@ -17,7 +17,7 @@
       - [OpenAL](https://www.openal.org/)
       - Shell Script
       - [Blender](https://www.blender.org/)
-               ...etc
+      ...etc
 
 - ### プレイ動画・マニュアル
    [プレイ動画・マニュアル（Google Driveに移動）](https://drive.google.com/drive/folders/1wf6xUjTrAFtylgJ2kHkbrIom9IfR53eB?usp=drive_link)
